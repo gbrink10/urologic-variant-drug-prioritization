@@ -1,0 +1,17 @@
+cancer,drug,target,tcga_score,geo_score,kegg_score,ext_score,score,tier,phase3_concordance,phase3_trial
+NEPC,Venetoclax,BCL2,3,3,0,1,7,Strong,,
+NEPC,Alisertib‡,AURKA,2,2,2,1,7,Strong,,
+NEPC,Tazemetostat,EZH2,2,2,0,1,5,Moderate,,
+NEPC,Decitabine,DNMT1/3A,2,3,0,1,6,Moderate,,
+NEPC,Cabazitaxel+carboplatin,TP53/platinum-sensitive,3,0,1,1,5,Moderate,Yes (off-label SOC),Aparicio 2013 J Clin Oncol
+NEPC,Olaparib,PARP1/2,2,2,0,1,5,Moderate,Yes (mCRPC HRR+),PROfound (de Bono NEJM 2020)
+MIBC,Alisertib‡,AURKA/AURKB,1,3,1,1,6,Moderate,,
+MIBC,Talazoparib,PARP1/2,2,1,0,1,4,Moderate,,
+MIBC,Alpelisib,PIK3CA,2,1,0,1,4,Moderate,,
+MIBC,Erdafitinib,FGFR2/3,2,2,0,1,5,Moderate,Yes (mUC),THOR (Loriot NEJM 2023)
+MIBC,Enfortumab Vedotin,NECTIN4,3,3,0,1,7,Strong,Yes (1L UC; perioperative MIBC),EV-302 (Powles NEJM 2024); KEYNOTE-905/EV-303 (Vulsteke NEJM 2026)
+MIBC,Pembrolizumab,PD-1/TMB-H,2,1,0,1,4,Moderate,Yes (1L UC; perioperative MIBC),EV-302; KEYNOTE-905/EV-303
+MIBC,Palbociclib,CDK4/6,2,1,1,1,5,Moderate,,
+ccRCC/sRCC,Pazopanib,VEGFR/PDGFR,2,3,1,1,7,Strong,Yes (adv RCC),COMPARZ (Motzer NEJM 2013)
+ccRCC/sRCC,Belzutifan,HIF2α/EPAS1,2,3,1,1,7,Strong,Yes (adv ccRCC; VHL-RCC),LITESPARK-005 (Choueiri NEJM 2024); Motzer NEJM 2021 (VHL)
+ccRCC,Abemaciclib,CDK4/6,0,1,0,0,1,Exploratory,,
