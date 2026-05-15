@@ -1,10 +1,16 @@
 # Public Genomic and Transcriptomic Drug Prioritization for Aggressive Urologic Cancer Variants
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20217919.svg)](https://doi.org/10.5281/zenodo.20217919)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python 3.10+](https://img.shields.io/badge/Python-3.10+-blue.svg)](https://www.python.org/downloads/)
+
 Code and processed result tables supporting:
 
 **Brinkley GJ, Greenberg J, Caso J.** *Biomarker-Matched Therapeutic Prioritization for Rare Aggressive Urologic Cancer Variants Using Public Genomic and Transcriptomic Data.* (Under review, 2026.)
 
 Department of Urology, Tulane University School of Medicine, New Orleans, Louisiana, USA.
+
+**Permanent archive:** Zenodo DOI [10.5281/zenodo.20217919](https://doi.org/10.5281/zenodo.20217919)
 
 ---
 
@@ -109,9 +115,8 @@ If you use this code or any of the processed tables, please cite:
 Brinkley GJ, Greenberg J, Caso J. Biomarker-Matched Therapeutic Prioritization for
 Rare Aggressive Urologic Cancer Variants Using Public Genomic and Transcriptomic Data.
 2026. https://github.com/gbrink10/urologic-variant-drug-prioritization
+DOI: 10.5281/zenodo.20217919
 ```
-
-A permanent Zenodo DOI will be minted for the first GitHub release.
 
 ## License
 
