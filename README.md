@@ -1,133 +1,136 @@
-# Public Genomic and Transcriptomic Drug Prioritization for Aggressive Urologic Cancer Variants
+# Urologic Variant Drug Prioritization — Public-Data Pipeline
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20217919.svg)](https://doi.org/10.5281/zenodo.20217919)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.10+](https://img.shields.io/badge/Python-3.10+-blue.svg)](https://www.python.org/downloads/)
 
-Code and processed result tables supporting:
+A reproducible public-data pipeline that identifies convergent and novel drug-repurposing priorities across rare aggressive urologic cancers.
 
-**Brinkley GJ, Greenberg J, Caso J.** *Biomarker-Matched Therapeutic Prioritization for Rare Aggressive Urologic Cancer Variants Using Public Genomic and Transcriptomic Data.* (Under review, 2026.)
+## What this repository contains
 
-Department of Urology, Tulane University School of Medicine, New Orleans, Louisiana, USA.
+This repository archives the analytical scripts, intermediate result tables, KEGG pathway artifacts, master drug-cancer association table, and generated figures for the manuscript:
 
-**Permanent archive:** Zenodo DOI [10.5281/zenodo.20217919](https://doi.org/10.5281/zenodo.20217919)
+**"A Reproducible Public-Data Pipeline Identifies Convergent and Novel Drug-Repurposing Priorities Across Rare Aggressive Urologic Cancers"** *(under review)*
 
----
+Authors: Garrett J. Brinkley, MD; Jacob Greenberg, MD; Jorge Caso, MD
+Department of Urology, Tulane University School of Medicine
 
-## What this is
+## v25 → v26 expansion
 
-A reproducible computational framework that integrates **TCGA PanCancer Atlas alteration frequencies**, **GEO transcriptomic / kinome expression data**, and **KEGG pathway enrichment** to prioritize biomarker-matched therapeutic hypotheses for three rare aggressive urologic cancer variants:
+The original repository was organized for a three-context source-disease analysis (neuroendocrine prostate cancer; muscle-invasive bladder cancer; clear cell renal cell carcinoma). In v26 the pipeline has been expanded to seven aggressive urologic cancer contexts and integrates ten Gene Expression Omnibus transcriptomic datasets, eighteen pre-specified KEGG pathways, a 9-point Molecular Prioritization Score, and an independent PubMed prior-proposal audit per drug-cancer association.
 
-- **NEPC** — neuroendocrine prostate cancer
-- **MPBC-applicable** — micropapillary bladder cancer, framed via MIBC kinome biology
-- **sRCC-applicable** — sarcomatoid renal cell carcinoma, framed via ccRCC/HLRCC HIF/VEGF biology
+### Seven clinical contexts
 
-The framework outputs **16 drug–cancer associations spanning 15 therapeutic candidates**, each assigned a **9-point molecular prioritization score** (TCGA + GEO + KEGG + external literature). Phase III source-disease trial concordance is reported as a separate flag, not as part of the score.
+1. Neuroendocrine prostate cancer (NEPC)
+2. Muscle-invasive bladder cancer (MIBC)
+3. Clear cell renal cell carcinoma (ccRCC)
+4. Renal medullary carcinoma (RMC) — SMARCB1-deficient
+5. Penile squamous cell carcinoma (PSCC)
+6. Sarcomatoid urothelial carcinoma
+7. Small-cell bladder cancer (SCBC) — lineage-transcription-factor-stratified (ASCL1+, NEUROD1+, POU2F3+, YAP1+)
 
-## Repository layout
+### Master output
+
+**30 drug-cancer associations** across the seven contexts:
+- **18** converge on previously-proposed urologic-oncology priorities (convergent literature support)
+- **6** are framework-novel within the urologic-oncology literature:
+  - Chemokine receptor 1/2 antagonists (reparixin, navarixin, AZD5069) in RMC
+  - Anti-CEACAM1 (CM24) in RMC
+  - NSD2 inhibitors (KTX-1001, seclidemstat) in sarcomatoid urothelial carcinoma
+  - ATR pathway inhibitors (ceralasertib, berzosertib, elimusertib) in sarcomatoid urothelial carcinoma
+  - Lutetium-177 DOTATATE in NEUROD1+ SCBC
+  - Tusamitamab ravtansine in ASCL1+ SCBC
+- **5** are partially novel variant-specific extensions
+- **1** is a clinically actionable negative biomarker (TROP2-low in sarcomatoid urothelial carcinoma predicts sacituzumab govitecan non-response)
+
+## Repository structure (v26)
 
 ```
 .
-├── code/                              # Analysis scripts
-│   ├── geo_full_de_kegg.py            # Main DE + KEGG pipeline
-│   ├── compute_drug_scores.py         # 10-point scoring (legacy; v12)
-│   ├── update_scores_9pt.py           # 9-point scoring (v18; current)
-│   ├── cbioportal_verify.py           # TCGA frequency verification
-│   ├── cbioportal_verify2.py          # Combined alteration check (mut + CNA + SV)
-│   ├── build_figure1.py               # TCGA molecular landscape (Figure 1)
-│   ├── build_score_figures.py         # Per-cancer score panels (legacy)
-│   ├── rebuild_score_figures_v18.py   # 9-point score panels (current)
-│   ├── build_figure5_heatmap.py       # Evidence-concordance heatmap (Figure 5)
-│   └── build_supp_table_s2.py         # Supplementary Table S2 builder
-│
-├── data/                              # Processed result tables
-│   ├── FULL_DE_RESULTS.csv            # Per-gene Welch/paired t-stats, log2FC, p, BH-q
-│   ├── KEGG_ENRICHMENT.csv            # Pathway-level OR + nominal p
-│   ├── DRUG_EVIDENCE_SCORES_v18.csv   # 9-point molecular scores + Ph III concordance flag
-│   ├── DRUG_EVIDENCE_SCORES_v12.csv   # Legacy 10-point scores (historical)
-│   └── Supplementary_Table_S2_expanded_drug_list.csv
-│
-└── figures/                           # Manuscript figures (PNG, 300 DPI)
-    ├── figure1_TCGAfixed.png          # TCGA molecular landscape
-    ├── figure2E_NEPC_drug_scores.png  # NEPC drug prioritization panel
-    ├── figure3E_MIBC_drug_scores.png  # MIBC drug prioritization panel
-    ├── figure4E_sRCC_drug_scores.png  # ccRCC/sRCC drug prioritization panel
-    └── figure5_evidence_concordance_heatmap.png
+├── code/
+│   ├── v26_pipeline/                    # Analysis pipeline (12 numbered scripts)
+│   │   ├── 09b_kegg_fetch_fixed.py      # Fetch 18 KEGG pathway gene sets
+│   │   ├── 01_rmc_de_analysis.py        # RMC differential expression
+│   │   ├── 02_rmc_drug_targets.py       # RMC drug-target identification
+│   │   ├── 03_penile_de_analysis.py     # Penile SCC DE (tumor vs normal)
+│   │   ├── 04_sarcomatoid_uc_de.py      # Sarcomatoid UC DE (SARC vs conventional UC)
+│   │   ├── 05_scbc_subtype_analysis.py  # SCBC subtype DE (lineage-TF stratified)
+│   │   ├── 06_trcc_de.py                # Translocation RCC (exploratory)
+│   │   ├── 07_consolidate_findings.py   # Cross-disease drug-target mapping
+│   │   ├── 08_master_table1.py          # Initial master table build
+│   │   ├── 10_uniform_scoring.py        # KEGG enrichment across all diseases
+│   │   ├── 11_master_table_uniform.py   # Final 30-row Master Table with uniform 9-point scoring
+│   │   └── 12_generate_figures.py       # Generate Figures 1-4
+│   └── v26_manuscript_build/            # Manuscript generation scripts (docx assembly)
+├── data/
+│   ├── v26_DE_results/                  # Per-disease differential-expression result tables
+│   │   ├── RMC_up_in_null_state.csv     # 13 cross-cell-line consistent UP genes in SMARCB1-null
+│   │   ├── SarcomatoidUC_up.csv         # SARC vs conventional UC UP genes (q<0.05, log2FC>1)
+│   │   ├── SarcomatoidUC_DE_full.csv.gz # Full Sarc-UC DE results (gzipped, 29,377 probes)
+│   │   ├── SCBC_subtype_calls.csv       # Per-sample lineage TF subtype assignments
+│   │   ├── SCBC_up_in_ASCL1.csv         # ASCL1+ subtype UP genes
+│   │   ├── SCBC_up_in_NEUROD1.csv       # NEUROD1+ subtype UP genes
+│   │   ├── SCBC_up_in_POU2F3.csv        # POU2F3+ subtype UP genes
+│   │   ├── PenileSCC_tumor_up.csv       # Penile SCC tumor-UP genes (filtered)
+│   │   └── PenileSCC_DE_full.csv.gz     # Full Penile SCC DE results (gzipped)
+│   └── (v25 source-disease data preserved in original locations)
+├── results/
+│   ├── v26/
+│   │   ├── MASTER_DRUG_ASSOCIATION_TABLE_30_ROWS.csv   # Central artifact
+│   │   ├── KEGG_PATHWAYS_18.json                       # 18 pre-specified pathway gene sets
+│   │   └── KEGG_ENRICHMENT_ALL10.json                  # Hypergeometric enrichment per disease
+│   └── (v25 result tables preserved)
+├── figures/
+│   ├── v26/
+│   │   ├── Figure1_pipeline.png          # Unified pipeline schematic
+│   │   ├── Figure2_RMC.png               # Renal medullary carcinoma novel findings
+│   │   ├── Figure3_SarcUC.png            # Sarcomatoid urothelial carcinoma novel findings
+│   │   └── Figure4_SCBC.png              # Small-cell bladder cancer subtype-stratified findings
+│   └── (v25 figures preserved)
+├── README.md
+├── LICENSE
+├── requirements.txt
+└── .gitignore
 ```
 
 ## Data sources
 
-All input data are publicly available; this repository contains only **processed results**, not raw data.
+- **The Cancer Genome Atlas Pan-Cancer Atlas 2018** via cBioPortal API
+- **Gene Expression Omnibus** (10 accessions): GSE199274, GSE216053, GSE216052, GSE130598, GSE143630, GSE157256, GSE180999, GSE196978, GSE128192, GSE269750
+- **Kyoto Encyclopedia of Genes and Genomes** REST API (18 pathway gene sets)
+- **Therapeutic Target Database** (accessed May 2026) and **OpenTargets** (release 2026.03)
+- **FDA Drugs@FDA** database
 
-### TCGA PanCancer Atlas (via cBioPortal)
-
-- BLCA: `blca_tcga_pan_can_atlas_2018` (n = 411 patients)
-- KIRC: `kirc_tcga_pan_can_atlas_2018` (n = 512 patients)
-- PRAD: `prad_tcga_pan_can_atlas_2018` (n = 494 patients)
-
-Alteration frequencies queried via cBioPortal REST API on 2026-05-13.
-
-### GEO expression datasets
-
-| Accession   | Description                                                   | n  |
-|-------------|---------------------------------------------------------------|----|
-| GSE199274   | MDVr NEPC-like cells; CXCR7 knockdown                         | 12 |
-| GSE216053   | PM154 NEPC patient-derived model; ± decitabine (day 14)       | 6  |
-| GSE216052   | PM154 with DNMT1 / DNMT3A knockout                            | 9  |
-| GSE130598   | MIBC tumor vs adjacent normal (NanoString ~522-gene kinome)   | 48 |
-| GSE143630   | ccRCC; stage pT1 vs pT2 sample-name partition                 | 44 |
-| GSE157256   | HLRCC + aggressive/metastatic RCC                             | 26 |
-
-## How to reproduce
-
-### Requirements
-
-- Python 3.10+
-- `pip install -r requirements.txt`
-
-### Quick start
+## Running the pipeline
 
 ```bash
-# Recompute the 9-point molecular prioritization scores
-python code/update_scores_9pt.py
-
-# Regenerate the per-cancer drug-prioritization figure panels
-python code/rebuild_score_figures_v18.py
-
-# Regenerate the evidence-concordance heatmap (Figure 5)
-python code/build_figure5_heatmap.py
+pip install -r requirements.txt
+python code/v26_pipeline/09b_kegg_fetch_fixed.py      # Fetch 18 KEGG pathway gene sets
+python code/v26_pipeline/01_rmc_de_analysis.py
+python code/v26_pipeline/03_penile_de_analysis.py
+python code/v26_pipeline/04_sarcomatoid_uc_de.py
+python code/v26_pipeline/05_scbc_subtype_analysis.py
+python code/v26_pipeline/10_uniform_scoring.py        # KEGG enrichment across all diseases
+python code/v26_pipeline/11_master_table_uniform.py   # Build Master Table 1 with uniform 9-point scoring
+python code/v26_pipeline/12_generate_figures.py       # Generate Figures 1-4
 ```
 
-The processed data tables (`data/FULL_DE_RESULTS.csv`, `data/KEGG_ENRICHMENT.csv`) were generated by `code/geo_full_de_kegg.py` from the GEO accessions listed above. The raw GEO expression matrices required to re-run the upstream pipeline are downloadable from NCBI GEO under the accessions above.
-
-## Methodology summary
-
-- **Differential expression:** Python 3.10 + `scipy.stats`. Paired two-sided t-test was primary for GSE130598 (matched-pair design); Welch t-tests were primary for all other comparisons. Benjamini–Hochberg FDR was applied within each comparison. Hypothesis-generating threshold: |log2FC| ≥ 0.5 with p < 0.05.
-- **KEGG pathway enrichment:** Upper-tail hypergeometric test (`scipy.stats.hypergeom.sf`) against eight pre-specified pathways (Cell Cycle hsa04110, PI3K-AKT hsa04151, HIF-1 hsa04066, VEGF hsa04370, p53 hsa04115, Homologous Recombination hsa03440, Apoptosis hsa04210, Epigenetic Regulation custom set). Background gene sets matched each dataset's profiling scope (whole-transcriptome for RNA-seq; ~522-gene NanoString panel for GSE130598). KEGG gene sets retrieved from the KEGG REST API (April 2026 release).
-- **Drug prioritization score (0–9):** TCGA genomic evidence (0–3) + GEO transcriptomic evidence (0–3) + KEGG pathway enrichment (0–2) + external literature concordance (0–1). Composite scores: Strong ≥ 7, Moderate 4–6, Exploratory ≤ 3.
-- **Phase III source-disease concordance:** Reported separately from the molecular score (not part of the 0–9 composite). Concordant trials cited in `DRUG_EVIDENCE_SCORES_v18.csv` `phase3_trial` column.
-
-## Citation
-
-If you use this code or any of the processed tables, please cite:
-
-```
-Brinkley GJ, Greenberg J, Caso J. Biomarker-Matched Therapeutic Prioritization for
-Rare Aggressive Urologic Cancer Variants Using Public Genomic and Transcriptomic Data.
-2026. https://github.com/gbrink10/urologic-variant-drug-prioritization
-DOI: 10.5281/zenodo.20217919
-```
+Note: scripts use absolute paths reflecting the development environment; adjust paths for your local setup.
 
 ## License
 
-- **Code** (`code/`): MIT License — see [LICENSE](LICENSE).
-- **Processed data tables** (`data/`): CC-BY 4.0.
-- **Figures** (`figures/`): CC-BY 4.0.
+MIT. See `LICENSE`.
+
+## How to cite
+
+> Brinkley GJ, Greenberg J, Caso J. A Reproducible Public-Data Pipeline Identifies Convergent and Novel Drug-Repurposing Priorities Across Rare Aggressive Urologic Cancers. Zenodo. 2026. doi:10.5281/zenodo.20217919
+
+(Manuscript citation pending publication acceptance.)
 
 ## AI usage disclosure
 
-Claude (Anthropic) was used for coding assistance, language editing, and manuscript-structure suggestions during preparation. All analyses were executed by author-run Python scripts using publicly available datasets. All quantitative values, interpretations, and final text were reviewed and approved by the authors, who take full responsibility for the content.
+Claude (Anthropic) and ChatGPT (OpenAI) large-language-model tools were used for coding assistance, literature-audit organization, language editing, and manuscript-structure suggestions. All analyses were executed by author-run Python scripts using publicly available datasets. All PubMed novelty classifications, score component assignments, drug-target interpretations, and final manuscript text were reviewed and approved by the human authors.
 
 ## Contact
 
-Corresponding author: Garrett J. Brinkley, MD — garrettjbrinkley@gmail.com
+For questions about reproducibility or methodology, open an issue on GitHub or contact the corresponding author.

@@ -1,0 +1,884 @@
+{
+  "RMC": {
+    "Cell_Cycle": {
+      "overlap": 1,
+      "pathway_size": 158,
+      "de_size": 13,
+      "pvalue": 0.09799830753670462,
+      "overlap_genes": [
+        "GADD45A"
+      ]
+    },
+    "Apoptosis": {
+      "overlap": 2,
+      "pathway_size": 137,
+      "de_size": 13,
+      "pvalue": 0.003457997916676909,
+      "overlap_genes": [
+        "FOS",
+        "GADD45A"
+      ]
+    },
+    "HIF1_signaling": {
+      "overlap": 0,
+      "pathway_size": 110,
+      "de_size": 13,
+      "pvalue": 1.0,
+      "overlap_genes": []
+    },
+    "VEGF_signaling": {
+      "overlap": 0,
+      "pathway_size": 60,
+      "de_size": 13,
+      "pvalue": 1.0,
+      "overlap_genes": []
+    },
+    "Homologous_Recombination": {
+      "overlap": 0,
+      "pathway_size": 41,
+      "de_size": 13,
+      "pvalue": 1.0,
+      "overlap_genes": []
+    },
+    "PI3K_AKT_signaling": {
+      "overlap": 0,
+      "pathway_size": 362,
+      "de_size": 13,
+      "pvalue": 1.0,
+      "overlap_genes": []
+    },
+    "p53_signaling": {
+      "overlap": 1,
+      "pathway_size": 75,
+      "de_size": 13,
+      "pvalue": 0.047682052603558005,
+      "overlap_genes": [
+        "GADD45A"
+      ]
+    },
+    "Chemokine_signaling": {
+      "overlap": 2,
+      "pathway_size": 193,
+      "de_size": 13,
+      "pvalue": 0.00673778101601049,
+      "overlap_genes": [
+        "CXCL1",
+        "CXCL2"
+      ]
+    },
+    "Cytokine_receptor_interaction": {
+      "overlap": 2,
+      "pathway_size": 298,
+      "de_size": 13,
+      "pvalue": 0.015486180837434964,
+      "overlap_genes": [
+        "CXCL1",
+        "CXCL2"
+      ]
+    },
+    "Antigen_processing_presentation": {
+      "overlap": 0,
+      "pathway_size": 82,
+      "de_size": 13,
+      "pvalue": 1.0,
+      "overlap_genes": []
+    },
+    "PDL1_PD1_checkpoint": {
+      "overlap": 1,
+      "pathway_size": 90,
+      "de_size": 13,
+      "pvalue": 0.0569629031227813,
+      "overlap_genes": [
+        "FOS"
+      ]
+    },
+    "Pentose_phosphate_pathway": {
+      "overlap": 0,
+      "pathway_size": 31,
+      "de_size": 13,
+      "pvalue": 1.0,
+      "overlap_genes": []
+    },
+    "Arachidonic_acid_metabolism": {
+      "overlap": 0,
+      "pathway_size": 63,
+      "de_size": 13,
+      "pvalue": 1.0,
+      "overlap_genes": []
+    },
+    "Neuroactive_ligand_receptor": {
+      "overlap": 0,
+      "pathway_size": 371,
+      "de_size": 13,
+      "pvalue": 1.0,
+      "overlap_genes": []
+    },
+    "Prostate_cancer": {
+      "overlap": 0,
+      "pathway_size": 106,
+      "de_size": 13,
+      "pvalue": 1.0,
+      "overlap_genes": []
+    },
+    "Bladder_cancer": {
+      "overlap": 1,
+      "pathway_size": 41,
+      "de_size": 13,
+      "pvalue": 0.026332460093858635,
+      "overlap_genes": [
+        "HBEGF"
+      ]
+    },
+    "Renal_cell_carcinoma": {
+      "overlap": 0,
+      "pathway_size": 70,
+      "de_size": 13,
+      "pvalue": 1.0,
+      "overlap_genes": []
+    },
+    "Epigenetic_Regulation": {
+      "overlap": 0,
+      "pathway_size": 94,
+      "de_size": 13,
+      "pvalue": 1.0,
+      "overlap_genes": []
+    }
+  },
+  "PSCC": {
+    "Cell_Cycle": {
+      "overlap": 0,
+      "pathway_size": 158,
+      "de_size": 200,
+      "pvalue": 1.0,
+      "overlap_genes": []
+    },
+    "Apoptosis": {
+      "overlap": 2,
+      "pathway_size": 137,
+      "de_size": 200,
+      "pvalue": 0.39884583614301294,
+      "overlap_genes": [
+        "CTSS",
+        "TNFSF10"
+      ]
+    },
+    "HIF1_signaling": {
+      "overlap": 1,
+      "pathway_size": 110,
+      "de_size": 200,
+      "pvalue": 0.6699713713858879,
+      "overlap_genes": [
+        "CYBB"
+      ]
+    },
+    "VEGF_signaling": {
+      "overlap": 0,
+      "pathway_size": 60,
+      "de_size": 200,
+      "pvalue": 1.0,
+      "overlap_genes": []
+    },
+    "Homologous_Recombination": {
+      "overlap": 0,
+      "pathway_size": 41,
+      "de_size": 200,
+      "pvalue": 1.0,
+      "overlap_genes": []
+    },
+    "PI3K_AKT_signaling": {
+      "overlap": 6,
+      "pathway_size": 362,
+      "de_size": 200,
+      "pvalue": 0.15590853006153907,
+      "overlap_genes": [
+        "COL1A2",
+        "COL6A3",
+        "IL7R",
+        "LAMA4",
+        "SPP1",
+        "TNC"
+      ]
+    },
+    "p53_signaling": {
+      "overlap": 0,
+      "pathway_size": 75,
+      "de_size": 200,
+      "pvalue": 1.0,
+      "overlap_genes": []
+    },
+    "Chemokine_signaling": {
+      "overlap": 5,
+      "pathway_size": 193,
+      "de_size": 200,
+      "pvalue": 0.04485005908688652,
+      "overlap_genes": [
+        "CCL2",
+        "CXCL10",
+        "CXCL11",
+        "CXCL14",
+        "CXCL9"
+      ]
+    },
+    "Cytokine_receptor_interaction": {
+      "overlap": 7,
+      "pathway_size": 298,
+      "de_size": 200,
+      "pvalue": 0.03066255460365452,
+      "overlap_genes": [
+        "CCL2",
+        "CXCL10",
+        "CXCL11",
+        "CXCL14",
+        "CXCL9",
+        "IL7R",
+        "TNFSF10"
+      ]
+    },
+    "Antigen_processing_presentation": {
+      "overlap": 6,
+      "pathway_size": 82,
+      "de_size": 200,
+      "pvalue": 0.00017278511433042255,
+      "overlap_genes": [
+        "CTSS",
+        "HLA-DPA1",
+        "HLA-DQA1",
+        "HLA-DRA",
+        "HLA-DRB1",
+        "HLA-DRB4"
+      ]
+    },
+    "PDL1_PD1_checkpoint": {
+      "overlap": 0,
+      "pathway_size": 90,
+      "de_size": 200,
+      "pvalue": 1.0,
+      "overlap_genes": []
+    },
+    "Pentose_phosphate_pathway": {
+      "overlap": 0,
+      "pathway_size": 31,
+      "de_size": 200,
+      "pvalue": 1.0,
+      "overlap_genes": []
+    },
+    "Arachidonic_acid_metabolism": {
+      "overlap": 0,
+      "pathway_size": 63,
+      "de_size": 200,
+      "pvalue": 1.0,
+      "overlap_genes": []
+    },
+    "Neuroactive_ligand_receptor": {
+      "overlap": 2,
+      "pathway_size": 371,
+      "de_size": 200,
+      "pvalue": 0.8882222243729604,
+      "overlap_genes": [
+        "EDNRA",
+        "FPR3"
+      ]
+    },
+    "Prostate_cancer": {
+      "overlap": 1,
+      "pathway_size": 106,
+      "de_size": 200,
+      "pvalue": 0.6563584532282977,
+      "overlap_genes": [
+        "MMP3"
+      ]
+    },
+    "Bladder_cancer": {
+      "overlap": 1,
+      "pathway_size": 41,
+      "de_size": 200,
+      "pvalue": 0.33799255321025723,
+      "overlap_genes": [
+        "MMP1"
+      ]
+    },
+    "Renal_cell_carcinoma": {
+      "overlap": 0,
+      "pathway_size": 70,
+      "de_size": 200,
+      "pvalue": 1.0,
+      "overlap_genes": []
+    },
+    "Epigenetic_Regulation": {
+      "overlap": 0,
+      "pathway_size": 94,
+      "de_size": 200,
+      "pvalue": 1.0,
+      "overlap_genes": []
+    }
+  },
+  "SarcUC": {
+    "Cell_Cycle": {
+      "overlap": 2,
+      "pathway_size": 158,
+      "de_size": 85,
+      "pvalue": 0.14526345904885812,
+      "overlap_genes": [
+        "CDKN2C",
+        "MAD1L1"
+      ]
+    },
+    "Apoptosis": {
+      "overlap": 0,
+      "pathway_size": 137,
+      "de_size": 85,
+      "pvalue": 1.0,
+      "overlap_genes": []
+    },
+    "HIF1_signaling": {
+      "overlap": 0,
+      "pathway_size": 110,
+      "de_size": 85,
+      "pvalue": 1.0,
+      "overlap_genes": []
+    },
+    "VEGF_signaling": {
+      "overlap": 0,
+      "pathway_size": 60,
+      "de_size": 85,
+      "pvalue": 1.0,
+      "overlap_genes": []
+    },
+    "Homologous_Recombination": {
+      "overlap": 0,
+      "pathway_size": 41,
+      "de_size": 85,
+      "pvalue": 1.0,
+      "overlap_genes": []
+    },
+    "PI3K_AKT_signaling": {
+      "overlap": 4,
+      "pathway_size": 362,
+      "de_size": 85,
+      "pvalue": 0.06841572530926848,
+      "overlap_genes": [
+        "COL6A2",
+        "CSF1",
+        "PDGFA",
+        "PPP2R3B"
+      ]
+    },
+    "p53_signaling": {
+      "overlap": 0,
+      "pathway_size": 75,
+      "de_size": 85,
+      "pvalue": 1.0,
+      "overlap_genes": []
+    },
+    "Chemokine_signaling": {
+      "overlap": 0,
+      "pathway_size": 193,
+      "de_size": 85,
+      "pvalue": 1.0,
+      "overlap_genes": []
+    },
+    "Cytokine_receptor_interaction": {
+      "overlap": 1,
+      "pathway_size": 298,
+      "de_size": 85,
+      "pvalue": 0.7216115323755437,
+      "overlap_genes": [
+        "CSF1"
+      ]
+    },
+    "Antigen_processing_presentation": {
+      "overlap": 0,
+      "pathway_size": 82,
+      "de_size": 85,
+      "pvalue": 1.0,
+      "overlap_genes": []
+    },
+    "PDL1_PD1_checkpoint": {
+      "overlap": 1,
+      "pathway_size": 90,
+      "de_size": 85,
+      "pvalue": 0.3189859772907029,
+      "overlap_genes": [
+        "LAT"
+      ]
+    },
+    "Pentose_phosphate_pathway": {
+      "overlap": 1,
+      "pathway_size": 31,
+      "de_size": 85,
+      "pvalue": 0.12377300946519339,
+      "overlap_genes": [
+        "G6PD"
+      ]
+    },
+    "Arachidonic_acid_metabolism": {
+      "overlap": 0,
+      "pathway_size": 63,
+      "de_size": 85,
+      "pvalue": 1.0,
+      "overlap_genes": []
+    },
+    "Neuroactive_ligand_receptor": {
+      "overlap": 0,
+      "pathway_size": 371,
+      "de_size": 85,
+      "pvalue": 1.0,
+      "overlap_genes": []
+    },
+    "Prostate_cancer": {
+      "overlap": 1,
+      "pathway_size": 106,
+      "de_size": 85,
+      "pvalue": 0.3640604996527819,
+      "overlap_genes": [
+        "PDGFA"
+      ]
+    },
+    "Bladder_cancer": {
+      "overlap": 0,
+      "pathway_size": 41,
+      "de_size": 85,
+      "pvalue": 1.0,
+      "overlap_genes": []
+    },
+    "Renal_cell_carcinoma": {
+      "overlap": 1,
+      "pathway_size": 70,
+      "de_size": 85,
+      "pvalue": 0.2581814161909471,
+      "overlap_genes": [
+        "FLCN"
+      ]
+    },
+    "Epigenetic_Regulation": {
+      "overlap": 3,
+      "pathway_size": 94,
+      "de_size": 85,
+      "pvalue": 0.007519781292957148,
+      "overlap_genes": [
+        "PHC2",
+        "UHRF1",
+        "WHSC1"
+      ]
+    }
+  },
+  "SCBC_ASCL1": {
+    "Cell_Cycle": {
+      "overlap": 0,
+      "pathway_size": 158,
+      "de_size": 138,
+      "pvalue": 1.0,
+      "overlap_genes": []
+    },
+    "Apoptosis": {
+      "overlap": 2,
+      "pathway_size": 137,
+      "de_size": 138,
+      "pvalue": 0.24397753121389876,
+      "overlap_genes": [
+        "ITPR3",
+        "MAPK10"
+      ]
+    },
+    "HIF1_signaling": {
+      "overlap": 0,
+      "pathway_size": 110,
+      "de_size": 138,
+      "pvalue": 1.0,
+      "overlap_genes": []
+    },
+    "VEGF_signaling": {
+      "overlap": 0,
+      "pathway_size": 60,
+      "de_size": 138,
+      "pvalue": 1.0,
+      "overlap_genes": []
+    },
+    "Homologous_Recombination": {
+      "overlap": 0,
+      "pathway_size": 41,
+      "de_size": 138,
+      "pvalue": 1.0,
+      "overlap_genes": []
+    },
+    "PI3K_AKT_signaling": {
+      "overlap": 1,
+      "pathway_size": 362,
+      "de_size": 138,
+      "pvalue": 0.9202959430376052,
+      "overlap_genes": [
+        "KITLG"
+      ]
+    },
+    "p53_signaling": {
+      "overlap": 1,
+      "pathway_size": 75,
+      "de_size": 138,
+      "pvalue": 0.40563404669631237,
+      "overlap_genes": [
+        "PERP"
+      ]
+    },
+    "Chemokine_signaling": {
+      "overlap": 0,
+      "pathway_size": 193,
+      "de_size": 138,
+      "pvalue": 1.0,
+      "overlap_genes": []
+    },
+    "Cytokine_receptor_interaction": {
+      "overlap": 1,
+      "pathway_size": 298,
+      "de_size": 138,
+      "pvalue": 0.8749266318111923,
+      "overlap_genes": [
+        "GDF15"
+      ]
+    },
+    "Antigen_processing_presentation": {
+      "overlap": 0,
+      "pathway_size": 82,
+      "de_size": 138,
+      "pvalue": 1.0,
+      "overlap_genes": []
+    },
+    "PDL1_PD1_checkpoint": {
+      "overlap": 0,
+      "pathway_size": 90,
+      "de_size": 138,
+      "pvalue": 1.0,
+      "overlap_genes": []
+    },
+    "Pentose_phosphate_pathway": {
+      "overlap": 0,
+      "pathway_size": 31,
+      "de_size": 138,
+      "pvalue": 1.0,
+      "overlap_genes": []
+    },
+    "Arachidonic_acid_metabolism": {
+      "overlap": 0,
+      "pathway_size": 63,
+      "de_size": 138,
+      "pvalue": 1.0,
+      "overlap_genes": []
+    },
+    "Neuroactive_ligand_receptor": {
+      "overlap": 2,
+      "pathway_size": 371,
+      "de_size": 138,
+      "pvalue": 0.7287232512256558,
+      "overlap_genes": [
+        "CALCA",
+        "NMUR2"
+      ]
+    },
+    "Prostate_cancer": {
+      "overlap": 0,
+      "pathway_size": 106,
+      "de_size": 138,
+      "pvalue": 1.0,
+      "overlap_genes": []
+    },
+    "Bladder_cancer": {
+      "overlap": 0,
+      "pathway_size": 41,
+      "de_size": 138,
+      "pvalue": 1.0,
+      "overlap_genes": []
+    },
+    "Renal_cell_carcinoma": {
+      "overlap": 0,
+      "pathway_size": 70,
+      "de_size": 138,
+      "pvalue": 1.0,
+      "overlap_genes": []
+    },
+    "Epigenetic_Regulation": {
+      "overlap": 0,
+      "pathway_size": 94,
+      "de_size": 138,
+      "pvalue": 1.0,
+      "overlap_genes": []
+    }
+  },
+  "SCBC_POU2F3": {
+    "Cell_Cycle": {
+      "overlap": 0,
+      "pathway_size": 158,
+      "de_size": 66,
+      "pvalue": 1.0,
+      "overlap_genes": []
+    },
+    "Apoptosis": {
+      "overlap": 0,
+      "pathway_size": 137,
+      "de_size": 66,
+      "pvalue": 1.0,
+      "overlap_genes": []
+    },
+    "HIF1_signaling": {
+      "overlap": 1,
+      "pathway_size": 110,
+      "de_size": 66,
+      "pvalue": 0.30552309013443296,
+      "overlap_genes": [
+        "LTBR"
+      ]
+    },
+    "VEGF_signaling": {
+      "overlap": 1,
+      "pathway_size": 60,
+      "de_size": 66,
+      "pvalue": 0.18013945552132227,
+      "overlap_genes": [
+        "PLA2G4A"
+      ]
+    },
+    "Homologous_Recombination": {
+      "overlap": 0,
+      "pathway_size": 41,
+      "de_size": 66,
+      "pvalue": 1.0,
+      "overlap_genes": []
+    },
+    "PI3K_AKT_signaling": {
+      "overlap": 1,
+      "pathway_size": 362,
+      "de_size": 66,
+      "pvalue": 0.7010636956442107,
+      "overlap_genes": [
+        "ITGB4"
+      ]
+    },
+    "p53_signaling": {
+      "overlap": 0,
+      "pathway_size": 75,
+      "de_size": 66,
+      "pvalue": 1.0,
+      "overlap_genes": []
+    },
+    "Chemokine_signaling": {
+      "overlap": 1,
+      "pathway_size": 193,
+      "de_size": 66,
+      "pvalue": 0.47325583424506,
+      "overlap_genes": [
+        "CCR4"
+      ]
+    },
+    "Cytokine_receptor_interaction": {
+      "overlap": 2,
+      "pathway_size": 298,
+      "de_size": 66,
+      "pvalue": 0.25806193201508393,
+      "overlap_genes": [
+        "CCR4",
+        "LTBR"
+      ]
+    },
+    "Antigen_processing_presentation": {
+      "overlap": 0,
+      "pathway_size": 82,
+      "de_size": 66,
+      "pvalue": 1.0,
+      "overlap_genes": []
+    },
+    "PDL1_PD1_checkpoint": {
+      "overlap": 0,
+      "pathway_size": 90,
+      "de_size": 66,
+      "pvalue": 1.0,
+      "overlap_genes": []
+    },
+    "Pentose_phosphate_pathway": {
+      "overlap": 0,
+      "pathway_size": 31,
+      "de_size": 66,
+      "pvalue": 1.0,
+      "overlap_genes": []
+    },
+    "Arachidonic_acid_metabolism": {
+      "overlap": 2,
+      "pathway_size": 63,
+      "de_size": 66,
+      "pvalue": 0.01840495723018805,
+      "overlap_genes": [
+        "PLA2G4A",
+        "PTGS1"
+      ]
+    },
+    "Neuroactive_ligand_receptor": {
+      "overlap": 1,
+      "pathway_size": 371,
+      "de_size": 66,
+      "pvalue": 0.7099869516348378,
+      "overlap_genes": [
+        "P2RY10"
+      ]
+    },
+    "Prostate_cancer": {
+      "overlap": 0,
+      "pathway_size": 106,
+      "de_size": 66,
+      "pvalue": 1.0,
+      "overlap_genes": []
+    },
+    "Bladder_cancer": {
+      "overlap": 0,
+      "pathway_size": 41,
+      "de_size": 66,
+      "pvalue": 1.0,
+      "overlap_genes": []
+    },
+    "Renal_cell_carcinoma": {
+      "overlap": 0,
+      "pathway_size": 70,
+      "de_size": 66,
+      "pvalue": 1.0,
+      "overlap_genes": []
+    },
+    "Epigenetic_Regulation": {
+      "overlap": 0,
+      "pathway_size": 94,
+      "de_size": 66,
+      "pvalue": 1.0,
+      "overlap_genes": []
+    }
+  },
+  "SCBC_NEUROD1": {
+    "Cell_Cycle": {
+      "overlap": 0,
+      "pathway_size": 158,
+      "de_size": 30,
+      "pvalue": 1.0,
+      "overlap_genes": []
+    },
+    "Apoptosis": {
+      "overlap": 0,
+      "pathway_size": 137,
+      "de_size": 30,
+      "pvalue": 1.0,
+      "overlap_genes": []
+    },
+    "HIF1_signaling": {
+      "overlap": 0,
+      "pathway_size": 110,
+      "de_size": 30,
+      "pvalue": 1.0,
+      "overlap_genes": []
+    },
+    "VEGF_signaling": {
+      "overlap": 0,
+      "pathway_size": 60,
+      "de_size": 30,
+      "pvalue": 1.0,
+      "overlap_genes": []
+    },
+    "Homologous_Recombination": {
+      "overlap": 0,
+      "pathway_size": 41,
+      "de_size": 30,
+      "pvalue": 1.0,
+      "overlap_genes": []
+    },
+    "PI3K_AKT_signaling": {
+      "overlap": 1,
+      "pathway_size": 362,
+      "de_size": 30,
+      "pvalue": 0.42211222750832894,
+      "overlap_genes": [
+        "PRKAA2"
+      ]
+    },
+    "p53_signaling": {
+      "overlap": 0,
+      "pathway_size": 75,
+      "de_size": 30,
+      "pvalue": 1.0,
+      "overlap_genes": []
+    },
+    "Chemokine_signaling": {
+      "overlap": 0,
+      "pathway_size": 193,
+      "de_size": 30,
+      "pvalue": 1.0,
+      "overlap_genes": []
+    },
+    "Cytokine_receptor_interaction": {
+      "overlap": 1,
+      "pathway_size": 298,
+      "de_size": 30,
+      "pvalue": 0.3628135121456039,
+      "overlap_genes": [
+        "EDA"
+      ]
+    },
+    "Antigen_processing_presentation": {
+      "overlap": 0,
+      "pathway_size": 82,
+      "de_size": 30,
+      "pvalue": 1.0,
+      "overlap_genes": []
+    },
+    "PDL1_PD1_checkpoint": {
+      "overlap": 0,
+      "pathway_size": 90,
+      "de_size": 30,
+      "pvalue": 1.0,
+      "overlap_genes": []
+    },
+    "Pentose_phosphate_pathway": {
+      "overlap": 0,
+      "pathway_size": 31,
+      "de_size": 30,
+      "pvalue": 1.0,
+      "overlap_genes": []
+    },
+    "Arachidonic_acid_metabolism": {
+      "overlap": 0,
+      "pathway_size": 63,
+      "de_size": 30,
+      "pvalue": 1.0,
+      "overlap_genes": []
+    },
+    "Neuroactive_ligand_receptor": {
+      "overlap": 2,
+      "pathway_size": 371,
+      "de_size": 30,
+      "pvalue": 0.10633827290758345,
+      "overlap_genes": [
+        "CHRNA1",
+        "SSTR2"
+      ]
+    },
+    "Prostate_cancer": {
+      "overlap": 0,
+      "pathway_size": 106,
+      "de_size": 30,
+      "pvalue": 1.0,
+      "overlap_genes": []
+    },
+    "Bladder_cancer": {
+      "overlap": 0,
+      "pathway_size": 41,
+      "de_size": 30,
+      "pvalue": 1.0,
+      "overlap_genes": []
+    },
+    "Renal_cell_carcinoma": {
+      "overlap": 0,
+      "pathway_size": 70,
+      "de_size": 30,
+      "pvalue": 1.0,
+      "overlap_genes": []
+    },
+    "Epigenetic_Regulation": {
+      "overlap": 0,
+      "pathway_size": 94,
+      "de_size": 30,
+      "pvalue": 1.0,
+      "overlap_genes": []
+    }
+  }
+}
