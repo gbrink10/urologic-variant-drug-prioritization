@@ -1,0 +1,11 @@
+accession,context,platform,samples,comparison,source_publication_PMID,source_publication
+GSE199274,NEPC,RNA-seq,12,MDVr NEPC cells,37347559,Gritsina J Clin Invest 2023
+GSE216053,NEPC,RNA-seq,6,PM154 NEPC patient-derived cells,37967200,Yamada Sci Transl Med 2023
+GSE216052,NEPC,RNA-seq,9,PM154 DNMT1/3A knockout,37967200,Yamada Sci Transl Med 2023
+GSE130598,MIBC,NanoString PanCancer Pathways (~522 genes),24 paired tumor/adjacent-normal,kinome panel,32231273,Chandrashekar Oncogene 2020
+GSE143630,ccRCC,RNA-seq,44,ccRCC molecular characterization,32850445,Shih Front Oncol 2020
+GSE157256,HLRCC (renal HIF2alpha confirmation),RNA-seq,26,HLRCC + aggressive RCC,33402335,Crooks Sci Signal 2021
+GSE180999,RMC,RNA-seq,18,"SMARCB1-rescue vs null (RMC219, RMC-2C cell lines)",37236926,Hong Cell Rep 2023 (subseries of GSE181001)
+GSE196978,Penile SCC,Affymetrix HTA 2.0 (GPL17586),22 (6 normal + 16 tumor),penile tumor vs normal penis,35928876,Pinheiro et al. 2022 (penile SCC)
+GSE128192,Sarcomatoid UC,Illumina HumanHT-12 V4 (GPL14951),112 (28 SARC + 84 UC),sarcomatoid vs conventional UC,31067463,Guo et al. Cancer Cell 2019
+GSE269750,SCBC (subtype-stratified),RNA-seq,44,lineage TF subtype calls (ASCL1+/NEUROD1+/POU2F3+/YAP1+),37380560,Feng Eur Urol 2024
