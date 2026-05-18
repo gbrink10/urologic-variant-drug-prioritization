@@ -35,67 +35,153 @@ plt.rcParams.update({
 })
 
 # =====================================================================
-# Figure 1 — Pipeline schematic
+# Figure 1 — Pipeline schematic (vertical flow, parallel Step 1 inputs)
 # =====================================================================
 print("Generating Figure 1: Pipeline schematic")
-fig, ax = plt.subplots(figsize=(11, 7.5))
+fig, ax = plt.subplots(figsize=(11, 11.5))
 ax.set_xlim(0, 11)
-ax.set_ylim(0, 7.5)
+ax.set_ylim(0, 11.5)
 ax.axis('off')
 
-# Draw 6 step boxes (shifted down to leave clear space for title)
-steps = [
-    (0.4, 4.2, 'Step 1\nTCGA Pan-Cancer\nAtlas alteration\nfrequencies', '#cfe2f3'),
-    (2.2, 4.2, 'Step 2\nGEO transcriptomic\ndata (10 datasets,\n7 contexts)', '#d9ead3'),
-    (4.0, 4.2, 'Step 3\nDifferential expr.\n+ KEGG enrichment\n(18 pathways)', '#fff2cc'),
-    (5.8, 4.2, 'Step 4\nDrug-target curation\n(TTD + OpenTargets)', '#f4cccc'),
-    (7.6, 4.2, 'Step 5\n9-point Molecular\nPrioritization Score\n(T/G/K/L)', '#ead1dc'),
-    (9.4, 4.2, 'Step 6\nIndependent PubMed\nliterature audit\n(novelty per row)', '#d0e0e3'),
+# --- Title ---
+ax.text(5.5, 11.15, 'Figure 1. Unified Public-Data Pipeline for Drug Repurposing',
+        ha='center', fontsize=13, weight='bold', color='#1a1a1a')
+ax.text(5.5, 10.80, 'Across Seven Aggressive Urologic Cancer Contexts',
+        ha='center', fontsize=11.5, weight='bold', color='#1a1a1a')
+
+# --- Context header bar ---
+header_box = FancyBboxPatch((0.4, 9.85), 10.2, 0.70,
+                             boxstyle="round,pad=0.05",
+                             ec='#1a1a1a', fc='#1a3a5c', linewidth=1.2)
+ax.add_patch(header_box)
+ax.text(5.5, 10.32, '7 Aggressive Urologic Cancer Contexts',
+        ha='center', va='center', fontsize=11, weight='bold', color='white')
+ax.text(5.5, 10.00,
+        'NEPC   |   MIBC   |   ccRCC   |   RMC   |   PSCC   |   Sarcomatoid UC   |   SCBC',
+        ha='center', va='center', fontsize=9, color='#e8e8e8', style='italic')
+
+# Down arrow from header to Step 1
+ax.annotate('', xy=(5.5, 9.30), xytext=(5.5, 9.75),
+            arrowprops=dict(arrowstyle='->', lw=1.6, color='#444'))
+
+# --- Step 1 group label ---
+ax.text(5.5, 9.27, 'Step 1.  Genomic evidence input',
+        ha='center', fontsize=10.5, weight='bold', color='#1a1a1a')
+
+# --- Step 1a (TCGA) and Step 1b (Published series) — parallel boxes ---
+# Left: TCGA
+ax.add_patch(FancyBboxPatch((0.5, 7.40), 4.85, 1.65,
+                              boxstyle="round,pad=0.06",
+                              ec='#1f4e79', fc='#cfe2f3', linewidth=1.4))
+ax.text(2.925, 8.75, 'Step 1a — TCGA Pan-Cancer Atlas',
+        ha='center', va='center', fontsize=9.5, weight='bold', color='#0b2e4f')
+ax.text(2.925, 8.42, 'Source-disease cohorts',
+        ha='center', va='center', fontsize=8.5, style='italic', color='#1a1a1a')
+ax.text(2.925, 8.02, 'PRAD  n = 494   (NEPC)\n'
+                     'BLCA  n = 411   (MIBC)\n'
+                     'KIRC  n = 512   (ccRCC)',
+        ha='center', va='center', fontsize=8.3, color='#0b2e4f',
+        family='monospace')
+ax.text(2.925, 7.52, '→ Master Table 1 rows 1–16',
+        ha='center', va='center', fontsize=8.3, weight='bold', color='#0b2e4f')
+
+# Right: Published genomic series
+ax.add_patch(FancyBboxPatch((5.65, 7.40), 4.85, 1.65,
+                              boxstyle="round,pad=0.06",
+                              ec='#2c6e49', fc='#d9ead3', linewidth=1.4))
+ax.text(8.075, 8.75, 'Step 1b — Published genomic series',
+        ha='center', va='center', fontsize=9.5, weight='bold', color='#1d4d33')
+ax.text(8.075, 8.42, 'Rare-disease discovery cohorts',
+        ha='center', va='center', fontsize=8.5, style='italic', color='#1a1a1a')
+ax.text(8.075, 8.02, 'RMC: Msaouel 2020       PSCC: Chahoud 2022\n'
+                     'Sarc-UC: Guo 2019         SCBC: Chang 2018',
+        ha='center', va='center', fontsize=8.0, color='#1d4d33',
+        family='monospace')
+ax.text(8.075, 7.52, '→ Master Table 1 rows 17–30',
+        ha='center', va='center', fontsize=8.3, weight='bold', color='#1d4d33')
+
+# Converging arrows from Step 1a / 1b to top of Step 2 box (straight diagonals
+# that originate just below the Step 1 boxes so they don't bisect interior text)
+ax.annotate('', xy=(5.5, 7.00), xytext=(2.925, 7.36),
+            arrowprops=dict(arrowstyle='->', lw=1.5, color='#1f4e79'))
+ax.annotate('', xy=(5.5, 7.00), xytext=(8.075, 7.36),
+            arrowprops=dict(arrowstyle='->', lw=1.5, color='#2c6e49'))
+
+# --- Steps 2–6: unified vertical column (height 0.80, spacing 1.10) ---
+unified_steps = [
+    (6.17, 'Step 2',
+     'GEO transcriptomic differential expression',
+     '10 datasets across all 7 contexts  ·  Welch t-test, BH-FDR',
+     '#fff2cc', '#806600'),
+    (5.07, 'Step 3',
+     '18 pre-specified KEGG pathway enrichment',
+     '8 drug-class  +  7 discovery-context  +  3 disease-context  ·  hypergeometric',
+     '#fce5cd', '#a04a00'),
+    (3.97, 'Step 4',
+     'Drug–target curation',
+     'Therapeutic Target Database  +  OpenTargets (release 2026.03)',
+     '#f4cccc', '#922b21'),
+    (2.87, 'Step 5',
+     '9-point Molecular Prioritization Score',
+     'TCGA-equivalent genomic (0–3)  +  GEO (0–3)  +  KEGG (0–2)  +  Literature (0–1)',
+     '#ead1dc', '#6c3483'),
+    (1.77, 'Step 6',
+     'Independent PubMed prior-proposal audit',
+     'Urologic-oncology-literature-only novelty classification per drug–cancer row',
+     '#d0e0e3', '#1b5e6b'),
 ]
-for x, y, txt, color in steps:
-    box = FancyBboxPatch((x, y), 1.6, 1.6, boxstyle="round,pad=0.05",
-                          ec='black', fc=color, linewidth=1.0)
-    ax.add_patch(box)
-    ax.text(x + 0.8, y + 0.8, txt, ha='center', va='center', fontsize=8, weight='bold')
+box_x, box_w, box_h = 1.20, 8.60, 0.80
+for y, label, title, sub, fc, accent in unified_steps:
+    ax.add_patch(FancyBboxPatch((box_x, y), box_w, box_h,
+                                  boxstyle="round,pad=0.05",
+                                  ec=accent, fc=fc, linewidth=1.2))
+    ax.text(box_x + 0.30, y + box_h/2, label, ha='left', va='center',
+            fontsize=10, weight='bold', color=accent)
+    ax.text(5.50, y + 0.55, title, ha='center', va='center',
+            fontsize=10, weight='bold', color='#1a1a1a')
+    ax.text(5.50, y + 0.22, sub, ha='center', va='center',
+            fontsize=8.3, color='#333')
 
-# Arrows between steps
-for i in range(5):
-    ax.annotate('', xy=(steps[i+1][0], steps[i+1][1] + 0.8),
-                xytext=(steps[i][0] + 1.6, steps[i][1] + 0.8),
-                arrowprops=dict(arrowstyle='->', lw=1.5, color='black'))
+# Arrows linking unified steps (downward — head=destination, tail=origin)
+arrow_pairs = [
+    (5.87, 6.17),   # Step 2 (bot 6.17) → Step 3 (top 5.87)
+    (4.77, 5.07),   # Step 3 (bot 5.07) → Step 4 (top 4.77)
+    (3.67, 3.97),   # Step 4 (bot 3.97) → Step 5 (top 3.67)
+    (2.57, 2.87),   # Step 5 (bot 2.87) → Step 6 (top 2.57)
+]
+for head_y, tail_y in arrow_pairs:
+    ax.annotate('', xy=(5.5, head_y), xytext=(5.5, tail_y),
+                arrowprops=dict(arrowstyle='->', lw=1.6, color='#444'))
 
-# Inputs (top) — clear separation from step boxes
-ax.text(5.5, 7.0, '7 Aggressive Urologic Cancer Contexts',
-        ha='center', fontsize=12, weight='bold', color='#1a1a1a')
-ax.text(5.5, 6.55, 'NEPC  |  MIBC  |  ccRCC  |  RMC  |  PSCC  |  Sarc-UC  |  SCBC',
-        ha='center', fontsize=8.5, color='#444444', style='italic')
-# Arrow from input header to step boxes
-ax.annotate('', xy=(5.5, 5.8), xytext=(5.5, 6.3),
-            arrowprops=dict(arrowstyle='->', lw=1.5, color='gray'))
+# Arrow from Step 6 (bottom 1.77) down to output box (top 1.28)
+ax.annotate('', xy=(5.5, 1.30), xytext=(5.5, 1.75),
+            arrowprops=dict(arrowstyle='->', lw=2.0, color='#1a1a1a'))
 
-# Output (bottom)
-output_box = FancyBboxPatch((1.0, 0.5), 9.0, 2.5,
-                             boxstyle="round,pad=0.1", ec='black',
-                             fc='#fef5e7', linewidth=1.5)
-ax.add_patch(output_box)
-ax.text(5.5, 2.65, 'Master Table 1: 30 Drug–Cancer Associations',
-        ha='center', fontsize=11, weight='bold')
-ax.text(5.5, 2.20, '24 convergent validation (previously-proposed priorities)',
-        ha='center', fontsize=9)
-ax.text(5.5, 1.80, '6 framework-novel within urologic-oncology literature',
-        ha='center', fontsize=9, color='#c00')
-ax.text(5.5, 1.40, '5 partially novel; 1 clinically-actionable negative biomarker',
-        ha='center', fontsize=9)
-ax.text(5.5, 0.85, '10 Strong-tier | 17 Moderate-tier | 2 Exploratory-tier (Molecular Prioritization Score 0–9)',
-        ha='center', fontsize=8, style='italic', color='#555')
+# --- Output box: Master Table 1 ---
+out_box = FancyBboxPatch((0.40, 0.10), 10.20, 1.18,
+                          boxstyle="round,pad=0.06",
+                          ec='#7a4a00', fc='#fef5e7', linewidth=1.6)
+ax.add_patch(out_box)
+ax.text(5.50, 0.95, 'Master Table 1 — 30 Drug–Cancer Associations',
+        ha='center', va='center', fontsize=11.5, weight='bold', color='#7a4a00')
+# Color-coded category summary on one line
+ax.text(2.20, 0.55, '18  previously proposed',
+        ha='center', va='center', fontsize=9, weight='bold', color='#0b2e4f')
+ax.text(2.20, 0.30, '(convergent literature support)',
+        ha='center', va='center', fontsize=7.8, style='italic', color='#0b2e4f')
+ax.text(4.85, 0.55, '6  framework-novel',
+        ha='center', va='center', fontsize=9, weight='bold', color='#c00000')
+ax.text(4.85, 0.30, '(within urologic-oncology literature)',
+        ha='center', va='center', fontsize=7.8, style='italic', color='#c00000')
+ax.text(7.30, 0.55, '5  partially novel',
+        ha='center', va='center', fontsize=9, weight='bold', color='#6c3483')
+ax.text(7.30, 0.30, '(variant-specific extensions)',
+        ha='center', va='center', fontsize=7.8, style='italic', color='#6c3483')
+ax.text(9.50, 0.55, '1  negative biomarker',
+        ha='center', va='center', fontsize=9, weight='bold', color='#1d4d33')
+ax.text(9.50, 0.30, '(TROP2-low in Sarc-UC)',
+        ha='center', va='center', fontsize=7.8, style='italic', color='#1d4d33')
 
-# Connect steps to output
-ax.annotate('', xy=(5.5, 3.0), xytext=(5.5, 3.95),
-            arrowprops=dict(arrowstyle='->', lw=2.0, color='black'))
-
-plt.title('Figure 1. Unified Public-Data Pipeline Schematic for Drug Repurposing Across\n'
-          'Seven Aggressive Urologic Cancer Contexts', fontsize=11, weight='bold', pad=8)
-plt.tight_layout()
 plt.savefig(FIGURES / 'Figure1_pipeline.png', bbox_inches='tight')
 plt.close()
 print(f"  Saved: {FIGURES / 'Figure1_pipeline.png'}")

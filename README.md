@@ -6,6 +6,22 @@
 
 A reproducible public-data pipeline that identifies convergent and novel drug-repurposing priorities across seven aggressive urologic cancer contexts.
 
+---
+
+> ### What is deposited at the root of this repository
+>
+> **Seven clinical contexts. Ten GEO datasets. Thirty drug–cancer associations (Master Table 1).** The processed analysis tables that accompany the v26 manuscript are located at the **root of this repository** and named:
+>
+> - `data/DE_results/FULL_DE_RESULTS_ALL10.csv` — consolidated DE across all ten GEO datasets
+> - `data/DE_results/GEO_DATASET_AUDIT_10_DATASETS.csv` — ten-dataset accession audit with PMIDs
+> - `results/MASTER_DRUG_ASSOCIATION_TABLE_30_ROWS.csv` — thirty drug–cancer associations with per-row scoring
+> - `results/PUBMED_NOVELTY_AUDIT.csv` — per-row novelty classification
+> - `results/KEGG_PATHWAYS_18.json` and `results/KEGG_ENRICHMENT_ALL10.{json,csv}` — eighteen pre-specified pathways + hypergeometric enrichment per disease
+>
+> Source manuscript: the v26 submission (under review, May 2026). The `legacy/v25/` subfolder preserves an earlier three-context analysis **for provenance only** and is **not** the active deposit; see [`legacy/v25/README.md`](legacy/v25/README.md).
+
+---
+
 ## Companion manuscript
 
 **"A Reproducible Public-Data Pipeline Identifies Convergent and Novel Drug-Repurposing Priorities Across Rare Aggressive Urologic Cancers"** *(under review, May 2026)*
@@ -25,9 +41,13 @@ The pipeline integrates:
 
 ## Seven clinical contexts analyzed
 
-1. Neuroendocrine prostate cancer (NEPC)
-2. Muscle-invasive bladder cancer (MIBC)
-3. Clear cell renal cell carcinoma (ccRCC)
+**Source-disease contexts** (TCGA Pan-Cancer Atlas cohorts, Master Table 1 rows 1–16):
+1. Neuroendocrine prostate cancer (NEPC) — TCGA PRAD n = 494
+2. Muscle-invasive bladder cancer (MIBC) — TCGA BLCA n = 411
+3. Clear cell renal cell carcinoma (ccRCC) — TCGA KIRC n = 512
+
+**Rare-disease / variant-histology discovery contexts** (published genomic series + GEO discovery-mode, Master Table 1 rows 17–30):
+
 4. Renal medullary carcinoma (RMC) — SMARCB1-deficient
 5. Penile squamous cell carcinoma (PSCC)
 6. Sarcomatoid urothelial carcinoma
@@ -35,14 +55,16 @@ The pipeline integrates:
 
 ## Master Table 1 output (30 drug-cancer associations)
 
+Rows 1–16 (source-disease validation) ↔ Rows 17–30 (rare-disease / variant-histology discovery mode).
+
 - **18 previously-proposed** urologic-oncology priorities (convergent literature support)
 - **6 framework-novel** within urologic-oncology literature:
-  - CXCR1/CXCR2 antagonists (reparixin, navarixin, AZD5069) in RMC
+  - CXCR1/CXCR2 antagonists (reparixin, navarixin, AZD5069, danirixin, ladarixin) in RMC
   - Anti-CEACAM1 (CM24) in RMC
   - NSD2/WHSC1 inhibition (KTX-1001) in sarcomatoid urothelial carcinoma
   - ATR pathway inhibitors (ceralasertib, berzosertib, elimusertib) in sarcomatoid urothelial carcinoma
   - SSTR2-directed lutetium-177 DOTATATE in NEUROD1+ SCBC
-  - CEACAM5-directed targeting in ASCL1+ SCBC
+  - CEACAM5-directed targeting in ASCL1+ SCBC (replacement-agent selection required following the December 2023 discontinuation of tusamitamab ravtansine)
 - **5 partially novel** variant-specific extensions
 - **1 clinically actionable negative biomarker** (TROP2-low in sarcomatoid urothelial carcinoma → sacituzumab govitecan predicted non-response, concordant with Brunelli 2024 / Bahlinger 2024 / Hoffman-Censits 2021)
 
@@ -139,9 +161,9 @@ The concept-DOI [10.5281/zenodo.20217919](https://doi.org/10.5281/zenodo.2021791
 
 Claude (Anthropic) and ChatGPT (OpenAI) large-language-model tools were used for coding assistance, literature-audit organization, language editing, and manuscript-structure suggestions. All analyses were executed by author-run Python scripts using publicly available datasets. All PubMed novelty classifications, score component assignments, drug-target interpretations, and final manuscript text were reviewed and approved by the human authors.
 
-## Legacy v25 content
+## Provenance: `legacy/v25/` (archived, not used by the current manuscript)
 
-The original three-context source-disease analysis (16 drug-cancer associations across NEPC, MIBC, ccRCC) is preserved in `legacy/v25/` for provenance and continuity. The v26 expansion supersedes the v25 analysis for all reproducibility claims in the companion manuscript.
+The earlier three-context analysis is archived under [`legacy/v25/`](legacy/v25/) for historical provenance only. **It is not the deposit referenced by the v26 manuscript and should not be used to reproduce any v26 claim.** All current reproducibility claims map exclusively to the files at the root of this repository (see the top of this README). The `legacy/v25/` folder contains its own README clarifying its archive status.
 
 ## Contact
 
