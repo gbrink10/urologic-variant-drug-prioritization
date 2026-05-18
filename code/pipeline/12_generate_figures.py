@@ -297,32 +297,35 @@ def schematic_sarcuc(ax):
             color='#c00', style='italic', zorder=7)
 
     # --- Drug boxes around the cell ---
-    # KTX-1001 → NSD2 (top-left)
-    draw_drug_box(ax, 0.5, 8.9, 5.0, 1.0,
+    # KTX-1001 → NSD2 (top-left, above cell)
+    draw_drug_box(ax, 0.3, 8.9, 5.5, 1.0,
                   'FRAMEWORK-NOVEL: NSD2 inhibitor',
-                  'KTX-1001 (Phase I)')
-    # ATR inhibitors (top-right)
-    draw_drug_box(ax, 14.0, 8.9, 7.0, 1.0,
+                  'KTX-1001 (Phase I)',
+                  fontsize_main=7.8)
+    # ATR inhibitors (top-right, above cell)
+    draw_drug_box(ax, 13.5, 8.9, 8.0, 1.0,
                   'FRAMEWORK-NOVEL: ATR inhibitors',
                   'ceralasertib · berzosertib · elimusertib',
-                  fontsize_sub=7.0)
-    # UHRF1 PROTAC (right middle)
-    draw_drug_box(ax, 16.0, 6.2, 5.5, 0.9,
+                  fontsize_main=7.8, fontsize_sub=7.0)
+    # UHRF1 PROTAC (right margin, mid; placed beyond cell x=16)
+    draw_drug_box(ax, 16.3, 6.2, 5.4, 0.9,
                   'PARTIALLY NOVEL: UHRF1 PROTAC',
-                  'UM-002 (preclinical)')
-    # G6PD inhibitor (right bottom)
-    draw_drug_box(ax, 16.5, 2.3, 5.3, 0.9,
+                  'UM-002 (preclinical)',
+                  fontsize_main=7.8)
+    # G6PD inhibitor (right margin, bottom)
+    draw_drug_box(ax, 16.3, 2.3, 5.4, 0.9,
                   'PARTIALLY NOVEL: G6PD inhibitor',
-                  '6-aminonicotinamide')
+                  '6-aminonicotinamide',
+                  fontsize_main=7.8)
 
-    # Inhibition arrows (all routed to land directly on the targets)
+    # Inhibition arrows updated to match new box positions
     draw_inhibition(ax, (3.0, 8.9), (sc_cx - 2.7, sc_cy + 0.85),
                     color='darkred', lw=2.0)
     draw_inhibition(ax, (17.5, 8.9), (sc_cx + 1.8, sc_cy + 0.85),
                     color='darkred', lw=2.0)
-    draw_inhibition(ax, (16.0, 6.65), (sc_cx - 0.05, sc_cy + 0.45),
+    draw_inhibition(ax, (16.3, 6.65), (sc_cx - 0.05, sc_cy + 0.55),
                     color='darkred', lw=2.0)
-    draw_inhibition(ax, (16.5, 2.75), (sc_cx + 4.0, sc_cy - 1.8),
+    draw_inhibition(ax, (16.3, 2.75), (sc_cx + 4.0, sc_cy - 1.8),
                     color='darkred', lw=2.0)
 
     # Negative biomarker box (bottom-left)
@@ -423,26 +426,28 @@ def schematic_scbc(ax):
             ha='right', va='center')
 
     # --- Drug boxes top ---
-    draw_drug_box(ax, 0.5, 9.0, 9.0, 1.0,
-                  'FRAMEWORK-NOVEL: anti-CEACAM5 antibody-drug conjugate',
+    # ADC label shortened ("antibody-drug conjugate" -> "ADC") + smaller font
+    # so the FRAMEWORK-NOVEL header text fits inside the box
+    draw_drug_box(ax, 0.5, 9.0, 9.5, 1.0,
+                  'FRAMEWORK-NOVEL: anti-CEACAM5 ADC',
                   '(tusamitamab ravtansine = prior proof-of-concept, '
                   'discontinued Dec 2023; replacement-agent required)',
-                  fontsize_sub=6.8)
-    draw_drug_box(ax, 12.5, 9.0, 9.0, 1.0,
-                  'FRAMEWORK-NOVEL: lutetium-177 DOTATATE (FDA-approved)',
+                  fontsize_main=7.8, fontsize_sub=6.8)
+    draw_drug_box(ax, 12.0, 9.0, 9.5, 1.0,
+                  'FRAMEWORK-NOVEL: ¹⁷⁷Lu DOTATATE (FDA-approved)',
                   'theranostic — Ga-68 DOTATATE PET selection → ¹⁷⁷Lu therapy',
-                  fontsize_sub=6.8)
+                  fontsize_main=7.8, fontsize_sub=6.8)
 
     # CEACAM5 inhibition arrows: ONE T-bar per receptor, all originating from
     # the drug box. To avoid the "tangle" look, draw them with consistent
     # angles and short, clean shafts.
     for rx_, ry_, _ in ascl_recs:
-        draw_inhibition(ax, (5.0, 9.0), (rx_ + 0.05, ry_ + 0.05),
+        draw_inhibition(ax, (5.25, 9.0), (rx_ + 0.05, ry_ + 0.05),
                         color='darkred', lw=1.6, bar_half=0.16)
     # SSTR2 binding arrows (theranostic): use directed arrows (not T-bars)
     # to indicate binding/delivery, not inhibition
     for rx_, ry_, _ in neur_recs:
-        ax.annotate('', xy=(rx_ - 0.05, ry_ + 0.05), xytext=(17.0, 9.0),
+        ax.annotate('', xy=(rx_ - 0.05, ry_ + 0.05), xytext=(16.75, 9.0),
                     arrowprops=dict(arrowstyle='-|>', lw=1.6,
                                     color='#6c3483'))
 
