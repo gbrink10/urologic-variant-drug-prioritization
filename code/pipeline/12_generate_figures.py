@@ -1,492 +1,596 @@
-"""Generate the 4 novel-target-focused figures for v26 manuscript.
+"""Generate final Figures 2, 3, 4 with integrated cellular mechanism
+schematics replacing the redundant chart/panel content.
 
-Fig 1 — Pipeline schematic (6-step workflow diagram)
-Fig 2 — RMC novel findings (volcano + chemokine triad + pathway + drug-class)
-Fig 3 — Sarcomatoid UC novel findings (volcano + KEGG + TROP2-down + drug-class)
-Fig 4 — SCBC subtype-stratified novel findings (4 panels per subtype)
-
-Uses matplotlib; produces high-resolution PNG figures in framework_expansion/figures/
+Layout (consistent across all three figures):
+  Panel A (top-left): volcano / subtype distribution
+  Panel B (top-right): cross-cell-line or pathway enrichment or subtype bars
+  Panel C (full-width bottom): cellular mechanism schematic
 """
 import sys, json
 from pathlib import Path
-import pandas as pd
 import numpy as np
+import pandas as pd
 import matplotlib
-matplotlib.use('Agg')  # non-interactive backend
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-import matplotlib.patches as mpatches
-from matplotlib.patches import FancyBboxPatch, FancyArrowPatch
+import matplotlib.gridspec as gridspec
+from matplotlib.patches import (FancyBboxPatch, Circle, Ellipse, Polygon,
+                                  FancyArrowPatch)
 sys.stdout.reconfigure(encoding='utf-8')
 
 RESULTS = Path(r"C:\Users\garre\framework_expansion\results")
 FIGURES = Path(r"C:\Users\garre\framework_expansion\figures")
-FIGURES.mkdir(parents=True, exist_ok=True)
 
 plt.rcParams.update({
-    'figure.dpi': 200,
-    'savefig.dpi': 300,
-    'font.size': 9,
-    'axes.titlesize': 10,
-    'axes.labelsize': 9,
-    'xtick.labelsize': 8,
-    'ytick.labelsize': 8,
-    'legend.fontsize': 8,
+    'figure.dpi': 200, 'savefig.dpi': 300, 'font.size': 9,
     'font.family': 'sans-serif',
+    'axes.spines.top': False, 'axes.spines.right': False,
 })
 
+
 # =====================================================================
-# Figure 1 — Pipeline schematic (vertical flow, parallel Step 1 inputs)
+# Schematic helper functions
 # =====================================================================
-print("Generating Figure 1: Pipeline schematic")
-fig, ax = plt.subplots(figsize=(11, 11.5))
-ax.set_xlim(0, 11)
-ax.set_ylim(0, 11.5)
-ax.axis('off')
+def smooth_blob(cx, cy, rx, ry, n=80, wiggle=0.10, seed=0):
+    rng = np.random.RandomState(seed)
+    theta = np.linspace(0, 2 * np.pi, n, endpoint=False)
+    r_mod = (1 + wiggle * np.cos(theta * 4 + rng.uniform(0, 2 * np.pi))
+                + 0.5 * wiggle * np.cos(theta * 7 + rng.uniform(0, 2 * np.pi)))
+    xs = cx + rx * r_mod * np.cos(theta)
+    ys = cy + ry * r_mod * np.sin(theta)
+    return list(zip(xs, ys))
 
-# --- Title ---
-ax.text(5.5, 11.15, 'Figure 1. Unified Public-Data Pipeline for Drug Repurposing',
-        ha='center', fontsize=13, weight='bold', color='#1a1a1a')
-ax.text(5.5, 10.80, 'Across Seven Aggressive Urologic Cancer Contexts',
-        ha='center', fontsize=11.5, weight='bold', color='#1a1a1a')
 
-# --- Context header bar ---
-header_box = FancyBboxPatch((0.4, 9.85), 10.2, 0.70,
-                             boxstyle="round,pad=0.05",
-                             ec='#1a1a1a', fc='#1a3a5c', linewidth=1.2)
-ax.add_patch(header_box)
-ax.text(5.5, 10.32, '7 Aggressive Urologic Cancer Contexts',
-        ha='center', va='center', fontsize=11, weight='bold', color='white')
-ax.text(5.5, 10.00,
-        'NEPC   |   MIBC   |   ccRCC   |   RMC   |   PSCC   |   Sarcomatoid UC   |   SCBC',
-        ha='center', va='center', fontsize=9, color='#e8e8e8', style='italic')
+def draw_receptor(ax, x, y, size=0.28, color='#222', angle=90, lw=1.8):
+    rad = np.radians(angle)
+    dx, dy = np.cos(rad), np.sin(rad)
+    sx, sy = x + size * dx, y + size * dy
+    ax.plot([x, sx], [y, sy], color=color, lw=lw, solid_capstyle='round',
+            zorder=5)
+    for arm_off in (-45, 45):
+        arad = np.radians(angle + arm_off)
+        ax_ = sx + 0.7 * size * np.cos(arad)
+        ay_ = sy + 0.7 * size * np.sin(arad)
+        ax.plot([sx, ax_], [sy, ay_], color=color, lw=lw,
+                solid_capstyle='round', zorder=5)
 
-# Down arrow from header to Step 1
-ax.annotate('', xy=(5.5, 9.30), xytext=(5.5, 9.75),
-            arrowprops=dict(arrowstyle='->', lw=1.6, color='#444'))
 
-# --- Step 1 group label ---
-ax.text(5.5, 9.27, 'Step 1.  Genomic evidence input',
-        ha='center', fontsize=10.5, weight='bold', color='#1a1a1a')
+def draw_inhibition(ax, start, end, color='darkred', lw=1.8, bar_half=0.20):
+    sx, sy = start
+    ex, ey = end
+    ax.plot([sx, ex], [sy, ey], color=color, lw=lw, solid_capstyle='round',
+            zorder=8)
+    dx, dy = ex - sx, ey - sy
+    L = np.hypot(dx, dy)
+    if L == 0:
+        return
+    px, py = -dy / L, dx / L
+    ax.plot([ex - bar_half * px, ex + bar_half * px],
+            [ey - bar_half * py, ey + bar_half * py],
+            color=color, lw=lw + 0.7, solid_capstyle='round', zorder=8)
 
-# --- Step 1a (TCGA) and Step 1b (Published series) — parallel boxes ---
-# Left: TCGA
-ax.add_patch(FancyBboxPatch((0.5, 7.40), 4.85, 1.65,
-                              boxstyle="round,pad=0.06",
-                              ec='#1f4e79', fc='#cfe2f3', linewidth=1.4))
-ax.text(2.925, 8.75, 'Step 1a — TCGA Pan-Cancer Atlas',
-        ha='center', va='center', fontsize=9.5, weight='bold', color='#0b2e4f')
-ax.text(2.925, 8.42, 'Source-disease cohorts',
-        ha='center', va='center', fontsize=8.5, style='italic', color='#1a1a1a')
-ax.text(2.925, 8.02, 'PRAD  n = 494   (NEPC)\n'
-                     'BLCA  n = 411   (MIBC)\n'
-                     'KIRC  n = 512   (ccRCC)',
-        ha='center', va='center', fontsize=8.3, color='#0b2e4f',
-        family='monospace')
-ax.text(2.925, 7.52, '→ Master Table 1 rows 1–16',
-        ha='center', va='center', fontsize=8.3, weight='bold', color='#0b2e4f')
 
-# Right: Published genomic series
-ax.add_patch(FancyBboxPatch((5.65, 7.40), 4.85, 1.65,
-                              boxstyle="round,pad=0.06",
-                              ec='#2c6e49', fc='#d9ead3', linewidth=1.4))
-ax.text(8.075, 8.75, 'Step 1b — Published genomic series',
-        ha='center', va='center', fontsize=9.5, weight='bold', color='#1d4d33')
-ax.text(8.075, 8.42, 'Rare-disease discovery cohorts',
-        ha='center', va='center', fontsize=8.5, style='italic', color='#1a1a1a')
-ax.text(8.075, 8.02, 'RMC: Msaouel 2020       PSCC: Chahoud 2022\n'
-                     'Sarc-UC: Guo 2019         SCBC: Chang 2018',
-        ha='center', va='center', fontsize=8.0, color='#1d4d33',
-        family='monospace')
-ax.text(8.075, 7.52, '→ Master Table 1 rows 17–30',
-        ha='center', va='center', fontsize=8.3, weight='bold', color='#1d4d33')
+def draw_drug_box(ax, x, y, w, h, label_main, label_sub, novel=True):
+    ec = 'darkred' if novel else '#444'
+    fc = '#fadbd8' if novel else '#ececec'
+    ax.add_patch(FancyBboxPatch((x, y), w, h, boxstyle="round,pad=0.05",
+                                  ec=ec, fc=fc, linewidth=1.5, zorder=6))
+    ax.text(x + w/2, y + h * 0.65, label_main, ha='center', va='center',
+            fontsize=8.5, weight='bold', color=ec, zorder=7)
+    ax.text(x + w/2, y + h * 0.30, label_sub, ha='center', va='center',
+            fontsize=7.3, color=ec, zorder=7)
 
-# Converging arrows from Step 1a / 1b to top of Step 2 box (straight diagonals
-# that originate just below the Step 1 boxes so they don't bisect interior text)
-ax.annotate('', xy=(5.5, 7.00), xytext=(2.925, 7.36),
-            arrowprops=dict(arrowstyle='->', lw=1.5, color='#1f4e79'))
-ax.annotate('', xy=(5.5, 7.00), xytext=(8.075, 7.36),
-            arrowprops=dict(arrowstyle='->', lw=1.5, color='#2c6e49'))
 
-# --- Steps 2–6: unified vertical column (height 0.80, spacing 1.10) ---
-unified_steps = [
-    (6.17, 'Step 2',
-     'GEO transcriptomic differential expression',
-     '10 datasets across all 7 contexts  ·  Welch t-test, BH-FDR',
-     '#fff2cc', '#806600'),
-    (5.07, 'Step 3',
-     '18 pre-specified KEGG pathway enrichment',
-     '8 drug-class  +  7 discovery-context  +  3 disease-context  ·  hypergeometric',
-     '#fce5cd', '#a04a00'),
-    (3.97, 'Step 4',
-     'Drug–target curation',
-     'Therapeutic Target Database  +  OpenTargets (release 2026.03)',
-     '#f4cccc', '#922b21'),
-    (2.87, 'Step 5',
-     '9-point Molecular Prioritization Score',
-     'TCGA-equivalent genomic (0–3)  +  GEO (0–3)  +  KEGG (0–2)  +  Literature (0–1)',
-     '#ead1dc', '#6c3483'),
-    (1.77, 'Step 6',
-     'Independent PubMed prior-proposal audit',
-     'Urologic-oncology-literature-only novelty classification per drug–cancer row',
-     '#d0e0e3', '#1b5e6b'),
-]
-box_x, box_w, box_h = 1.20, 8.60, 0.80
-for y, label, title, sub, fc, accent in unified_steps:
-    ax.add_patch(FancyBboxPatch((box_x, y), box_w, box_h,
+def draw_phenotype_box(ax, x, y, w, h, main, sub=None, accent='#806600'):
+    ax.add_patch(FancyBboxPatch((x, y), w, h, boxstyle="round,pad=0.05",
+                                  ec=accent, fc='#fff8e1', linewidth=1.3,
+                                  zorder=6))
+    ax.text(x + w/2, y + (h*0.65 if sub else h*0.5), main,
+            ha='center', va='center', fontsize=8.5, weight='bold',
+            color=accent, zorder=7)
+    if sub:
+        ax.text(x + w/2, y + h * 0.28, sub, ha='center', va='center',
+                fontsize=7.3, color='#1a1a1a', zorder=7)
+
+
+# =====================================================================
+# Three schematics (each takes an ax, draws into it)
+# =====================================================================
+def schematic_rmc(ax):
+    ax.set_xlim(0, 22); ax.set_ylim(0, 10); ax.axis('off')
+    ax.text(11, 9.6,
+            'C. Proposed mechanism — RMC chemokine axis and framework-novel drug-class candidates',
+            ha='center', va='center', fontsize=10.5, weight='bold')
+
+    # Drug boxes top
+    draw_drug_box(ax, 1.0, 8.3, 6.0, 0.85,
+                  'FRAMEWORK-NOVEL: anti-CEACAM1',
+                  'CM24 (Phase I/II)')
+    draw_drug_box(ax, 10.0, 8.3, 8.0, 0.85,
+                  'FRAMEWORK-NOVEL: CXCR1 / CXCR2 antagonists',
+                  'reparixin · navarixin (MK-7123) · AZD5069 · danirixin · ladarixin')
+
+    # RMC cell
+    ax.add_patch(Polygon(smooth_blob(4.5, 4.6, 3.5, 2.4, seed=7),
+                          closed=True, facecolor='#f8d7da', edgecolor='#922b21',
+                          linewidth=1.8, alpha=0.85))
+    ax.text(4.5, 7.5, 'SMARCB1-null RMC tumor cell',
+            ha='center', va='center', fontsize=9.5, weight='bold',
+            color='#922b21', style='italic')
+
+    # Nucleus + SMARCB1-X
+    ax.add_patch(Ellipse((3.5, 4.4), 1.9, 1.3, facecolor='#cfd8e8',
+                          edgecolor='#1f3a5c', linewidth=1.2))
+    ax.text(3.5, 4.75, 'Nucleus', ha='center', va='center',
+            fontsize=7.3, style='italic', color='#1f3a5c')
+    ax.text(3.5, 4.20, 'SMARCB1', ha='center', va='center',
+            fontsize=8.3, weight='bold', color='#1f3a5c')
+    ax.plot([2.75, 4.25], [4.65, 3.85], color='#c00', lw=2.2, zorder=5)
+    ax.plot([2.75, 4.25], [3.85, 4.65], color='#c00', lw=2.2, zorder=5)
+
+    # CEACAM1 on RMC right edge
+    draw_receptor(ax, 7.5, 4.6, size=0.32, color='#7a4a00', angle=0)
+    ax.text(7.95, 4.30, 'CEACAM1',
+            fontsize=7.8, weight='bold', color='#7a4a00', zorder=7)
+
+    # Chemokines
+    chemokines = [(5.7, 6.2, 'IL-8'), (5.7, 4.7, 'CXCL1'), (5.7, 3.2, 'CXCL2')]
+    for cx, cy, lbl in chemokines:
+        ax.add_patch(Circle((cx, cy), 0.16, facecolor='#c00', edgecolor='black',
+                             linewidth=0.6, alpha=0.85, zorder=4))
+        ax.text(cx, cy + 0.45, lbl, ha='center', va='center',
+                fontsize=7, weight='bold', color='#c00')
+    for sy in (6.2, 4.7, 3.2):
+        ax.annotate('', xy=(8.4, sy), xytext=(5.95, sy),
+                    arrowprops=dict(arrowstyle='->', lw=1.4,
+                                    color='#c00', alpha=0.7))
+
+    # Myeloid cell
+    ax.add_patch(Polygon(smooth_blob(14.5, 4.6, 3.2, 2.3, seed=11),
+                          closed=True, facecolor='#fff3cd', edgecolor='#806600',
+                          linewidth=1.8, alpha=0.85))
+    ax.text(14.5, 7.4, 'Myeloid cell (MDSC precursor)',
+            ha='center', va='center', fontsize=9.5, weight='bold',
+            color='#806600', style='italic')
+    ax.add_patch(Ellipse((14.5, 4.6), 1.5, 1.0, facecolor='#cfd8e8',
+                          edgecolor='#1f3a5c', linewidth=1.0, alpha=0.7))
+
+    for ry, rname in [(5.5, 'CXCR1'), (3.7, 'CXCR2')]:
+        draw_receptor(ax, 11.5, ry, size=0.32, color='#1d4d33', angle=180)
+        ax.text(11.05, ry, rname, ha='right', va='center',
+                fontsize=8, weight='bold', color='#1d4d33', zorder=7)
+
+    # Inhibition arrows
+    draw_inhibition(ax, (11.6, 8.3), (11.55, 5.78), color='darkred', lw=1.8)
+    draw_inhibition(ax, (13.0, 8.3), (11.55, 3.98), color='darkred', lw=1.8)
+    draw_inhibition(ax, (5.5, 8.3), (7.4, 5.0), color='darkred', lw=1.8)
+
+    # Output boxes
+    draw_phenotype_box(ax, 18.5, 5.2, 3.4, 2.0,
+                        'MDSC recruitment',
+                        '+ immunosuppressive\ntumor microenvironment',
+                        accent='#806600')
+    draw_phenotype_box(ax, 18.5, 2.2, 3.4, 2.0,
+                        'Tumor growth +',
+                        'reduced anti-tumor\nimmunity',
+                        accent='#7a1a00')
+
+    ax.annotate('', xy=(18.5, 6.0), xytext=(17.0, 5.0),
+                arrowprops=dict(arrowstyle='->', lw=1.5, color='#806600'))
+    ax.annotate('', xy=(20.2, 4.2), xytext=(20.2, 5.2),
+                arrowprops=dict(arrowstyle='->', lw=1.5, color='#7a1a00'))
+
+    ax.add_patch(FancyBboxPatch((0.2, 0.05), 21.6, 0.32,
+                                  boxstyle="round,pad=0.03",
+                                  ec='#888', fc='#f4f4f4', linewidth=0.8))
+    ax.text(11, 0.21,
+            '⊥ = drug inhibition  ·  Y = membrane receptor  ·  ● = secreted chemokine  ·  red = framework-novel target',
+            ha='center', va='center', fontsize=7.5, style='italic', color='#333')
+
+
+def schematic_sarcuc(ax):
+    ax.set_xlim(0, 22); ax.set_ylim(0, 11); ax.axis('off')
+    ax.text(11, 10.5,
+            'C. Proposed mechanism — Sarcomatoid UC framework-novel targets + TROP2-low negative biomarker',
+            ha='center', va='center', fontsize=10.5, weight='bold')
+
+    ax.add_patch(Polygon(smooth_blob(11, 5.2, 5.0, 3.2, seed=21),
+                          closed=True, facecolor='#e8d8e8', edgecolor='#6c3483',
+                          linewidth=1.8, alpha=0.85))
+    ax.text(11, 9.0, 'Sarcomatoid urothelial carcinoma cell',
+            ha='center', va='center', fontsize=10, weight='bold',
+            color='#6c3483', style='italic')
+
+    ax.add_patch(Ellipse((10, 5.2), 4.5, 2.6, facecolor='#cfd8e8',
+                          edgecolor='#1f3a5c', linewidth=1.2))
+    ax.text(10, 6.85, 'Nucleus', ha='center', va='center',
+            fontsize=7.5, style='italic', color='#1f3a5c')
+    ax.add_patch(Circle((8.5, 5.7), 0.45, facecolor='#fadbd8', ec='#922b21', lw=1.2))
+    ax.text(8.5, 5.7, 'NSD2', ha='center', va='center', fontsize=7.5, weight='bold', color='#922b21')
+    ax.add_patch(Circle((10.0, 5.7), 0.45, facecolor='#fadbd8', ec='#922b21', lw=1.2))
+    ax.text(10.0, 5.7, 'UHRF1', ha='center', va='center', fontsize=7.5, weight='bold', color='#922b21')
+    ax.add_patch(Ellipse((11.7, 5.7), 1.1, 0.55, facecolor='#fadbd8', ec='#922b21', lw=1.2))
+    ax.text(11.7, 5.7, 'ATR-ATRIP', ha='center', va='center',
+            fontsize=7.5, weight='bold', color='#922b21')
+    ax.text(10, 4.5, 'Epigenetic dysregulation  +  DNA damage response',
+            ha='center', va='center', fontsize=7, style='italic', color='#1f3a5c')
+
+    ax.add_patch(Circle((13.4, 3.4), 0.45, facecolor='#fce5cd', ec='#a04a00', lw=1.2))
+    ax.text(13.4, 3.4, 'G6PD', ha='center', va='center', fontsize=7.5, weight='bold', color='#a04a00')
+    ax.text(13.4, 2.85, 'pentose phosphate\npathway', ha='center', va='center',
+            fontsize=6.5, style='italic', color='#a04a00')
+
+    draw_receptor(ax, 6.5, 5.2, size=0.35, color='#1d3a8a', angle=180, lw=2.0)
+    ax.text(6.0, 6.05, 'TROP2', ha='right', va='center',
+            fontsize=8.5, weight='bold', color='#1d3a8a', zorder=7)
+    ax.text(6.0, 5.75, '(LOW)', ha='right', va='center',
+            fontsize=7.3, weight='bold', color='#c00', style='italic',
+            zorder=7)
+
+    draw_drug_box(ax, 0.5, 8.4, 4.0, 0.85,
+                  'FRAMEWORK-NOVEL: NSD2 inhibitor',
+                  'KTX-1001 (Phase I)')
+    draw_inhibition(ax, (2.5, 8.4), (8.5, 6.05), color='darkred')
+
+    draw_drug_box(ax, 13.5, 8.4, 7.5, 0.85,
+                  'FRAMEWORK-NOVEL: ATR inhibitors',
+                  'ceralasertib · berzosertib · elimusertib')
+    draw_inhibition(ax, (17.2, 8.4), (12.0, 6.05), color='darkred')
+
+    draw_drug_box(ax, 16.0, 6.3, 5.5, 0.75,
+                  'PARTIALLY NOVEL: UHRF1 PROTAC',
+                  'UM-002 (preclinical)')
+    draw_inhibition(ax, (16.0, 6.55), (10.4, 5.85), color='darkred')
+
+    draw_drug_box(ax, 16.0, 3.0, 5.5, 0.75,
+                  'PARTIALLY NOVEL: G6PD inhibitor',
+                  '6-aminonicotinamide')
+    draw_inhibition(ax, (16.0, 3.35), (13.85, 3.35), color='darkred')
+
+    ax.add_patch(FancyBboxPatch((0.2, 3.0), 4.5, 0.85,
                                   boxstyle="round,pad=0.05",
-                                  ec=accent, fc=fc, linewidth=1.2))
-    ax.text(box_x + 0.30, y + box_h/2, label, ha='left', va='center',
-            fontsize=10, weight='bold', color=accent)
-    ax.text(5.50, y + 0.55, title, ha='center', va='center',
-            fontsize=10, weight='bold', color='#1a1a1a')
-    ax.text(5.50, y + 0.22, sub, ha='center', va='center',
-            fontsize=8.3, color='#333')
+                                  ec='#1d3a8a', fc='#d6e4f0', linewidth=1.5,
+                                  zorder=6))
+    ax.text(2.45, 3.65, 'NEGATIVE BIOMARKER',
+            ha='center', va='center', fontsize=8.5, weight='bold', color='#1d3a8a',
+            zorder=7)
+    ax.text(2.45, 3.25, 'sacituzumab govitecan → predicted non-response',
+            ha='center', va='center', fontsize=7.3, color='#1d3a8a', zorder=7)
+    ax.annotate('', xy=(6.3, 5.0), xytext=(4.7, 3.7),
+                arrowprops=dict(arrowstyle='->', lw=1.4, color='#1d3a8a',
+                                ls='dashed'))
+    ax.plot([6.05, 6.55], [4.75, 5.25], color='#c00', lw=2.2, zorder=10)
+    ax.plot([6.05, 6.55], [5.25, 4.75], color='#c00', lw=2.2, zorder=10)
 
-# Arrows linking unified steps (downward — head=destination, tail=origin)
-arrow_pairs = [
-    (5.87, 6.17),   # Step 2 (bot 6.17) → Step 3 (top 5.87)
-    (4.77, 5.07),   # Step 3 (bot 5.07) → Step 4 (top 4.77)
-    (3.67, 3.97),   # Step 4 (bot 3.97) → Step 5 (top 3.67)
-    (2.57, 2.87),   # Step 5 (bot 2.87) → Step 6 (top 2.57)
-]
-for head_y, tail_y in arrow_pairs:
-    ax.annotate('', xy=(5.5, head_y), xytext=(5.5, tail_y),
-                arrowprops=dict(arrowstyle='->', lw=1.6, color='#444'))
+    draw_phenotype_box(ax, 0.2, 0.45, 7.0, 1.5,
+                        'Epigenetic dysregulation reversal +',
+                        'DNA damage repair vulnerability',
+                        accent='#922b21')
+    draw_phenotype_box(ax, 7.8, 0.45, 6.4, 1.5,
+                        'Metabolic reprogramming',
+                        'pentose phosphate pathway',
+                        accent='#a04a00')
+    draw_phenotype_box(ax, 14.8, 0.45, 6.8, 1.5,
+                        'TROP2-low → de-prioritize',
+                        'sacituzumab govitecan',
+                        accent='#1d3a8a')
 
-# Arrow from Step 6 (bottom 1.77) down to output box (top 1.28)
-ax.annotate('', xy=(5.5, 1.30), xytext=(5.5, 1.75),
-            arrowprops=dict(arrowstyle='->', lw=2.0, color='#1a1a1a'))
 
-# --- Output box: Master Table 1 ---
-out_box = FancyBboxPatch((0.40, 0.10), 10.20, 1.18,
-                          boxstyle="round,pad=0.06",
-                          ec='#7a4a00', fc='#fef5e7', linewidth=1.6)
-ax.add_patch(out_box)
-ax.text(5.50, 0.95, 'Master Table 1 — 30 Drug–Cancer Associations',
-        ha='center', va='center', fontsize=11.5, weight='bold', color='#7a4a00')
-# Color-coded category summary on one line
-ax.text(2.20, 0.55, '18  previously proposed',
-        ha='center', va='center', fontsize=9, weight='bold', color='#0b2e4f')
-ax.text(2.20, 0.30, '(convergent literature support)',
-        ha='center', va='center', fontsize=7.8, style='italic', color='#0b2e4f')
-ax.text(4.85, 0.55, '6  framework-novel',
-        ha='center', va='center', fontsize=9, weight='bold', color='#c00000')
-ax.text(4.85, 0.30, '(within urologic-oncology literature)',
-        ha='center', va='center', fontsize=7.8, style='italic', color='#c00000')
-ax.text(7.30, 0.55, '5  partially novel',
-        ha='center', va='center', fontsize=9, weight='bold', color='#6c3483')
-ax.text(7.30, 0.30, '(variant-specific extensions)',
-        ha='center', va='center', fontsize=7.8, style='italic', color='#6c3483')
-ax.text(9.50, 0.55, '1  negative biomarker',
-        ha='center', va='center', fontsize=9, weight='bold', color='#1d4d33')
-ax.text(9.50, 0.30, '(TROP2-low in Sarc-UC)',
-        ha='center', va='center', fontsize=7.8, style='italic', color='#1d4d33')
+def schematic_scbc(ax):
+    ax.set_xlim(0, 22); ax.set_ylim(0, 11); ax.axis('off')
+    ax.text(11, 10.5,
+            'C. Proposed mechanism — Lineage-stratified SCBC framework-novel cell-surface targets',
+            ha='center', va='center', fontsize=10.5, weight='bold')
 
-plt.savefig(FIGURES / 'Figure1_pipeline.png', bbox_inches='tight')
-plt.close()
-print(f"  Saved: {FIGURES / 'Figure1_pipeline.png'}")
+    ax.add_patch(Polygon(smooth_blob(5.5, 5.0, 3.3, 2.6, seed=31),
+                          closed=True, facecolor='#cfe0f5', edgecolor='#1f4e79',
+                          linewidth=1.8, alpha=0.85))
+    ax.text(5.5, 8.2, 'ASCL1-positive SCBC cell',
+            ha='center', va='center', fontsize=9.5, weight='bold',
+            color='#1f4e79', style='italic')
+    ax.add_patch(Ellipse((5.5, 4.8), 1.7, 1.1, facecolor='#cfd8e8',
+                          edgecolor='#1f3a5c', linewidth=1.0, alpha=0.7))
+    ax.text(5.5, 4.8, 'ASCL1+', ha='center', va='center',
+            fontsize=8, weight='bold', color='#1f3a5c')
+    for ry in [6.2, 5.5, 4.5, 3.7]:
+        draw_receptor(ax, 8.0, ry, size=0.30, color='#922b21', angle=0, lw=1.8)
+    ax.text(8.55, 6.2, 'CEACAM5 HIGH', fontsize=8, weight='bold', color='#922b21',
+            zorder=7)
+
+    ax.add_patch(Polygon(smooth_blob(16.5, 5.0, 3.3, 2.6, seed=37),
+                          closed=True, facecolor='#e6e6fa', edgecolor='#6c3483',
+                          linewidth=1.8, alpha=0.85))
+    ax.text(16.5, 8.2, 'NEUROD1-positive SCBC cell',
+            ha='center', va='center', fontsize=9.5, weight='bold',
+            color='#6c3483', style='italic')
+    ax.add_patch(Ellipse((16.5, 4.8), 1.7, 1.1, facecolor='#cfd8e8',
+                          edgecolor='#1f3a5c', linewidth=1.0, alpha=0.7))
+    ax.text(16.5, 4.8, 'NEUROD1+', ha='center', va='center',
+            fontsize=8, weight='bold', color='#1f3a5c')
+    for ry in [6.2, 5.5, 4.5, 3.7]:
+        draw_receptor(ax, 14.0, ry, size=0.30, color='#6c3483', angle=180, lw=1.8)
+    ax.text(13.55, 6.2, 'SSTR2 HIGH', ha='right', va='center',
+            fontsize=8, weight='bold', color='#6c3483', zorder=7)
+
+    draw_drug_box(ax, 0.5, 8.6, 9.5, 0.85,
+                  'FRAMEWORK-NOVEL: anti-CEACAM5 ADC',
+                  '(tusamitamab ravtansine — discontinued Dec 2023 — replacement-agent required)')
+    for ry in [6.2, 5.5, 4.5, 3.7]:
+        draw_inhibition(ax, (5.0, 8.6), (8.0, ry + 0.25),
+                         color='darkred', lw=1.4, bar_half=0.13)
+
+    draw_drug_box(ax, 12.0, 8.6, 9.5, 0.85,
+                  'FRAMEWORK-NOVEL: lutetium-177 DOTATATE (FDA-approved)',
+                  '(theranostic — Ga-68 DOTATATE PET selection → Lu-177 therapy)')
+    for ry in [6.2, 5.5, 4.5, 3.7]:
+        ax.annotate('', xy=(14.0, ry + 0.25), xytext=(17.0, 8.6),
+                    arrowprops=dict(arrowstyle='-|>', lw=1.4,
+                                    color='#6c3483'))
+
+    cx, cy = 19.0, 5.0
+    for ang in np.linspace(0, 2*np.pi, 8, endpoint=False):
+        ax.plot([cx, cx + 0.35*np.cos(ang)], [cy, cy + 0.35*np.sin(ang)],
+                color='#c00', lw=1.4, alpha=0.7)
+    ax.add_patch(Circle((cx, cy), 0.18, facecolor='#c00', edgecolor='black',
+                         linewidth=0.6, alpha=0.5, zorder=6))
+    ax.text(cx, cy - 0.7, '¹⁷⁷Lu radiation\nlocal cytotoxicity',
+            ha='center', va='center', fontsize=7, color='#c00',
+            style='italic')
+
+    ax.text(9.5, 3.0, 'ADC payload\n→ apoptosis',
+            ha='center', va='center', fontsize=7, color='#922b21',
+            style='italic')
+
+    draw_phenotype_box(ax, 0.5, 0.45, 10.0, 1.5,
+                        'ASCL1-driven CEA-mediated cytotoxicity',
+                        'paradigm transfer from small-cell lung cancer',
+                        accent='#1f4e79')
+    draw_phenotype_box(ax, 11.5, 0.45, 10.0, 1.5,
+                        'NEUROD1-driven peptide receptor radionuclide therapy',
+                        'existing Ga-68 / Lu-177 theranostic infrastructure',
+                        accent='#6c3483')
 
 
 # =====================================================================
-# Figure 2 — RMC novel findings
+# Figure 2 — RMC findings (3-panel with mechanism schematic)
 # =====================================================================
-print("\nGenerating Figure 2: RMC novel findings")
-import xml.etree.ElementTree as ET
-
-# Load RMC DE data — both cell lines for cross-cell-line plot
+print("Generating Figure 2: RMC (3-panel + cellular schematic)")
 xl_path = Path(r"C:\Users\garre\framework_expansion\data\GSE180999_DE.xlsx")
 rmc2c = pd.read_excel(xl_path, sheet_name='RMC2C+SMARCB1')
 rmc219 = pd.read_excel(xl_path, sheet_name='RMC219+SMARCB1')
-rmc2c.columns = ['gene', 'l2fc_12h_RMC2C', 'q_12h_RMC2C', 'l2fc_48h_RMC2C', 'q_48h_RMC2C']
-rmc219.columns = ['gene', 'l2fc_12h_RMC219', 'q_12h_RMC219', 'l2fc_48h_RMC219', 'q_48h_RMC219']
+rmc2c.columns = ['gene', 'l2fc_12h_RMC2C', 'q_12h_RMC2C',
+                  'l2fc_48h_RMC2C', 'q_48h_RMC2C']
+rmc219.columns = ['gene', 'l2fc_12h_RMC219', 'q_12h_RMC219',
+                   'l2fc_48h_RMC219', 'q_48h_RMC219']
 de = pd.merge(rmc2c, rmc219, on='gene').dropna(
     subset=['l2fc_48h_RMC2C', 'q_48h_RMC2C', 'l2fc_48h_RMC219', 'q_48h_RMC219'])
-
 rmc_up = pd.read_csv(RESULTS / 'RMC_up_in_null_state.csv')
 top_genes = rmc_up['gene'].tolist()
 
-fig, axes = plt.subplots(2, 2, figsize=(11, 8.5))
+fig = plt.figure(figsize=(11, 11))
+gs = gridspec.GridSpec(2, 2, figure=fig,
+                       height_ratios=[1.0, 1.05],
+                       hspace=0.45, wspace=0.30,
+                       left=0.07, right=0.98, top=0.93, bottom=0.04)
+axA = fig.add_subplot(gs[0, 0])
+axB = fig.add_subplot(gs[0, 1])
+axC = fig.add_subplot(gs[1, :])
 
-# Panel A — Volcano plot RMC2C
-ax = axes[0, 0]
-# log2FC is "SMARCB1-rescue vs NEG"; we want genes UP in NEG = down upon rescue (negative l2fc)
+# Panel A — Volcano
 neg_log_q = -np.log10(de['q_48h_RMC2C'].clip(lower=1e-300))
-ax.scatter(de['l2fc_48h_RMC2C'], neg_log_q, s=4, c='lightgrey', alpha=0.5)
-# Highlight top genes UP in NULL (= down on rescue = negative l2fc)
+axA.scatter(de['l2fc_48h_RMC2C'], neg_log_q, s=4, c='lightgrey', alpha=0.5)
 highlight = de[de['gene'].isin(top_genes)]
-ax.scatter(highlight['l2fc_48h_RMC2C'], -np.log10(highlight['q_48h_RMC2C'].clip(lower=1e-300)),
-           s=30, c='red', edgecolor='black', linewidth=0.5, zorder=5)
+axA.scatter(highlight['l2fc_48h_RMC2C'],
+            -np.log10(highlight['q_48h_RMC2C'].clip(lower=1e-300)),
+            s=30, c='red', edgecolor='black', linewidth=0.5, zorder=5)
 for _, r in highlight.iterrows():
     g = r['gene']
     x, y = r['l2fc_48h_RMC2C'], -np.log10(max(r['q_48h_RMC2C'], 1e-300))
     if g in ['IL8', 'CXCL1', 'CXCL2', 'HBEGF', 'CEACAM1']:
-        ax.annotate(g, (x, y), xytext=(x-0.2, y), fontsize=7, fontweight='bold',
-                    color='darkred')
-ax.axvline(-1, color='red', linestyle='--', lw=0.8, alpha=0.5)
-ax.axvline(1, color='red', linestyle='--', lw=0.8, alpha=0.5)
-ax.axhline(-np.log10(0.05), color='red', linestyle='--', lw=0.8, alpha=0.5)
-ax.set_xlabel('log₂FC (SMARCB1-rescue vs NEG, RMC-2C cells)\n← UP in SMARCB1-null         DOWN in null →')
-ax.set_ylabel('−log₁₀(adj. p-value)')
-ax.set_title('A. Volcano plot — RMC-2C cell line\nGSE180999 (n=9; SMARCB1-rescue vs NEG)', fontsize=9)
-ax.set_xlim(-3, 9)
+        axA.annotate(g, (x, y), xytext=(x - 0.3, y + 5), fontsize=7,
+                     fontweight='bold', color='darkred')
+axA.axvline(-1, color='red', linestyle='--', lw=0.8, alpha=0.5)
+axA.axvline(1, color='red', linestyle='--', lw=0.8, alpha=0.5)
+axA.axhline(-np.log10(0.05), color='red', linestyle='--', lw=0.8, alpha=0.5)
+axA.set_xlabel('log₂FC (SMARCB1-rescue vs NEG, RMC-2C cells)\n← UP in SMARCB1-null         DOWN in null →')
+axA.set_ylabel('−log₁₀(adj. p-value)')
+axA.set_title('A. Volcano plot — RMC-2C cell line\nGSE180999 (n=9; SMARCB1-rescue vs NEG)',
+              fontsize=9.5, pad=8)
+axA.set_xlim(-3, 9)
 
-# Panel B — Cross-cell-line consistency for top 13 UP-in-null genes
-ax = axes[0, 1]
+# Panel B — Cross-cell-line consistency
 top_df = rmc_up.sort_values('mean_l2fc_48h')
 y_pos = np.arange(len(top_df))
-ax.barh(y_pos - 0.2, -top_df['l2fc_48h_RMC2C'], height=0.4, label='RMC-2C', color='steelblue')
-ax.barh(y_pos + 0.2, -top_df['l2fc_48h_RMC219'], height=0.4, label='RMC219', color='lightcoral')
-ax.set_yticks(y_pos)
-ax.set_yticklabels(top_df['gene'], fontsize=8)
-ax.set_xlabel('log₂FC UP in SMARCB1-null state\n(positive = elevated in RMC)')
-ax.set_title('B. Cross-cell-line consistency of\nSMARCB1-null UP genes', fontsize=9)
-ax.legend(loc='lower right')
-ax.axvline(1, color='red', linestyle='--', lw=0.8)
-ax.grid(axis='x', alpha=0.3)
+axB.barh(y_pos - 0.2, -top_df['l2fc_48h_RMC2C'], height=0.4,
+         label='RMC-2C', color='steelblue')
+axB.barh(y_pos + 0.2, -top_df['l2fc_48h_RMC219'], height=0.4,
+         label='RMC219', color='lightcoral')
+axB.set_yticks(y_pos)
+axB.set_yticklabels(top_df['gene'], fontsize=8)
+axB.set_xlabel('log₂FC UP in SMARCB1-null state\n(positive = elevated in RMC)')
+axB.set_title('B. Cross-cell-line consistency of\nSMARCB1-null UP genes',
+              fontsize=9.5, pad=8)
+axB.legend(loc='lower right', frameon=True)
+axB.axvline(1, color='red', linestyle='--', lw=0.8)
+axB.grid(axis='x', alpha=0.3)
 
-# Panel C — Mechanism schematic
-ax = axes[1, 0]
-ax.set_xlim(-0.3, 10.3)
-ax.set_ylim(-0.5, 7.0)
-ax.axis('off')
-# Top row boxes (SMARCB1 loss → chemokine triad → CXCR1/2)
-ax.add_patch(FancyBboxPatch((0.5, 5.5), 2.5, 1.0, boxstyle="round,pad=0.05",
-                              ec='black', fc='#fef5e7'))
-ax.text(1.75, 6.0, 'SMARCB1\nbiallelic loss', ha='center', va='center', fontsize=9, weight='bold')
-
-ax.add_patch(FancyBboxPatch((3.75, 5.5), 2.5, 1.0, boxstyle="round,pad=0.05",
-                              ec='black', fc='#f4cccc'))
-ax.text(5.0, 6.0, 'Chemokine triad\nIL-8 / CXCL1 / CXCL2', ha='center', va='center', fontsize=9, weight='bold')
-
-ax.add_patch(FancyBboxPatch((7.0, 5.5), 2.5, 1.0, boxstyle="round,pad=0.05",
-                              ec='black', fc='#d9ead3'))
-ax.text(8.25, 6.0, 'CXCR1 / CXCR2\non myeloid cells', ha='center', va='center', fontsize=9, weight='bold')
-
-ax.annotate('', xy=(3.75, 6.0), xytext=(3.0, 6.0),
-            arrowprops=dict(arrowstyle='->', lw=1.5))
-ax.annotate('', xy=(7.0, 6.0), xytext=(6.25, 6.0),
-            arrowprops=dict(arrowstyle='->', lw=1.5))
-
-# Middle box — MDSC recruitment
-ax.add_patch(FancyBboxPatch((2.0, 2.8), 6.0, 1.0, boxstyle="round,pad=0.05",
-                              ec='black', fc='#fff2cc', linewidth=1.5))
-ax.text(5.0, 3.3, 'Myeloid-derived suppressor cell recruitment\n+ immunosuppressive tumor microenvironment',
-        ha='center', va='center', fontsize=9, weight='bold')
-
-ax.annotate('', xy=(5.0, 3.8), xytext=(8.25, 5.5),
-            arrowprops=dict(arrowstyle='->', lw=1.5))
-
-# Bottom box — Framework-novel target (with breathing room from panel edge)
-ax.add_patch(FancyBboxPatch((1.0, 0.4), 8.0, 1.4, boxstyle="round,pad=0.05",
-                              ec='darkred', fc='#fadbd8', linewidth=2.0))
-ax.text(5.0, 1.1, 'FRAMEWORK-NOVEL TARGET\nReparixin  ·  Navarixin  ·  AZD5069  ·  Danirixin',
-        ha='center', va='center', fontsize=9.5, weight='bold', color='darkred')
-
-ax.annotate('', xy=(5.0, 1.8), xytext=(5.0, 2.8),
-            arrowprops=dict(arrowstyle='->', lw=1.5, color='darkred'))
-
-ax.set_title('C. Proposed mechanism — RMC chemokine axis', fontsize=9, pad=10)
-
-# Panel D — Drug-class clinical-stage table
-ax = axes[1, 1]
-ax.axis('off')
-drug_table_data = [
-    ['Drug', 'Target', 'Stage', 'Status'],
-    ['Reparixin', 'CXCR1/2', 'Phase II/III', 'Breast cancer trials'],
-    ['Navarixin (MK-7123)', 'CXCR2', 'Phase II', 'Active basket trials'],
-    ['AZD5069', 'CXCR2', 'Phase II', 'HNSCC, mCRPC'],
-    ['Danirixin', 'CXCR2', 'Phase II', 'Inflammation'],
-    ['Ladarixin', 'CXCR1/2', 'Phase II', 'T1 diabetes basket'],
-    ['CM24', 'CEACAM1', 'Phase I/II', 'Melanoma + GI'],
-]
-table = ax.table(cellText=drug_table_data, loc='center',
-                  cellLoc='left', colWidths=[0.25, 0.20, 0.20, 0.35])
-table.auto_set_font_size(False)
-table.set_fontsize(8)
-table.scale(1, 1.6)
-for i in range(len(drug_table_data)):
-    for j in range(4):
-        if i == 0:
-            table[(i, j)].set_facecolor('#cfe2f3')
-            table[(i, j)].set_text_props(weight='bold')
-ax.set_title('D. Candidate drugs for RMC framework-novel targets', fontsize=9)
+# Panel C — RMC schematic
+schematic_rmc(axC)
 
 plt.suptitle('Figure 2. Renal Medullary Carcinoma — Framework-Novel Findings',
-             fontsize=12, weight='bold', y=1.00)
-plt.tight_layout()
+             fontsize=12, weight='bold', y=0.985)
 plt.savefig(FIGURES / 'Figure2_RMC.png', bbox_inches='tight')
 plt.close()
-print(f"  Saved: {FIGURES / 'Figure2_RMC.png'}")
+print(f"  Saved: Figure2_RMC.png  ({(FIGURES/'Figure2_RMC.png').stat().st_size:,} bytes)")
 
 
 # =====================================================================
-# Figure 3 — Sarcomatoid UC novel findings
+# Figure 3 — Sarc-UC findings (3-panel with mechanism schematic)
 # =====================================================================
-print("\nGenerating Figure 3: Sarcomatoid UC novel findings")
+print("\nGenerating Figure 3: Sarc-UC (3-panel + cellular schematic)")
 sarc_de = pd.read_csv(RESULTS / 'SarcomatoidUC_DE_full.csv')
-sarc_up = pd.read_csv(RESULTS / 'SarcomatoidUC_up.csv')
-sarc_down = pd.read_csv(RESULTS / 'SarcomatoidUC_down.csv')
 
-fig, axes = plt.subplots(2, 2, figsize=(11, 8.5))
+fig = plt.figure(figsize=(11, 11.5))
+gs = gridspec.GridSpec(2, 2, figure=fig,
+                       height_ratios=[1.0, 1.05],
+                       hspace=0.50, wspace=0.30,
+                       left=0.07, right=0.98, top=0.92, bottom=0.04)
+axA = fig.add_subplot(gs[0, 0])
+axB = fig.add_subplot(gs[0, 1])
+axC = fig.add_subplot(gs[1, :])
 
-# Panel A — Volcano plot
-ax = axes[0, 0]
-ax.scatter(sarc_de['log2fc'], -np.log10(sarc_de['qvalue'].clip(lower=1e-30)),
-           s=3, c='lightgrey', alpha=0.4)
+# Panel A — Volcano (dedup + manual offsets)
+sarc_de_dedup = (sarc_de.sort_values('qvalue')
+                       .drop_duplicates(subset='gene', keep='first'))
+axA.scatter(sarc_de_dedup['log2fc'],
+            -np.log10(sarc_de_dedup['qvalue'].clip(lower=1e-30)),
+            s=3, c='lightgrey', alpha=0.4)
 novel_targets = ['WHSC1', 'ATRIP', 'UHRF1', 'G6PD', 'PHC2']
 neg_target = ['TACSTD2']
+label_offsets = {
+    'UHRF1':   (0.35, 1.0),
+    'WHSC1':   (-0.75, 1.5),
+    'PHC2':    (0.30, -0.5),
+    'ATRIP':   (-0.75, -1.5),
+    'G6PD':    (0.30, -0.8),
+    'TACSTD2': (0.20, 0.5),
+}
 for tgt, col in [(novel_targets, 'red'), (neg_target, 'blue')]:
-    sub = sarc_de[sarc_de['gene'].isin(tgt)]
-    ax.scatter(sub['log2fc'], -np.log10(sub['qvalue'].clip(lower=1e-30)),
-               s=60, c=col, edgecolor='black', linewidth=0.5, zorder=10)
+    sub = sarc_de_dedup[sarc_de_dedup['gene'].isin(tgt)]
+    axA.scatter(sub['log2fc'], -np.log10(sub['qvalue'].clip(lower=1e-30)),
+                s=60, c=col, edgecolor='black', linewidth=0.5, zorder=10)
     for _, r in sub.iterrows():
-        ax.annotate(r['gene'], (r['log2fc'], -np.log10(max(r['qvalue'], 1e-30))),
-                    xytext=(r['log2fc'] + 0.15, -np.log10(max(r['qvalue'], 1e-30)) + 0.5),
-                    fontsize=8, fontweight='bold', color=col)
-ax.axvline(-1, color='red', linestyle='--', lw=0.8, alpha=0.5)
-ax.axvline(1, color='red', linestyle='--', lw=0.8, alpha=0.5)
-ax.axhline(-np.log10(0.05), color='red', linestyle='--', lw=0.8, alpha=0.5)
-ax.set_xlabel('log₂FC (Sarcomatoid UC vs conventional UC)\n← DOWN in sarcomatoid     UP in sarcomatoid →')
-ax.set_ylabel('−log₁₀(adj. p-value)')
-ax.set_title('A. Volcano — Sarcomatoid UC (n=28) vs conventional UC (n=84)\nGSE128192; novel targets red, negative biomarker blue', fontsize=9)
+        x = r['log2fc']
+        y = -np.log10(max(r['qvalue'], 1e-30))
+        dx, dy = label_offsets.get(r['gene'], (0.2, 0.5))
+        axA.annotate(r['gene'], (x, y),
+                     xytext=(x + dx, y + dy),
+                     fontsize=8, fontweight='bold', color=col,
+                     arrowprops=dict(arrowstyle='-', color=col,
+                                     lw=0.6, alpha=0.6))
+axA.axvline(-1, color='red', linestyle='--', lw=0.8, alpha=0.5)
+axA.axvline(1, color='red', linestyle='--', lw=0.8, alpha=0.5)
+axA.axhline(-np.log10(0.05), color='red', linestyle='--', lw=0.8, alpha=0.5)
+axA.set_xlabel('log₂FC (Sarcomatoid UC vs conventional UC)\n← DOWN in sarcomatoid     UP in sarcomatoid →')
+axA.set_ylabel('−log₁₀(adj. p-value)')
+axA.set_title('A. Volcano — Sarcomatoid UC (n=28) vs conventional UC (n=84)\n'
+              'GSE128192; novel targets red, negative biomarker blue',
+              fontsize=9.5, pad=8)
 
-# Panel B — KEGG enrichment
-ax = axes[0, 1]
+# Panel B — KEGG enrichment (clean labels)
 enr_all = json.load(open(RESULTS / 'kegg_enrichment_all_diseases.json'))
 sarc_enr = enr_all['SarcUC']
-top_paths = sorted([(p, r['pvalue'], r['overlap']) for p, r in sarc_enr.items() if r['overlap'] > 0],
-                   key=lambda x: x[1])[:8]
-names = [p for p, _, _ in top_paths]
-pvals = [-np.log10(p) for _, p, _ in top_paths]
-overlaps = [o for _, _, o in top_paths]
-colors = ['darkred' if -np.log10(p) > 1 else 'steelblue' for _, p, _ in top_paths]
-ax.barh(range(len(names)), pvals, color=colors)
-ax.set_yticks(range(len(names)))
-ax.set_yticklabels(names, fontsize=8)
-ax.set_xlabel('−log₁₀(p-value), hypergeometric')
-ax.set_title('B. KEGG pathway enrichment (Sarcomatoid UP)\nEpigenetic Regulation top enriched', fontsize=9)
-ax.axvline(-np.log10(0.10), color='red', linestyle='--', lw=0.8, alpha=0.5)
-for i, (p, _, o) in enumerate(top_paths):
-    ax.text(pvals[i] + 0.05, i, f'k={o}', fontsize=7, va='center')
+top_paths = sorted([(p, r['pvalue'], r['overlap']) for p, r in sarc_enr.items()
+                    if r['overlap'] > 0], key=lambda x: x[1])[:8]
+def prettify(name: str) -> str:
+    s = name.replace('_', ' ')
+    s = s.replace('PDL1 PD1 checkpoint', 'PD-L1 / PD-1 checkpoint')
+    s = s.replace('PI3K AKT signaling', 'PI3K / AKT signaling')
+    return s
 
-# Panel C — TROP2 negative biomarker
-ax = axes[1, 0]
-# Get top 10 most DOWN genes
-top_down = sarc_down.head(15)
-y_pos = np.arange(len(top_down))[::-1]
-colors_down = ['darkblue' if g == 'TACSTD2' else 'lightblue' for g in top_down['gene']]
-ax.barh(y_pos, top_down['log2fc'], color=colors_down, edgecolor='black', linewidth=0.4)
-ax.set_yticks(y_pos)
-ax.set_yticklabels(top_down['gene'], fontsize=8)
-ax.set_xlabel('log₂FC Sarcomatoid vs conventional UC')
-ax.set_title('C. Top genes DOWN in Sarcomatoid UC\nTROP2/TACSTD2 = sacituzumab govitecan target', fontsize=9)
-ax.axvline(-1, color='red', linestyle='--', lw=0.8)
+top_paths_sorted = sorted(top_paths, key=lambda x: x[1], reverse=True)
+names_pretty = [prettify(p) for p, _, _ in top_paths_sorted]
+pvals = [-np.log10(p) for _, p, _ in top_paths_sorted]
+overlaps = [o for _, _, o in top_paths_sorted]
+colors = ['#922b21' if v > 1 else '#4a78b3' for v in pvals]
+y_b = np.arange(len(names_pretty))
+axB.barh(y_b, pvals, color=colors, edgecolor='black', linewidth=0.4)
+axB.set_yticks(y_b)
+axB.set_yticklabels(names_pretty, fontsize=8)
+axB.set_xlabel('−log₁₀(p-value), hypergeometric')
+axB.set_title('B. KEGG pathway enrichment — Sarcomatoid UC upregulated genes',
+              fontsize=9.5, pad=8)
+axB.axvline(-np.log10(0.10), color='red', linestyle='--', lw=0.8, alpha=0.5)
+xmax = max(pvals) * 1.15
+axB.set_xlim(0, xmax)
+for i, (v, o) in enumerate(zip(pvals, overlaps)):
+    axB.text(v + xmax * 0.02, i, f'k = {o}', fontsize=7.5,
+             va='center', ha='left', color='#333')
+axB.grid(axis='x', alpha=0.3)
 
-# Panel D — Drug-class clinical-stage table
-ax = axes[1, 1]
-ax.axis('off')
-drug_data = [
-    ['Drug', 'Target', 'Stage', 'Novelty'],
-    ['KTX-1001', 'NSD2/WHSC1', 'Phase I', 'FRAMEWORK-NOVEL'],
-    ['Seclidemstat (SP-2577)', 'NSD2/WHSC1', 'Phase I', 'FRAMEWORK-NOVEL'],
-    ['Ceralasertib (AZD6738)', 'ATR', 'Phase II', 'FRAMEWORK-NOVEL'],
-    ['Berzosertib (M6620)', 'ATR', 'Phase II', 'FRAMEWORK-NOVEL'],
-    ['Elimusertib (BAY-1895344)', 'ATR', 'Phase II', 'FRAMEWORK-NOVEL'],
-    ['UM-002 (PROTAC)', 'UHRF1', 'Preclinical', 'Partially novel'],
-    ['6-Aminonicotinamide', 'G6PD/PPP', 'Preclinical', 'Partially novel'],
-    ['Sacituzumab govitecan', 'TROP2 (NEG)', 'FDA-approved', 'Negative biomarker'],
-]
-table = ax.table(cellText=drug_data, loc='center',
-                  cellLoc='left', colWidths=[0.32, 0.22, 0.20, 0.26])
-table.auto_set_font_size(False)
-table.set_fontsize(7.5)
-table.scale(1, 1.6)
-for j in range(4):
-    table[(0, j)].set_facecolor('#cfe2f3')
-    table[(0, j)].set_text_props(weight='bold')
-# Highlight framework-novel rows
-for i in [1, 2, 3, 4, 5]:
-    for j in range(4):
-        table[(i, j)].set_facecolor('#fadbd8')
-# Negative biomarker
-for j in range(4):
-    table[(8, j)].set_facecolor('#d4e6f1')
-ax.set_title('D. Candidate drugs for Sarcomatoid UC framework-novel targets', fontsize=9)
+# Panel C — Sarc-UC schematic
+schematic_sarcuc(axC)
 
-plt.suptitle('Figure 3. Sarcomatoid Urothelial Carcinoma — Framework-Novel Findings\n'
-             '(NSD2, ATR, UHRF1, G6PD upregulated; TROP2 negative biomarker)',
-             fontsize=12, weight='bold', y=1.00)
-plt.tight_layout()
+plt.suptitle('Figure 3. Sarcomatoid Urothelial Carcinoma — Framework-Novel Findings',
+             fontsize=12, weight='bold', y=0.99)
 plt.savefig(FIGURES / 'Figure3_SarcUC.png', bbox_inches='tight')
 plt.close()
-print(f"  Saved: {FIGURES / 'Figure3_SarcUC.png'}")
+print(f"  Saved: Figure3_SarcUC.png  ({(FIGURES/'Figure3_SarcUC.png').stat().st_size:,} bytes)")
 
 
 # =====================================================================
-# Figure 4 — SCBC subtype-stratified novel findings
+# Figure 4 — SCBC subtype-stratified (3-panel: pie + ASCL1+/NEUROD1+
+# combined headlines + schematic)
 # =====================================================================
-print("\nGenerating Figure 4: SCBC subtype novel findings")
+print("\nGenerating Figure 4: SCBC (3-panel + cellular schematic)")
 scbc_subtypes = pd.read_csv(RESULTS / 'SCBC_subtype_calls.csv')
-
-fig, axes = plt.subplots(2, 2, figsize=(11, 8.5))
-
-# Panel A — Subtype distribution
-ax = axes[0, 0]
-counts = scbc_subtypes['subtype'].value_counts()
-colors_pie = ['#3498db', '#e67e22', '#9b59b6', '#27ae60']
-wedges, texts, autotexts = ax.pie(
-    counts.values, labels=counts.index,
-    colors=colors_pie[:len(counts)],
-    autopct=lambda p: f'n={int(p*counts.sum()/100)}\n({p:.0f}%)',
-    startangle=90, textprops={'fontsize': 9, 'weight': 'bold'})
-ax.set_title('A. SCBC subtype distribution (n=44)\nClassified by maximum lineage-TF expression\nGSE269750', fontsize=9)
-
-# Panel B — ASCL1+ CEACAM5
-ax = axes[0, 1]
 ascl1_df = pd.read_csv(RESULTS / 'SCBC_up_in_ASCL1.csv').head(10)
-genes_a = ascl1_df['gene'][:10][::-1]
-fcs_a = ascl1_df['log2fc'][:10][::-1]
-colors_a = ['darkred' if g == 'CEACAM5' else 'steelblue' for g in genes_a]
-ax.barh(range(len(genes_a)), fcs_a, color=colors_a)
-ax.set_yticks(range(len(genes_a)))
-ax.set_yticklabels(genes_a, fontsize=8)
-ax.set_xlabel('log₂FC (ASCL1+ vs other subtypes)')
-ax.set_title('B. ASCL1+ subtype (n=19) top UP genes\nCEACAM5 = tusamitamab ravtansine target', fontsize=9)
-ax.axvline(1, color='red', linestyle='--', lw=0.8, alpha=0.5)
+neur_df  = pd.read_csv(RESULTS / 'SCBC_up_in_NEUROD1.csv').head(10)
 
-# Panel C — NEUROD1+ SSTR2
-ax = axes[1, 0]
-neur_df = pd.read_csv(RESULTS / 'SCBC_up_in_NEUROD1.csv').head(10)
-genes_n = neur_df['gene'][:10][::-1]
-fcs_n = neur_df['log2fc'][:10][::-1]
-colors_n = ['darkred' if g == 'SSTR2' else 'mediumpurple' for g in genes_n]
-ax.barh(range(len(genes_n)), fcs_n, color=colors_n)
-ax.set_yticks(range(len(genes_n)))
-ax.set_yticklabels(genes_n, fontsize=8)
-ax.set_xlabel('log₂FC (NEUROD1+ vs other subtypes)')
-ax.set_title('C. NEUROD1+ subtype (n=10) top UP genes\nSSTR2 → ¹⁷⁷Lu-DOTATATE theranostic target', fontsize=9)
-ax.axvline(1, color='red', linestyle='--', lw=0.8, alpha=0.5)
+fig = plt.figure(figsize=(11, 11.5))
+gs = gridspec.GridSpec(2, 2, figure=fig,
+                       height_ratios=[1.0, 1.05],
+                       hspace=0.50, wspace=0.30,
+                       left=0.07, right=0.98, top=0.92, bottom=0.04)
+axA = fig.add_subplot(gs[0, 0])
+axB = fig.add_subplot(gs[0, 1])
+axC = fig.add_subplot(gs[1, :])
 
-# Panel D — POU2F3+ COX-1
-ax = axes[1, 1]
-pou_df = pd.read_csv(RESULTS / 'SCBC_up_in_POU2F3.csv').head(10)
-genes_p = pou_df['gene'][:10][::-1]
-fcs_p = pou_df['log2fc'][:10][::-1]
-colors_p = ['darkred' if g in ('PTGS1', 'PLA2G4A') else 'darkorange' for g in genes_p]
-ax.barh(range(len(genes_p)), fcs_p, color=colors_p)
-ax.set_yticks(range(len(genes_p)))
-ax.set_yticklabels(genes_p, fontsize=8)
-ax.set_xlabel('log₂FC (POU2F3+ vs other subtypes)')
-ax.set_title('D. POU2F3+ subtype (n=7) top UP genes\nPTGS1 (COX-1) + PLA2G4A → aspirin/celecoxib', fontsize=9)
-ax.axvline(1, color='red', linestyle='--', lw=0.8, alpha=0.5)
+# Panel A — Subtype distribution pie
+counts = scbc_subtypes['subtype'].value_counts()
+colors_pie = ['#3498db', '#9b59b6', '#e67e22', '#27ae60']
+axA.pie(counts.values, labels=counts.index,
+        colors=colors_pie[:len(counts)],
+        autopct=lambda p: f'n={int(p*counts.sum()/100)}\n({p:.0f}%)',
+        startangle=90, textprops={'fontsize': 9, 'weight': 'bold'})
+axA.set_title('A. SCBC subtype distribution (n=44)\n'
+              'classified by maximum lineage-TF expression — GSE269750',
+              fontsize=9.5, pad=8)
 
-plt.suptitle('Figure 4. Small-Cell Bladder Cancer — Lineage-Transcription-Factor-Stratified\n'
-             'Framework-Novel Drug-Target Candidates per Subtype',
-             fontsize=12, weight='bold', y=1.00)
-plt.tight_layout()
+# Panel B — Combined ASCL1+ / NEUROD1+ headline bars
+# Show top 8 ASCL1+ and top 8 NEUROD1+ side by side, highlighting CEACAM5 and SSTR2
+ascl1_top = ascl1_df.head(8).copy()
+neur_top  = neur_df.head(8).copy()
+ascl1_top['subtype'] = 'ASCL1+'
+neur_top['subtype']  = 'NEUROD1+'
+combined = pd.concat([
+    ascl1_top.assign(group_y=np.arange(len(ascl1_top))[::-1] + 0.5 + len(neur_top) + 1.5),
+    neur_top.assign(group_y=np.arange(len(neur_top))[::-1] + 0.5),
+])
+for _, r in combined.iterrows():
+    is_headline = (r['gene'] == 'CEACAM5' and r['subtype'] == 'ASCL1+') or \
+                  (r['gene'] == 'SSTR2'   and r['subtype'] == 'NEUROD1+')
+    color = '#922b21' if is_headline else (
+        '#3498db' if r['subtype'] == 'ASCL1+' else '#9b59b6')
+    axB.barh(r['group_y'], r['log2fc'], color=color, edgecolor='black',
+             linewidth=0.4, height=0.7)
+all_y = combined['group_y'].tolist()
+all_labels = combined['gene'].tolist()
+axB.set_yticks(all_y)
+axB.set_yticklabels(all_labels, fontsize=7.5)
+axB.set_xlabel('log₂FC (subtype vs other subtypes)')
+axB.axvline(1, color='red', linestyle='--', lw=0.8, alpha=0.5)
+axB.grid(axis='x', alpha=0.3)
+# Section labels
+axB.text(-0.25, len(neur_top) + 1.5 + len(ascl1_top) / 2 + 0.5,
+         'ASCL1+\n(CEACAM5)', ha='right', va='center', rotation=90,
+         fontsize=8, weight='bold', color='#3498db',
+         transform=axB.get_yaxis_transform())
+axB.text(-0.25, len(neur_top) / 2 + 0.5,
+         'NEUROD1+\n(SSTR2)', ha='right', va='center', rotation=90,
+         fontsize=8, weight='bold', color='#9b59b6',
+         transform=axB.get_yaxis_transform())
+axB.set_title('B. Headline subtype-stratified upregulated genes\n'
+              'CEACAM5 (ASCL1+) and SSTR2 (NEUROD1+) highlighted dark red',
+              fontsize=9.5, pad=8)
+
+# Panel C — SCBC schematic
+schematic_scbc(axC)
+
+plt.suptitle('Figure 4. Small-Cell Bladder Cancer — Lineage-Stratified Framework-Novel Findings',
+             fontsize=12, weight='bold', y=0.99)
 plt.savefig(FIGURES / 'Figure4_SCBC.png', bbox_inches='tight')
 plt.close()
-print(f"  Saved: {FIGURES / 'Figure4_SCBC.png'}")
+print(f"  Saved: Figure4_SCBC.png  ({(FIGURES/'Figure4_SCBC.png').stat().st_size:,} bytes)")
 
-print("\nAll 4 figures generated.")
-print(f"Output directory: {FIGURES}")
+print("\nAll three figures regenerated with integrated cellular schematics.")
