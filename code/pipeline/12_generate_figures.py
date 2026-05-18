@@ -559,7 +559,7 @@ sarc_de = pd.read_csv(RESULTS / 'SarcomatoidUC_DE_full.csv')
 fig = plt.figure(figsize=(11, 11.5))
 gs = gridspec.GridSpec(2, 2, figure=fig,
                        height_ratios=[1.0, 1.20],
-                       hspace=0.45, wspace=0.45,
+                       hspace=0.45, wspace=0.60,
                        left=0.08, right=0.97, top=0.93, bottom=0.04)
 axA = fig.add_subplot(gs[0, 0])
 axB = fig.add_subplot(gs[0, 1])
@@ -598,6 +598,7 @@ axA.axvline(1, color='red', linestyle='--', lw=0.8, alpha=0.5)
 axA.axhline(-np.log10(0.05), color='red', linestyle='--', lw=0.8, alpha=0.5)
 axA.set_xlabel('log₂FC (Sarcomatoid UC vs conventional UC)\n← DOWN in sarcomatoid     UP in sarcomatoid →')
 axA.set_ylabel('−log₁₀(adj. p-value)')
+axA.set_xlim(-3.0, 2.5)
 axA.set_title('A. Volcano — Sarcomatoid UC (n=28) vs conventional UC (n=84)\n'
               'GSE128192; novel targets red, negative biomarker blue',
               fontsize=9.5, pad=8)
