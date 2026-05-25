@@ -1,11 +1,11 @@
-"""Final Figures 2/3/4 with ChatGPT cellular schematics as Panel C
-(replacing the matplotlib-drawn schematics).
+"""Generate all four manuscript figures.
 
-Panels A and B (volcano, cross-cell consistency, KEGG enrichment, subtype
-pie, subtype bars) are kept as the matplotlib reproducible outputs from
-the deposited code. Panel C is rendered by imshow-ing the deposited
-ChatGPT-generated cellular schematic PNGs (which are committed to the
-repository at figures/chatgpt_schematics/ for provenance).
+Figure 1 — Pipeline schematic (fully matplotlib).
+Figures 2 / 3 / 4 — Panels A and B (volcano, cross-cell consistency, KEGG
+enrichment, subtype pie, subtype bars) are matplotlib reproducible
+outputs from the deposited code. Panel C is rendered by imshow-ing the
+deposited ChatGPT-generated cellular schematic PNGs (committed to
+figures/chatgpt_schematics/ for provenance).
 """
 import sys, json
 from pathlib import Path
@@ -16,6 +16,7 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 import matplotlib.image as mpimg
+from matplotlib.patches import FancyBboxPatch
 sys.stdout.reconfigure(encoding='utf-8')
 
 RESULTS = Path(r"C:\Users\garre\framework_expansion\results")
@@ -27,6 +28,162 @@ plt.rcParams.update({
     'font.family': 'sans-serif',
     'axes.spines.top': False, 'axes.spines.right': False,
 })
+
+
+# =====================================================================
+# Figure 1 — Pipeline schematic (compact aspect, Step 5 = G/E/P/L)
+# =====================================================================
+def generate_figure1():
+    print("Generating Figure 1: pipeline schematic")
+    fig, ax = plt.subplots(figsize=(11, 9.0))
+    ax.set_xlim(0, 11); ax.set_ylim(0, 9.0); ax.axis('off')
+
+    ax.text(5.5, 8.75,
+            'Figure 1. Unified Public-Data Pipeline for Drug Repurposing',
+            ha='center', fontsize=13, weight='bold', color='#1a1a1a')
+    ax.text(5.5, 8.45, 'Across Seven Aggressive Urologic Cancer Contexts',
+            ha='center', fontsize=11.5, weight='bold', color='#1a1a1a')
+
+    ax.add_patch(FancyBboxPatch((0.4, 7.75), 10.2, 0.55,
+                                 boxstyle='round,pad=0.04',
+                                 ec='#1a1a1a', fc='#1a3a5c', linewidth=1.2))
+    ax.text(5.5, 8.13, '7 Aggressive Urologic Cancer Contexts',
+            ha='center', va='center', fontsize=10.5, weight='bold',
+            color='white')
+    ax.text(5.5, 7.88,
+            'NEPC   |   MIBC   |   ccRCC   |   RMC   |   PSCC   |   '
+            'Sarcomatoid UC   |   SCBC',
+            ha='center', va='center', fontsize=8.5, color='#e8e8e8',
+            style='italic')
+    ax.annotate('', xy=(5.5, 7.35), xytext=(5.5, 7.70),
+                arrowprops=dict(arrowstyle='->', lw=1.5, color='#444'))
+
+    ax.text(5.5, 7.22, 'Step 1.  Genomic evidence input',
+            ha='center', fontsize=10, weight='bold', color='#1a1a1a')
+
+    ax.add_patch(FancyBboxPatch((0.5, 5.65), 4.85, 1.45,
+                                 boxstyle='round,pad=0.05',
+                                 ec='#1f4e79', fc='#cfe2f3', linewidth=1.3))
+    ax.text(2.925, 6.85, 'Step 1a — TCGA Pan-Cancer Atlas',
+            ha='center', va='center', fontsize=9.2, weight='bold',
+            color='#0b2e4f')
+    ax.text(2.925, 6.55, 'Source-disease cohorts',
+            ha='center', va='center', fontsize=8.2, style='italic',
+            color='#1a1a1a')
+    ax.text(2.925, 6.22,
+            'PRAD  n = 494   (NEPC)\nBLCA  n = 411   (MIBC)\n'
+            'KIRC  n = 512   (ccRCC)',
+            ha='center', va='center', fontsize=8.0, color='#0b2e4f',
+            family='monospace')
+    ax.text(2.925, 5.78, '→ Master Table 1 rows 1–16',
+            ha='center', va='center', fontsize=8.0, weight='bold',
+            color='#0b2e4f')
+
+    ax.add_patch(FancyBboxPatch((5.65, 5.65), 4.85, 1.45,
+                                 boxstyle='round,pad=0.05',
+                                 ec='#2c6e49', fc='#d9ead3', linewidth=1.3))
+    ax.text(8.075, 6.85, 'Step 1b — Published genomic series',
+            ha='center', va='center', fontsize=9.2, weight='bold',
+            color='#1d4d33')
+    ax.text(8.075, 6.55, 'Rare-disease discovery cohorts',
+            ha='center', va='center', fontsize=8.2, style='italic',
+            color='#1a1a1a')
+    ax.text(8.075, 6.22,
+            'RMC: Msaouel 2020       PSCC: Chahoud 2022\n'
+            'Sarc-UC: Guo 2019         SCBC: Chang 2018',
+            ha='center', va='center', fontsize=7.7, color='#1d4d33',
+            family='monospace')
+    ax.text(8.075, 5.78, '→ Master Table 1 rows 17–30',
+            ha='center', va='center', fontsize=8.0, weight='bold',
+            color='#1d4d33')
+
+    ax.annotate('', xy=(5.5, 5.30), xytext=(2.925, 5.62),
+                arrowprops=dict(arrowstyle='->', lw=1.4, color='#1f4e79'))
+    ax.annotate('', xy=(5.5, 5.30), xytext=(8.075, 5.62),
+                arrowprops=dict(arrowstyle='->', lw=1.4, color='#2c6e49'))
+
+    unified_steps = [
+        (4.62, 'Step 2',
+         'GEO transcriptomic differential expression',
+         '10 datasets across all 7 contexts  ·  Welch t-test, BH-FDR',
+         '#fff2cc', '#806600'),
+        (3.74, 'Step 3',
+         '18 pre-specified druggable pathway / gene sets',
+         'drug-class-first selection  ·  upper-tail hypergeometric',
+         '#fce5cd', '#a04a00'),
+        (2.86, 'Step 4',
+         'Drug–target curation',
+         'Therapeutic Target Database  +  OpenTargets (release 2026.03)',
+         '#f4cccc', '#922b21'),
+        (1.98, 'Step 5',
+         '9-point Molecular Prioritization Score',
+         'Genomic / context-anchor (0–3)  +  GEO (0–3)  +  '
+         'KEGG (0–2)  +  Literature (0–1)',
+         '#ead1dc', '#6c3483'),
+        (1.10, 'Step 6',
+         'Independent PubMed prior-proposal audit',
+         'Urologic-oncology-literature-only novelty classification '
+         'per drug–cancer row',
+         '#d0e0e3', '#1b5e6b'),
+    ]
+    box_x, box_w, box_h = 1.20, 8.60, 0.62
+    for y, label, title, sub, fc, accent in unified_steps:
+        ax.add_patch(FancyBboxPatch((box_x, y), box_w, box_h,
+                                     boxstyle='round,pad=0.04',
+                                     ec=accent, fc=fc, linewidth=1.1))
+        ax.text(box_x + 0.30, y + box_h/2, label, ha='left', va='center',
+                fontsize=9.5, weight='bold', color=accent)
+        ax.text(5.50, y + 0.42, title, ha='center', va='center',
+                fontsize=9.5, weight='bold', color='#1a1a1a')
+        ax.text(5.50, y + 0.16, sub, ha='center', va='center',
+                fontsize=7.8, color='#333')
+
+    for head_y, tail_y in [(4.36, 4.62), (3.48, 3.74), (2.60, 2.86),
+                            (1.72, 1.98)]:
+        ax.annotate('', xy=(5.5, head_y), xytext=(5.5, tail_y),
+                    arrowprops=dict(arrowstyle='->', lw=1.4, color='#444'))
+
+    ax.annotate('', xy=(5.5, 0.92), xytext=(5.5, 1.08),
+                arrowprops=dict(arrowstyle='->', lw=1.8, color='#1a1a1a'))
+
+    ax.add_patch(FancyBboxPatch((0.40, 0.08), 10.20, 0.84,
+                                 boxstyle='round,pad=0.05',
+                                 ec='#7a4a00', fc='#fef5e7', linewidth=1.5))
+    ax.text(5.50, 0.72, 'Master Table 1 — 30 Drug–Cancer Associations',
+            ha='center', va='center', fontsize=10.5, weight='bold',
+            color='#7a4a00')
+    ax.text(2.20, 0.40, '18  previously proposed',
+            ha='center', va='center', fontsize=8.5, weight='bold',
+            color='#0b2e4f')
+    ax.text(2.20, 0.20, '(convergent literature support)',
+            ha='center', va='center', fontsize=7.3, style='italic',
+            color='#0b2e4f')
+    ax.text(4.85, 0.40, '6  framework-novel',
+            ha='center', va='center', fontsize=8.5, weight='bold',
+            color='#c00000')
+    ax.text(4.85, 0.20, '(within urologic-oncology literature)',
+            ha='center', va='center', fontsize=7.3, style='italic',
+            color='#c00000')
+    ax.text(7.30, 0.40, '5  partially novel',
+            ha='center', va='center', fontsize=8.5, weight='bold',
+            color='#6c3483')
+    ax.text(7.30, 0.20, '(variant-specific extensions)',
+            ha='center', va='center', fontsize=7.3, style='italic',
+            color='#6c3483')
+    ax.text(9.50, 0.40, '1  negative biomarker',
+            ha='center', va='center', fontsize=8.5, weight='bold',
+            color='#1d4d33')
+    ax.text(9.50, 0.20, '(TROP2-low in Sarc-UC)',
+            ha='center', va='center', fontsize=7.3, style='italic',
+            color='#1d4d33')
+
+    plt.savefig(FIGURES / 'Figure1_pipeline.png', bbox_inches='tight')
+    plt.close()
+    print(f"  Saved Figure1_pipeline.png "
+          f"({(FIGURES/'Figure1_pipeline.png').stat().st_size:,} bytes)")
+
+
+generate_figure1()
 
 
 def panel_c_schematic(ax, png_path, title):
