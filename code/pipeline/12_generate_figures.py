@@ -222,26 +222,34 @@ axA = fig.add_subplot(gs[0, 0])
 axB = fig.add_subplot(gs[0, 1])
 axC = fig.add_subplot(gs[1, :])
 
+# Volcano oriented so that POSITIVE log₂FC = upregulated in the SMARCB1-null
+# (RMC) disease state. Achieved by negating the rescue-vs-null log₂FC
+# stored in the deposited table so the contrast displayed is
+# SMARCB1-null vs SMARCB1-rescue (i.e., disease state vs control).
+de_l2fc_disease = -de['l2fc_48h_RMC2C']
 neg_log_q = -np.log10(de['q_48h_RMC2C'].clip(lower=1e-300))
-axA.scatter(de['l2fc_48h_RMC2C'], neg_log_q, s=4, c='lightgrey', alpha=0.5)
+axA.scatter(de_l2fc_disease, neg_log_q, s=4, c='lightgrey', alpha=0.5)
 highlight = de[de['gene'].isin(top_genes)]
-axA.scatter(highlight['l2fc_48h_RMC2C'],
+axA.scatter(-highlight['l2fc_48h_RMC2C'],
             -np.log10(highlight['q_48h_RMC2C'].clip(lower=1e-300)),
             s=30, c='red', edgecolor='black', linewidth=0.5, zorder=5)
 for _, r in highlight.iterrows():
     g = r['gene']
-    x, y = r['l2fc_48h_RMC2C'], -np.log10(max(r['q_48h_RMC2C'], 1e-300))
+    x = -r['l2fc_48h_RMC2C']  # flip sign for disease-state orientation
+    y = -np.log10(max(r['q_48h_RMC2C'], 1e-300))
     if g in ['IL8', 'CXCL1', 'CXCL2', 'HBEGF', 'CEACAM1']:
-        axA.annotate(g, (x, y), xytext=(x - 0.3, y + 5), fontsize=7,
+        axA.annotate(g, (x, y), xytext=(x + 0.3, y + 5), fontsize=7,
                      fontweight='bold', color='darkred')
 axA.axvline(-1, color='red', linestyle='--', lw=0.8, alpha=0.5)
 axA.axvline(1, color='red', linestyle='--', lw=0.8, alpha=0.5)
 axA.axhline(-np.log10(0.05), color='red', linestyle='--', lw=0.8, alpha=0.5)
-axA.set_xlabel('log₂FC (SMARCB1-rescue vs NEG, RMC-2C cells)\n← UP in SMARCB1-null         DOWN in null →')
+axA.set_xlabel('log₂FC (SMARCB1-null vs SMARCB1-rescue, RMC-2C cells)\n'
+               '← DOWN in RMC         UP in RMC →')
 axA.set_ylabel('−log₁₀(adj. p-value)')
-axA.set_title('A. Volcano plot — RMC-2C cell line\nGSE180999 (n=9; SMARCB1-rescue vs NEG)',
+axA.set_title('A. Volcano plot — RMC-2C cell line\n'
+              'GSE180999 (n=9; SMARCB1-null vs rescue)',
               fontsize=9.5, pad=8)
-axA.set_xlim(-3, 9)
+axA.set_xlim(-9, 3)
 
 top_df = rmc_up.sort_values('mean_l2fc_48h')
 y_pos = np.arange(len(top_df))
