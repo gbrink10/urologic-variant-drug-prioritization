@@ -1,0 +1,7 @@
+sample,title,genotype,description,treatment
+GSM6657927,"PM154, Control, rep1",Wilde Type,PM154-1,control
+GSM6657928,"PM154, Control, rep2",Wilde Type,PM154-2,control
+GSM6657929,"PM154, Control, rep3",Wilde Type,PM154-3,control
+GSM6657930,"PM154, decitaine treated, rep1",DNMT1 knockout,PM154-day14-1,decitabine
+GSM6657931,"PM154, decitaine treated, rep2",DNMT1 knockout,PM154-day14-2,decitabine
+GSM6657932,"PM154, decitaine treated, rep3",DNMT1 knockout,PM154-day14-3,decitabine

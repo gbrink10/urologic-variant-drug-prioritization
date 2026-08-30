@@ -1,0 +1,10 @@
+context,genes,samples,data_type,design,contrast,note
+NEPC_CXCR7,26473,12,linear,~ cell_line + treatment,shCXCR7 - LKO,"RPKM; two cell lines, three replicates each"
+NEPC_DECITABINE,37788,6,linear,~ treatment,decitabine - control,"TPM; PM154 patient-derived line, three replicates per arm"
+NEPC_DNMT,33690,9,linear,~ genotype,DNMT1KO - WT,"TPM aggregated to gene; three genotypes, three replicates each"
+MIBC_KINOME,536,48,counts,~ patient + tissue_group,tumor - normal,"NanoString kinome panel, no housekeeping probes; negative-control background subtracted, positive spike-in scaled, 24 matched pairs"
+ccRCC_METS,57358,44,counts,~ gender + metastatic,Yes - No,"htseq counts, 44 tumours; this series contains NO normal tissue"
+HLRCC,56470,26,counts,~ group,Tumor - Normal,RSEM counts; primary tumour and metastasis vs adjacent normal
+PSCC,67528,22,log2,~ group (+ duplicateCorrelation on donor),Tumor - Normal,HTA-2.0 series matrix; 3 normal donors across 6 arrays - technical replicates
+SarcUC,29377,112,log2,~ chip + group,SARC - UC,Illumina series matrix; 19 chips as batch
+SCBC,20802,44,log2,~ batch + subtype,each subtype - rest,"batch-adjusted matrix; batches {'BatchA': 24, 'BatchC': 14, 'BatchB': 6}; subtypes {'ASCL1': 19, 'NEUROD1': 10, 'YAP1': 8, 'POU2F3': 7}"

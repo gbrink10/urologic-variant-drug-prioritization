@@ -1,0 +1,23 @@
+sample,title,disease_state,source,description,group,donor
+GSM5906195,N1.1,Normal,Normal penile glans,Gene expression data from penile normal tissues,Normal,N1
+GSM5906196,N1.2,Normal,Normal penile glans,Gene expression data from penile normal tissues,Normal,N1
+GSM5906197,N5.1,Normal,Normal penile glans,Gene expression data from penile normal tissues,Normal,N5
+GSM5906198,N5.2,Normal,Normal penile glans,Gene expression data from penile normal tissues,Normal,N5
+GSM5906199,N10.1,Normal,Normal penile glans,Gene expression data from penile normal tissues,Normal,N10
+GSM5906200,N10.2,Normal,Normal penile glans,Gene expression data from penile normal tissues,Normal,N10
+GSM5906201,PA6T,Penile cancer,Penile cancer,Gene expression data from penile usual carcinoma,Tumor,PA6T
+GSM5906202,PA7T,Penile cancer,Penile cancer,Gene expression data from penile usual carcinoma,Tumor,PA7T
+GSM5906203,PA9T,Penile cancer,Penile cancer,Gene expression data from penile usual carcinoma,Tumor,PA9T
+GSM5906204,PA13T,Penile cancer,Penile cancer,Gene expression data from penile usual carcinoma,Tumor,PA13T
+GSM5906205,PA17T,Penile cancer,Penile cancer,Gene expression data from penile usual carcinoma,Tumor,PA17T
+GSM5906206,PA23T,Penile cancer,Penile cancer,Gene expression data from penile usual carcinoma,Tumor,PA23T
+GSM5906207,PA26T,Penile cancer,Penile cancer,Gene expression data from penile usual carcinoma,Tumor,PA26T
+GSM5906208,PA27T,Penile cancer,Penile cancer,Gene expression data from penile usual carcinoma,Tumor,PA27T
+GSM5906209,PA29T,Penile cancer,Penile cancer,Gene expression data from penile usual carcinoma,Tumor,PA29T
+GSM5906210,PA40T.1,Penile cancer,Penile cancer,Gene expression data from penile usual carcinoma,Tumor,PA40T
+GSM5906211,PA41T.1,Penile cancer,Penile cancer,Gene expression data from penile usual carcinoma,Tumor,PA41T
+GSM5906212,PA42T.1,Penile cancer,Penile cancer,Gene expression data from penile usual carcinoma,Tumor,PA42T
+GSM5906213,PE2T,Penile cancer,Penile cancer,Gene expression data from penile usual carcinoma,Tumor,PE2T
+GSM5906214,PE17T,Penile cancer,Penile cancer,Gene expression data from penile usual carcinoma,Tumor,PE17T
+GSM5906215,PE23T,Penile cancer,Penile cancer,Gene expression data from penile usual carcinoma,Tumor,PE23T
+GSM5906216,PE25T,Penile cancer,Penile cancer,Gene expression data from penile usual carcinoma,Tumor,PE25T

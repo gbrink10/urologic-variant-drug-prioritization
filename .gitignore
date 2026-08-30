@@ -6,3 +6,12 @@ __pycache__/
 Thumbs.db
 *.tmp
 *.bak
+
+# Large re-derivable inputs. Regenerate with:
+#   python code/pipeline/30_fetch_raw_matrices.py     (GEO deposits, ~820 MB)
+#   python code/pipeline/31_fetch_sample_metadata.py  (series matrices)
+#   python code/pipeline/37_hgnc_symbol_map.py        (HGNC table)
+#   python code/pipeline/32_prepare_matrices.py       (standardised matrices)
+data/raw_matrices/
+data/prepared/*_expr.csv
+data/hgnc_complete_set.txt

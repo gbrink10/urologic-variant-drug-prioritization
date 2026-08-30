@@ -1,0 +1,49 @@
+sample,title,individual,age,gender,race,tissue,source,description,patient,tissue_group
+GSM3744490,Patient 1 -tumor,Patient 1,76,female,African American,tumor,Bladder tumor,BL1,Patient 1,tumor
+GSM3744491,Patient 1 -normal,Patient 1,76,female,African American,adjacent normal,Adjacent Normal,BL1N,Patient 1,normal
+GSM3744492,Patient 2 -tumor,Patient 2,68,male,Caucasian,tumor,Bladder tumor,BL2,Patient 2,tumor
+GSM3744493,Patient 2 -normal,Patient 2,68,male,Caucasian,adjacent normal,Adjacent Normal,BL2N,Patient 2,normal
+GSM3744494,Patient 3 -tumor,Patient 3,58,male,Caucasian,tumor,Bladder tumor,BL3,Patient 3,tumor
+GSM3744495,Patient 3 -normal,Patient 3,58,male,Caucasian,adjacent normal,Adjacent Normal,BL3N,Patient 3,normal
+GSM3744496,Patient 4 -tumor,Patient 4,74,female,Caucasian,tumor,Bladder tumor,BL4,Patient 4,tumor
+GSM3744497,Patient 4 -normal,Patient 4,74,female,Caucasian,adjacent normal,Adjacent Normal,BL4N,Patient 4,normal
+GSM3744498,Patient 5 -tumor,Patient 5,66,female,African American,tumor,Bladder tumor,BL5,Patient 5,tumor
+GSM3744499,Patient 5 -normal,Patient 5,66,female,African American,adjacent normal,Adjacent Normal,BL5N,Patient 5,normal
+GSM3744500,Patient 6 -tumor,Patient 6,61,female,Caucasian,tumor,Bladder tumor,BL6,Patient 6,tumor
+GSM3744501,Patient 6 -normal,Patient 6,61,female,Caucasian,adjacent normal,Adjacent Normal,BL6N,Patient 6,normal
+GSM3744502,Patient 8 -tumor,Patient 8,72,female,Caucasian,tumor,Bladder tumor,BL8,Patient 8,tumor
+GSM3744503,Patient 8 -normal,Patient 8,72,female,Caucasian,adjacent normal,Adjacent Normal,BL8N,Patient 8,normal
+GSM3744504,Patient 9 -tumor,Patient 9,60,male,Caucasian,tumor,Bladder tumor,BL9,Patient 9,tumor
+GSM3744505,Patient 9 -normal,Patient 9,60,male,Caucasian,adjacent normal,Adjacent Normal,BL9N,Patient 9,normal
+GSM3744506,Patient 11 -tumor,Patient 11,66,male,Caucasian,tumor,Bladder tumor,BL11,Patient 11,tumor
+GSM3744507,Patient 11 -normal,Patient 11,66,male,Caucasian,adjacent normal,Adjacent Normal,BL11N,Patient 11,normal
+GSM3744508,Patient 12 -tumor,Patient 12,77,female,Caucasian,tumor,Bladder tumor,BL12,Patient 12,tumor
+GSM3744509,Patient 12 -normal,Patient 12,77,female,Caucasian,adjacent normal,Adjacent Normal,BL12N,Patient 12,normal
+GSM3744510,Patient 13 -tumor,Patient 13,66,female,Caucasian,tumor,Bladder tumor,BL13,Patient 13,tumor
+GSM3744511,Patient 13 -normal,Patient 13,66,female,Caucasian,adjacent normal,Adjacent Normal,BL13N,Patient 13,normal
+GSM3744512,Patient 14 -tumor,Patient 14,63,male,Caucasian,tumor,Bladder tumor,BL14,Patient 14,tumor
+GSM3744513,Patient 14 -normal,Patient 14,63,male,Caucasian,adjacent normal,Adjacent Normal,BL14N,Patient 14,normal
+GSM3744514,Patient 15 -tumor,Patient 15,84,male,Caucasian,tumor,Bladder tumor,BL15,Patient 15,tumor
+GSM3744515,Patient 15 -normal,Patient 15,84,male,Caucasian,adjacent normal,Adjacent Normal,BL15N,Patient 15,normal
+GSM3744516,Patient 17 -tumor,Patient 17,65,female,Caucasian,tumor,Bladder tumor,BL17,Patient 17,tumor
+GSM3744517,Patient 17 -normal,Patient 17,65,female,Caucasian,adjacent normal,Adjacent Normal,BL17N,Patient 17,normal
+GSM3744518,Patient 23 -tumor,Patient 23,58,male,African American,tumor,Bladder tumor,BL23,Patient 23,tumor
+GSM3744519,Patient 23 -normal,Patient 23,58,male,African American,adjacent normal,Adjacent Normal,BL23N,Patient 23,normal
+GSM3744520,Patient 26 -tumor,Patient 26,83,male,Caucasian,tumor,Bladder tumor,BL26,Patient 26,tumor
+GSM3744521,Patient 26 -normal,Patient 26,83,male,Caucasian,adjacent normal,Adjacent Normal,BL26N,Patient 26,normal
+GSM3744522,Patient 29 -tumor,Patient 29,54,male,Caucasian,tumor,Bladder tumor,BL29,Patient 29,tumor
+GSM3744523,Patient 29 -normal,Patient 29,54,male,Caucasian,adjacent normal,Adjacent Normal,BL29N,Patient 29,normal
+GSM3744524,Patient 30 -tumor,Patient 30,70,male,Caucasian,tumor,Bladder tumor,BL30,Patient 30,tumor
+GSM3744525,Patient 30 -normal,Patient 30,70,male,Caucasian,adjacent normal,Adjacent Normal,BL30N,Patient 30,normal
+GSM3744526,Patient 31 -tumor,Patient 31,56,male,Caucasian,tumor,Bladder tumor,BL31,Patient 31,tumor
+GSM3744527,Patient 31 -normal,Patient 31,56,male,Caucasian,adjacent normal,Adjacent Normal,BL31N,Patient 31,normal
+GSM3744528,Patient 33 -tumor,Patient 33,86,male,Caucasian,tumor,Bladder tumor,BL33,Patient 33,tumor
+GSM3744529,Patient 33 -normal,Patient 33,86,male,Caucasian,adjacent normal,Adjacent Normal,BL33N,Patient 33,normal
+GSM3744530,Patient 34 -tumor,Patient 34,63,male,Caucasian,tumor,Bladder tumor,BL34,Patient 34,tumor
+GSM3744531,Patient 34 -normal,Patient 34,63,male,Caucasian,adjacent normal,Adjacent Normal,BL34N,Patient 34,normal
+GSM3744532,Patient 35 -tumor,Patient 35,42,male,Caucasian,tumor,Bladder tumor,BL35,Patient 35,tumor
+GSM3744533,Patient 35 -normal,Patient 35,42,male,Caucasian,adjacent normal,Adjacent Normal,BL35N,Patient 35,normal
+GSM3744534,Patient 36 -tumor,Patient 36,45,male,Caucasian,tumor,Bladder tumor,BL36,Patient 36,tumor
+GSM3744535,Patient 36 -normal,Patient 36,45,male,Caucasian,adjacent normal,Adjacent Normal,BL36N,Patient 36,normal
+GSM3744536,Patient 37 -tumor,Patient 37,58,male,Caucasian,tumor,Bladder tumor,BL37,Patient 37,tumor
+GSM3744537,Patient 37 -normal,Patient 37,58,male,Caucasian,adjacent normal,Adjacent Normal,BL37N,Patient 37,normal
