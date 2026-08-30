@@ -43,6 +43,7 @@ prov = pd.read_csv(RF / 'SCORING_PROVENANCE_V29.csv')
 defs = pd.read_csv(REPO / 'data' / 'master_row_definitions.csv')
 hpa = pd.read_csv(RES / 'HPA_PROTEIN_VALIDATION.csv')
 dep = pd.read_csv(RES / 'DEPMAP_STRATIFIED.csv')
+dep_all = pd.read_csv(RES / 'DEPMAP_DEPENDENCY.csv')
 pri = pd.read_csv(RES / 'PRISM_DRUG_SENSITIVITY.csv')
 
 # which HPA / DepMap gene and which PRISM drugs speak to each row
@@ -80,10 +81,20 @@ for _, d in defs.iterrows():
     contradictions, layers = [], {}
     g = keys.get('dep')
     if g:
+        # the stratified table covers only targets nominated on mutation or
+        # over-expression; fall back to the unstratified analysis, which carries
+        # the verdict for every queried gene including the payload modalities
         s = dep[dep['gene'] == g]
-        v = str(s['verdict'].iloc[0]) if len(s) else 'not assayed in this release'
+        if len(s):
+            v = str(s['verdict'].iloc[0])
+        else:
+            s2 = dep_all[dep_all['gene'] == g]
+            v = (str(s2['verdict'].iloc[0]) if len(s2)
+                 else 'not present in the DepMap release used')
         layers['dependency'] = v
-        if v.startswith('no dependency'):
+        # only a genuine absence of dependency contradicts a candidate; a target
+        # that need not be essential for its modality to work does not
+        if v.startswith('no dependency') or v.startswith('not a dependency'):
             contradictions.append(f'DepMap: {v}')
     else:
         layers['dependency'] = 'cannot test (modality delivers a payload)'
