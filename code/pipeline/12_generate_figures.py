@@ -47,7 +47,7 @@ def generate_figure1():
     ax.add_patch(FancyBboxPatch((0.4, 7.75), 10.2, 0.55,
                                  boxstyle='round,pad=0.04',
                                  ec='#1a1a1a', fc='#1a3a5c', linewidth=1.2))
-    ax.text(5.5, 8.13, '7 Aggressive Urologic Cancer Contexts',
+    ax.text(5.5, 8.13, '3 Benchmark Contexts  +  4 Rare / Variant Discovery Contexts',
             ha='center', va='center', fontsize=10.5, weight='bold',
             color='white')
     ax.text(5.5, 7.88,
@@ -105,11 +105,11 @@ def generate_figure1():
     unified_steps = [
         (4.62, 'Step 2',
          'GEO transcriptomic differential expression',
-         '10 datasets across all 7 contexts  ·  Welch t-test, BH-FDR',
+         '10 datasets  ·  limma / edgeR, design-aware model per platform  ·  BH-FDR',
          '#fff2cc', '#806600'),
         (3.74, 'Step 3',
          '18 pre-specified druggable pathway / gene sets',
-         'drug-class-first selection  ·  upper-tail hypergeometric (nominal p < 0.10)',
+         'drug-class-first  ·  hypergeometric against each dataset\'s own measured-gene universe',
          '#fce5cd', '#a04a00'),
         (2.86, 'Step 4',
          'Drug–target curation',
@@ -185,6 +185,8 @@ def generate_figure1():
     ax.text(5.05, -0.16, '6 framework-novel candidates carried forward',
             ha='left', va='center', fontsize=7.4, style='italic',
             color='#c00000')
+    ax.text(5.05, -0.30, '3 eligible \u2192 2 survive the audit',
+            ha='left', va='center', fontsize=7.0, style='italic', color='#7d6608')
 
     ax.add_patch(FancyBboxPatch((1.20, -1.31), 8.60, 0.93,
                                  boxstyle='round,pad=0.04',
@@ -192,8 +194,8 @@ def generate_figure1():
     ax.text(1.50, -0.62, 'Step 7', ha='left', va='center',
             fontsize=9.5, weight='bold', color='#1e8449')
     ax.text(5.50, -0.62,
-            'Four orthogonal layers — none contributed to the score',
-            ha='center', va='center', fontsize=9.5, weight='bold',
+            'Orthogonal evidence audit — four layers, none contributed to the score',
+            ha='center', va='center', fontsize=9.3, weight='bold',
             color='#1a1a1a')
     ax.text(5.50, -0.90,
             'Human Protein Atlas localisation + normal tissue   ·   '
@@ -214,9 +216,10 @@ def generate_figure1():
             ha='center', va='center', fontsize=10.5, weight='bold',
             color='white')
     ax.text(5.50, -2.06,
-            'only framework-novel enrichment surviving BH correction (q = 0.061);\n'
-            'layers unable to test a microenvironment-directed agent are not support',
-            ha='center', va='center', fontsize=7.5, style='italic',
+            'chemokine signalling enriched at q = 0.0025 on genes consistent in both '
+            'patient-derived lines;\nlayers unable to test a microenvironment-directed '
+            'agent are not support',
+            ha='center', va='center', fontsize=7.3, style='italic',
             color='#eafaf1')
 
     plt.savefig(FIGURES / 'Figure1_pipeline.png', bbox_inches='tight')

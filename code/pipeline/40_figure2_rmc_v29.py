@@ -9,7 +9,7 @@ candidate.
   A  effect in RMC-2C against effect in RMC219, every gene, chemokine axis
      highlighted - consistency between lines is the claim being made
   B  the chemokine axis gene by gene, both lines shown separately
-  C  mechanism, drawn here rather than imported as a generated image
+  C  mechanism schematic, checked molecule by molecule before use
 
 Writes: figures/Figure2_RMC.png
 """
@@ -20,9 +20,9 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
+import matplotlib.image as mpimg
 import numpy as np
 import pandas as pd
-from matplotlib.patches import FancyBboxPatch, FancyArrowPatch, Circle, Ellipse
 
 sys.stdout.reconfigure(encoding='utf-8')
 REPO = Path(__file__).resolve().parents[2]
@@ -39,8 +39,8 @@ chem_q = float(enr[(enr['analysis'] == 'both lines')
 AXIS = ['CXCL8', 'CXCL1', 'CXCL2', 'CXCL3', 'CEACAM1']
 present = [g for g in AXIS if g in d.index]
 
-fig = plt.figure(figsize=(15.2, 5.4))
-gs = gridspec.GridSpec(1, 3, width_ratios=[1.0, 0.95, 1.3], wspace=0.34,
+fig = plt.figure(figsize=(15.6, 5.2))
+gs = gridspec.GridSpec(1, 3, width_ratios=[1.0, 0.95, 1.45], wspace=0.30,
                        left=0.05, right=0.99, top=0.82, bottom=0.12)
 
 # ---------------- A: agreement between the two cell lines ------------------
@@ -95,59 +95,14 @@ axB.legend(fontsize=7.4, frameon=False, loc='lower right')
 for s in ('top', 'right'):
     axB.spines[s].set_visible(False)
 
-# ---------------- C: mechanism, drawn not generated ------------------------
+# ---------------- C: mechanism schematic -----------------------------------
+# Verified against the analysis before use: the receptors are on the neutrophil
+# rather than the tumour cell, which is the point the panel has to make.
 axC = fig.add_subplot(gs[0, 2])
-axC.set_xlim(0, 10); axC.set_ylim(0, 10); axC.axis('off')
-axC.set_title('C. Proposed mechanism and point of blockade',
-              fontsize=9.3, weight='bold', loc='left', pad=14)
-
-# tumour cell
-axC.add_patch(Ellipse((2.7, 7.1), 4.3, 3.3, facecolor='#eaf2f8',
-                      edgecolor='#1f4e79', lw=1.4))
-axC.text(2.7, 8.12, 'RMC tumour cell', ha='center', fontsize=8.3, weight='bold',
-         color='#1f4e79')
-axC.text(2.7, 7.52, 'SMARCB1 loss', ha='center', fontsize=7.7, style='italic',
-         color='#c0392b')
-axC.text(2.7, 6.68, 'CXCL8  CXCL1\nCXCL2  CXCL3', ha='center', va='center',
-         fontsize=7.7, color='#1a1a1a', family='monospace')
-for dy in (0.28, 0.0, -0.28):
-    axC.add_patch(FancyArrowPatch((5.05, 6.8 + dy), (6.60, 5.75 + dy),
-                                  arrowstyle='-|>', mutation_scale=10,
-                                  lw=1.1, color='#c0392b'))
-axC.text(5.85, 7.55, 'secreted chemokines', fontsize=7.1, style='italic',
-         color='#c0392b', ha='center')
-
-# neutrophil
-axC.add_patch(Circle((8.05, 4.30), 1.45, facecolor='#fdf2e9',
-                     edgecolor='#b9770e', lw=1.4))
-axC.text(8.05, 6.02, 'neutrophil', ha='center', fontsize=8.1, weight='bold',
-         color='#b9770e')
-for ang, lab in ((125, 'CXCR1'), (190, 'CXCR2')):
-    a = np.deg2rad(ang)
-    px, py = 8.05 + 1.45 * np.cos(a), 4.30 + 1.45 * np.sin(a)
-    axC.add_patch(Circle((px, py), 0.26, facecolor='#1a3a5c', edgecolor='white',
-                         lw=1.0, zorder=6))
-    axC.text(px - 0.40, py + 0.04, lab, ha='right', va='center', fontsize=7.4,
-             weight='bold', color='#1a3a5c')
-axC.text(8.35, 4.05, 'myeloid\nrecruitment', ha='center', va='center',
-         fontsize=7.2, color='#7e5109', style='italic')
-
-# blockade
-axC.add_patch(FancyBboxPatch((0.10, 1.55), 5.35, 1.42,
-                             boxstyle='round,pad=0.10', facecolor='#e8f6ef',
-                             edgecolor='#1e8449', lw=1.3))
-axC.text(2.78, 2.54, 'CXCR1/CXCR2 antagonists', ha='center', fontsize=8.1,
-         weight='bold', color='#1e8449')
-axC.text(2.78, 1.96, 'reparixin · navarixin · AZD5069 · danirixin',
-         ha='center', fontsize=6.9, color='#145a32')
-axC.add_patch(FancyArrowPatch((5.55, 2.55), (6.45, 3.40), arrowstyle='-|>',
-                              mutation_scale=11, lw=1.5, color='#1e8449'))
-axC.plot([6.25, 6.85], [3.10, 3.70], lw=2.4, color='#c0392b', zorder=8)
-axC.plot([6.85, 6.25], [3.10, 3.70], lw=2.4, color='#c0392b', zorder=8)
-axC.text(5.0, 0.60,
-         'The mechanism runs through the myeloid compartment, so a tumour-cell\n'
-         'monoculture cannot test it in either direction.',
-         ha='center', fontsize=6.9, style='italic', color='#555')
+axC.imshow(mpimg.imread(str(FIG / 'panelC' / 'PanelC_RMC.png')))
+axC.axis('off')
+axC.set_title('C. Proposed mechanism and point of blockade', fontsize=9.3,
+              weight='bold', loc='left')
 
 out = FIG / 'Figure2_RMC.png'
 plt.savefig(out, bbox_inches='tight')
