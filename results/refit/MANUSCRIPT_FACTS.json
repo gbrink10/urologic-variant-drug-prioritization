@@ -1,0 +1,238 @@
+{
+ "n_associations": 30,
+ "tiers": {
+  "Moderate": 15,
+  "Strong": 10,
+  "Exploratory": 5
+ },
+ "n_framework_novel": 6,
+ "n_partially_novel": 5,
+ "n_previously_proposed": 18,
+ "per_context": {
+  "MIBC / MPBC": 7,
+  "NEPC": 6,
+  "Sarcomatoid UC": 5,
+  "Penile SCC": 3,
+  "RMC": 3,
+  "ccRCC / sRCC": 2,
+  "ccRCC": 1,
+  "SCBC (ASCL1+)": 1,
+  "SCBC (NEUROD1+)": 1,
+  "SCBC (POU2F3+)": 1
+ },
+ "funnel": {
+  "framework_novel": 6,
+  "eligible": 3,
+  "survive": 2
+ },
+ "survivors": [
+  {
+   "N": 17,
+   "target": "CXCR1 / CXCR2 (IL-8/CXCL1/CXCL2 triad)",
+   "drug": "Reparixin / navarixin / AZD5069",
+   "total": 8,
+   "context": "RMC",
+   "nTPM": 0.5
+  },
+  {
+   "N": 19,
+   "target": "CEACAM1",
+   "drug": "CM24 (anti-CEACAM1)",
+   "total": 7,
+   "context": "RMC",
+   "nTPM": 31.4
+  }
+ ],
+ "excluded": [
+  {
+   "N": 23,
+   "target": "NSD2 / WHSC1 (histone methyltransferase)",
+   "reason": "S1 DepMap: no dependency in the nominated stratum"
+  },
+  {
+   "N": 28,
+   "target": "CEACAM5 (CEA)",
+   "reason": "E4 no clinical-stage agent"
+  },
+  {
+   "N": 24,
+   "target": "ATR / ATRIP (DNA damage response)",
+   "reason": "E2 score 2/9 below Moderate; E3 transcriptomic q = 0.0831"
+  },
+  {
+   "N": 29,
+   "target": "SSTR2 (somatostatin receptor 2)",
+   "reason": "E2 score 2/9 below Moderate; E3 transcriptomic q = 0.363"
+  }
+ ],
+ "q": {
+  "rmc_chemokine": 0.002517266624895,
+  "rmc_cytokine": 0.0014507720106064,
+  "pscc_antigen": 0.0030977446108821,
+  "sarc_epigenetic": 0.0576947840477228,
+  "sarc_cellcycle": 0.0017581859254402,
+  "pou2f3_arachidonic": 0.0676751774142437,
+  "neurod1_neuroactive": 1.0,
+  "mibc_cellcycle": 0.0056345224447106
+ },
+ "rmc_top_pathway": "Bladder_cancer",
+ "rmc_top_q": 0.0002667346867784,
+ "n_pathways_surviving": {
+  "HLRCC": 8,
+  "MIBC": 1,
+  "NEPC_CXCR7": 1,
+  "NEPC_DECITABINE": 0,
+  "NEPC_DNMT": 0,
+  "PSCC": 2,
+  "SCBC_ASCL1": 0,
+  "SCBC_NEUROD1": 0,
+  "SCBC_POU2F3": 1,
+  "SCBC_YAP1": 0,
+  "SarcUC": 3,
+  "ccRCC": 0
+ },
+ "de": {
+  "CXCL8_rmc": {
+   "log2FC": 2.31882330226163,
+   "q": 1.37036685892139e-112
+  },
+  "CEACAM1_rmc": {
+   "log2FC": 1.41931964837862,
+   "q": 2.14691118625299e-05
+  },
+  "HLA_DRA_pscc": {
+   "log2FC": 8.92208333333334,
+   "q": 2.67503877703762e-05
+  },
+  "NSD2_sarc": {
+   "log2FC": 1.25832939954587,
+   "q": 1.26568494526104e-13
+  },
+  "ATR_sarc": {
+   "log2FC": 0.177482678255587,
+   "q": 0.0830846702168365
+  },
+  "TACSTD2_sarc": {
+   "log2FC": -2.06423418924647,
+   "q": 9.64661587834248e-19
+  },
+  "CEACAM5_ascl1": {
+   "log2FC": 6.44545376254699,
+   "q": 0.0002969179470215
+  },
+  "SSTR2_neurod1": {
+   "log2FC": 2.30000934882713,
+   "q": 0.362913847252951
+  },
+  "PTGS1_pou2f3": {
+   "log2FC": 3.56007354527279,
+   "q": 0.0125949838356163
+  }
+ },
+ "rmc": {
+  "genes_measured_both": 23841,
+  "r_between_lines": 0.12,
+  "up_both": 187,
+  "up_2C": 1262,
+  "up_219": 857,
+  "chemokine_genes": [
+   "CXCL8",
+   "CXCL1",
+   "CXCL2",
+   "CXCL3"
+  ],
+  "CXCL8": {
+   "RMC2C": 2.53,
+   "RMC219": 2.11,
+   "mean": 2.32
+  },
+  "CXCL1": {
+   "RMC2C": 2.24,
+   "RMC219": 1.49,
+   "mean": 1.86
+  },
+  "CXCL2": {
+   "RMC2C": 1.81,
+   "RMC219": 1.79,
+   "mean": 1.8
+  },
+  "CXCL3": {
+   "RMC2C": 2.23,
+   "RMC219": 0.57,
+   "mean": 1.4
+  },
+  "CEACAM1": {
+   "RMC2C": 1.36,
+   "RMC219": 1.48,
+   "mean": 1.42
+  }
+ },
+ "design": {
+  "sarc_chips_total": 19,
+  "sarc_chips_sarc_only": 4,
+  "sarc_chips_uc_only": 15,
+  "sarc_chips_mixed": 0,
+  "pscc_normal_arrays": 6,
+  "pscc_normal_donors": 3,
+  "ccrcc_samples": 44,
+  "ccrcc_q05_genes": 1
+ },
+ "hpa": {
+  "n_surface_required": 10,
+  "n_confirmed": 10,
+  "nTPM": {
+   "DLL3": 0.0,
+   "SSTR2": 0.8,
+   "TACSTD2": 219.0,
+   "CEACAM5": 9.8
+  },
+  "CXCR1_kidney": 0.5,
+  "CEACAM1_kidney": 31.4
+ },
+ "depmap": {
+  "n_urothelial_lines": 32,
+  "NSD2_verdict": "not a dependency",
+  "ATR_verdict": "common essential (dependency, but not lineage-selective)",
+  "CEACAM1_verdict": "not evaluable - payload/effector modality, target need not be essential",
+  "RPL5": -2.656,
+  "PIK3CA_mut": -1.088,
+  "PIK3CA_wt": -0.571,
+  "NSD2_high": -0.009,
+  "G6PD_high": -0.053
+ },
+ "prism": {
+  "n_lines": 578,
+  "bortezomib": -4.175,
+  "erlotinib_uro": -0.932,
+  "cxcr_quartet": {
+   "reparixin": -0.035,
+   "navarixin": 0.092,
+   "AZD5069": -0.244,
+   "danirixin": 0.048
+  }
+ },
+ "lincs": {
+  "n_contexts": 8,
+  "n_sig_reversal": 125,
+  "n_terms": 200,
+  "best_nominated_rank": 3,
+  "nominated_contexts": [
+   "HLRCC",
+   "muscle-invasive bladder cancer",
+   "sarcomatoid urothelial carcinoma"
+  ],
+  "any_rank1_nominated": false
+ },
+ "refit": {
+  "n_contexts": 12,
+  "methods": [
+   "TMM + voom, patient as blocking factor (matched pairs)",
+   "edgeR filterByExpr + TMM + voom + limma",
+   "limma-trend on log2(TPM/RPKM+1), robust eBayes",
+   "limma-trend with duplicateCorrelation on donor",
+   "limma-trend, batch-adjusted, subtype vs mean of remaining subtypes",
+   "limma-trend, group only - chip not estimable"
+  ],
+  "pscc_dupcor": "6 normal arrays from 3 donors; duplicateCorrelation consensus 0.947"
+ }
+}
