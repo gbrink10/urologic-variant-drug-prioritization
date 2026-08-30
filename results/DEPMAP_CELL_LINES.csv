@@ -1,0 +1,98 @@
+ModelID,cell_line,cellosaurus_disease,context
+ACH-000956,22Rv1,Prostate carcinoma,prostate
+ACH-000979,DU145,Prostate carcinoma,prostate
+ACH-000977,LNCaP clone FGC,Prostate carcinoma,prostate
+ACH-000952,MDA-PCa-2b,Prostate carcinoma,prostate
+ACH-000090,PC-3,Prostate carcinoma,prostate
+ACH-000411,769-P,Renal cell carcinoma,renal
+ACH-000649,786-O,Renal cell carcinoma,renal
+ACH-000555,A-498,Renal cell carcinoma,renal
+ACH-000429,A-704,Renal cell carcinoma,renal
+ACH-000046,ACHN,Papillary renal cell carcinoma,renal
+ACH-002090,BB65-RCC,Renal cell carcinoma,renal
+ACH-000457,CAL-54,Renal cell carcinoma,renal
+ACH-000433,Caki-1,Clear cell renal cell carcinoma,renal
+ACH-000234,Caki-2,Papillary renal cell carcinoma,renal
+ACH-002139,HA7-RCC,Renal cell carcinoma,renal
+ACH-000684,KMRC-1,Clear cell renal cell carcinoma,renal
+ACH-000709,KMRC-2,Clear cell renal cell carcinoma,renal
+ACH-000250,KMRC-20,Clear cell renal cell carcinoma,renal
+ACH-000313,KMRC-3,Clear cell renal cell carcinoma,renal
+ACH-002188,KTCTL-13,Clear cell renal cell carcinoma,renal
+ACH-002190,KTCTL-140,Clear cell renal cell carcinoma,renal
+ACH-002191,KTCTL-195,Clear cell renal cell carcinoma,renal
+ACH-002192,KTCTL-1M,Clear cell renal cell carcinoma,renal
+ACH-002187,KTCTL-21,Clear cell renal cell carcinoma,renal
+ACH-002189,KTCTL-26A,Clear cell renal cell carcinoma,renal
+ACH-002150,LB1047-RCC,Renal cell carcinoma,renal
+ACH-002151,LB2241-RCC,Renal cell carcinoma,renal
+ACH-002155,LB996-RCC,Renal cell carcinoma,renal
+ACH-002167,NCC010,Renal cell carcinoma,renal
+ACH-002168,NCC021,Renal cell carcinoma,renal
+ACH-000159,OS-RC-2,Clear cell renal cell carcinoma,renal
+ACH-000189,RCC10RGB,Renal cell carcinoma,renal
+ACH-001175,RCC4,Clear cell renal cell carcinoma,renal
+ACH-002195,RXF 393L,Renal cell carcinoma,renal
+ACH-000385,SK-RC-20,Renal cell carcinoma,renal
+ACH-001194,SK-RC-31,Renal cell carcinoma,renal
+ACH-000016,SLR21,Clear cell renal cell carcinoma,renal
+ACH-000246,SLR23,Clear cell renal cell carcinoma,renal
+ACH-000272,SLR24,Clear cell renal cell carcinoma,renal
+ACH-000300,SLR25,Clear cell renal cell carcinoma,renal
+ACH-000600,SLR26,Clear cell renal cell carcinoma,renal
+ACH-002199,SN12C,Renal cell carcinoma,renal
+ACH-000513,SNU-1272,Clear cell renal cell carcinoma,renal
+ACH-000907,SNU-349,Clear cell renal cell carcinoma,renal
+ACH-001398,SW156,Renal cell carcinoma,renal
+ACH-001208,TK-10,Clear cell renal cell carcinoma,renal
+ACH-000459,TUHR10TKB,Clear cell renal cell carcinoma,renal
+ACH-000317,TUHR14TKB,Renal cell carcinoma,renal
+ACH-000495,TUHR4TKB,Renal cell carcinoma,renal
+ACH-001224,UM-RC-2,Clear cell renal cell carcinoma,renal
+ACH-001687,UM-RC-3,Clear cell renal cell carcinoma,renal
+ACH-001225,UM-RC-6,Renal cell carcinoma,renal
+ACH-001688,UM-RC-7,Renal cell carcinoma,renal
+ACH-000428,UO-31,Renal cell carcinoma,renal
+ACH-002203,UO-31,Renal cell carcinoma,renal
+ACH-000262,UOK101,Clear cell renal cell carcinoma,renal
+ACH-000484,VMRC-RCW,Renal cell carcinoma,renal
+ACH-000171,VMRC-RCZ,Renal cell carcinoma,renal
+ACH-001163,CCLF-PEDS-0001-T,Kidney medullary carcinoma,renal medullary
+ACH-000011,253J,Bladder carcinoma,urothelial
+ACH-000026,253J-BV,Bladder carcinoma,urothelial
+ACH-000905,5637,Bladder carcinoma,urothelial
+ACH-000896,647V,Bladder carcinoma,urothelial
+ACH-001011,ACCS,Bladder carcinoma,urothelial
+ACH-000593,BC-3C,Bladder carcinoma,urothelial
+ACH-000802,BFTC-905,Bladder carcinoma,urothelial
+ACH-000142,CAL-29,Bladder carcinoma,urothelial
+ACH-002235,DSH1,Bladder carcinoma,urothelial
+ACH-000547,HT-1197,Recurrent bladder carcinoma,urothelial
+ACH-000724,HT-1376,Bladder carcinoma,urothelial
+ACH-000396,J82,Bladder carcinoma,urothelial
+ACH-000753,JMSU-1,Bladder carcinoma,urothelial
+ACH-000862,KMBC-2,Bladder carcinoma,urothelial
+ACH-000486,KU-19-19,Bladder carcinoma,urothelial
+ACH-002266,LB831-BLC,Bladder carcinoma,urothelial
+ACH-000473,RT-112,Bladder carcinoma,urothelial
+ACH-000242,RT-4,Bladder carcinoma,urothelial
+ACH-001183,RT112/84,Bladder carcinoma,urothelial
+ACH-000839,SCaBER,Bladder squamous cell carcinoma,urothelial
+ACH-000127,SLR20,Bladder carcinoma,urothelial
+ACH-000566,SW1710,Bladder carcinoma,urothelial
+ACH-000384,SW780,Bladder carcinoma,urothelial
+ACH-000018,T24,Bladder carcinoma,urothelial
+ACH-000720,TCCSUP,Bladder carcinoma,urothelial
+ACH-000741,U-BLC1,Bladder carcinoma,urothelial
+ACH-000834,UM-UC-1,Bladder carcinoma,urothelial
+ACH-001412,UM-UC-10,Bladder carcinoma,urothelial
+ACH-001413,UM-UC-11,Bladder carcinoma,urothelial
+ACH-001407,UM-UC-13,Bladder carcinoma,urothelial
+ACH-001409,UM-UC-16,Bladder carcinoma,urothelial
+ACH-000522,UM-UC-3,Bladder carcinoma,urothelial
+ACH-001410,UM-UC-4,Bladder carcinoma,urothelial
+ACH-001411,UM-UC-5,Bladder carcinoma,urothelial
+ACH-001414,UM-UC-6,Bladder carcinoma,urothelial
+ACH-001415,UM-UC-7,Bladder carcinoma,urothelial
+ACH-001416,UM-UC-9,Bladder carcinoma,urothelial
+ACH-000545,VM-CUB-1,Bladder carcinoma,urothelial

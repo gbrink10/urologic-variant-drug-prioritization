@@ -1,0 +1,9 @@
+row,gene,quoted_value,attributed_dataset,deposited_mean,percentile,top_1pct_met,verdict
+1,BCL2,34.3,GSE216053,37.759,89.47,False,top 1% NOT met (top 10.5%); DOES NOT reconcile (deposited mean 37.76 vs quoted 34.3)
+3,EZH2,39.7,GSE216053,1.891,65.56,False,top 1% NOT met (top 34.4%); DOES NOT reconcile (deposited mean 1.89 vs quoted 39.7)
+4,DNMT1,123.6,GSE216053,123.624,96.96,False,top 1% NOT met (top 3.0%); reconciles with quoted value
+6,PARP1,267.0,GSE216053,,,False,ABSENT from attributed dataset; highest elsewhere: GSE199274 mean=72.99 (97.79th pct)
+6,PARP2,45.0,GSE216053,,,False,ABSENT from attributed dataset; highest elsewhere: GSE199274 mean=13.56 (83.47th pct)
+14,VEGFA,,GSE143630,16.429,99.96,True,"top 1% MET; n/a (rank recorded, not a value)"
+15,EPAS1,,GSE143630,15.834,99.92,True,"top 1% MET; n/a (rank recorded, not a value)"
+16,CDK4,,GSE143630,10.639,91.81,False,"top 1% NOT met (top 8.2%); n/a (rank recorded, not a value)"

@@ -35,8 +35,8 @@ plt.rcParams.update({
 # =====================================================================
 def generate_figure1():
     print("Generating Figure 1: pipeline schematic")
-    fig, ax = plt.subplots(figsize=(11, 9.0))
-    ax.set_xlim(0, 11); ax.set_ylim(0, 9.0); ax.axis('off')
+    fig, ax = plt.subplots(figsize=(11, 11.45))
+    ax.set_xlim(0, 11); ax.set_ylim(-2.45, 9.0); ax.axis('off')
 
     ax.text(5.5, 8.75,
             'Figure 1. Unified Public-Data Pipeline for Drug Repurposing',
@@ -89,7 +89,7 @@ def generate_figure1():
             ha='center', va='center', fontsize=8.2, style='italic',
             color='#1a1a1a')
     ax.text(8.075, 6.22,
-            'RMC: Msaouel 2020       PSCC: Chahoud 2022\n'
+            'RMC: Msaouel 2020       PSCC: Chahoud 2021\n'
             'Sarc-UC: Guo 2019         SCBC: Chang 2018',
             ha='center', va='center', fontsize=7.7, color='#1d4d33',
             family='monospace')
@@ -109,7 +109,7 @@ def generate_figure1():
          '#fff2cc', '#806600'),
         (3.74, 'Step 3',
          '18 pre-specified druggable pathway / gene sets',
-         'drug-class-first selection  ·  upper-tail hypergeometric',
+         'drug-class-first selection  ·  upper-tail hypergeometric (nominal p < 0.10)',
          '#fce5cd', '#a04a00'),
         (2.86, 'Step 4',
          'Drug–target curation',
@@ -177,6 +177,48 @@ def generate_figure1():
             ha='center', va='center', fontsize=7.3, style='italic',
             color='#1d4d33')
 
+    # ---- Step 7: orthogonal validation of the framework-novel candidates ----
+    # Only the framework-novel column is carried forward, so the arrow leaves
+    # from beneath that column rather than from the centre of the table box.
+    ax.annotate('', xy=(4.85, -0.36), xytext=(4.85, 0.05),
+                arrowprops=dict(arrowstyle='->', lw=1.8, color='#c00000'))
+    ax.text(5.05, -0.16, '6 framework-novel candidates carried forward',
+            ha='left', va='center', fontsize=7.4, style='italic',
+            color='#c00000')
+
+    ax.add_patch(FancyBboxPatch((1.20, -1.31), 8.60, 0.93,
+                                 boxstyle='round,pad=0.04',
+                                 ec='#1e8449', fc='#d4efdf', linewidth=1.1))
+    ax.text(1.50, -0.62, 'Step 7', ha='left', va='center',
+            fontsize=9.5, weight='bold', color='#1e8449')
+    ax.text(5.50, -0.62,
+            'Four orthogonal layers — none contributed to the score',
+            ha='center', va='center', fontsize=9.5, weight='bold',
+            color='#1a1a1a')
+    ax.text(5.50, -0.90,
+            'Human Protein Atlas localisation + normal tissue   ·   '
+            'DepMap CRISPR dependency (genotype-stratified)',
+            ha='center', va='center', fontsize=7.5, color='#333')
+    ax.text(5.50, -1.11,
+            'PRISM Repurposing compound activity   ·   '
+            'LINCS L1000 signature reversal',
+            ha='center', va='center', fontsize=7.5, color='#333')
+
+    ax.annotate('', xy=(5.5, -1.52), xytext=(5.5, -1.34),
+                arrowprops=dict(arrowstyle='->', lw=1.8, color='#1a1a1a'))
+
+    ax.add_patch(FancyBboxPatch((2.30, -2.36), 6.40, 0.82,
+                                 boxstyle='round,pad=0.05',
+                                 ec='#1a1a1a', fc='#1e8449', linewidth=1.4))
+    ax.text(5.50, -1.75, '1 lead candidate — CXCR1/CXCR2 blockade in RMC',
+            ha='center', va='center', fontsize=10.5, weight='bold',
+            color='white')
+    ax.text(5.50, -2.06,
+            'only framework-novel enrichment surviving BH correction (q = 0.061);\n'
+            'layers unable to test a microenvironment-directed agent are not support',
+            ha='center', va='center', fontsize=7.5, style='italic',
+            color='#eafaf1')
+
     plt.savefig(FIGURES / 'Figure1_pipeline.png', bbox_inches='tight')
     plt.close()
     print(f"  Saved Figure1_pipeline.png "
@@ -233,23 +275,39 @@ highlight = de[de['gene'].isin(top_genes)]
 axA.scatter(-highlight['l2fc_48h_RMC2C'],
             -np.log10(highlight['q_48h_RMC2C'].clip(lower=1e-300)),
             s=30, c='red', edgecolor='black', linewidth=0.5, zorder=5)
+rmc_label_offsets = {          # explicit offsets prevent label/point collision
+    'IL8':     (0.30,  12),
+    'CXCL1':   (0.35,  14),
+    'CEACAM1': (-1.55, 22),
+    'CXCL2':   (0.35,  26),
+    'HBEGF':   (-1.75, 34),
+}
 for _, r in highlight.iterrows():
     g = r['gene']
     x = -r['l2fc_48h_RMC2C']  # flip sign for disease-state orientation
     y = -np.log10(max(r['q_48h_RMC2C'], 1e-300))
-    if g in ['IL8', 'CXCL1', 'CXCL2', 'HBEGF', 'CEACAM1']:
-        axA.annotate(g, (x, y), xytext=(x + 0.3, y + 5), fontsize=7,
-                     fontweight='bold', color='darkred')
+    if g in rmc_label_offsets:
+        dx, dy = rmc_label_offsets[g]
+        axA.annotate(g, (x, y), xytext=(x + dx, y + dy), fontsize=7,
+                     fontweight='bold', color='darkred',
+                     arrowprops=dict(arrowstyle='-', color='darkred',
+                                     lw=0.6, alpha=0.6))
 axA.axvline(-1, color='red', linestyle='--', lw=0.8, alpha=0.5)
 axA.axvline(1, color='red', linestyle='--', lw=0.8, alpha=0.5)
 axA.axhline(-np.log10(0.05), color='red', linestyle='--', lw=0.8, alpha=0.5)
 axA.set_xlabel('log₂FC (SMARCB1-null vs SMARCB1-rescue, RMC-2C cells)\n'
                '← DOWN in RMC         UP in RMC →')
-axA.set_ylabel('−log₁₀(adj. p-value)')
+axA.set_ylabel('−log₁₀(adj. p-value)   [clipped at 300]')
 axA.set_title('A. Volcano plot — RMC-2C cell line\n'
               'GSE180999 (n=9; SMARCB1-null vs rescue)',
               fontsize=9.5, pad=8)
 axA.set_xlim(-9, 3)
+axA.set_ylim(-10, 335)
+axA.text(0.02, 0.985,
+         'Cell-line rescue contrast; q-values clipped at 1e-300.' + chr(10) +
+         'Effect direction and magnitude, not p, drive prioritization.',
+         transform=axA.transAxes, fontsize=6, style='italic',
+         color='#555', va='top')
 
 top_df = rmc_up.sort_values('mean_l2fc_48h')
 y_pos = np.arange(len(top_df))
@@ -324,7 +382,7 @@ axA.axvline(-1, color='red', linestyle='--', lw=0.8, alpha=0.5)
 axA.axvline(1, color='red', linestyle='--', lw=0.8, alpha=0.5)
 axA.axhline(-np.log10(0.05), color='red', linestyle='--', lw=0.8, alpha=0.5)
 axA.set_xlabel('log₂FC (Sarcomatoid UC vs conventional UC)\n← DOWN in sarcomatoid     UP in sarcomatoid →')
-axA.set_ylabel('−log₁₀(adj. p-value)')
+axA.set_ylabel('−log₁₀(adj. p-value)   [clipped at 30]')
 axA.set_xlim(-3.0, 2.5)
 axA.set_title('A. Volcano — Sarcomatoid UC (n=28) vs conventional UC (n=84)\n'
               'GSE128192; novel targets red, negative biomarker blue',
@@ -332,6 +390,21 @@ axA.set_title('A. Volcano — Sarcomatoid UC (n=28) vs conventional UC (n=84)\n'
 
 enr_all = json.load(open(RESULTS / 'kegg_enrichment_all_diseases.json'))
 sarc_enr = enr_all['SarcUC']
+def _bh(pvals):
+    'Benjamini-Hochberg q-values across the 18 pre-specified gene sets.'
+    pv = np.asarray(pvals, dtype=float)
+    n_t = pv.size
+    order = np.argsort(pv)
+    q = pv[order] * n_t / np.arange(1, n_t + 1)
+    q = np.minimum.accumulate(q[::-1])[::-1]
+    out = np.empty(n_t)
+    out[order] = np.clip(q, 0, 1)
+    return out
+
+_all_names = list(sarc_enr.keys())
+_bh_map = dict(zip(_all_names,
+                   _bh([sarc_enr[nm]['pvalue'] for nm in _all_names])))
+
 top_paths = sorted([(p, r['pvalue'], r['overlap']) for p, r in sarc_enr.items()
                     if r['overlap'] > 0], key=lambda x: x[1])[:8]
 def prettify(name: str) -> str:
@@ -355,9 +428,16 @@ axB.set_title('B. KEGG pathway enrichment — Sarcomatoid UC upregulated genes',
 axB.axvline(-np.log10(0.10), color='red', linestyle='--', lw=0.8, alpha=0.5)
 xmax = max(pvals) * 1.15
 axB.set_xlim(0, xmax)
-for i, (v, o) in enumerate(zip(pvals, overlaps)):
-    axB.text(v + xmax * 0.02, i, f'k = {o}', fontsize=7.5,
+qs_bh = [_bh_map[nm] for nm, _, _ in top_paths_sorted]
+for i, (v, o, q_bh) in enumerate(zip(pvals, overlaps, qs_bh)):
+    star = '  *' if q_bh < 0.10 else ''
+    axB.text(v + xmax * 0.02, i, f'k = {o}{star}', fontsize=7.5,
              va='center', ha='left', color='#333')
+axB.text(0.98, 0.03,
+         'bars = nominal hypergeometric p (scoring basis)' + chr(10) +
+         '* = also survives Benjamini-Hochberg FDR q < 0.10',
+         transform=axB.transAxes, fontsize=6.5, style='italic',
+         ha='right', va='bottom', color='#555')
 axB.grid(axis='x', alpha=0.3)
 
 panel_c_schematic(axC, SCHEMATICS / 'Figure3_PanelC_SarcUC.png',
@@ -377,7 +457,14 @@ print(f"  Saved Figure3_SarcUC.png ({(FIGURES/'Figure3_SarcUC.png').stat().st_si
 print("\nGenerating Figure 4: SCBC (panels A/B matplotlib + Panel C ChatGPT)")
 scbc_subtypes = pd.read_csv(RESULTS / 'SCBC_subtype_calls.csv')
 ascl1_df = pd.read_csv(RESULTS / 'SCBC_up_in_ASCL1.csv').head(10)
-neur_df  = pd.read_csv(RESULTS / 'SCBC_up_in_NEUROD1.csv').head(10)
+neur_full = pd.read_csv(RESULTS / 'SCBC_up_in_NEUROD1.csv')
+# SSTR2 is the nominated theranostic target for this subtype. It is
+# significant but ranks below the top genes by fold change, so it is shown
+# explicitly alongside the top 7 rather than being silently omitted.
+neur_df = pd.concat([neur_full.head(7),
+                     neur_full[neur_full['gene'] == 'SSTR2']],
+                    ignore_index=True)
+assert 'SSTR2' in set(neur_df['gene']), 'SSTR2 must appear in Figure 4B'
 
 fig = plt.figure(figsize=(11, 11.5))
 gs = gridspec.GridSpec(2, 2, figure=fig,
@@ -389,55 +476,96 @@ axB = fig.add_subplot(gs[0, 1])
 axC = fig.add_subplot(gs[1, :])
 
 counts = scbc_subtypes['subtype'].value_counts()
-colors_pie = ['#3498db', '#9b59b6', '#e67e22', '#27ae60']
+# Colour keyed by subtype NAME, not by count order, so POU2F3 is the same colour
+# in the pie, the bar panel and the Panel C schematic.
+SUBTYPE_COLOR = {'ASCL1': '#3498db', 'NEUROD1': '#9b59b6',
+                 'POU2F3': '#e67e22', 'YAP1': '#27ae60'}
+colors_pie = [SUBTYPE_COLOR.get(s, '#95a5a6') for s in counts.index]
+_pie_n = list(counts.values)          # label from the actual subtype counts,
+_pie_i = iter(range(len(_pie_n)))     # never from the rounded percentage
+
+
+def _pie_label(pct):
+    k = _pie_n[next(_pie_i)]
+    return 'n=' + str(k) + chr(10) + '(' + format(pct, '.0f') + '%)'
+
+
+assert sum(_pie_n) == 44, 'subtype calls must sum to 44, got ' + str(sum(_pie_n))
 axA.pie(counts.values, labels=counts.index,
-        colors=colors_pie[:len(counts)],
-        autopct=lambda p: f'n={int(p*counts.sum()/100)}\n({p:.0f}%)',
+        colors=colors_pie,
+        autopct=_pie_label,
         startangle=90, textprops={'fontsize': 9, 'weight': 'bold'})
-axA.set_title('A. SCBC subtype distribution (n=44)\n'
+axA.set_title('A. SCBC subtype distribution (n=44)' + chr(10) +
               'classified by maximum lineage-TF expression — GSE269750',
               fontsize=9.5, pad=8)
 
-ascl1_top = ascl1_df.head(8).copy()
-ascl1_top['subtype'] = 'ASCL1+'
-neur_top  = neur_df.head(8).copy()
-neur_top['subtype'] = 'NEUROD1+'
-n_neur, n_ascl = len(neur_top), len(ascl1_top)
+# ---- Panel B: three lineage subtypes, each with its nominated target ---------
+# The nominated target is forced into its block where it does not reach the top
+# by fold change (SSTR2 ranks 12th, PTGS1 14th); CEACAM5 ranks 2nd and needs no
+# special handling. Without this the panel would claim to highlight targets it
+# never actually plots.
+pou_full = pd.read_csv(RESULTS / 'SCBC_up_in_POU2F3.csv')
+
+N_TOP = 5
+BLOCKS = [
+    ('ASCL1+', ascl1_df, 'CEACAM5', SUBTYPE_COLOR['ASCL1']),
+    ('NEUROD1+', neur_full, 'SSTR2', SUBTYPE_COLOR['NEUROD1']),
+    ('POU2F3+', pou_full, 'PTGS1', SUBTYPE_COLOR['POU2F3']),
+]
+HEADLINE = '#922b21'
+
+frames = []
+for label, df_all, target, color in BLOCKS:
+    df_all = df_all.sort_values('log2fc', ascending=False)
+    top = df_all.head(N_TOP)
+    if target not in set(top['gene']):
+        extra = df_all[df_all['gene'] == target]
+        assert not extra.empty, label + ' is missing its nominated target ' + target
+        top = pd.concat([top, extra], ignore_index=True)
+    top = top.copy()
+    top['block'] = label
+    top['color'] = [HEADLINE if g == target else color for g in top['gene']]
+    frames.append(top)
+
 gap = 1.5
-neur_y = np.arange(n_neur)[::-1] + 0.5
-ascl_y = np.arange(n_ascl)[::-1] + 0.5 + n_neur + gap
+y_cursor = 0.5
+block_y, divider_y = [], []
+for frame in reversed(frames):                 # bottom block drawn first
+    n = len(frame)
+    ys = np.arange(n)[::-1] + y_cursor
+    block_y.append((frame, ys))
+    y_cursor += n + gap
+    divider_y.append(y_cursor - gap / 2)
+block_y.reverse()
+divider_y = divider_y[:-1]
 
-for i, (_, r) in enumerate(ascl1_top.iterrows()):
-    is_headline = (r['gene'] == 'CEACAM5')
-    color = '#922b21' if is_headline else '#3498db'
-    axB.barh(ascl_y[i], r['log2fc'], color=color, edgecolor='black',
-             linewidth=0.4, height=0.7)
-for i, (_, r) in enumerate(neur_top.iterrows()):
-    is_headline = (r['gene'] == 'SSTR2')
-    color = '#922b21' if is_headline else '#9b59b6'
-    axB.barh(neur_y[i], r['log2fc'], color=color, edgecolor='black',
-             linewidth=0.4, height=0.7)
+for frame, ys in block_y:
+    for i, (_, r) in enumerate(frame.iterrows()):
+        axB.barh(ys[i], r['log2fc'], color=r['color'], edgecolor='black',
+                 linewidth=0.4, height=0.7)
 
-axB.set_yticks(list(ascl_y) + list(neur_y))
-axB.set_yticklabels(list(ascl1_top['gene']) + list(neur_top['gene']),
-                    fontsize=7.8)
+ticks, labels_ = [], []
+for frame, ys in block_y:
+    ticks.extend(list(ys))
+    labels_.extend(list(frame['gene']))
+axB.set_yticks(ticks)
+axB.set_yticklabels(labels_, fontsize=7.5)
 axB.set_xlabel('log₂FC (subtype vs other subtypes)')
 axB.axvline(1, color='red', linestyle='--', lw=0.8, alpha=0.5)
 axB.grid(axis='x', alpha=0.3)
-divider_y = n_neur + gap / 2
-axB.axhline(divider_y, color='#888', lw=0.6, alpha=0.5)
-axB.text(0.98, 0.97, 'ASCL1+  ·  CEACAM5 (red)',
-         ha='right', va='top', transform=axB.transAxes,
-         fontsize=8, weight='bold', color='#3498db',
-         bbox=dict(boxstyle='round,pad=0.3', facecolor='#e8f0f9',
-                   edgecolor='#3498db', linewidth=0.8))
-axB.text(0.98, 0.45, 'NEUROD1+  ·  SSTR2 (red)',
-         ha='right', va='top', transform=axB.transAxes,
-         fontsize=8, weight='bold', color='#9b59b6',
-         bbox=dict(boxstyle='round,pad=0.3', facecolor='#efe6f5',
-                   edgecolor='#9b59b6', linewidth=0.8))
-axB.set_title('B. Headline subtype-stratified upregulated genes\n'
-              'CEACAM5 (ASCL1+) and SSTR2 (NEUROD1+) highlighted dark red',
+for dy in divider_y:
+    axB.axhline(dy, color='#888', lw=0.6, alpha=0.5)
+
+for (frame, ys), (label, _, target, color) in zip(block_y, BLOCKS):
+    axB.text(0.985, ys.max() + 0.55, label + '  ·  ' + target + ' (red)',
+             ha='right', va='center', transform=axB.get_yaxis_transform(),
+             fontsize=7.5, weight='bold', color=color,
+             bbox=dict(boxstyle='round,pad=0.25', facecolor='white',
+                       edgecolor=color, linewidth=0.8, alpha=0.9))
+
+axB.set_ylim(-0.6, y_cursor - gap + 0.6)
+axB.set_title('B. Headline subtype-stratified upregulated genes' + chr(10) +
+              'nominated targets CEACAM5, SSTR2 and PTGS1 in dark red',
               fontsize=9.5, pad=8)
 
 panel_c_schematic(axC, SCHEMATICS / 'Figure4_PanelC_SCBC.png',

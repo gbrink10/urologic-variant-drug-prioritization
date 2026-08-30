@@ -1,0 +1,14 @@
+row,context,transcript,log2FC_disease,q,E_recomputed,E_in_table,agrees,note
+17,RMC,IL8,2.319,1.48e-216,3,3,yes,CXCR1/CXCR2 - scored on IL8/CXCL8 ligand
+18,RMC,HBEGF,1.41,5.84e-96,3,3,yes,EGFR - scored on HBEGF ligand
+19,RMC,CEACAM1,1.419,4.4e-80,3,3,yes,CM24 - target transcript
+20,Penile SCC,HLA-DRA,9.009,1.06e-08,3,3,yes,PD-1 - scored on immune-hot marker HLA-DRA
+21,Penile SCC,MMP1,5.984,1.24e-05,3,3,yes,MMP inhibitor - target transcript
+22,Penile SCC,POSTN,6.258,3.88e-06,3,3,yes,TGFB axis - scored on POSTN
+23,Sarcomatoid UC,WHSC1,1.258,1.94e-13,3,3,yes,NSD2/WHSC1 - target transcript
+24,Sarcomatoid UC,ATRIP,1.229,3.33e-12,3,3,yes,ATR - scored on ATRIP
+25,Sarcomatoid UC,UHRF1,1.552,1.64e-17,3,3,yes,UHRF1 - target transcript
+26,Sarcomatoid UC,G6PD,1.32,1.02e-08,3,3,yes,G6PD - target transcript
+28,SCBC ASCL1+ subtype,CEACAM5,6.19,0.0024,3,3,yes,CEACAM5 - target transcript
+29,SCBC NEUROD1+ subtype,SSTR2,2.159,0.0478,3,3,yes,SSTR2 - target transcript
+30,SCBC POU2F3+ subtype,PTGS1,3.569,0.0056,3,3,yes,COX-1/PTGS1 - target transcript

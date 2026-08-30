@@ -46,12 +46,12 @@ MASTER_ROWS = [
     # ===========================
     # NEPC
     (1, 'NEPC', 'Venetoclax', 'BCL2',
-     3, 3, 0, 1,  # was 7/9 Strong in v25 — TCGA RB1 loss in NEPC + GEO BCL2 TPM=34.3 + lit
+     3, 2, 0, 1,  # E=2: BCL2 34.28 TPM, 88.6th pct (top 11.4%) -> top-15% bin
      'FDA-approved (CLL, AML)',
      'Previously proposed (Westaby JCI 2024 [PMID 39286979])',
      'Ready now'),
     (2, 'NEPC', 'Alisertib (investigational)', 'AURKA / CXCR7→AURKA axis',
-     1, 3, 2, 1,  # 7/9 Strong — framework converges on published priority
+     1, 2, 2, 1,  # E=2: DE arm fails (FC=-1.17, p=0.10, and negative direction); AURKA 61.0 TPM at 93.2nd pct = top 6.8% -> top-15% bin
      'Investigational (Phase II)',
      'Previously proposed (Gritsina JCI 2023 [PMID 37347559]; CXCR7→AURKA axis + '
      'in vivo alisertib validation) — framework convergent validation',
@@ -74,7 +74,7 @@ MASTER_ROWS = [
      'Previously proposed (Aparicio 2013; Corn Lancet Oncol 2019 [PMID 31416691])',
      'Ready now (off-label SOC)'),
     (6, 'NEPC', 'Olaparib', 'PARP1/2 (HRR-mutated subset)',
-     2, 2, 0, 1,  # was 5/9 Moderate
+     2, 3, 0, 1,  # E=3: PARP1 267.2 TPM, 98.8th pct (top 1.2%) -> top-5% bin
      'FDA-approved (HRR-mCRPC per PROfound 2020)',
      'Previously proposed (de Bono NEJM 2020; Ikeda 2024 [PMID 38440716])',
      'Ready now'),
@@ -85,7 +85,7 @@ MASTER_ROWS = [
      'Previously proposed for MIBC (Choi 2022 [PMC9022081]); MPBC extension novel',
      'Ready now'),
     (8, 'MIBC / MPBC', 'Talazoparib', 'PARP (ERCC2/ATM/BRCA-mutated)',
-     2, 1, 0, 1,  # was 4/9 Moderate
+     2, 2, 0, 1,  # E=2: ATR FC=+0.55 p=0.038 (GSE130598), 0.5<=|log2FC|<1 significant
      'FDA-approved (BRCA-breast; HRR-mCRPC)',
      'Previously proposed (Crist 2018; JAVELIN PARP Medley)',
      'Ready now'),
@@ -95,7 +95,7 @@ MASTER_ROWS = [
      'Previously proposed (Hyman/Chakraborty 2022 [PMID 35100734])',
      'Ready now'),
     (10, 'MIBC / MPBC', 'Erdafitinib', 'FGFR2 / FGFR3',
-     2, 2, 0, 1,  # was 5/9 Moderate
+     2, 3, 0, 1,  # E=3: FGFR3 FC=+1.63 p=0.016 q=0.045 (GSE130598), |log2FC|>=1 significant
      'FDA-approved (FGFR-mUC per THOR Loriot NEJM 2023)',
      'Source-approved; MPBC extension marginal',
      'Ready now'),
@@ -126,7 +126,7 @@ MASTER_ROWS = [
      'Source-approved; sRCC subgroup inclusion only',
      'Ready now'),
     (16, 'ccRCC', 'Abemaciclib', 'CDK4/6',
-     0, 1, 0, 0,  # was 1/9 Exploratory
+     0, 2, 0, 0,  # E=2: CDK4 91.8th pct (top 8.2%) -> top-15% bin
      'FDA-approved (HR+ breast)',
      'Previously tested (McGregor 2025 [PMID 40081120]; negative monotherapy)',
      'Long-horizon (combination strategy needed)'),
@@ -151,13 +151,13 @@ MASTER_ROWS = [
     # RMC EGFR (already proposed by Wiele/Zacharias)
     (18, 'RMC', 'Erlotinib (± bevacizumab)',
      'EGFR (HBEGF ligand)',
-     3, 2, 1, 1,  # 7/9 Strong but previously published
+     3, 3, 1, 1,  # E=3: |log2FC|>=1 with q<0.05 in the deposited DE table (verified by 14_audit_geo_score_component.py)
      'FDA-approved (NSCLC)',
      'Previously proposed (Wiele Cancers 2021; Zacharias Mol Cancer Ther 2025)',
      'Ready now (pipeline-validation example)'),
     # RMC CEACAM1
     (19, 'RMC', 'CM24 (anti-CEACAM1)', 'CEACAM1',
-     3, 2, 0, 0,  # 5/9 Moderate-discovery
+     3, 3, 0, 0,  # E=3: |log2FC|>=1 with q<0.05 in the deposited DE table (verified by 14_audit_geo_score_component.py)
      'Investigational (Phase I/II)',
      'FRAMEWORK-NOVEL (zero prior PubMed hits)',
      'Ready now'),
@@ -200,21 +200,21 @@ MASTER_ROWS = [
     # NSD2 / WHSC1: in epigenetic set; pathway enriched → 2
     (23, 'Sarcomatoid UC', 'KTX-1001 / SP-2577 (seclidemstat)',
      'NSD2 / WHSC1 (histone methyltransferase)',
-     0, 2, 2, 0,  # 4/9 Moderate-discovery
+     0, 3, 2, 0,  # E=3: |log2FC|>=1 with q<0.05 in the deposited DE table (verified by 14_audit_geo_score_component.py)
      'Phase I',
      'FRAMEWORK-NOVEL (zero prior PubMed hits)',
      'Ready after preclinical bridging'),
     # ATR — ATRIP elevated; ATR in p53 + HR pathways
     (24, 'Sarcomatoid UC', 'Ceralasertib / berzosertib / elimusertib',
      'ATR / ATRIP (DNA damage response)',
-     0, 2, 1, 0,  # 3/9 Moderate-discovery
+     0, 3, 1, 0,  # E=3: |log2FC|>=1 with q<0.05 in the deposited DE table (verified by 14_audit_geo_score_component.py)
      'Phase II',
      'FRAMEWORK-NOVEL (zero prior PubMed hits in sarcomatoid UC)',
      'Ready now'),
     # UHRF1 — in epigenetic set; pathway enriched → 2
     (25, 'Sarcomatoid UC', 'UM-002 (UHRF1 PROTAC)',
      'UHRF1 (epigenetic reader)',
-     0, 2, 2, 1,  # 5/9 — UHRF1 in bladder broadly previously proposed
+     0, 3, 2, 1,  # E=3: |log2FC|>=1 with q<0.05 in the deposited DE table (verified by 14_audit_geo_score_component.py)
      'Preclinical',
      'PARTIALLY NOVEL — UHRF1 in conventional bladder cancer previously proposed '
      '(e.g., PMID 40667845); sarcomatoid-specific application is novel slice',
@@ -222,7 +222,7 @@ MASTER_ROWS = [
     # G6PD — Pentose_phosphate p=0.12 (not formally enriched but G6PD is THE pathway gene)
     (26, 'Sarcomatoid UC', '6-aminonicotinamide / polydatin',
      'G6PD (pentose phosphate)',
-     0, 2, 1, 1,  # 4/9 — bladder G6PD previously proposed broadly
+     0, 3, 1, 1,  # E=3: |log2FC|>=1 with q<0.05 in the deposited DE table (verified by 14_audit_geo_score_component.py)
      'Preclinical',
      'PARTIALLY NOVEL — G6PD/pentose phosphate in conventional bladder cancer '
      'previously proposed (PMID 37958478); sarcomatoid-specific application is novel slice',
@@ -249,13 +249,18 @@ MASTER_ROWS = [
      'CEACAM5 (CEA)',
      1, 3, 0, 1,  # 5/9 Moderate-discovery (some prior via SCLC paradigm)
      'Phase III (NSCLC)',
-     'PARTIALLY NOVEL — direct SCLC paradigm transfer; no explicit SCBC proposal',
+     # Reclassified to framework-novel: the novelty standard is urologic-oncology
+     # literature only, and the SCLC ASCL1-CEACAM5 paradigm has no prior
+     # small-cell-bladder-cancer proposal. Matches Master Table 1 in the
+     # manuscript, which was reclassified in build_v26_comprehensive_fixes.py.
+     'FRAMEWORK-NOVEL within urologic-oncology literature — SCLC ASCL1-CEACAM5 '
+     'paradigm has zero prior small-cell-bladder-cancer proposal',
      'Ready after preclinical bridging'),
     # NEUROD1+ SSTR2 theranostics
     (29, 'SCBC (NEUROD1+)',
      '177Lu-DOTATATE (Lutathera) / octreotide',
      'SSTR2 (somatostatin receptor 2)',
-     1, 2, 1, 0,  # 4/9 Moderate-discovery; FRAMEWORK-NOVEL in SCBC subtype context
+     1, 3, 1, 0,  # E=3: |log2FC|>=1 with q<0.05 in the deposited DE table (verified by 14_audit_geo_score_component.py)
      'FDA-approved (NETs)',
      'FRAMEWORK-NOVEL (no prior SCBC + SSTR2/DOTATATE PubMed hits; '
      'SCLC SSTR2 literature exists but not NEUROD1-stratified)',

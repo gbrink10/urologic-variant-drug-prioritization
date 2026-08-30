@@ -1,0 +1,2 @@
+context,drug,target,log2FC,p,q_BH,fold_change_rank_pct,G,E_conservative_q,E_nominal_p,P,L,total_conservative,tier_conservative,total_nominal,tier_nominal,prior_status,notch_set_hypergeom_p,notch_overlap_k
+SCBC (ASCL1+),Tarlatamab (DLL3 x CD3 bispecific T-cell engager),DLL3,1.418,0.03882746329377704,0.41968811130500416,2.55,1,0,3,2,1,4,Moderate,7,Strong,"PREVIOUSLY PROPOSED in urologic-oncology literature (Liao 2024 ASCO Educ Book, PMID 38176691); not recovered by the pre-specified 18-set panel",0.05161676249296033,6

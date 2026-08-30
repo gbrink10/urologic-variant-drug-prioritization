@@ -1,109 +1,109 @@
-context,pathway,overlap_k,pathway_size_K,de_set_size_n,pvalue,overlap_genes
-RMC,Cell_Cycle,1,158,13,0.09799830753670462,GADD45A
-RMC,Apoptosis,2,137,13,0.003457997916676909,FOS; GADD45A
-RMC,HIF1_signaling,0,110,13,1.0,
-RMC,VEGF_signaling,0,60,13,1.0,
-RMC,Homologous_Recombination,0,41,13,1.0,
-RMC,PI3K_AKT_signaling,0,362,13,1.0,
-RMC,p53_signaling,1,75,13,0.047682052603558005,GADD45A
-RMC,Chemokine_signaling,2,193,13,0.00673778101601049,CXCL1; CXCL2
-RMC,Cytokine_receptor_interaction,2,298,13,0.015486180837434964,CXCL1; CXCL2
-RMC,Antigen_processing_presentation,0,82,13,1.0,
-RMC,PDL1_PD1_checkpoint,1,90,13,0.0569629031227813,FOS
-RMC,Pentose_phosphate_pathway,0,31,13,1.0,
-RMC,Arachidonic_acid_metabolism,0,63,13,1.0,
-RMC,Neuroactive_ligand_receptor,0,371,13,1.0,
-RMC,Prostate_cancer,0,106,13,1.0,
-RMC,Bladder_cancer,1,41,13,0.026332460093858635,HBEGF
-RMC,Renal_cell_carcinoma,0,70,13,1.0,
-RMC,Epigenetic_Regulation,0,94,13,1.0,
-PSCC,Cell_Cycle,0,158,200,1.0,
-PSCC,Apoptosis,2,137,200,0.39884583614301294,CTSS; TNFSF10
-PSCC,HIF1_signaling,1,110,200,0.6699713713858879,CYBB
-PSCC,VEGF_signaling,0,60,200,1.0,
-PSCC,Homologous_Recombination,0,41,200,1.0,
-PSCC,PI3K_AKT_signaling,6,362,200,0.15590853006153907,COL1A2; COL6A3; IL7R; LAMA4; SPP1; TNC
-PSCC,p53_signaling,0,75,200,1.0,
-PSCC,Chemokine_signaling,5,193,200,0.04485005908688652,CCL2; CXCL10; CXCL11; CXCL14; CXCL9
-PSCC,Cytokine_receptor_interaction,7,298,200,0.03066255460365452,CCL2; CXCL10; CXCL11; CXCL14; CXCL9; IL7R; TNFSF10
-PSCC,Antigen_processing_presentation,6,82,200,0.00017278511433042255,CTSS; HLA-DPA1; HLA-DQA1; HLA-DRA; HLA-DRB1; HLA-DRB4
-PSCC,PDL1_PD1_checkpoint,0,90,200,1.0,
-PSCC,Pentose_phosphate_pathway,0,31,200,1.0,
-PSCC,Arachidonic_acid_metabolism,0,63,200,1.0,
-PSCC,Neuroactive_ligand_receptor,2,371,200,0.8882222243729604,EDNRA; FPR3
-PSCC,Prostate_cancer,1,106,200,0.6563584532282977,MMP3
-PSCC,Bladder_cancer,1,41,200,0.33799255321025723,MMP1
-PSCC,Renal_cell_carcinoma,0,70,200,1.0,
-PSCC,Epigenetic_Regulation,0,94,200,1.0,
-SarcUC,Cell_Cycle,2,158,85,0.14526345904885812,CDKN2C; MAD1L1
-SarcUC,Apoptosis,0,137,85,1.0,
-SarcUC,HIF1_signaling,0,110,85,1.0,
-SarcUC,VEGF_signaling,0,60,85,1.0,
-SarcUC,Homologous_Recombination,0,41,85,1.0,
-SarcUC,PI3K_AKT_signaling,4,362,85,0.06841572530926848,COL6A2; CSF1; PDGFA; PPP2R3B
-SarcUC,p53_signaling,0,75,85,1.0,
-SarcUC,Chemokine_signaling,0,193,85,1.0,
-SarcUC,Cytokine_receptor_interaction,1,298,85,0.7216115323755437,CSF1
-SarcUC,Antigen_processing_presentation,0,82,85,1.0,
-SarcUC,PDL1_PD1_checkpoint,1,90,85,0.3189859772907029,LAT
-SarcUC,Pentose_phosphate_pathway,1,31,85,0.12377300946519339,G6PD
-SarcUC,Arachidonic_acid_metabolism,0,63,85,1.0,
-SarcUC,Neuroactive_ligand_receptor,0,371,85,1.0,
-SarcUC,Prostate_cancer,1,106,85,0.3640604996527819,PDGFA
-SarcUC,Bladder_cancer,0,41,85,1.0,
-SarcUC,Renal_cell_carcinoma,1,70,85,0.2581814161909471,FLCN
-SarcUC,Epigenetic_Regulation,3,94,85,0.007519781292957148,PHC2; UHRF1; WHSC1
-SCBC_ASCL1,Cell_Cycle,0,158,138,1.0,
-SCBC_ASCL1,Apoptosis,2,137,138,0.24397753121389876,ITPR3; MAPK10
-SCBC_ASCL1,HIF1_signaling,0,110,138,1.0,
-SCBC_ASCL1,VEGF_signaling,0,60,138,1.0,
-SCBC_ASCL1,Homologous_Recombination,0,41,138,1.0,
-SCBC_ASCL1,PI3K_AKT_signaling,1,362,138,0.9202959430376052,KITLG
-SCBC_ASCL1,p53_signaling,1,75,138,0.40563404669631237,PERP
-SCBC_ASCL1,Chemokine_signaling,0,193,138,1.0,
-SCBC_ASCL1,Cytokine_receptor_interaction,1,298,138,0.8749266318111923,GDF15
-SCBC_ASCL1,Antigen_processing_presentation,0,82,138,1.0,
-SCBC_ASCL1,PDL1_PD1_checkpoint,0,90,138,1.0,
-SCBC_ASCL1,Pentose_phosphate_pathway,0,31,138,1.0,
-SCBC_ASCL1,Arachidonic_acid_metabolism,0,63,138,1.0,
-SCBC_ASCL1,Neuroactive_ligand_receptor,2,371,138,0.7287232512256558,CALCA; NMUR2
-SCBC_ASCL1,Prostate_cancer,0,106,138,1.0,
-SCBC_ASCL1,Bladder_cancer,0,41,138,1.0,
-SCBC_ASCL1,Renal_cell_carcinoma,0,70,138,1.0,
-SCBC_ASCL1,Epigenetic_Regulation,0,94,138,1.0,
-SCBC_POU2F3,Cell_Cycle,0,158,66,1.0,
-SCBC_POU2F3,Apoptosis,0,137,66,1.0,
-SCBC_POU2F3,HIF1_signaling,1,110,66,0.30552309013443296,LTBR
-SCBC_POU2F3,VEGF_signaling,1,60,66,0.18013945552132227,PLA2G4A
-SCBC_POU2F3,Homologous_Recombination,0,41,66,1.0,
-SCBC_POU2F3,PI3K_AKT_signaling,1,362,66,0.7010636956442107,ITGB4
-SCBC_POU2F3,p53_signaling,0,75,66,1.0,
-SCBC_POU2F3,Chemokine_signaling,1,193,66,0.47325583424506,CCR4
-SCBC_POU2F3,Cytokine_receptor_interaction,2,298,66,0.25806193201508393,CCR4; LTBR
-SCBC_POU2F3,Antigen_processing_presentation,0,82,66,1.0,
-SCBC_POU2F3,PDL1_PD1_checkpoint,0,90,66,1.0,
-SCBC_POU2F3,Pentose_phosphate_pathway,0,31,66,1.0,
-SCBC_POU2F3,Arachidonic_acid_metabolism,2,63,66,0.01840495723018805,PLA2G4A; PTGS1
-SCBC_POU2F3,Neuroactive_ligand_receptor,1,371,66,0.7099869516348378,P2RY10
-SCBC_POU2F3,Prostate_cancer,0,106,66,1.0,
-SCBC_POU2F3,Bladder_cancer,0,41,66,1.0,
-SCBC_POU2F3,Renal_cell_carcinoma,0,70,66,1.0,
-SCBC_POU2F3,Epigenetic_Regulation,0,94,66,1.0,
-SCBC_NEUROD1,Cell_Cycle,0,158,30,1.0,
-SCBC_NEUROD1,Apoptosis,0,137,30,1.0,
-SCBC_NEUROD1,HIF1_signaling,0,110,30,1.0,
-SCBC_NEUROD1,VEGF_signaling,0,60,30,1.0,
-SCBC_NEUROD1,Homologous_Recombination,0,41,30,1.0,
-SCBC_NEUROD1,PI3K_AKT_signaling,1,362,30,0.42211222750832894,PRKAA2
-SCBC_NEUROD1,p53_signaling,0,75,30,1.0,
-SCBC_NEUROD1,Chemokine_signaling,0,193,30,1.0,
-SCBC_NEUROD1,Cytokine_receptor_interaction,1,298,30,0.3628135121456039,EDA
-SCBC_NEUROD1,Antigen_processing_presentation,0,82,30,1.0,
-SCBC_NEUROD1,PDL1_PD1_checkpoint,0,90,30,1.0,
-SCBC_NEUROD1,Pentose_phosphate_pathway,0,31,30,1.0,
-SCBC_NEUROD1,Arachidonic_acid_metabolism,0,63,30,1.0,
-SCBC_NEUROD1,Neuroactive_ligand_receptor,2,371,30,0.10633827290758345,CHRNA1; SSTR2
-SCBC_NEUROD1,Prostate_cancer,0,106,30,1.0,
-SCBC_NEUROD1,Bladder_cancer,0,41,30,1.0,
-SCBC_NEUROD1,Renal_cell_carcinoma,0,70,30,1.0,
-SCBC_NEUROD1,Epigenetic_Regulation,0,94,30,1.0,
+context,pathway,overlap_k,pathway_size_K,de_set_size_n,pvalue,overlap_genes,qvalue_BH
+RMC,Cell_Cycle,1,158,13,0.0979983075367046,GADD45A,0.2519956479515261
+RMC,Apoptosis,2,137,13,0.0034579979166769,FOS; GADD45A,0.060640029144093596
+RMC,HIF1_signaling,0,110,13,1.0,,1.0
+RMC,VEGF_signaling,0,60,13,1.0,,1.0
+RMC,Homologous_Recombination,0,41,13,1.0,,1.0
+RMC,PI3K_AKT_signaling,0,362,13,1.0,,1.0
+RMC,p53_signaling,1,75,13,0.047682052603558,GADD45A,0.1708887093683439
+RMC,Chemokine_signaling,2,193,13,0.0067377810160104,CXCL1; CXCL2,0.060640029144093596
+RMC,Cytokine_receptor_interaction,2,298,13,0.0154861808374349,CXCL1; CXCL2,0.0929170850246094
+RMC,Antigen_processing_presentation,0,82,13,1.0,,1.0
+RMC,PDL1_PD1_checkpoint,1,90,13,0.0569629031227813,FOS,0.1708887093683439
+RMC,Pentose_phosphate_pathway,0,31,13,1.0,,1.0
+RMC,Arachidonic_acid_metabolism,0,63,13,1.0,,1.0
+RMC,Neuroactive_ligand_receptor,0,371,13,1.0,,1.0
+RMC,Prostate_cancer,0,106,13,1.0,,1.0
+RMC,Bladder_cancer,1,41,13,0.0263324600938586,HBEGF,0.1184960704223637
+RMC,Renal_cell_carcinoma,0,70,13,1.0,,1.0
+RMC,Epigenetic_Regulation,0,94,13,1.0,,1.0
+PSCC,Cell_Cycle,0,158,200,1.0,,1.0
+PSCC,Apoptosis,2,137,200,0.3988458361430129,CTSS; TNFSF10,1.0
+PSCC,HIF1_signaling,1,110,200,0.6699713713858879,CYBB,1.0
+PSCC,VEGF_signaling,0,60,200,1.0,,1.0
+PSCC,Homologous_Recombination,0,41,200,1.0,,1.0
+PSCC,PI3K_AKT_signaling,6,362,200,0.155908530061539,COL1A2; COL6A3; IL7R; LAMA4; SPP1; TNC,0.7015883852769256
+PSCC,p53_signaling,0,75,200,1.0,,1.0
+PSCC,Chemokine_signaling,5,193,200,0.0448500590868865,CCL2; CXCL10; CXCL11; CXCL14; CXCL9,0.26910035452131903
+PSCC,Cytokine_receptor_interaction,7,298,200,0.0306625546036545,CCL2; CXCL10; CXCL11; CXCL14; CXCL9; IL7R; TNFSF10,0.26910035452131903
+PSCC,Antigen_processing_presentation,6,82,200,0.0001727851143304,CTSS; HLA-DPA1; HLA-DQA1; HLA-DRA; HLA-DRB1; HLA-DRB4,0.0031101320579472
+PSCC,PDL1_PD1_checkpoint,0,90,200,1.0,,1.0
+PSCC,Pentose_phosphate_pathway,0,31,200,1.0,,1.0
+PSCC,Arachidonic_acid_metabolism,0,63,200,1.0,,1.0
+PSCC,Neuroactive_ligand_receptor,2,371,200,0.8882222243729604,EDNRA; FPR3,1.0
+PSCC,Prostate_cancer,1,106,200,0.6563584532282977,MMP3,1.0
+PSCC,Bladder_cancer,1,41,200,0.3379925532102572,MMP1,1.0
+PSCC,Renal_cell_carcinoma,0,70,200,1.0,,1.0
+PSCC,Epigenetic_Regulation,0,94,200,1.0,,1.0
+SarcUC,Cell_Cycle,2,158,85,0.1452634590488581,CDKN2C; MAD1L1,0.6536855657198615
+SarcUC,Apoptosis,0,137,85,1.0,,1.0
+SarcUC,HIF1_signaling,0,110,85,1.0,,1.0
+SarcUC,VEGF_signaling,0,60,85,1.0,,1.0
+SarcUC,Homologous_Recombination,0,41,85,1.0,,1.0
+SarcUC,PI3K_AKT_signaling,4,362,85,0.0684157253092684,COL6A2; CSF1; PDGFA; PPP2R3B,0.6157415277834156
+SarcUC,p53_signaling,0,75,85,1.0,,1.0
+SarcUC,Chemokine_signaling,0,193,85,1.0,,1.0
+SarcUC,Cytokine_receptor_interaction,1,298,85,0.7216115323755437,CSF1,1.0
+SarcUC,Antigen_processing_presentation,0,82,85,1.0,,1.0
+SarcUC,PDL1_PD1_checkpoint,1,90,85,0.3189859772907029,LAT,0.936155570535725
+SarcUC,Pentose_phosphate_pathway,1,31,85,0.1237730094651933,G6PD,0.6536855657198615
+SarcUC,Arachidonic_acid_metabolism,0,63,85,1.0,,1.0
+SarcUC,Neuroactive_ligand_receptor,0,371,85,1.0,,1.0
+SarcUC,Prostate_cancer,1,106,85,0.3640604996527819,PDGFA,0.936155570535725
+SarcUC,Bladder_cancer,0,41,85,1.0,,1.0
+SarcUC,Renal_cell_carcinoma,1,70,85,0.2581814161909471,FLCN,0.9294530982874095
+SarcUC,Epigenetic_Regulation,3,94,85,0.0075197812929571,PHC2; UHRF1; WHSC1,0.1353560632732278
+SCBC_ASCL1,Cell_Cycle,0,158,138,1.0,,1.0
+SCBC_ASCL1,Apoptosis,2,137,138,0.2439775312138987,ITPR3; MAPK10,1.0
+SCBC_ASCL1,HIF1_signaling,0,110,138,1.0,,1.0
+SCBC_ASCL1,VEGF_signaling,0,60,138,1.0,,1.0
+SCBC_ASCL1,Homologous_Recombination,0,41,138,1.0,,1.0
+SCBC_ASCL1,PI3K_AKT_signaling,1,362,138,0.9202959430376052,KITLG,1.0
+SCBC_ASCL1,p53_signaling,1,75,138,0.4056340466963123,PERP,1.0
+SCBC_ASCL1,Chemokine_signaling,0,193,138,1.0,,1.0
+SCBC_ASCL1,Cytokine_receptor_interaction,1,298,138,0.8749266318111923,GDF15,1.0
+SCBC_ASCL1,Antigen_processing_presentation,0,82,138,1.0,,1.0
+SCBC_ASCL1,PDL1_PD1_checkpoint,0,90,138,1.0,,1.0
+SCBC_ASCL1,Pentose_phosphate_pathway,0,31,138,1.0,,1.0
+SCBC_ASCL1,Arachidonic_acid_metabolism,0,63,138,1.0,,1.0
+SCBC_ASCL1,Neuroactive_ligand_receptor,2,371,138,0.7287232512256558,CALCA; NMUR2,1.0
+SCBC_ASCL1,Prostate_cancer,0,106,138,1.0,,1.0
+SCBC_ASCL1,Bladder_cancer,0,41,138,1.0,,1.0
+SCBC_ASCL1,Renal_cell_carcinoma,0,70,138,1.0,,1.0
+SCBC_ASCL1,Epigenetic_Regulation,0,94,138,1.0,,1.0
+SCBC_POU2F3,Cell_Cycle,0,158,66,1.0,,1.0
+SCBC_POU2F3,Apoptosis,0,137,66,1.0,,1.0
+SCBC_POU2F3,HIF1_signaling,1,110,66,0.3055230901344329,LTBR,1.0
+SCBC_POU2F3,VEGF_signaling,1,60,66,0.1801394555213222,PLA2G4A,1.0
+SCBC_POU2F3,Homologous_Recombination,0,41,66,1.0,,1.0
+SCBC_POU2F3,PI3K_AKT_signaling,1,362,66,0.7010636956442107,ITGB4,1.0
+SCBC_POU2F3,p53_signaling,0,75,66,1.0,,1.0
+SCBC_POU2F3,Chemokine_signaling,1,193,66,0.47325583424506,CCR4,1.0
+SCBC_POU2F3,Cytokine_receptor_interaction,2,298,66,0.2580619320150839,CCR4; LTBR,1.0
+SCBC_POU2F3,Antigen_processing_presentation,0,82,66,1.0,,1.0
+SCBC_POU2F3,PDL1_PD1_checkpoint,0,90,66,1.0,,1.0
+SCBC_POU2F3,Pentose_phosphate_pathway,0,31,66,1.0,,1.0
+SCBC_POU2F3,Arachidonic_acid_metabolism,2,63,66,0.018404957230188,PLA2G4A; PTGS1,0.331289230143384
+SCBC_POU2F3,Neuroactive_ligand_receptor,1,371,66,0.7099869516348378,P2RY10,1.0
+SCBC_POU2F3,Prostate_cancer,0,106,66,1.0,,1.0
+SCBC_POU2F3,Bladder_cancer,0,41,66,1.0,,1.0
+SCBC_POU2F3,Renal_cell_carcinoma,0,70,66,1.0,,1.0
+SCBC_POU2F3,Epigenetic_Regulation,0,94,66,1.0,,1.0
+SCBC_NEUROD1,Cell_Cycle,0,158,30,1.0,,1.0
+SCBC_NEUROD1,Apoptosis,0,137,30,1.0,,1.0
+SCBC_NEUROD1,HIF1_signaling,0,110,30,1.0,,1.0
+SCBC_NEUROD1,VEGF_signaling,0,60,30,1.0,,1.0
+SCBC_NEUROD1,Homologous_Recombination,0,41,30,1.0,,1.0
+SCBC_NEUROD1,PI3K_AKT_signaling,1,362,30,0.4221122275083289,PRKAA2,1.0
+SCBC_NEUROD1,p53_signaling,0,75,30,1.0,,1.0
+SCBC_NEUROD1,Chemokine_signaling,0,193,30,1.0,,1.0
+SCBC_NEUROD1,Cytokine_receptor_interaction,1,298,30,0.3628135121456039,EDA,1.0
+SCBC_NEUROD1,Antigen_processing_presentation,0,82,30,1.0,,1.0
+SCBC_NEUROD1,PDL1_PD1_checkpoint,0,90,30,1.0,,1.0
+SCBC_NEUROD1,Pentose_phosphate_pathway,0,31,30,1.0,,1.0
+SCBC_NEUROD1,Arachidonic_acid_metabolism,0,63,30,1.0,,1.0
+SCBC_NEUROD1,Neuroactive_ligand_receptor,2,371,30,0.1063382729075834,CHRNA1; SSTR2,1.0
+SCBC_NEUROD1,Prostate_cancer,0,106,30,1.0,,1.0
+SCBC_NEUROD1,Bladder_cancer,0,41,30,1.0,,1.0
+SCBC_NEUROD1,Renal_cell_carcinoma,0,70,30,1.0,,1.0
+SCBC_NEUROD1,Epigenetic_Regulation,0,94,30,1.0,,1.0

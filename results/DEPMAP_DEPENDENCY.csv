@@ -1,0 +1,29 @@
+gene,master_table_rows,modality,dependency_is_the_right_test,n_urothelial_lines,mean_gene_effect_urothelial,mean_gene_effect_pan_cancer,selectivity_uro_minus_pan,pct_urothelial_lines_dependent,mean_gene_effect_renal,verdict
+NSD2,23,"KTX-1001, methyltransferase inhibitor",True,32,0.011,-0.061,0.072,0.0,-0.039,not a dependency
+ATR,24,"ceralasertib class, kinase inhibitor",True,32,-1.312,-1.353,0.041,100.0,-1.358,"common essential (dependency, but not lineage-selective)"
+G6PD,26,"6-aminonicotinamide, metabolic inhibitor",True,32,-0.104,-0.154,0.051,0.0,-0.106,not a dependency
+PHC2,23,co-enriched epigenetic regulator (not drugged),True,32,-0.122,-0.128,0.006,0.0,-0.105,not a dependency
+ATRIP,24,the transcript actually scored for row 24,True,32,-0.616,-0.62,0.003,75.0,-0.679,DEPENDENCY in urothelial lines
+PLA2G4A,30,upstream partner of PTGS1 in the POU2F3 cascade,True,32,0.071,0.04,0.031,0.0,0.079,not a dependency
+PSMB5,n/a,bortezomib target (panel-coverage gap probe),True,32,-1.615,-1.703,0.088,100.0,-1.132,"common essential (dependency, but not lineage-selective)"
+SMARCB1,n/a,renal medullary carcinoma context anchor,True,32,-0.866,-0.82,-0.046,96.9,-0.522,"common essential (dependency, but not lineage-selective)"
+BCL2,1,"venetoclax, BH3 mimetic",True,32,0.021,-0.037,0.057,0.0,0.042,not a dependency
+AURKA,"2, 7","alisertib, kinase inhibitor",True,32,-1.118,-1.239,0.121,100.0,-1.241,"common essential (dependency, but not lineage-selective)"
+EZH2,3,"tazemetostat, methyltransferase inhibitor",True,32,0.012,-0.085,0.098,0.0,-0.069,not a dependency
+DNMT1,4,"decitabine, hypomethylating agent",True,32,-0.693,-0.738,0.045,96.9,-0.802,"common essential (dependency, but not lineage-selective)"
+PARP1,"6, 8",olaparib / talazoparib,True,32,-0.167,-0.183,0.017,0.0,-0.21,not a dependency
+PIK3CA,9,alpelisib,True,32,-0.668,-0.486,-0.182,56.2,-0.327,DEPENDENCY in urothelial lines
+FGFR3,10,erdafitinib,True,32,0.006,0.064,-0.059,6.2,0.079,not a dependency
+CDK4,"13, 16",palbociclib / abemaciclib,True,32,-0.61,-0.765,0.155,56.2,-0.709,DEPENDENCY in urothelial lines
+CDK6,"13, 16",palbociclib / abemaciclib,True,32,-0.498,-0.588,0.09,50.0,-0.785,dependency in a subset (50% of lines)
+EPAS1,15,"belzutifan, HIF2a antagonist",True,32,-0.053,-0.069,0.016,0.0,-0.295,not a dependency
+KDR,14,"pazopanib, VEGFR multikinase",True,32,-0.164,-0.126,-0.039,3.1,-0.13,not a dependency
+EGFR,18,erlotinib,True,32,-0.398,-0.294,-0.104,31.2,-0.364,dependency in a subset (31% of lines)
+PTGS1,30,aspirin / celecoxib,True,32,0.036,0.063,-0.028,0.0,0.042,not a dependency
+NECTIN4,11,enfortumab vedotin (ADC),False,32,-0.062,-0.08,0.017,0.0,-0.054,"not evaluable - payload/effector modality, target need not be essential"
+TACSTD2,27,sacituzumab govitecan (ADC) - negative biomarker,False,32,-0.055,-0.027,-0.028,0.0,-0.034,"not evaluable - payload/effector modality, target need not be essential"
+CEACAM1,19,CM24 (antibody),False,32,0.024,0.049,-0.024,0.0,0.02,"not evaluable - payload/effector modality, target need not be essential"
+CEACAM5,28,anti-CEACAM5 ADC,False,32,-0.034,-0.008,-0.026,0.0,0.017,"not evaluable - payload/effector modality, target need not be essential"
+SSTR2,29,177Lu-DOTATATE (radioligand),False,32,-0.131,-0.145,0.014,0.0,-0.161,"not evaluable - payload/effector modality, target need not be essential"
+DLL3,3.3,"tarlatamab (engager), post hoc",False,32,-0.014,-0.03,0.016,0.0,-0.03,"not evaluable - payload/effector modality, target need not be essential"
+RPL5,control,common-essential positive control,True,32,-2.656,-2.55,-0.106,100.0,-2.528,"common essential (dependency, but not lineage-selective)"

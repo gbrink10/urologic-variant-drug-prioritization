@@ -1,0 +1,17 @@
+row,drug,datasets,genes,E_in_table,log2FC,q,expr_pct,E_recomputed,verdict
+1,Venetoclax,GSE199274/GSE216053,BCL2,3,0.373,0.637,88.47,0.0,DISAGREES
+2,Alisertib (investigational),GSE199274/GSE216053,AURKA,3,-1.17,0.612,77.33,0.0,DISAGREES
+3,Tazemetostat,GSE199274/GSE216053,EZH2,2,0.835,0.306,80.91,0.0,DISAGREES
+4,Decitabine / azacitidine,GSE216052,DNMT1/DNMT3A/DNMT3B,3,,,,,NO DEPOSITED DATA for the cited dataset
+5,Cabazitaxel + Carboplatin,none,TP53,0,,,,0.0,n/a - genomic-only row
+6,Olaparib,GSE199274/GSE216053,PARP1/PARP2,2,0.083,0.871,97.78,0.0,DISAGREES
+7,Alisertib (investigational),GSE130598,AURKA/AURKB,3,4.083,0.000822,69.64,3.0,agrees
+8,Talazoparib,GSE130598,ATR,2,0.552,0.0914,71.64,0.0,DISAGREES
+9,Alpelisib,GSE130598,PIK3CA,1,,,,,NO DEPOSITED DATA for the cited dataset
+10,Erdafitinib,GSE130598,FGFR2/FGFR3,3,1.628,0.0447,95.82,3.0,agrees
+11,Enfortumab vedotin,GSE130598,NECTIN4/PVRL4,3,,,,,NO DEPOSITED DATA for the cited dataset
+12,Pembrolizumab,GSE130598,PDCD1/CD274,1,,,,,NO DEPOSITED DATA for the cited dataset
+13,Palbociclib,GSE130598,CDK4/CDK6/CDKN2A,1,0.543,0.375,61.27,0.0,DISAGREES
+14,Pazopanib,GSE143630,KDR/FLT1/VEGFA,3,-0.17,0.371,99.96,3.0,agrees
+15,Belzutifan,GSE143630,EPAS1,3,-0.13,0.369,99.92,3.0,agrees
+16,Abemaciclib,GSE143630,CDK4/CDK6,1,-0.083,0.75,91.77,0.0,DISAGREES

@@ -1,0 +1,15 @@
+gene,rows,stratified_by,feature,positive_stratum,negative_stratum,n_positive,n_negative,mean_effect_positive,mean_effect_negative,difference,p_one_sided,pct_positive_dependent,verdict
+NSD2,23,expression,NSD2,NSD2-high,NSD2-low,11,21,-0.009,0.022,-0.031,0.191,0.0,no dependency in the nominated stratum
+G6PD,26,expression,G6PD,G6PD-high,G6PD-low,11,21,-0.053,-0.131,0.078,0.762,0.0,no dependency in the nominated stratum
+ATR,24,expression,ATRIP,ATRIP-high,ATRIP-low,11,21,-1.288,-1.324,0.037,0.711,100.0,dependency in stratum but not selective
+ATRIP,24,expression,ATRIP,ATRIP-high,ATRIP-low,11,21,-0.583,-0.633,0.05,0.697,72.7,dependency in stratum but not selective
+EZH2,3,expression,EZH2,EZH2-high,EZH2-low,11,21,-0.054,0.047,-0.101,0.0259,0.0,no dependency in the nominated stratum
+BCL2,1,expression,BCL2,BCL2-high,BCL2-low,11,21,0.013,0.025,-0.012,0.437,0.0,no dependency in the nominated stratum
+DNMT1,4,expression,DNMT1,DNMT1-high,DNMT1-low,11,21,-0.732,-0.673,-0.059,0.102,100.0,dependency in stratum but not selective
+AURKA,"2, 7",expression,AURKA,AURKA-high,AURKA-low,11,21,-1.069,-1.144,0.074,0.775,100.0,dependency in stratum but not selective
+PTGS1,30,expression,PTGS1,PTGS1-high,PTGS1-low,11,21,0.044,0.031,0.012,0.711,0.0,no dependency in the nominated stratum
+EPAS1,15,expression,EPAS1,EPAS1-high,EPAS1-low,11,21,-0.042,-0.058,0.016,0.579,0.0,no dependency in the nominated stratum
+FGFR3,10,mutation,FGFR3,,,0,32,,,,,,"not testable - FGFR3 alterations in urothelial lines are mainly TACC3 fusions, absent from the mutation profile"
+PIK3CA,9,mutation,PIK3CA,PIK3CA-altered,PIK3CA-wildtype,6,26,-1.088,-0.571,-0.517,0.000186,100.0,selective dependency in the nominated stratum
+CDK4,"13, 16",deletion,CDKN2A,,,0,32,,,,,,"not testable - copy-number profile carries no negative values for these lines, so deletion cannot be called"
+CDK6,"13, 16",deletion,CDKN2A,,,0,32,,,,,,"not testable - copy-number profile carries no negative values for these lines, so deletion cannot be called"
