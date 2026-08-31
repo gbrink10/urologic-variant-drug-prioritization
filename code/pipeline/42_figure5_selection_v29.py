@@ -129,6 +129,7 @@ axA.set_xlim(0, 10); axA.set_ylim(0, 10); axA.axis('off')
 n_novel = len(sel)
 n_elig = int(sel['eligible'].sum())
 n_surv = int(sel['survives'].sum())
+n_ctx = int(sel[sel['survives']]['Context'].nunique())
 STAGES = [
     (8.5, 9.5, 10.4, f'{n_assoc} drug\u2013cancer associations', '#1a3a5c',
      'across seven contexts'),
@@ -138,8 +139,8 @@ STAGES = [
      'estimable contrast, Moderate tier or better, q < 0.05, agent available'),
     (2.2, 6.0, 10.0, f'{n_surv} survive the audit', '#7d6608',
      'no contradicting layer; access matches modality'),
-    (0.2, 5.0, 10.4, '1 lead hypothesis', '#1e8449',
-     'CXCR1/CXCR2 blockade in RMC'),
+    (0.2, 5.0, 9.4, f'{n_surv} hypotheses, {n_ctx} diseases', '#1e8449',
+     'ranked within a disease, not across diseases'),
 ]
 for i, (y, w, fs, label, fc, sub) in enumerate(STAGES):
     x0 = 5 - w / 2
@@ -217,7 +218,7 @@ plt.savefig(out, bbox_inches='tight')
 plt.close()
 print(f"Saved {out} ({out.stat().st_size:,} bytes)")
 print(f"  {n_assoc} associations -> {n_novel} framework-novel -> {n_elig} "
-      f"eligible -> {n_surv} survive -> 1 lead")
+      f"eligible -> {n_surv} survive in {n_ctx} diseases")
 for _, r in sel.iterrows():
     print(f"    row {int(r['N']):<3} {'SURVIVES' if r['survives'] else 'excluded':<9} "
           f"{r['failed_criteria'][:60]}")

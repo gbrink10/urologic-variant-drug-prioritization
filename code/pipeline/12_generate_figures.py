@@ -37,8 +37,8 @@ plt.rcParams.update({
 # =====================================================================
 def generate_figure1():
     print("Generating Figure 1: pipeline schematic")
-    fig, ax = plt.subplots(figsize=(11, 11.45))
-    ax.set_xlim(0, 11); ax.set_ylim(-2.45, 9.0); ax.axis('off')
+    fig, ax = plt.subplots(figsize=(11, 11.55))
+    ax.set_xlim(0, 11); ax.set_ylim(-2.55, 9.0); ax.axis('off')
 
     ax.text(5.5, 8.75,
             'Figure 1. Public-Data Prioritization of Drug Hypotheses',
@@ -187,7 +187,7 @@ def generate_figure1():
     ax.text(5.05, -0.16, '6 with no prior urologic-oncology proposal found',
             ha='left', va='center', fontsize=7.4, style='italic',
             color='#c00000')
-    ax.text(5.05, -0.30, '3 eligible \u2192 3 survive the audit',
+    ax.text(5.05, -0.27, '3 eligible \u2192 3 survive, in 2 diseases',
             ha='left', va='center', fontsize=7.0, style='italic', color='#7d6608')
 
     ax.add_patch(FancyBboxPatch((1.20, -1.31), 8.60, 0.93,
@@ -209,17 +209,18 @@ def generate_figure1():
     ax.annotate('', xy=(5.5, -1.52), xytext=(5.5, -1.34),
                 arrowprops=dict(arrowstyle='->', lw=1.8, color='#1a1a1a'))
 
-    ax.add_patch(FancyBboxPatch((2.30, -2.36), 6.40, 0.82,
+    ax.add_patch(FancyBboxPatch((0.55, -2.42), 9.90, 0.94,
                                  boxstyle='round,pad=0.05',
                                  ec='#1a1a1a', fc='#1e8449', linewidth=1.4))
-    ax.text(5.50, -1.75, '1 lead hypothesis — CXCR1/CXCR2 blockade in RMC',
+    ax.text(5.50, -1.72, '3 surviving hypotheses across 2 diseases',
             ha='center', va='center', fontsize=10.5, weight='bold',
             color='white')
-    ax.text(5.50, -2.06,
-            'chemokine signalling enriched at q = 0.0025 on genes consistent in both '
-            'patient-derived lines;\nlayers unable to test a microenvironment-directed '
-            'agent are not support',
-            ha='center', va='center', fontsize=7.3, style='italic',
+    ax.text(5.50, -2.02,
+            'renal medullary carcinoma: CXCR1/CXCR2 blockade, then anti-CEACAM1   '
+            '\u00b7   ASCL1+ small-cell bladder: anti-CEACAM5\n'
+            'ranked within a disease, not across diseases; layers unable to test a '
+            'mechanism are not support',
+            ha='center', va='center', fontsize=7.0, style='italic',
             color='#eafaf1')
 
     plt.savefig(FIGURES / 'Figure1_pipeline.png', bbox_inches='tight')

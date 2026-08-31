@@ -181,7 +181,14 @@ for _, r in sel.iterrows():
     tgt = str(r['Target']).split('(')[0].split('/')[0].strip()
     if r['survives']:
         check(f'survivor {tgt} appears in the text', tgt.split()[0] in text)
-check('lead named as CXCR1/CXCR2', 'CXCR1/CXCR2 blockade is the lead candidate' in text)
+check('within-disease priority named, not a global lead',
+      'first priority within RMC' in text
+      or 'the one to carry forward first' in text)
+check('no cross-disease ranking claimed',
+      'not ranked against one another across diseases' in text)
+check('three survivors across two diseases stated',
+      'across 2 diseases' in text or 'across two diseases' in text
+      or f"{F['n_survivor_contexts']} diseases" in text)
 check('lead hedged as hypothesis not finding',
       'not a validated finding' in text)
 

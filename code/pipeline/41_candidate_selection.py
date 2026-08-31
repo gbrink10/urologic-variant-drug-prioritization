@@ -185,16 +185,27 @@ for _, r in out.iterrows():
 surv = out[out['survives']]
 print(f"\n{len(out)} framework-novel -> {int(out['eligible'].sum())} eligible "
       f"-> {len(surv)} survive")
-lead_pool = surv[surv['target_in_enriched_pathway']]
-print(f"  of which the target itself lies in an enriched pathway: {len(lead_pool)}")
-if len(lead_pool):
-    lead = lead_pool.sort_values('normal_tissue_nTPM_organ_of_origin',
-                                 na_position='last').iloc[0]
-    print(f"\nlead candidate: row {lead['N']} - {lead['Target']}")
-    print(f"  pathway q = {lead['pathway_q']:.4g}; normal-tissue nTPM in the organ "
-          f"of origin = {lead['normal_tissue_nTPM_organ_of_origin']}")
-    for _, r in surv.iterrows():
-        if r['N'] != lead['N']:
-            print(f"  second survivor: row {r['N']} - {r['Target']} "
-                  f"(nTPM {r['normal_tissue_nTPM_organ_of_origin']})")
+out['context_priority'] = ''
+for ctx, g in surv.groupby('Context'):
+    ranked = g.sort_values(['target_in_enriched_pathway', 'total'],
+                           ascending=[False, False])
+    for rank, (_, r) in enumerate(ranked.iterrows(), 1):
+        out.loc[out['N'] == r['N'], 'context_priority'] = \
+            f'{rank} of {len(ranked)} in {ctx}'
+out.to_csv(RF / 'CANDIDATE_SELECTION.csv', index=False)
+
+print(f"\n{len(surv)} surviving hypotheses in "
+      f"{surv['Context'].nunique()} diseases, ranked only within a disease:")
+for ctx, g in surv.groupby('Context'):
+    ranked = g.sort_values(['target_in_enriched_pathway', 'total'],
+                           ascending=[False, False])
+    print(f"  {ctx}:")
+    for rank, (_, r) in enumerate(ranked.iterrows(), 1):
+        why = ('target lies in an enriched pathway'
+               if r['target_in_enriched_pathway']
+               else 'no enrichment contains the target')
+        print(f"    {rank}. row {int(r['N'])} {str(r['Target'])[:32]:<34} "
+              f"{r['total']}/9  ({why})")
+print("  not ranked across diseases: the only criterion that could do so is "
+      "panel\n  membership, which Section 3.6 identifies as a framework artifact.")
 print(f"\nwrote {RF / 'CANDIDATE_SELECTION.csv'}")

@@ -68,8 +68,10 @@ F['per_context'] = defs['Context'].value_counts().to_dict()
 F['funnel'] = {'framework_novel': int(len(sel)),
                'eligible': int(sel['eligible'].sum()),
                'survive': int(sel['survives'].sum())}
+F['n_survivor_contexts'] = int(sel[sel['survives']]['Context'].nunique())
 F['survivors'] = [{'N': int(r['N']), 'target': r['Target'], 'drug': r['Drug'],
                    'total': int(r['total']), 'context': r['Context'],
+                   'target_in_enriched': bool(r['target_in_enriched_pathway']),
                    'nTPM': None if pd.isna(r['normal_tissue_nTPM_organ_of_origin'])
                    else float(r['normal_tissue_nTPM_organ_of_origin'])}
                   for _, r in sel[sel['survives']].iterrows()]

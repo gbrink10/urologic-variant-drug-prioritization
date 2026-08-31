@@ -27,6 +27,7 @@
   "eligible": 3,
   "survive": 3
  },
+ "n_survivor_contexts": 2,
  "survivors": [
   {
    "N": 17,
@@ -34,6 +35,7 @@
    "drug": "Reparixin / navarixin / AZD5069",
    "total": 8,
    "context": "RMC",
+   "target_in_enriched": true,
    "nTPM": 0.5
   },
   {
@@ -42,6 +44,7 @@
    "drug": "CM24 (anti-CEACAM1)",
    "total": 7,
    "context": "RMC",
+   "target_in_enriched": false,
    "nTPM": 31.4
   },
   {
@@ -50,6 +53,7 @@
    "drug": "Precemtabart tocentecan (M9140), anti-CEACAM5 ADC",
    "total": 5,
    "context": "SCBC (ASCL1+)",
+   "target_in_enriched": false,
    "nTPM": 0.8
   }
  ],

@@ -149,11 +149,9 @@ P(f"Results. The frozen set of {F['n_associations']} associations was "
   f"scoreable: "
   f"{F['tiers'].get('Strong', 0)} Strong-tier, {F['tiers'].get('Moderate', 0)} "
   f"Moderate-tier and {F['tiers'].get('Exploratory', 0)} Exploratory-tier. "
-  f"The remaining {F['n_not_scored']}, all from one series in which histology "
-  f"is completely aliased with array chip, are reported descriptively and "
-  f"given no score, including a candidate target-loss marker (trophoblast "
-  f"cell-surface antigen 2, log\u2082 fold change "
-  f"{de['TACSTD2_sarc']['log2FC']:+.2f}). "
+  f"The remaining {F['n_not_scored']}, from one series in which histology is "
+  f"completely aliased with array chip, are unscored and reported "
+  f"descriptively. "
   f"{F['n_previously_proposed']} recovered priorities proposed independently "
   f"elsewhere. {F['n_framework_novel']} had no prior urologic-oncology proposal "
   f"identified; of these, {F['funnel']['eligible']} met eligibility and "
@@ -162,12 +160,13 @@ P(f"Results. The frozen set of {F['n_associations']} associations was "
   f"forward.")
 P(f"Conclusion. A public-data framework can prioritize biomarker-matched drug "
   f"hypotheses where prospective evidence will not otherwise exist, provided it "
-  f"reports what it cannot support. CXCR1/CXCR2 blockade in renal medullary "
-  f"carcinoma is the highest-priority experimental hypothesis it produces "
-  f"(chemokine signaling q = {q['rmc_chemokine']:.4f}), but the dependency and "
-  f"compound screens cannot test a microenvironment-directed mechanism, so "
-  f"their silence is not support. All candidates require disease-specific "
-  f"validation.")
+  f"reports what it cannot support. {F['funnel']['survive']} hypotheses survive "
+  f"across {F['n_survivor_contexts']} diseases: CXCR1/CXCR2 blockade and "
+  f"anti-CEACAM1 in renal medullary carcinoma, and anti-CEACAM5 conjugates in "
+  f"ASCL1-positive small-cell bladder cancer. They are ranked within a disease "
+  f"but not across diseases, because the only criterion that would order them "
+  f"is a property of the framework rather than of the biology. All require "
+  f"disease-specific validation.")
 
 # =====================================================================
 # Introduction
@@ -482,7 +481,7 @@ P(f"Signature reversal against the LINCS L1000 libraries [52,53] was recomputed 
   f"therefore remains uninformative here, for a more specific reason than "
   f"before.")
 
-H('3.5 The Shortlist', 11.5, 10)
+H('3.5 The Surviving Hypotheses', 11.5, 10)
 P(f"Applying the rule set out above (Figure 5), the "
   f"{F['funnel']['framework_novel']} associations without a prior "
   f"urologic-oncology proposal reduce to {F['funnel']['eligible']} eligible and "
@@ -496,7 +495,18 @@ P(f"Applying the rule set out above (Figure 5), the "
   f"and DepMap independently contradicts it. The survivors span two "
   f"diseases, renal medullary carcinoma and ASCL1-positive small-cell "
   f"bladder cancer.")
-P(f"CXCR1/CXCR2 blockade is the lead candidate. It scores {lead['total']}/9, its "
+P(f"The three survivors are not ranked against one another across diseases. "
+  f"Two are in renal medullary carcinoma, where they compete for the same "
+  f"experimental effort and can be ordered; the third is in ASCL1-positive "
+  f"small-cell bladder cancer and is not in competition with them at all. The "
+  f"only criterion that could order candidates across diseases is whether the "
+  f"target happens to lie in one of the eighteen pre-specified sets, and "
+  f"Section 3.6 shows that panel coverage is a property of this framework "
+  f"rather than of the underlying biology. Ranking across contexts on that "
+  f"basis would apply the very artifact the framework is shown to suffer "
+  f"from.")
+P(f"Within renal medullary carcinoma, CXCR1/CXCR2 blockade is the one to carry "
+  f"forward first. It scores {lead['total']}/9, its "
   f"chemokine axis is elevated consistently in both patient-derived lines, its "
   f"target lies in a pathway that is itself enriched "
   f"(q = {q['rmc_chemokine']:.4f}) rather than borrowing an enrichment driven by "
@@ -898,7 +908,7 @@ for _, r in novel_rows.sort_values('N').iterrows():
                 f"(q = {de['SSTR2_neurod1']['q']:.3f}), and no enriched pathway "
                 'contains the target',
         }
-        status = ('LEAD HYPOTHESIS' if int(r['N']) == 17 else
+        status = ('Survives; first priority within RMC' if int(r['N']) == 17 else
                   'Survives the audit' if bool(srow['survives']) else
                   PLAIN.get(int(r['N']),
                             'Excluded: ' + str(srow['failed_criteria'])))
