@@ -137,14 +137,19 @@ renamed genes — including IL8/CXCL8 — from the pathways they define.
 
 ## Archive
 
-Concept DOI [10.5281/zenodo.20217918](https://doi.org/10.5281/zenodo.20217918) —
-always resolves to the most recent archived version. Cutting a GitHub release
-mints a new version DOI under it; `.zenodo.json` supplies the deposit metadata.
-After minting, set `ZENODO_VERSION_DOI` in `code/pipeline/48_build_manuscript_v29.py`
-and rebuild, and the audit stops warning.
+| | DOI |
+| --- | --- |
+| This version (v31.0) | [10.5281/zenodo.22211795](https://doi.org/10.5281/zenodo.22211795) |
+| All versions | [10.5281/zenodo.20217918](https://doi.org/10.5281/zenodo.20217918) |
+
+The concept DOI always resolves to the most recent archived version. Each GitHub
+release mints a new version DOI under it, with deposit metadata from
+`.zenodo.json`; set `ZENODO_VERSION_DOI` in
+`code/pipeline/48_build_manuscript_v29.py` to match and rebuild.
 
 ## Citation
 
 Brinkley GJ, Greenberg J, Caso J. *An Auditable Public-Data Framework for
 Prioritizing Biomarker-Matched Drug Hypotheses Across Benchmark and Rare
-Urologic Cancers.* Manuscript in preparation.
+Urologic Cancers.* Manuscript submitted. Code and results archived at Zenodo,
+doi:10.5281/zenodo.22211795.
