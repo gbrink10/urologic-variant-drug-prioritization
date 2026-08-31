@@ -79,8 +79,9 @@ x = d['logFC'].values
 y = -np.log10(d['adj.P.Val'].clip(lower=1e-300).values)
 axA.scatter(x, y, s=3, c='#d9d9d9', alpha=0.5, linewidths=0, rasterized=True)
 sig = (d['adj.P.Val'] < 0.05) & (d['logFC'].abs() > 0.5)
-axA.scatter(x[sig.values], y[sig.values], s=5, c='#c0392b', alpha=0.6,
-            linewidths=0, label=f'q<0.05, |log$_2$FC|>0.5 (n={int(sig.sum()):,})')
+axA.scatter(x[sig.values], y[sig.values], s=5, c='#7f8c8d', alpha=0.6,
+            linewidths=0,
+            label=f'separates the two chip-aligned groups (n={int(sig.sum()):,})')
 LAB = {'NSD2': (8, 6), 'UHRF1': (8, -10), 'G6PD': (-40, 6), 'ATR': (10, 0),
        'TACSTD2': (-58, 4)}
 for g, off in LAB.items():
@@ -97,8 +98,8 @@ axA.axvline(0, lw=0.7, c='#bbb')
 axA.axhline(-np.log10(0.05), ls='--', lw=0.8, c='#888')
 axA.set_xlabel('log$_2$ fold change (sarcomatoid vs conventional)', fontsize=8.4)
 axA.set_ylabel('$-$log$_{10}$ q', fontsize=8.6)
-axA.set_title('A. Differential expression (descriptive)\n'
-              '28 sarcomatoid vs 84 conventional; chip-aliased', fontsize=9.5,
+axA.set_title('A. Descriptive chip-aligned group separation\n'
+              'differences cannot be attributed to histology', fontsize=9.5,
               weight='bold', loc='left')
 axA.legend(fontsize=7.0, frameon=False, loc='upper left')
 for s_ in ('top', 'right'):
@@ -109,25 +110,27 @@ e = enr[enr['context'] == 'SarcUC'].nsmallest(7, 'pvalue').iloc[::-1]
 ypos = np.arange(len(e))
 vals = -np.log10(e['pvalue'].clip(lower=1e-300))
 fdr = e['qvalue_BH'] < 0.10
-bars = axB.barh(ypos, vals, color=['#1e8449' if f else '#f4d03f' for f in fdr],
-                edgecolor='#333', linewidth=0.6)
+# one neutral colour: nothing here is attributable to histology, so a scale
+# that distinguishes 'survives FDR' from 'nominal' would assert what E0 denies
+bars = axB.barh(ypos, vals, color='#b0b7bc', edgecolor='#333', linewidth=0.6,
+                hatch='//')
 for i, (v, q, f) in enumerate(zip(vals, e['qvalue_BH'], fdr)):
-    axB.text(v + 0.06, i, f'q={q:.3f}' + ('  *' if f else ''), va='center',
-             fontsize=6.8, color='#1a1a1a')
+    axB.text(v + 0.06, i, f'q={q:.3f}', va='center', fontsize=6.8,
+             color='#1a1a1a')
 axB.set_yticks(ypos)
 axB.set_yticklabels([p.replace('_', ' ') for p in e['pathway']], fontsize=7.6)
 axB.axvline(-np.log10(0.05), ls='--', lw=0.8, c='#888')
 axB.set_xlabel('$-$log$_{10}$ nominal p', fontsize=8.4)
 axB.set_xlim(0, float(vals.max()) * 1.32)
-axB.set_title('B. Pathway enrichment\n'
-              'green with * survives FDR (q<0.10); gold is nominal only',
+axB.set_title('B. Pathway values from the confounded comparison\n'
+              'not attributable to histology; shown for completeness only',
               fontsize=9.5, weight='bold', loc='left')
 for s_ in ('top', 'right'):
     axB.spines[s_].set_visible(False)
 
 axs = fig.add_subplot(gs[0, 2])
 panel_c(axs, 'PanelC_SarcUC.png',
-        'C. Nominated targets by subcellular compartment')
+        'C. Descriptive signals requiring independent replication')
 axs.text(0.50, 0.02, 'Descriptive only: histology completely aliased with '
          'array chip', transform=axs.transAxes, ha='center', fontsize=8.0,
          weight='bold', color='#c0392b',

@@ -31,8 +31,8 @@
  "survivors": [
   {
    "N": 17,
-   "target": "CXCR1 / CXCR2 (IL-8/CXCL1/CXCL2 triad)",
-   "drug": "Reparixin / navarixin / AZD5069",
+   "target": "CXCR1 / CXCR2 (CXCL8/CXCL1/CXCL2/CXCL3 chemokine axis)",
+   "drug": "CXCR2-directed antagonists, including agents with additional CXCR1 activity (AZD5069, navarixin, reparixin, danirixin)",
    "total": 8,
    "context": "RMC",
    "target_in_enriched": true,

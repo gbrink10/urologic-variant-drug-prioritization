@@ -163,7 +163,7 @@ for lab in ('CXCR1', 'CXCR2'):
                                   color='#1e8449'))
 axC.text(5.0, 0.95,
          'The mechanism runs through the myeloid compartment, so a tumor-cell\n'
-         'monoculture cannot test it in either direction.',
+         'monoculture cannot test in either direction.',
          ha='center', fontsize=6.9, style='italic', color='#555')
 
 out = FIG / 'Figure2_RMC.png'

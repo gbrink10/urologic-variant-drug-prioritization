@@ -113,9 +113,16 @@ STAGE_OVERRIDE = {
          'first-generation tusamitamab ravtansine discontinued Dec 2023 after '
          'CARMEN-LC03'),
 }
+TARGET_OVERRIDE = {
+    # one formulation for the ligand axis throughout; CXCL3 is reproducibly
+    # elevated in both lines and appears in the mechanism figure
+    17: 'CXCR1 / CXCR2 (CXCL8/CXCL1/CXCL2/CXCL3 chemokine axis)',
+}
 DRUG_OVERRIDE = {
     # Seclidemstat (SP-2577) is an LSD1/KDM1A inhibitor, not an NSD2 inhibitor,
     # and does not belong in this row.
+    17: 'CXCR2-directed antagonists, including agents with additional CXCR1 '
+        'activity (AZD5069, navarixin, reparixin, danirixin)',
     23: 'Gintemetostat (KTX-1001)',
     # The representative agent for the class is now the agent in development.
     28: 'Precemtabart tocentecan (M9140), anti-CEACAM5 ADC',
@@ -142,7 +149,8 @@ for r in rows:
     arm, ctx, gene = SCORING[n]
     recs.append({
         'N': n, 'Context': r[1],
-        'Drug': DRUG_OVERRIDE.get(n, r[2]), 'Target': r[3],
+        'Drug': DRUG_OVERRIDE.get(n, r[2]),
+        'Target': TARGET_OVERRIDE.get(n, r[3]),
         'genomic_score_curated': r[4], 'literature_score_curated': r[7],
         'Stage': STAGE_OVERRIDE.get(n, r[8]),
         'Prior status': r[9], 'Trial readiness': r[10],

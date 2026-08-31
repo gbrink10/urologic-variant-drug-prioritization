@@ -65,28 +65,37 @@ for _, r in sel.iterrows():
     cells.append(SUPPORT if ident else AGAINST)
     txt.append('estimable' if ident else 'aliased\nwith chip')
 
-    total = int(r['total'])
-    cells.append(SUPPORT if total >= 7 else PARTIAL if total >= 4 else AGAINST)
-    txt.append(f'{total}/9')
-
-    q = float(r['E_refit_q']) if pd.notna(r['E_refit_q']) else np.nan
-    if np.isnan(q):
-        cells.append(UNTESTED); txt.append('n/a')
-    elif q < 0.05:
-        cells.append(SUPPORT); txt.append(f'q={q:.0e}' if q < 1e-3 else f'q={q:.3f}')
+    # Once E0 has failed, the score and the quantities behind it are not
+    # interpretable for this disease and are withheld rather than displayed.
+    if not ident:
+        for _ in range(3):
+            cells.append(UNTESTED)
+        txt += ['not\nassigned', 'not estimable\nfor histology',
+                'not estimable\nfor histology']
     else:
-        cells.append(AGAINST); txt.append(f'q={q:.2f}')
+        total = int(r['total'])
+        cells.append(SUPPORT if total >= 7 else PARTIAL if total >= 4 else AGAINST)
+        txt.append(f'{total}/9')
 
-    if bool(r['target_in_enriched_pathway']):
-        cells.append(SUPPORT); txt.append(f"q={float(r['pathway_q']):.3f}")
-    elif pd.notna(r['pathway_q']) and float(r['pathway_q']) < 0.10:
-        # a pathway is enriched but the target is not one of the genes driving it
-        cells.append(PARTIAL); txt.append('other\ngenes')
-    elif pd.notna(r['pathway_q']):
-        # the target does sit in a pre-specified set; that set is not enriched
-        cells.append(AGAINST); txt.append('set not\nenriched')
-    else:
-        cells.append(UNTESTED); txt.append('not in\npanel')
+        q = float(r['E_refit_q']) if pd.notna(r['E_refit_q']) else np.nan
+        if np.isnan(q):
+            cells.append(UNTESTED); txt.append('n/a')
+        elif q < 0.05:
+            cells.append(SUPPORT)
+            txt.append(f'q={q:.0e}' if q < 1e-3 else f'q={q:.3f}')
+        else:
+            cells.append(AGAINST); txt.append(f'q={q:.2f}')
+
+        if bool(r['target_in_enriched_pathway']):
+            cells.append(SUPPORT); txt.append(f"q={float(r['pathway_q']):.3f}")
+        elif pd.notna(r['pathway_q']) and float(r['pathway_q']) < 0.10:
+            # the pathway is enriched but the target is not driving it
+            cells.append(PARTIAL); txt.append('other\ngenes')
+        elif pd.notna(r['pathway_q']):
+            # the target sits in a pre-specified set that is not enriched
+            cells.append(AGAINST); txt.append('set not\nenriched')
+        else:
+            cells.append(UNTESTED); txt.append('not in\npanel')
 
     pl = str(r['protein_layer'])
     if 'confirmed' in pl:
