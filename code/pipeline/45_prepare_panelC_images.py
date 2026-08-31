@@ -17,6 +17,7 @@ celecoxib.
 
 Writes: figures/panelC/<name>.png
 """
+import os
 import shutil
 import sys
 from pathlib import Path
@@ -27,12 +28,17 @@ from PIL import Image, ImageDraw
 
 sys.stdout.reconfigure(encoding='utf-8')
 REPO = Path(__file__).resolve().parents[2]
-SRC = paths.OUTPUT
+# generated schematics are dropped here by the author before staging;
+# override with UVDP_SCHEMATIC_SRC if they live elsewhere
+SRC = Path(os.environ.get('UVDP_SCHEMATIC_SRC',
+                          Path.home() / 'Downloads'))
 OUT = paths.PANEL_C
 OUT.mkdir(parents=True, exist_ok=True)
 
 SOURCES = {
-    'RMC': 'ChatGPT Image Aug 30, 2026, 06_24_33 PM.png',
+    # regenerated 31 Aug after the ligand-receptor mapping was corrected:
+    # CXCL8 binds both receptors, CXCL1/2/3 are CXCR2-selective
+    'RMC': 'ChatGPT Image Aug 31, 2026, 06_18_41 AM.png',
     'SarcUC': 'ChatGPT Image Aug 30, 2026, 06_28_51 PM.png',
     'SCBC': 'ChatGPT Image Aug 30, 2026, 06_30_09 PM.png',
 }
