@@ -306,7 +306,7 @@ P(f"Candidates were generated one cancer at a time. For each cancer we took "
   f"from the three positive controls carry an alteration frequency of 15% or "
   f"more, while {F['geo_rows_no_recurrent_alteration']} of the "
   f"{F['n_geo_anchored']} from the rare cancers score zero, because there the "
-  f"nominated target is not itself recurrently altered (Figure 2).")
+  f"nominated target is not itself recurrently altered (Supplementary Figure S2).")
 P(f"Membership in the eighteen pre-specified gene sets was not a condition of "
   f"entry. Those sets contribute points to the score and supply the "
   f"pathway-level evidence; a gene could be nominated without belonging to any "
@@ -425,7 +425,7 @@ ctx_counts = ', '.join(f'{k} {v}' for k, v in F['per_context'].items())
 P(f"The pipeline produced {F['n_associations']} drug-cancer associations "
   f"(Table 1; the full table with every score component and its provenance is "
   f"Supplementary Table S1). They fall into two groups fixed before any result "
-  f"was seen, by which data source anchors each cancer (Figure 2): "
+  f"was seen, by which data source anchors each cancer (Supplementary Figure S2): "
   f"{F['arm_control']['n']} in the three positive controls, and "
   f"{F['arm_discovery']['n']} in the four rare cancers. The second group is "
   f"the output of the study; the first is there to test it. "
@@ -466,7 +466,7 @@ P(f"In renal medullary carcinoma the deposited experiment is a SMARCB1 rescue in
   f"{rmc['CXCL2']['RMC2C']:+.2f} and {rmc['CXCL2']['RMC219']:+.2f}, CXCL3 "
   f"{rmc['CXCL3']['RMC2C']:+.2f} and {rmc['CXCL3']['RMC219']:+.2f} \u2014 with "
   f"KEGG chemokine signaling enriched on the both-lines set at "
-  f"q = {q['rmc_chemokine']:.4f} (Figure 3), coherent with the neutrophil-rich "
+  f"q = {q['rmc_chemokine']:.4f} (Figure 2), coherent with the neutrophil-rich "
   f"microenvironment described in this disease [33]. This nominates the "
   f"CXCR1/CXCR2 antagonist class, and carcinoembryonic antigen-related cell adhesion "
   f"molecule 1 alongside it (CEACAM1 {rmc['CEACAM1']['RMC2C']:+.2f} and "
@@ -479,32 +479,20 @@ P(f"Penile squamous cell carcinoma is reported in the Supplementary Results "
   f"converges on the established pembrolizumab priority [36\u201338], with "
   f"two partially-novel candidates alongside it [39\u201341]; none of its "
   f"associations reached the shortlist.")
-P(f"In the sarcomatoid series (Figure 4) every sarcomatoid tumor was run on a "
-  f"different batch of chips from every conventional tumor. A difference "
-  f"between the two groups is therefore also a difference between two batches, "
-  f"and no model can separate them, so we report no sarcomatoid-versus-"
-  f"conventional comparison. What the cohort does support is how abundant each "
-  f"transcript is within the sarcomatoid tumors, and that is what these rows "
-  f"are scored on. UHRF1 sits at the "
-  f"{ordinal(F['abundance_pct']['UHRF1']['pct'])} percentile of "
-  f"{F['abundance_pct']['UHRF1']['n']:,} measured transcripts [42], NSD2 at "
-  f"the {ordinal(F['abundance_pct']['NSD2']['pct'])} and G6PD at the "
-  f"{ordinal(F['abundance_pct']['G6PD']['pct'])} [43]. ATR sits at the "
-  f"{ordinal(F['abundance_pct']['ATR']['pct'])}, which is why the ATR "
-  f"candidate the earlier analysis carried does not go forward. The pathway "
-  f"component could only have come from the comparison we ruled out, so it is "
-  f"reported as not estimable, and these rows total out of 7 rather than 9 and "
-  f"carry no tier.")
-P(f"TROP2, the target of sacituzumab govitecan, reads lower in the sarcomatoid "
-  f"samples, in agreement with two pathology reports [44,45]; antigen "
-  f"heterogeneity of this kind extends to NECTIN-4 as well [46]. Lower TROP2 "
-  f"would mean less target to bind, but only the ruled-out comparison could "
-  f"establish loss, no treated patients were studied here, and the accelerated "
-  f"urothelial indication for sacituzumab govitecan was withdrawn in November "
-  f"2024. We report it as an observation for an independent cohort, not as a "
+P(f"The sarcomatoid series is reported in full in the Supplementary Results "
+  f"(Supplementary Figure S1). In brief, every sarcomatoid tumor was run on a "
+  f"different batch of chips from every conventional tumor, so a difference "
+  f"between the two groups is also a difference between two batches and no "
+  f"model can separate them. We therefore report no sarcomatoid-versus-"
+  f"conventional comparison and scored these five associations on transcript "
+  f"abundance within the sarcomatoid tumors instead, which the confounding "
+  f"does not reach. UHRF1, NSD2 and G6PD are highly abundant there and ATR is "
+  f"not; the pathway component is not estimable for this context, so these "
+  f"rows carry a total out of 7 rather than 9 and no tier. Neither of its two "
+  f"candidates without a prior proposal reached the shortlist. TROP2 is "
+  f"reported there as an observation for an independent cohort, not as a "
   f"predictive biomarker, and it carries no score.")
-
-P(f"Lineage-stratified small-cell bladder cancer (Figure 5), classified by "
+P(f"Lineage-stratified small-cell bladder cancer (Figure 3), classified by "
   f"lineage transcription factor [47], produced three subtype-specific "
   f"associations. ASCL1-positive tumors show CEACAM5 elevation "
   f"({de['CEACAM5_ascl1']['log2FC']:+.2f}, q = {fmt(de['CEACAM5_ascl1']['q'])}), "
@@ -595,7 +583,7 @@ P(f"Signature reversal against the LINCS L1000 libraries [52,53], recomputed on 
   f"any candidate; complete rankings and corrected values are deposited.")
 
 H('3.5 The Surviving Hypotheses', 11.5, 10, level=2)
-P(f"Applying the rule (Figure 6), the {F['funnel']['framework_novel']} "
+P(f"Applying the rule (Figure 4), the {F['funnel']['framework_novel']} "
   f"associations with no prior proposal in the urologic literature reduce to "
   f"{F['funnel']['survive']}, and each of the three that stop does so for a "
   f"reason drawn from the evidence rather than from a limitation of our "
@@ -823,22 +811,8 @@ FIGURES = [
      'scoring. Step 7 is the independent evidence check, whose four sources '
      'contributed nothing to any score. The shortlist is produced by a rule '
      'fixed before it was applied.'),
-    ('Figure2_selection_routes.png', 6.9,
-     'Figure 2. How each of the 30 associations was nominated. Every gene '
-     'shown met the same two requirements: it stood out in its own cancer, and '
-     'an agent against it could be evaluated clinically. The routes differ '
-     'only in what standing out could mean, which depends on whether that '
-     'cancer has a genomic cohort. (A) The three positive controls do, so '
-     'genes were ranked by how often they are altered. (B) The four rare '
-     'cancers do not, so genes were ranked by differential expression; TROP2 '
-     'is negative because it was nominated as a marker of loss. (C) The '
-     'sarcomatoid series supports no interpretable contrast, so its genes are '
-     'ranked by abundance within the tumors instead. Filled markers are genes '
-     'belonging to one of the eighteen pre-specified gene sets and open '
-     'markers are genes that are not: panel membership contributes points to '
-     'the score, but it was never a condition of entry.'),
-    ('Figure3_RMC.png', 6.9,
-     'Figure 3. Renal medullary carcinoma. (A) Effect in RMC-2C against effect '
+    ('Figure2_RMC.png', 6.9,
+     'Figure 2. Renal medullary carcinoma. (A) Effect in RMC-2C against effect '
      'in RMC219 for every gene measured in both lines. The genome-wide '
      'correlation is weak, so requiring consistent change in both lines is a '
      'stringent filter rather than a formality; genes passing it are highlighted, '
@@ -848,19 +822,8 @@ FIGURES = [
      'CXCR2 are receptors on the neutrophil, not on the tumor cell, which is '
      'why a tumor-cell monoculture cannot test this hypothesis in either '
      'direction.'),
-    ('Figure4_SarcUC.png', 6.9,
-     'Figure 4. Sarcomatoid urothelial carcinoma. Every sarcomatoid sample was '
-     'run on an array chip carrying no conventional sample, and vice versa, so '
-     'histology and chip are completely aliased. (A) The separation between the '
-     'two chip-aligned groups, shown for completeness; it cannot be read as a '
-     'difference between histologies. (B) Pathway values from that same '
-     'comparison. Because they inherit the confounding, no pathway component is '
-     'scored for this context and these associations carry a total out of 7 '
-     'rather than 9. (C) The nominated targets, which are scored instead on how '
-     'abundant each transcript is within the sarcomatoid tumors themselves, a '
-     'quantity the aliasing does not reach.'),
-    ('Figure5_SCBC.png', 6.9,
-     'Figure 5. Lineage-stratified small-cell bladder cancer. (A) Subtype '
+    ('Figure3_SCBC.png', 6.9,
+     'Figure 3. Lineage-stratified small-cell bladder cancer. (A) Subtype '
      'composition by lineage transcription factor. (B) The nominated target in '
      'each subtype with its q-value from the batch-adjusted subtype contrast; '
      'somatostatin receptor 2 in NEUROD1-positive tumors does not reach '
@@ -871,8 +834,8 @@ FIGURES = [
      'perturbation axis with aspirin as a pharmacologically available '
      'non-selective inhibitor rather than a COX-2-selective agent; the '
      'therapeutic direction is unresolved and requires functional testing.'),
-    ('Figure6_candidate_selection.png', 6.9,
-     'Figure 6. Candidate selection under a rule fixed in advance. (A) '
+    ('Figure4_candidate_selection.png', 6.9,
+     'Figure 4. Candidate selection under a rule fixed in advance. (A) '
      'Attrition from the full association table to the three supported '
      'hypotheses, with the criterion applied at each stage. (B) Every '
      'association with no prior urologic-oncology proposal, against every '
@@ -947,7 +910,7 @@ P('Claude (Anthropic) and ChatGPT (OpenAI) were used for coding assistance, '
   'and edgeR 4.10.1. No artificial-intelligence-generated data entered any '
   'quantitative analysis, and every prior-proposal classification and score '
   'assignment was verified by the authors, who take responsibility for the '
-  'content and conclusions. The mechanism schematics in Figures 3C, 4C and 5C '
+  'content and conclusions. The mechanism schematics in Figures 2C and 3C, and Supplementary Figure S1C '
   'were produced with GPT-4o image generation from prompts written against the '
   'deposited scoring data and checked element by element against the analysis '
   'before use; the prompts, the unedited originals and the corrections applied '

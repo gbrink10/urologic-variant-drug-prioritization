@@ -10,7 +10,7 @@ Rebuilt after the refit. Three things change from v28:
   * the values come from the refit, and the enrichment column is only credited
     when the target is itself a member of the enriched pathway.
 
-Writes: figures/Figure6_candidate_selection.png
+Writes: figures/Figure4_candidate_selection.png
 """
 import sys
 from pathlib import Path
@@ -218,7 +218,7 @@ fig.text(0.5, 0.035,
          'Values are read from the deposited tables.',
          ha='center', fontsize=7.0, style='italic', color='#555')
 
-out = FIG / 'Figure6_candidate_selection.png'
+out = FIG / 'Figure4_candidate_selection.png'
 plt.savefig(out, bbox_inches='tight')
 plt.close()
 print(f"Saved {out} ({out.stat().st_size:,} bytes)")

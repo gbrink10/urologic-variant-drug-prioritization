@@ -16,7 +16,7 @@ Fill marks whether the gene belongs to one of the eighteen pre-specified
 druggable gene sets. Panel membership scores a candidate; it never gated one,
 and the open markers are the genes that entered without it.
 
-Writes: figures/Figure2_selection_routes.png
+Writes: figures/FigureS2_selection_routes.png
 """
 import json
 import re
@@ -161,7 +161,7 @@ fig.text(0.5, -0.055,
          'array chip, so no contrast is interpretable.',
          ha='center', fontsize=8.0, style='italic', color='#5d6d7e')
 
-out = FIG / 'Figure2_selection_routes.png'
+out = FIG / 'FigureS2_selection_routes.png'
 plt.savefig(out, dpi=300, bbox_inches='tight', facecolor='white')
 plt.close()
 print(f"Saved {out.name} ({out.stat().st_size:,} bytes)")

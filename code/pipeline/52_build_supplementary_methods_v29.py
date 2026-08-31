@@ -15,7 +15,7 @@ import paths
 
 import docx
 import pandas as pd
-from docx.shared import Pt
+from docx.shared import Inches, Pt
 
 sys.stdout.reconfigure(encoding='utf-8')
 RF = paths.REFIT
@@ -46,10 +46,96 @@ def P(t, size=10.5, italic=False):
     r.italic = italic
 
 
-H('Supplementary Methods', 15, 0)
+H('Supplementary Materials', 15, 0)
 P('A Public-Data Framework for Prioritizing Biomarker-Matched Drug '
   'Hypotheses Across Rare and Variant Urologic Cancers', italic=True)
 P('Brinkley GJ, Greenberg J, Caso J')
+
+H('Supplementary Results')
+
+H('S1. Sarcomatoid urothelial carcinoma')
+P('Every sarcomatoid sample in GSE128192 was hybridized on an array chip '
+  'carrying no conventional sample, and every conventional sample on a chip '
+  'carrying no sarcomatoid sample. Histology and chip are therefore completely '
+  'aliased: a difference between the two groups is also a difference between '
+  'two sets of chips, and no model can separate them. No '
+  'sarcomatoid-versus-conventional comparison is reported and no row is scored '
+  'on one.')
+P('What the cohort does support is how abundant a transcript is within the '
+  'sarcomatoid tumors themselves, which involves no comparison between chips. '
+  'On that basis UHRF1 sits at the 99th percentile of 20,363 measured '
+  'transcripts, NSD2 at the 96th and G6PD at the 91st, while ATR sits at the '
+  '73rd. The pathway component for this context could only have come from the '
+  'comparison ruled out above, so it is reported as not estimable, and these '
+  'rows carry a total out of 7 rather than 9 without a tier.')
+P('Neither sarcomatoid candidate without a prior urologic-oncology proposal '
+  'reached the shortlist. NSD2 scores 3 of the 7 points its cohort can support '
+  'and is contradicted outright by an independent source, since CRISPR screens '
+  'show that urothelial cells do not require NSD2 even where they express it '
+  'most highly. ATR scores 1, its abundance falling below the top 15% of '
+  'measured transcripts.')
+P('TROP2, encoded by TACSTD2 and the target of sacituzumab govitecan, reads '
+  'lower in the sarcomatoid samples, in agreement with two pathology reports; '
+  'antigen heterogeneity of this kind extends to NECTIN-4 as well. Lower TROP2 '
+  'would mean less target to bind, but only the ruled-out comparison could '
+  'establish loss, no treated patients were studied in this work, and the '
+  'accelerated urothelial indication for sacituzumab govitecan was withdrawn '
+  'in November 2024. It is reported as an observation for an independent '
+  'cohort, not as a predictive biomarker, and carries no score.')
+
+_s1 = paths.FIGURES / 'FigureS1_SarcUC.png'
+if _s1.exists():
+    doc.add_picture(str(_s1), width=Inches(6.5))
+    _cap = doc.add_paragraph()
+    _cr = _cap.add_run(
+        'Supplementary Figure S1. Sarcomatoid urothelial carcinoma. (A) The '
+        'separation between the two chip-aligned groups, shown for '
+        'completeness; it cannot be read as a difference between histologies. '
+        '(B) Pathway values from that same comparison, which inherit the '
+        'confounding, so no pathway component is scored for this context. '
+        '(C) The nominated targets, scored instead on how abundant each '
+        'transcript is within the sarcomatoid tumors, a quantity the aliasing '
+        'does not reach.')
+    _cr.font.size = Pt(9)
+    _cr.italic = True
+
+H('S2. Penile squamous cell carcinoma')
+P('Penile squamous cell carcinoma showed a dominant immune-hot phenotype. '
+  'HLA-DRA is elevated at +8.92 (q = 2.7 x 10^-5) with CXCL9 and CXCL10 '
+  'elevated and antigen processing and presentation enriched at q = 0.0031, '
+  'converging on the established pembrolizumab priority, alongside '
+  'partially-novel matrix metalloproteinase and periostin candidates. The '
+  'signal survives modelling the six normal arrays as three donors rather than '
+  'six independent samples, which is the more demanding test. None of its '
+  'three associations was classified as having no prior urologic-oncology '
+  'proposal, so none entered the shortlist rule.')
+
+H('S3. How each association was nominated')
+P('The two nomination routes are drawn per gene in Supplementary Figure S2. '
+  'Every gene shown met the same two requirements: it stood out in its own '
+  'cancer, and an agent against it could be evaluated clinically. The routes '
+  'differ only in what standing out could mean, which depends on whether that '
+  'cancer has a genomic cohort.')
+_s2 = paths.FIGURES / 'FigureS2_selection_routes.png'
+if _s2.exists():
+    doc.add_picture(str(_s2), width=Inches(6.5))
+    _c2 = doc.add_paragraph()
+    _r2 = _c2.add_run(
+        'Supplementary Figure S2. How each of the 30 associations was '
+        'nominated. (A) The three positive controls have a genomic cohort, so '
+        'genes were ranked by how often they are altered. (B) The four rare '
+        'cancers do not, so genes were ranked by differential expression; '
+        'TROP2 is negative because it was nominated as a marker of loss. '
+        '(C) The sarcomatoid series supports no interpretable contrast, so its '
+        'genes are ranked by abundance within the tumors instead. Filled '
+        'markers are genes belonging to one of the eighteen pre-specified gene '
+        'sets and open markers are genes that are not: panel membership '
+        'contributes points to the score, but it was never a condition of '
+        'entry.')
+    _r2.font.size = Pt(9)
+    _r2.italic = True
+
+H('Supplementary Methods', 13, 14)
 
 H('1. Contexts and their role')
 P('Seven contexts were analyzed. Three are better-studied benchmark contexts '

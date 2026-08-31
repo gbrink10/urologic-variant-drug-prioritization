@@ -341,9 +341,9 @@ panel_c_schematic(axC, SCHEMATICS / 'Figure2_PanelC_RMC.png',
 
 plt.suptitle('Figure 2. Renal Medullary Carcinoma — Framework-Novel Findings',
              fontsize=12, weight='bold', y=0.985)
-plt.savefig(FIGURES / 'Figure3_RMC.png', bbox_inches='tight')
+plt.savefig(FIGURES / 'Figure2_RMC.png', bbox_inches='tight')
 plt.close()
-print(f"  Saved Figure3_RMC.png ({(FIGURES/'Figure3_RMC.png').stat().st_size:,} bytes)")
+print(f"  Saved Figure2_RMC.png ({(FIGURES/'Figure2_RMC.png').stat().st_size:,} bytes)")
 
 
 # =====================================================================
@@ -457,9 +457,9 @@ panel_c_schematic(axC, SCHEMATICS / 'Figure3_PanelC_SarcUC.png',
 
 plt.suptitle('Figure 3. Sarcomatoid Urothelial Carcinoma — Framework-Novel Findings',
              fontsize=12, weight='bold', y=0.99)
-plt.savefig(FIGURES / 'Figure4_SarcUC.png', bbox_inches='tight')
+plt.savefig(FIGURES / 'FigureS1_SarcUC.png', bbox_inches='tight')
 plt.close()
-print(f"  Saved Figure4_SarcUC.png ({(FIGURES/'Figure4_SarcUC.png').stat().st_size:,} bytes)")
+print(f"  Saved FigureS1_SarcUC.png ({(FIGURES/'FigureS1_SarcUC.png').stat().st_size:,} bytes)")
 
 
 # =====================================================================
@@ -585,8 +585,8 @@ panel_c_schematic(axC, SCHEMATICS / 'Figure4_PanelC_SCBC.png',
 
 plt.suptitle('Figure 4. Small-Cell Bladder Cancer — Lineage-Stratified Framework-Novel Findings',
              fontsize=12, weight='bold', y=0.99)
-plt.savefig(FIGURES / 'Figure5_SCBC.png', bbox_inches='tight')
+plt.savefig(FIGURES / 'Figure3_SCBC.png', bbox_inches='tight')
 plt.close()
-print(f"  Saved Figure5_SCBC.png ({(FIGURES/'Figure5_SCBC.png').stat().st_size:,} bytes)")
+print(f"  Saved Figure3_SCBC.png ({(FIGURES/'Figure3_SCBC.png').stat().st_size:,} bytes)")
 
 print("\nAll three figures regenerated with ChatGPT cellular schematics.")

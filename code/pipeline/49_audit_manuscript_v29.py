@@ -26,6 +26,19 @@ for t in doc.tables:
 # use, so claims are checked against the body alone
 body = text.split("REFERENCES", 1)[0]
 
+# findings moved to the supplement are still the paper's claims, so the audit
+# reads both documents and checks each claim wherever it now lives
+_sp = paths.OUTPUT / 'Supplementary_Methods_v31.docx'
+supp = ''
+if _sp.exists():
+    _sd = docx.Document(str(_sp))
+    supp = "\n".join(p.text.strip() for p in _sd.paragraphs)
+    for t in _sd.tables:
+        for r in t.rows:
+            for c in r.cells:
+                supp += "\n" + c.text
+both = text + "\n" + supp
+
 F = json.loads((RF / 'MANUSCRIPT_FACTS.json').read_text(encoding='utf-8'))
 master = pd.read_csv(RF / 'MASTER_TABLE_V29.csv')  # v30 rebuild, same filename
 sel = pd.read_csv(RF / 'CANDIDATE_SELECTION.csv')
@@ -50,7 +63,7 @@ for sec in ('CONTEXT', 'ABSTRACT', 'INTRODUCTION', 'MATERIALS AND METHODS',
             'CONFLICTS OF INTEREST', 'ETHICS STATEMENT',
             'SUPPLEMENTARY MATERIALS', 'AI USAGE DISCLOSURE'):
     check(f'section {sec}', sec in paras)
-check('6 figures embedded', len(doc.inline_shapes) == 6, str(len(doc.inline_shapes)))
+check('4 figures embedded', len(doc.inline_shapes) == 4, str(len(doc.inline_shapes)))
 check('one condensed table in the main text', len(doc.tables) == 1)
 subs = [t for t in paras if re.match(r'^3\.\d ', t)]
 check('six Results subsections', len(subs) == 6, str([x[:22] for x in subs]))
@@ -142,8 +155,9 @@ def _ord(v):
 check('ATR abundance percentile reported',
       f"{_ord(F['abundance_pct']['ATR']['pct'])}" in text)
 check('TROP2 direction stated without a scored claim',
-      'reads lower in the sarcomatoid samples' in text
-      and 'it carries no score' in text)
+      'reads lower in the sarcomatoid samples' in both
+      and 'not as a predictive biomarker' in both
+      and 'carries no score' in both)
 check('two-line correlation reported', str(F['rmc']['r_between_lines']) in text)
 check('both-lines gene count reported', str(F['rmc']['up_both']) in text)
 check('CXCR1 vs CEACAM1 window contrasted',
@@ -176,6 +190,13 @@ check('novelty stated without a priority claim',
                   ('the first study', 'the first report', 'first to report',
                    'first to apply', 'first to describe', 'we are the first')))
 
+check('supplement carries the sarcomatoid results',
+      'S1. Sarcomatoid urothelial carcinoma' in supp)
+check('supplement carries the penile results',
+      'S2. Penile squamous cell carcinoma' in supp)
+check('main text points at both',
+      'Supplementary Figure S1' in text and 'Supplementary Results' in text)
+
 print('\n5. CITATIONS')
 cited = Counter()
 for m in re.finditer(r'\[([0-9,\u2013\-\s]+)\]', text):
@@ -207,14 +228,15 @@ check('seclidemstat no longer attached to the NSD2 row',
 check('the confounding and its consequence are both stated',
       'no model can separate them' in text and 'not estimable' in text)
 check('sarcomatoid rows scored on the arm their data supports',
-      'how abundant each transcript is within the sarcomatoid tumors' in text)
+      'abundance within the sarcomatoid tumors' in both
+      or 'abundant a transcript is within the sarcomatoid' in both)
 check('PRISM no longer claims absence of off-target cytotoxicity',
       'absence of off-target cytotoxicity' not in text)
 check('normal-tissue RNA not used as a therapeutic-window claim',
       'not a therapeutic-window' in text)
 check('tarlatamab approval history stated',
       'accelerated approval' in text and 'traditional approval' in text)
-check('sacituzumab withdrawal month corrected', 'November 2024' in text)
+check('sacituzumab withdrawal month corrected', 'November 2024' in both)
 check('LINCS analysis units explained', 'eight analysis units' in text)
 # published reference titles keep their own spelling, so test the prose only
 _body_only = chr(10).join(
