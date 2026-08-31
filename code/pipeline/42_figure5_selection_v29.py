@@ -48,16 +48,22 @@ NAMES = {
     24: 'ATR inhibition\n(sarcomatoid urothelial)',
     29: '$^{177}$Lu-DOTATATE\n(NEUROD1+ small-cell bladder)',
 }
-COLS = ['Score\n(of 9)', 'Transcript\nq < 0.05', 'Target in\nenriched pathway',
-        'Protein\naccess', 'Genetic\ndependency', 'Compound\nactivity',
-        'Agent\navailable']
+COLS = ['Contrast\nidentifiable', 'Score\n(of 9)', 'Transcript\nq < 0.05',
+        'Target in\nenriched pathway', 'Protein\naccess', 'Genetic\ndependency',
+        'Compound\nactivity', 'Agent\navailable']
 
 sel = sel.sort_values(['survives', 'total'], ascending=[False, False])
+if 'contrast_identifiable' not in sel.columns:
+    sel['contrast_identifiable'] = True
 grid, notes, rows_lbl = [], [], []
 for _, r in sel.iterrows():
     n = int(r['N'])
     p = prov[prov['N'] == n].iloc[0]
     cells, txt = [], []
+
+    ident = bool(r.get('contrast_identifiable', True))
+    cells.append(SUPPORT if ident else AGAINST)
+    txt.append('estimable' if ident else 'aliased\nwith chip')
 
     total = int(r['total'])
     cells.append(SUPPORT if total >= 7 else PARTIAL if total >= 4 else AGAINST)
@@ -109,7 +115,7 @@ for _, r in sel.iterrows():
 
     grid.append(cells); notes.append(txt); rows_lbl.append(NAMES.get(n, str(n)))
 
-fig = plt.figure(figsize=(13.6, 7.4))
+fig = plt.figure(figsize=(14.6, 7.4))
 gs = gridspec.GridSpec(1, 2, width_ratios=[1.0, 1.62], wspace=0.30,
                        left=0.045, right=0.985, top=0.85, bottom=0.16)
 
@@ -122,13 +128,13 @@ n_surv = int(sel['survives'].sum())
 STAGES = [
     (8.5, 9.5, 10.4, f'{n_assoc} drug\u2013cancer associations', '#1a3a5c',
      'across seven contexts'),
-    (6.4, 8.3, 10.4, f'{n_novel} framework-novel', '#c0392b',
-     'independent prior-proposal audit'),
+    (6.4, 8.3, 10.4, f'{n_novel} no prior proposal found', '#c0392b',
+     'score-independent prior-proposal audit'),
     (4.3, 7.1, 10.0, f'{n_elig} eligible', '#b9770e',
-     'Moderate tier or better, q < 0.05, agent available'),
+     'estimable contrast, Moderate tier or better, q < 0.05, agent available'),
     (2.2, 6.0, 10.0, f'{n_surv} survive the audit', '#7d6608',
      'no contradicting layer; access matches modality'),
-    (0.2, 5.0, 10.4, '1 lead candidate', '#1e8449',
+    (0.2, 5.0, 10.4, '1 lead hypothesis', '#1e8449',
      'CXCR1/CXCR2 blockade in RMC'),
 ]
 for i, (y, w, fs, label, fc, sub) in enumerate(STAGES):
@@ -147,7 +153,7 @@ for i, (y, w, fs, label, fc, sub) in enumerate(STAGES):
                               ec='#bdc3c7', lw=0.7))
         axA.annotate('', xy=(5, ny + 0.02), xytext=(5, y - 0.02),
                      arrowprops=dict(arrowstyle='-|>', lw=1.2, color='#555'))
-axA.set_title('A. Attrition under the pre-specified rule', fontsize=10.2,
+axA.set_title('A. Attrition under the stated rule', fontsize=10.2,
               weight='bold', pad=10, loc='left')
 
 # ---------------- Panel B: criterion-by-criterion --------------------------
@@ -188,6 +194,9 @@ axB.legend(handles, labels, loc='upper center', bbox_to_anchor=(0.5, -0.03),
            ncol=4, frameon=False, fontsize=7.4)
 
 fig.text(0.5, 0.035,
+         'Criteria: E0 contrast estimable separately from batch; E2 Moderate tier '
+         'or better; E3 transcript re-derivable at q<0.05; E4 clinical-stage agent; '
+         'S1 no contradicting layer.\n'
          'A layer that cannot evaluate a candidate is not evidence for it. '
          'Absence of contradiction is therefore weaker than positive support, '
          'and the lead candidate\nis the best-supported hypothesis this '

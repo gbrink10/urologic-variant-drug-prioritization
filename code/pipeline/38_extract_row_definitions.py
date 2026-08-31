@@ -106,23 +106,52 @@ PATHWAY = {
 # are stated in the v28 manuscript text but were absent from the row data, so
 # the selection rule could not see them.
 STAGE_OVERRIDE = {
-    28: ('Phase III in NSCLC; lead agent tusamitamab ravtansine DISCONTINUED '
-         'Dec 2023 after CARMEN-LC03. Class remains of interest only if a '
-         'successor anti-CEACAM5 conjugate is in active development - verify '
-         'before submission.'),
+    # Verified against ClinicalTrials.gov: the first-generation agent was
+    # discontinued but the class is in active clinical development, so this row
+    # does have an available clinical-stage agent.
+    28: ('Phase III (precemtabart tocentecan / M9140, NCT07549412, recruiting); '
+         'first-generation tusamitamab ravtansine discontinued Dec 2023 after '
+         'CARMEN-LC03'),
 }
+DRUG_OVERRIDE = {
+    # Seclidemstat (SP-2577) is an LSD1/KDM1A inhibitor, not an NSD2 inhibitor,
+    # and does not belong in this row.
+    23: 'Gintemetostat (KTX-1001)',
+    # The representative agent for the class is now the agent in development.
+    28: 'Precemtabart tocentecan (M9140), anti-CEACAM5 ADC',
+}
+
+# Whether the biological contrast in each context can be estimated separately
+# from the major known technical variable. GSE128192 hybridised every sarcomatoid
+# sample on a chip carrying no conventional sample and vice versa, so histology
+# and chip are completely aliased and no model can separate them.
+IDENTIFIABLE = {
+    'SarcUC': False,
+}
+
+# Whether an agent against this target is currently in clinical development, as
+# a curated fact rather than something inferred from prose. Row 28's first
+# agent was discontinued but its class is active (precemtabart tocentecan,
+# NCT07549412, phase 3, recruiting), which string-matching on the stage text
+# could not distinguish.
+AGENT_AVAILABLE = {28: True}
 
 recs = []
 for r in rows:
     n = r[0]
     arm, ctx, gene = SCORING[n]
     recs.append({
-        'N': n, 'Context': r[1], 'Drug': r[2], 'Target': r[3],
+        'N': n, 'Context': r[1],
+        'Drug': DRUG_OVERRIDE.get(n, r[2]), 'Target': r[3],
         'genomic_score_curated': r[4], 'literature_score_curated': r[7],
         'Stage': STAGE_OVERRIDE.get(n, r[8]),
         'Prior status': r[9], 'Trial readiness': r[10],
         'scoring_arm': arm, 'refit_context': ctx, 'scoring_gene': gene,
         'pathway_for_component': PATHWAY.get(n, ''),
+        'contrast_identifiable': IDENTIFIABLE.get(ctx, True),
+        'clinical_stage_agent': AGENT_AVAILABLE.get(
+            n, not any(w in f"{r[8]} {r[10]}".lower()
+                       for w in ('discontinued', 'withdrawn'))),
         'published_E': r[5], 'published_P': r[6],
     })
 

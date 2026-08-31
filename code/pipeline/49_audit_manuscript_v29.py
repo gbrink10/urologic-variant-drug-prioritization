@@ -13,7 +13,7 @@ import pandas as pd
 sys.stdout.reconfigure(encoding='utf-8')
 REPO = Path(__file__).resolve().parents[2]
 RF = REPO / 'results' / 'refit'
-MS = paths.OUTPUT / 'FDA_Drug_Repurposing_v29.docx'
+MS = paths.OUTPUT / 'FDA_Drug_Repurposing_v30.docx'
 
 doc = docx.Document(str(MS))
 paras = [p.text.strip() for p in doc.paragraphs]
@@ -24,7 +24,7 @@ for t in doc.tables:
             text += "\n" + c.text
 
 F = json.loads((RF / 'MANUSCRIPT_FACTS.json').read_text(encoding='utf-8'))
-master = pd.read_csv(RF / 'MASTER_TABLE_V29.csv')
+master = pd.read_csv(RF / 'MASTER_TABLE_V29.csv')  # v30 rebuild, same filename
 sel = pd.read_csv(RF / 'CANDIDATE_SELECTION.csv')
 
 ok = bad = 0
@@ -63,8 +63,11 @@ check('no "orthogonal validation" phrasing survives',
       'orthogonal validation' not in text.lower())
 check('"validated finding" only used to disclaim',
       text.lower().count('validated finding') == text.lower().count('not a validated finding'))
-check('negative biomarker described as candidate/hypothesised',
-      'candidate negative predictive biomarker' in text)
+check('marker described as target-loss, not predictive',
+      'candidate target-loss marker' in text
+      and 'negative predictive biomarker' not in text)
+check('no claim of established predictive value',
+      'predictive value is unestablished' in text)
 check('framework-novel language replaced with a search statement',
       'no prior urologic-oncology proposal' in text)
 
@@ -127,6 +130,51 @@ over = sorted(n for n in cited if n not in refnums)
 print(f'    uncited references: {len(missing)} -> {missing}')
 print(f'    citations without an entry: {over}')
 check('no citation points outside the reference list', not over, str(over))
+
+print('\n5b. SECOND-REVIEW CORRECTIONS')
+check('anti-CEACAM5 successor agent named',
+      'precemtabart' in text.lower() or 'M9140' in text)
+check('seclidemstat no longer attached to the NSD2 row',
+      'SP-2577' not in text and 'seclidemstat' not in text.lower())
+check('identifiability gate disclosed',
+      'aliased' in text and 'no model can attribute' in text)
+check('sarcomatoid rows reported descriptively', 'reported descriptively' in text)
+check('PRISM no longer claims absence of off-target cytotoxicity',
+      'absence of off-target cytotoxicity' not in text)
+check('normal-tissue RNA not used as a therapeutic-window claim',
+      'not a therapeutic-window' in text)
+check('tarlatamab approval history stated',
+      'accelerated approval' in text and 'traditional approval' in text)
+check('sacituzumab withdrawal month corrected', 'November 2024' in text)
+check('LINCS analysis units explained', 'eight analysis units' in text)
+# published reference titles keep their own spelling, so test the prose only
+_body_only = chr(10).join(
+    t for t in paras
+    if not re.match(r'^\s*\d{1,2}\.\s+\S', t))
+check('American spelling in the manuscript prose',
+      not any(w in _body_only for w in
+              ('tumour', 'signalling', 'normalised', 'hybridised', 'modelled')))
+check('RMC described as independent models, not replicates',
+      'two independent patient-derived models' in text
+      and 'two biological replicates' not in text)
+def _cell_rows(txt):
+    out = set()
+    for part in str(txt).replace('–', '-').split(','):
+        part = part.strip()
+        if '-' in part:
+            a, b = part.split('-')[:2]
+            if a.strip().isdigit() and b.strip().isdigit():
+                out |= set(range(int(a), int(b) + 1))
+        elif part.isdigit():
+            out.add(int(part))
+    return out
+
+
+_listed = set()
+for _r in doc.tables[0].rows:
+    _listed |= _cell_rows(_r.cells[0].text)
+check('all 30 associations accounted for in Table 1', len(_listed) == 30,
+      f'{len(_listed)} listed; missing {sorted(set(range(1, 31)) - _listed)}')
 
 print('\n6. SHORTLIST CONSISTENCY')
 for _, r in sel.iterrows():

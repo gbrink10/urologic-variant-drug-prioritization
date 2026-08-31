@@ -41,9 +41,9 @@ def generate_figure1():
     ax.set_xlim(0, 11); ax.set_ylim(-2.45, 9.0); ax.axis('off')
 
     ax.text(5.5, 8.75,
-            'Figure 1. Unified Public-Data Pipeline for Drug Repurposing',
+            'Figure 1. Public-Data Prioritization of Drug Hypotheses',
             ha='center', fontsize=13, weight='bold', color='#1a1a1a')
-    ax.text(5.5, 8.45, 'Across Seven Aggressive Urologic Cancer Contexts',
+    ax.text(5.5, 8.45, 'Benchmark Calibration and Rare-Context Prioritization',
             ha='center', fontsize=11.5, weight='bold', color='#1a1a1a')
 
     ax.add_patch(FancyBboxPatch((0.4, 7.75), 10.2, 0.55,
@@ -160,10 +160,10 @@ def generate_figure1():
     ax.text(2.20, 0.20, '(convergent literature support)',
             ha='center', va='center', fontsize=7.3, style='italic',
             color='#0b2e4f')
-    ax.text(4.85, 0.40, '6  framework-novel',
+    ax.text(4.85, 0.40, '6  no prior proposal found',
             ha='center', va='center', fontsize=8.5, weight='bold',
             color='#c00000')
-    ax.text(4.85, 0.20, '(within urologic-oncology literature)',
+    ax.text(4.85, 0.20, '(in the urologic-oncology literature)',
             ha='center', va='center', fontsize=7.3, style='italic',
             color='#c00000')
     ax.text(7.30, 0.40, '5  partially novel',
@@ -172,10 +172,10 @@ def generate_figure1():
     ax.text(7.30, 0.20, '(variant-specific extensions)',
             ha='center', va='center', fontsize=7.3, style='italic',
             color='#6c3483')
-    ax.text(9.50, 0.40, '1  negative biomarker',
+    ax.text(9.50, 0.40, '1  target-loss marker',
             ha='center', va='center', fontsize=8.5, weight='bold',
             color='#1d4d33')
-    ax.text(9.50, 0.20, '(TROP2-low in Sarc-UC)',
+    ax.text(9.50, 0.20, '(TROP2-low, descriptive only)',
             ha='center', va='center', fontsize=7.3, style='italic',
             color='#1d4d33')
 
@@ -187,16 +187,14 @@ def generate_figure1():
     ax.text(5.05, -0.16, '6 framework-novel candidates carried forward',
             ha='left', va='center', fontsize=7.4, style='italic',
             color='#c00000')
-    ax.text(5.05, -0.30, '3 eligible \u2192 2 survive the audit',
+    ax.text(5.05, -0.30, '3 eligible \u2192 3 survive the audit',
             ha='left', va='center', fontsize=7.0, style='italic', color='#7d6608')
 
     ax.add_patch(FancyBboxPatch((1.20, -1.31), 8.60, 0.93,
                                  boxstyle='round,pad=0.04',
                                  ec='#1e8449', fc='#d4efdf', linewidth=1.1))
-    ax.text(1.50, -0.62, 'Step 7', ha='left', va='center',
-            fontsize=9.5, weight='bold', color='#1e8449')
     ax.text(5.50, -0.62,
-            'Orthogonal evidence audit — four layers, none contributed to the score',
+            'Step 7 — orthogonal evidence audit; no layer contributed to the score',
             ha='center', va='center', fontsize=9.3, weight='bold',
             color='#1a1a1a')
     ax.text(5.50, -0.90,
@@ -214,7 +212,7 @@ def generate_figure1():
     ax.add_patch(FancyBboxPatch((2.30, -2.36), 6.40, 0.82,
                                  boxstyle='round,pad=0.05',
                                  ec='#1a1a1a', fc='#1e8449', linewidth=1.4))
-    ax.text(5.50, -1.75, '1 lead candidate — CXCR1/CXCR2 blockade in RMC',
+    ax.text(5.50, -1.75, '1 lead hypothesis — CXCR1/CXCR2 blockade in RMC',
             ha='center', va='center', fontsize=10.5, weight='bold',
             color='white')
     ax.text(5.50, -2.06,

@@ -1,10 +1,10 @@
-"""Build the v29 Supplementary Methods.
+"""Build the v30 Supplementary Methods.
 
 The v28 file documented the six pipeline steps only. It predates the refit, so
 it described elementary per-gene tests, a fixed gene universe, and no selection
-rule, none of which is what the v29 analysis does.
+rule, none of which is what the v30 analysis does.
 
-Writes: output/Supplementary_Methods_v29.docx
+Writes: output/Supplementary_Methods_v30.docx
 """
 import json
 import sys
@@ -18,7 +18,7 @@ from docx.shared import Pt
 
 sys.stdout.reconfigure(encoding='utf-8')
 RF = paths.REFIT
-OUT = paths.OUTPUT / 'Supplementary_Methods_v29.docx'
+OUT = paths.OUTPUT / 'Supplementary_Methods_v30.docx'
 F = json.loads((RF / 'MANUSCRIPT_FACTS.json').read_text(encoding='utf-8'))
 summary = pd.read_csv(RF / 'REFIT_SUMMARY.csv')
 manifest = pd.read_csv(paths.PREPARED / 'PREPARED_MANIFEST.csv')
@@ -51,7 +51,7 @@ P('An Auditable Public-Data Framework for Prioritizing Biomarker-Matched Drug '
 P('Brinkley GJ, Greenberg J, Caso J')
 
 H('1. Contexts and their role')
-P('Seven contexts were analysed. Three are common source diseases with abundant '
+P('Seven contexts were analyzed. Three are common source diseases with abundant '
   'prior literature and are used as benchmarks: their purpose is to show what '
   'the framework does where the answer is already known. Four are rare or '
   'variant diseases where the framework is asked to prioritize without a '
@@ -77,35 +77,39 @@ P('Ten Gene Expression Omnibus series were used. Each was fitted with the '
   'standard Bioconductor treatment for its platform rather than one elementary '
   'test applied uniformly, using limma 3.68.4 and edgeR 4.10.1 under R 4.6.1.')
 P('Count-based series were filtered with edgeR filterByExpr against the design '
-  'matrix, normalised by trimmed mean of M-values, and given voom precision '
-  'weights before the linear model. Log-scale and summarised series were fitted '
+  'matrix, normalized by trimmed mean of M-values, and given voom precision '
+  'weights before the linear model. Log-scale and summarized series were fitted '
   'with limma-trend, that is eBayes with an intensity-dependent prior variance '
   'and robust estimation of the hyperparameters.')
-P('Three design features present in the primary deposits were modelled. First, '
+P('Three design features present in the primary deposits were modeled. First, '
   f"the penile series contains {F['design']['pscc_normal_arrays']} normal arrays "
   f"derived from only {F['design']['pscc_normal_donors']} donors; donor was "
   f"included as a blocking factor through duplicate correlation. Treating those "
   f"arrays as independent would have declared roughly twice as many features "
   f"significant. Second, the muscle-invasive bladder kinome panel is a matched "
-  f"tumour-normal design and patient was included as a blocking factor. Third, "
+  f"tumor-normal design and patient was included as a blocking factor. Third, "
   f"in the lineage-stratified small-cell series each subtype was contrasted "
   f"against the mean of the remaining subtypes with batch in the model.")
-P('Two series could not be modelled as intended, and this is reported rather '
+P('Two series could not be modeled as intended, and this is reported rather '
   'than worked around. In the sarcomatoid series every sarcomatoid sample was '
-  'hybridised on a chip carrying no conventional sample and vice versa, so chip '
+  'hybridized on a chip carrying no conventional sample and vice versa, so chip '
   'and group are completely confounded and a model including chip is not '
   'estimable; the contrast is fitted without it and the confounding is stated '
   'wherever those rows appear. For renal medullary carcinoma the repository '
   'serves only an author differential-expression spreadsheet and no sample-level '
   'matrix, so no design-aware model can be fitted from deposited data; the two '
-  'patient-derived cell lines were instead treated as two biological replicates '
-  'and only genes changing consistently in both were carried forward.')
+  'patient-derived cell lines were instead treated as two independent models, '
+  'not as an inferential cohort, and only genes changing consistently in both '
+  'were carried forward. A gene was required to exceed a log2 fold change of '
+  '0.5 in the disease-state orientation at q < 0.05 in each line separately; '
+  'the reported q-value for such a gene is the larger of the two line-specific '
+  'values, and the enrichment universe is the genes measured in both lines.')
 P('The NanoString kinome panel carries no housekeeping probes, so the usual '
-  'housekeeping normalisation was unavailable. Counts were background-corrected '
+  'housekeeping normalization was unavailable. Counts were background-corrected '
   'against the negative controls, rescaled on the positive spike-ins, and passed '
   'to TMM and voom.')
 
-H('4. Gene symbol normalisation')
+H('4. Gene symbol normalization')
 P('Gene symbols were mapped to current HGNC nomenclature before any enrichment '
   'test, using the HGNC complete set and its previous-symbol and alias fields, '
   'with mappings discarded where a legacy symbol is itself the current symbol of '
@@ -175,7 +179,7 @@ P('Four sources that took no part in scoring were interrogated after the table '
   'candidate wanting, none can establish that a candidate works, and each is '
   'blind to some candidates by construction.')
 P('Protein-level evidence came from the Human Protein Atlas: curated protein '
-  'class, subcellular location, and normalised transcripts per million in normal '
+  'class, subcellular location, and normalized transcripts per million in normal '
   'bladder, kidney and prostate. Rows were adjudicated on the curated protein '
   'class rather than the immunofluorescence call, which derives from a small '
   'cell-line panel. Genetic dependency came from the DepMap 24Q4 CRISPR screen '
@@ -187,9 +191,9 @@ P('Protein-level evidence came from the Human Protein Atlas: curated protein '
   'against the panel by two-sided Welch t-test. Signature reversal was tested '
   'through the Enrichr interface against the LINCS L1000 chemical-perturbation '
   'libraries, with the up-perturbation library reported as an internal control '
-  'so that a compound appearing in both directions can be recognised as '
+  'so that a compound appearing in both directions can be recognized as '
   'non-specific.')
-P('Two interpretive rules were fixed in advance. A tumour-cell monoculture '
+P('Two interpretive rules were fixed in advance. A tumor-cell monoculture '
   'cannot test a mechanism that runs through the microenvironment, so for such '
   'candidates the dependency and compound screens are informative only if '
   'positive and never disconfirming. And antibody, conjugate, engager and '
@@ -199,7 +203,8 @@ P('Two interpretive rules were fixed in advance. A tumour-cell monoculture '
 
 H('9. Candidate selection rule')
 P('The rule was fixed before it was applied, and every exclusion in the '
-  'manuscript is attributable to a named criterion. Eligibility requires all '
+  'manuscript is attributable to a named criterion. Eligibility requires, first, that the biological contrast be estimable separately from the major '
+  'known technical variable: a transcript can be re-derived exactly and still be uninterpretable, and where histology is completely aliased with array chip no model can attribute a difference to biology. It then requires all '
   'four of: no prior urologic-oncology proposal identified by the audit; a total '
   'reaching Moderate tier or better; a transcriptomic component re-derivable '
   'from deposited data at q < 0.05; and an available clinical-stage agent. '

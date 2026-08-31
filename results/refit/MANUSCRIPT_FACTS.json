@@ -23,7 +23,7 @@
  "funnel": {
   "framework_novel": 6,
   "eligible": 3,
-  "survive": 2
+  "survive": 3
  },
  "survivors": [
   {
@@ -41,23 +41,26 @@
    "total": 7,
    "context": "RMC",
    "nTPM": 31.4
+  },
+  {
+   "N": 28,
+   "target": "CEACAM5 (CEA)",
+   "drug": "Precemtabart tocentecan (M9140), anti-CEACAM5 ADC",
+   "total": 5,
+   "context": "SCBC (ASCL1+)",
+   "nTPM": 0.8
   }
  ],
  "excluded": [
   {
    "N": 23,
    "target": "NSD2 / WHSC1 (histone methyltransferase)",
-   "reason": "S1 DepMap: no dependency in the nominated stratum"
-  },
-  {
-   "N": 28,
-   "target": "CEACAM5 (CEA)",
-   "reason": "E4 no clinical-stage agent"
+   "reason": "E0 contrast not estimable separately from batch; S1 DepMap: no dependency in the nominated stratum"
   },
   {
    "N": 24,
    "target": "ATR / ATRIP (DNA damage response)",
-   "reason": "E2 score 2/9 below Moderate; E3 transcriptomic q = 0.0831"
+   "reason": "E0 contrast not estimable separately from batch; E2 score 2/9 below Moderate; E3 transcriptomic q = 0.0831"
   },
   {
    "N": 29,

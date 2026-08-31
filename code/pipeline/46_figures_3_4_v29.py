@@ -97,8 +97,8 @@ axA.axvline(0, lw=0.7, c='#bbb')
 axA.axhline(-np.log10(0.05), ls='--', lw=0.8, c='#888')
 axA.set_xlabel('log$_2$ fold change (sarcomatoid vs conventional)', fontsize=8.4)
 axA.set_ylabel('$-$log$_{10}$ q', fontsize=8.6)
-axA.set_title('A. Differential expression (limma refit)\n'
-              '28 sarcomatoid vs 84 conventional', fontsize=9.5,
+axA.set_title('A. Differential expression (descriptive)\n'
+              '28 sarcomatoid vs 84 conventional; chip-aliased', fontsize=9.5,
               weight='bold', loc='left')
 axA.legend(fontsize=7.0, frameon=False, loc='upper left')
 for s_ in ('top', 'right'):
@@ -125,8 +125,14 @@ axB.set_title('B. Pathway enrichment\n'
 for s_ in ('top', 'right'):
     axB.spines[s_].set_visible(False)
 
-panel_c(fig.add_subplot(gs[0, 2]), 'PanelC_SarcUC.png',
+axs = fig.add_subplot(gs[0, 2])
+panel_c(axs, 'PanelC_SarcUC.png',
         'C. Nominated targets by subcellular compartment')
+axs.text(0.50, 0.02, 'Descriptive only: histology completely aliased with '
+         'array chip', transform=axs.transAxes, ha='center', fontsize=8.0,
+         weight='bold', color='#c0392b',
+         bbox=dict(boxstyle='round,pad=0.35', facecolor='#fdecea',
+                   edgecolor='#c0392b', linewidth=1.0))
 out3 = FIG / 'Figure3_SarcUC.png'
 plt.savefig(out3, bbox_inches='tight')
 plt.close()
@@ -185,13 +191,20 @@ axB.set_yticklabels([lbl for lbl, _, _ in rows], fontsize=7.8)
 axB.set_xlabel('log$_2$ fold change vs remaining subtypes', fontsize=8.4)
 axB.set_xlim(0, max(fc for _, fc, _ in rows) * 1.35)
 axB.set_title('B. Nominated target per subtype\n'
-              'green q<0.05; red does not reach significance',
+              'green q<0.05; red not supported by this cohort',
               fontsize=9.5, weight='bold', loc='left')
 for s_ in ('top', 'right'):
     axB.spines[s_].set_visible(False)
 
-panel_c(fig.add_subplot(gs[0, 2]), 'PanelC_SCBC.png',
+axc = fig.add_subplot(gs[0, 2])
+panel_c(axc, 'PanelC_SCBC.png',
         'C. Proposed lineage-stratified therapeutic hypotheses')
+# the NEUROD1 branch does not survive the refit, so say so on the panel
+axc.text(0.50, 0.02, 'NEUROD1 branch not supported by this cohort (q = 0.363)',
+         transform=axc.transAxes, ha='center', fontsize=8.0, weight='bold',
+         color='#c0392b',
+         bbox=dict(boxstyle='round,pad=0.35', facecolor='#fdecea',
+                   edgecolor='#c0392b', linewidth=1.0))
 out4 = FIG / 'Figure4_SCBC.png'
 plt.savefig(out4, bbox_inches='tight')
 plt.close()

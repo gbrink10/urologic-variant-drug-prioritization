@@ -1,7 +1,7 @@
 """Figure 2 (v29) - renal medullary carcinoma, corrected for what the data are.
 
 The v26-v28 figure showed a volcano plot of one cell line's 48-hour contrast and
-labelled it "n=9", which reads as nine independent tumours. The experiment is two
+labelled it "n=9", which reads as nine independent tumors. The experiment is two
 patient-derived cell lines with SMARCB1 rescue, so the honest display is the
 agreement between the two lines, which is also the actual evidence for the lead
 candidate.
@@ -22,9 +22,9 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
-import matplotlib.image as mpimg
 import numpy as np
 import pandas as pd
+from matplotlib.patches import (FancyBboxPatch, FancyArrowPatch, Circle, Ellipse)
 
 sys.stdout.reconfigure(encoding='utf-8')
 REPO = Path(__file__).resolve().parents[2]
@@ -97,14 +97,74 @@ axB.legend(fontsize=7.4, frameon=False, loc='lower right')
 for s in ('top', 'right'):
     axB.spines[s].set_visible(False)
 
-# ---------------- C: mechanism schematic -----------------------------------
-# Verified against the analysis before use: the receptors are on the neutrophil
-# rather than the tumour cell, which is the point the panel has to make.
+# ---------------- C: mechanism, drawn so the receptor map is explicit -------
+# CXCL8 binds both CXCR1 and CXCR2; CXCL1, CXCL2 and CXCL3 are CXCR2-selective.
 axC = fig.add_subplot(gs[0, 2])
-axC.imshow(mpimg.imread(str(FIG / 'panelC' / 'PanelC_RMC.png')))
-axC.axis('off')
+axC.set_xlim(0, 10); axC.set_ylim(0, 10); axC.axis('off')
 axC.set_title('C. Proposed mechanism and point of blockade', fontsize=9.3,
-              weight='bold', loc='left')
+              weight='bold', loc='left', pad=12)
+
+axC.add_patch(Ellipse((2.05, 6.9), 3.5, 3.5, facecolor='#eaf2f8',
+                      edgecolor='#1f4e79', lw=1.4))
+axC.text(2.05, 8.05, 'RMC tumor cell', ha='center', fontsize=8.2,
+         weight='bold', color='#1f4e79')
+axC.text(2.05, 7.55, 'SMARCB1 loss', ha='center', fontsize=7.5, style='italic',
+         color='#c0392b')
+LIG = [('CXCL8', 7.05, '#1a3a5c'), ('CXCL1', 6.55, '#2e86c1'),
+       ('CXCL2', 6.05, '#2e86c1'), ('CXCL3', 5.55, '#2e86c1')]
+for name, y, col in LIG:
+    axC.text(2.05, y, name, ha='center', va='center', fontsize=7.4,
+             weight='bold', color=col, family='monospace')
+
+# neutrophil with the two receptors
+axC.add_patch(Circle((7.9, 6.0), 1.75, facecolor='#fdf2e9', edgecolor='#b9770e',
+                     lw=1.4))
+axC.text(7.9, 8.05, 'neutrophil', ha='center', fontsize=8.2, weight='bold',
+         color='#b9770e')
+rec = {}
+for lab, y in (('CXCR1', 6.85), ('CXCR2', 5.35)):
+    px = 7.9 - 1.75 * 0.62
+    axC.add_patch(Circle((px, y), 0.30, facecolor='#1a3a5c', edgecolor='white',
+                         lw=1.1, zorder=6))
+    axC.text(px + 0.42, y, lab, ha='left', va='center', fontsize=7.6,
+             weight='bold', color='#1a3a5c', zorder=7)
+    rec[lab] = (px, y)
+axC.text(8.15, 5.9, 'myeloid\nrecruitment', ha='center', va='center',
+         fontsize=7.2, color='#7e5109', style='italic')
+
+# ligand -> receptor arrows, drawn one per real interaction
+ARROWS = [('CXCL8', 'CXCR1', '#1a3a5c'), ('CXCL8', 'CXCR2', '#1a3a5c'),
+          ('CXCL1', 'CXCR2', '#2e86c1'), ('CXCL2', 'CXCR2', '#2e86c1'),
+          ('CXCL3', 'CXCR2', '#2e86c1')]
+ly = {n: y for n, y, _ in LIG}
+for lig, receptor, col in ARROWS:
+    x0, y0 = 3.5, ly[lig]
+    x1, y1 = rec[receptor]
+    axC.add_patch(FancyArrowPatch((x0, y0), (x1 - 0.34, y1),
+                                  connectionstyle='arc3,rad=0.16',
+                                  arrowstyle='-|>', mutation_scale=9, lw=1.0,
+                                  color=col, alpha=0.85))
+axC.text(5.2, 7.75, 'CXCL8 binds both receptors;\nCXCL1/2/3 are CXCR2-selective',
+         ha='center', fontsize=6.6, style='italic', color='#555')
+
+# blockade
+axC.add_patch(FancyBboxPatch((0.15, 1.75), 5.6, 1.35,
+                             boxstyle='round,pad=0.10', facecolor='#e8f6ef',
+                             edgecolor='#1e8449', lw=1.3))
+axC.text(2.95, 2.70, 'CXCR1- and/or CXCR2 antagonists', ha='center',
+         fontsize=8.0, weight='bold', color='#1e8449')
+axC.text(2.95, 2.14, 'reparixin \u00b7 navarixin \u00b7 AZD5069 \u00b7 danirixin',
+         ha='center', fontsize=6.9, color='#145a32')
+for lab in ('CXCR1', 'CXCR2'):
+    x1, y1 = rec[lab]
+    axC.add_patch(FancyArrowPatch((5.75, 2.6), (x1 - 0.30, y1 - 0.34),
+                                  connectionstyle='arc3,rad=-0.22',
+                                  arrowstyle='-[', mutation_scale=7, lw=1.5,
+                                  color='#1e8449'))
+axC.text(5.0, 0.95,
+         'The mechanism runs through the myeloid compartment, so a tumor-cell\n'
+         'monoculture cannot test it in either direction.',
+         ha='center', fontsize=6.9, style='italic', color='#555')
 
 out = FIG / 'Figure2_RMC.png'
 plt.savefig(out, bbox_inches='tight')
