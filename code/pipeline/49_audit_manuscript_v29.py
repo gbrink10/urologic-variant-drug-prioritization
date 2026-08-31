@@ -88,6 +88,11 @@ check('Methods has named subsections', len(_subs) >= 5, str(_subs))
 check('Methods has a statistics section',
       any('statistical' in t.lower() for t in _subs), str(_subs))
 check('the retired E0 criterion is gone', 'E0' not in text)
+check('the selection rule for the 30 is stated',
+      'most altered pathways and genes in each cancer' in text
+      and 'search for drugs against them' in text.lower())
+check('the funnel numbers match the deposit',
+      f"{F['funnel_entry']:,}" in text and str(F['funnel_in_panel']) in text)
 
 # a reader must be able to tell which three cancers are the positive controls
 _PC = ('neuroendocrine prostate cancer', 'muscle-invasive bladder cancer',

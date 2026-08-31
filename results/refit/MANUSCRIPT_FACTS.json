@@ -25,6 +25,12 @@
   "SCBC (NEUROD1+)": 1,
   "SCBC (POU2F3+)": 1
  },
+ "funnel_entry": 19199,
+ "funnel_in_panel": 658,
+ "n_tcga_anchored": 16,
+ "n_geo_anchored": 14,
+ "tcga_rows_freq_ge_15pct": 13,
+ "geo_rows_no_recurrent_alteration": 7,
  "abundance_pct": {
   "NSD2": {
    "pct": 96.1,

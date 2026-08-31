@@ -75,6 +75,17 @@ assert (F['n_previously_proposed'] + F['n_partially_novel']
         == F['n_associations']), 'novelty classes do not sum to the total'
 F['per_context'] = defs['Context'].value_counts().to_dict()
 
+# the candidate funnel, as far as it can be recomputed
+_uni = pd.read_csv(RF / 'CANDIDATE_UNIVERSE.csv')
+F['funnel_entry'] = int(_uni['genes_meeting_entry_rule'].sum())
+F['funnel_in_panel'] = int(_uni['also_in_the_18_pre_specified_sets'].sum())
+F['n_tcga_anchored'] = int((defs['N'] <= 16).sum())
+F['n_geo_anchored'] = int((defs['N'] > 16).sum())
+F['tcga_rows_freq_ge_15pct'] = int(
+    (defs.loc[defs['N'] <= 16, 'genomic_score_curated'] >= 2).sum())
+F['geo_rows_no_recurrent_alteration'] = int(
+    (defs.loc[defs['N'] > 16, 'genomic_score_curated'] == 0).sum())
+
 # the sarcomatoid rows are scored on abundance within the sarcomatoid samples;
 # the manuscript quotes the percentile, so read it back from the provenance
 # table rather than restating it

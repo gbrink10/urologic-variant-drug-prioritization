@@ -163,7 +163,10 @@ P(f"Purpose. Rare and variant urologic cancers are difficult to study in "
   f"randomized trials, so few have biomarker-directed treatment options. We "
   f"built a public-data framework that identifies and prioritizes drug targets "
   f"for rare aggressive urologic malignancies.")
-P(f"Methods. Alteration frequencies, differential expression across ten Gene "
+P(f"Methods. Candidates were chosen by taking the most altered pathways and "
+  f"genes in each cancer, from The Cancer Genome Atlas where a cohort exists "
+  f"and from transcriptomic data where one does not, and then searching for "
+  f"drugs against them. Alteration frequencies, differential expression across ten Gene "
   f"Expression Omnibus datasets, enrichment across eighteen pre-specified "
   f"druggable gene sets and drug-target curation were combined into a 9-point "
   f"score, which exists to put several dissimilar kinds of evidence on one "
@@ -284,7 +287,44 @@ P('The four rare-disease contexts are absent from The Cancer Genome Atlas, so '
   'SMARCB1 loss in renal medullary carcinoma being the clearest case, so '
   'transcriptomic nomination was not restricted to recurrently altered genes.')
 
-H('2.2 The pipeline', 11.5, 10, level=2)
+H('2.2 How candidate associations were selected', 11.5, 10, level=2)
+P(f"The rule was to take the most altered pathways and genes in each cancer "
+  f"and then search for drugs against them. What \u201cmost altered\u201d "
+  f"means depends on the data that cancer has. For the three positive "
+  f"controls, The Cancer Genome Atlas provides a cohort, so we ranked genes by "
+  f"how often they are mutated or copy-number altered and took the top of that "
+  f"list. That is the route for associations 1 to {F['n_tcga_anchored']}, and "
+  f"it is why their genomic component is high: "
+  f"{F['tcga_rows_freq_ge_15pct']} of the {F['n_tcga_anchored']} carry an "
+  f"alteration frequency of 15% or more. For the four rare cancers no such "
+  f"cohort exists, so we ranked genes instead by how strongly they were "
+  f"differentially expressed in the relevant Gene Expression Omnibus series, "
+  f"or by abundance where no disease-versus-comparator contrast was available. "
+  f"That is the route for associations {F['n_tcga_anchored'] + 1} to "
+  f"{F['n_associations']}, and their genomic component is correspondingly low: "
+  f"{F['geo_rows_no_recurrent_alteration']} of the {F['n_geo_anchored']} score "
+  f"zero, because the nominated target is not itself recurrently altered "
+  f"(Figure 1, Steps 1a and 1b).")
+P(f"For the genes that came through either route we then searched the "
+  f"Therapeutic Target Database and OpenTargets for agents against them, and "
+  f"kept an association where an agent existed that could be evaluated "
+  f"clinically. Most of the nominated genes are members of the eighteen "
+  f"pre-specified druggable sets; seven are not, and those entered on the drug "
+  f"search alone. They are surface antigens addressed by antibody-drug "
+  f"conjugates and radioligands, a modality no pathway definition covers.")
+P(f"Two features of this procedure limit how exactly it can be replayed. "
+  f"\u201cMost frequently altered\u201d and \u201cmost strongly "
+  f"expressed\u201d were applied as a ranked cut rather than a fixed "
+  f"threshold, so no single number reproduces the boundary. And the mapping "
+  f"from a gene to an available agent was performed by hand against the "
+  f"Therapeutic Target Database and OpenTargets without a query log. What can "
+  f"be recomputed is deposited: {F['funnel_entry']:,} gene-context pairs meet "
+  f"a transcriptomic entry rule of q < 0.05 with log2 fold change above 0.5, "
+  f"of which {F['funnel_in_panel']} are members of the eighteen sets. The step "
+  f"from there to {F['n_associations']} is the curation step, and it is the "
+  f"weakest link in this study\u2019s audit trail.")
+
+H('2.3 The pipeline', 11.5, 10, level=2)
 P('One pipeline was applied to all seven cancers (Figure 1). Three are the positive '
   'controls \u2014 neuroendocrine prostate cancer, muscle-invasive bladder '
   'cancer and clear cell renal cell carcinoma \u2014 and four are the rare '
@@ -302,7 +342,7 @@ P('One pipeline was applied to all seven cancers (Figure 1). Three are the posit
   'expression, DepMap for CRISPR dependency, the PRISM Repurposing screen for '
   'compound activity, and LINCS L1000 for signature reversal.')
 
-H('2.3 Scoring', 11.5, 10, level=2)
+H('2.4 Scoring', 11.5, 10, level=2)
 P('Each association received 0 to 9 points across four dimensions: a genomic '
   'or context-anchor value (0\u20133), a transcriptomic value (0\u20133), a '
   'pathway value (0\u20132) and external mechanistic-literature concordance '
@@ -316,7 +356,7 @@ P('Each association received 0 to 9 points across four dimensions: a genomic '
   'estimable and the total carries a smaller denominator, and such rows are '
   'not assigned a tier.')
 
-H('2.4 Prior-proposal classification', 11.5, 10, level=2)
+H('2.5 Prior-proposal classification', 11.5, 10, level=2)
 P('After scoring was complete, each association was classified on PubMed as '
   'having no prior urologic-oncology proposal identified, a partial precedent, '
   'or a prior proposal. Novelty was assessed against the urologic-oncology '
@@ -327,7 +367,7 @@ P('After scoring was complete, each association was classified on PubMed as '
   'independent in the dual-reviewer sense. The search template, the counting '
   'rules and the per-row classifications are deposited.')
 
-H('2.5 Candidate selection rule', 11.5, 10, level=2)
+H('2.6 Candidate selection rule', 11.5, 10, level=2)
 P('The rule was fixed before it was applied. Eligibility required all four of: '
   'E1, no prior urologic-oncology proposal identified; E2, a total of 4 or '
   'better out of the points estimable for that row; E3, a transcriptomic '
@@ -340,7 +380,7 @@ P('The rule was fixed before it was applied. Eligibility required all four of: '
   'first priority additionally required that the target itself belong to an '
   'enriched pathway. Full criteria are in Supplementary Methods.')
 
-H('2.6 Statistical analysis', 11.5, 10, level=2)
+H('2.7 Statistical analysis', 11.5, 10, level=2)
 P(f"Differential expression was fitted with the model appropriate to each "
   f"platform. Count-based series were filtered by expression, normalized by "
   f"trimmed mean of M-values and fitted with voom precision weights in edgeR "
