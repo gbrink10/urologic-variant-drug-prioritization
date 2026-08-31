@@ -21,12 +21,14 @@ import shutil
 import sys
 from pathlib import Path
 
+import paths
+
 from PIL import Image, ImageDraw
 
 sys.stdout.reconfigure(encoding='utf-8')
 REPO = Path(__file__).resolve().parents[2]
-SRC = Path(r"C:\Users\garre\Downloads")
-OUT = Path(r"C:\Users\garre\framework_expansion\figures\panelC")
+SRC = paths.OUTPUT
+OUT = paths.PANEL_C
 OUT.mkdir(parents=True, exist_ok=True)
 
 SOURCES = {

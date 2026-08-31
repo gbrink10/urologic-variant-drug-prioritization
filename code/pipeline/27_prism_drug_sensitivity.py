@@ -25,14 +25,15 @@ Writes: results/PRISM_DRUG_SENSITIVITY.csv
 import sys
 from pathlib import Path
 
+import paths
+
 import numpy as np
 import pandas as pd
 from scipy import stats
 
 sys.stdout.reconfigure(encoding='utf-8')
 REPO = Path(__file__).resolve().parents[2]
-SCRATCH = Path(r"C:\Users\garre\AppData\Local\Temp\claude\C--Users-garre"
-               r"\6e817035-d63f-47ec-a06b-299c00bcd5aa\scratchpad")
+SCRATCH = paths.DATA / 'cache'   # large third-party downloads; see README for how to populate
 OUT = REPO / 'results' / 'PRISM_DRUG_SENSITIVITY.csv'
 
 SENSITIVE = -0.5          # log2 fold-change viability treated as a response

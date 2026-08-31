@@ -19,14 +19,16 @@ import gzip
 import sys
 from pathlib import Path
 
+import paths
+
 import numpy as np
 import pandas as pd
 from scipy import stats
 
 sys.stdout.reconfigure(encoding='utf-8')
 
-DATA = Path(r"C:\Users\garre\framework_expansion\data\GSE269750_expression.txt.gz")
-CALLS = Path(r"C:\Users\garre\framework_expansion\results\SCBC_subtype_calls.csv")
+DATA = paths.RAW / 'GSE269750' / 'GSE269750_SCBC_after_batch_adjusting_after_normalization_2024_01_24.txt.gz'
+CALLS = paths.DE_RESULTS / 'SCBC_subtype_calls.csv'
 REPO = Path(__file__).resolve().parents[2]
 OUT = REPO / 'results' / 'DLL3_SCBC_CHECK.csv'
 

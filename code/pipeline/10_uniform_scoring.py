@@ -1,6 +1,18 @@
-"""Apply uniform 9-point Molecular Prioritization Score to all 4 rare disease
-contexts (RMC, PSCC, Sarcomatoid UC, SCBC), matching the scoring scheme used
-for the 14 validation candidates.
+"""Apply the uniform 9-point score to the four rare-disease contexts.
+
+SUPERSEDED (v29). This script produced the v26-v28 analysis and is retained so
+that earlier versions of the manuscript remain reconstructible. It is NOT part
+of the current pipeline. The v29 analysis refits every dataset with design-aware
+models and recomputes the scores from the fitted tables:
+
+    32_prepare_matrices.py  ->  33_refit_limma.R  ->  35/36 enrichment
+    38_extract_row_definitions.py  ->  39_rescore_from_refit.py
+    41_candidate_selection.py
+
+Note in particular that the enrichment here uses a fixed 20,000-gene universe,
+which inflates the hypergeometric test on targeted panels. The v29 enrichment
+(35_refit_enrichment.py) uses each dataset's own measured-gene universe and
+normalises gene symbols to current HGNC nomenclature first.
 
 Score components (0-9):
   - TCGA / genomic component (0-3): alteration frequency in source / disease
@@ -23,12 +35,14 @@ Genomic landscape sources (from published literature, not TCGA where rare):
 """
 import sys, json
 from pathlib import Path
+
+import paths
 import pandas as pd
 import numpy as np
 from scipy.stats import hypergeom
 sys.stdout.reconfigure(encoding='utf-8')
 
-RESULTS = Path(r"C:\Users\garre\framework_expansion\results")
+RESULTS = paths.RESULTS
 KEGG = json.load(open(RESULTS / 'kegg_pathways.json'))
 print(f"Loaded {len(KEGG)} KEGG pathway sets")
 

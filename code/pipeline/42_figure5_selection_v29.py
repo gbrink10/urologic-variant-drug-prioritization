@@ -15,6 +15,8 @@ Writes: figures/Figure5_candidate_selection.png
 import sys
 from pathlib import Path
 
+import paths
+
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
@@ -26,7 +28,7 @@ from matplotlib.patches import FancyBboxPatch, Polygon
 sys.stdout.reconfigure(encoding='utf-8')
 REPO = Path(__file__).resolve().parents[2]
 RF = REPO / 'results' / 'refit'
-FIG = Path(r"C:\Users\garre\framework_expansion\figures")
+FIG = paths.FIGURES
 plt.rcParams.update({'figure.dpi': 200, 'savefig.dpi': 300, 'font.size': 9,
                      'font.family': 'sans-serif'})
 

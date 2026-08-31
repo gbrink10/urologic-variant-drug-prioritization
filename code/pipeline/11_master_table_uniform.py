@@ -1,5 +1,18 @@
-"""Build the unified Master Table 1 for v26 manuscript:
-all 28 drug-cancer associations across 7 contexts with uniform 9-point scoring.
+"""Build the Master Table for the v26-v28 manuscript: 30 drug-cancer
+associations across 7 contexts with uniform 9-point scoring.
+
+SUPERSEDED (v29). This script produced the v26-v28 analysis and is retained so
+that earlier versions of the manuscript remain reconstructible. It is NOT part
+of the current pipeline. The v29 analysis refits every dataset with design-aware
+models and recomputes the scores from the fitted tables:
+
+    32_prepare_matrices.py  ->  33_refit_limma.R  ->  35/36 enrichment
+    38_extract_row_definitions.py  ->  39_rescore_from_refit.py
+    41_candidate_selection.py
+
+The curated half of this table is now data, in
+data/master_row_definitions.csv; the scored half is computed by
+39_rescore_from_refit.py.
 
 Score components (each row):
   TCGA / genomic frequency (0–3): from TCGA Pan-Cancer Atlas for source contexts;
@@ -16,10 +29,12 @@ Plus annotation columns:
 """
 import sys, json
 from pathlib import Path
+
+import paths
 import pandas as pd
 sys.stdout.reconfigure(encoding='utf-8')
 
-RESULTS = Path(r"C:\Users\garre\framework_expansion\results")
+RESULTS = paths.RESULTS
 
 # Aliases for gene symbols — KEGG uses CXCL8 but the data has IL8 etc.
 GENE_ALIAS = {

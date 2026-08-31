@@ -11,13 +11,15 @@ import json
 import sys
 from pathlib import Path
 
+import paths
+
 import docx
 from docx.shared import Pt
 
 sys.stdout.reconfigure(encoding='utf-8')
 REPO = Path(__file__).resolve().parents[2]
 RF = REPO / 'results' / 'refit'
-OUT = Path(r"C:\Users\garre\Downloads\Cover_Letter_v29.docx")
+OUT = paths.OUTPUT / 'Cover_Letter_v29.docx'
 F = json.loads((RF / 'MANUSCRIPT_FACTS.json').read_text(encoding='utf-8'))
 
 TITLE = ('An Auditable Public-Data Framework for Prioritizing Biomarker-Matched '

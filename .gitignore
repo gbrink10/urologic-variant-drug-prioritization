@@ -15,3 +15,10 @@ Thumbs.db
 data/raw_matrices/
 data/prepared/*_expr.csv
 data/hgnc_complete_set.txt
+data/cache/
+data/manuscript_parts/
+output/
+body.txt
+results_sec.txt
+code/pipeline/26_trial_design_feasibility.py
+results/TRIAL_DESIGN_FEASIBILITY.csv

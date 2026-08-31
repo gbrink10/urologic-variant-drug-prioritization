@@ -8,17 +8,29 @@ Plan:
 2. Classify each sample by lineage TF expression (max of ASCL1, NEUROD1, POU2F3).
 3. Run DE per subtype vs the others.
 4. Identify subtype-specific drug-target candidates.
+
+SUPERSEDED (v29). This script produced the v26-v28 analysis and is retained so
+that earlier versions of the manuscript remain reconstructible. It is NOT part
+of the current pipeline. The v29 analysis refits every dataset with design-aware
+models and recomputes the scores from the fitted tables:
+
+    32_prepare_matrices.py  ->  33_refit_limma.R  ->  35/36 enrichment
+    38_extract_row_definitions.py  ->  39_rescore_from_refit.py
+    41_candidate_selection.py
+
 """
 import sys, gzip
 from pathlib import Path
+
+import paths
 import pandas as pd
 import numpy as np
 from scipy import stats
 from statsmodels.stats.multitest import multipletests
 sys.stdout.reconfigure(encoding='utf-8')
 
-DATA = Path(r"C:\Users\garre\framework_expansion\data\GSE269750_expression.txt.gz")
-RESULTS = Path(r"C:\Users\garre\framework_expansion\results")
+DATA = paths.RAW / 'GSE269750' / 'GSE269750_SCBC_after_batch_adjusting_after_normalization_2024_01_24.txt.gz'
+RESULTS = paths.RESULTS
 
 print("=" * 70)
 print("SCBC subtype-stratified analysis: GSE269750")

@@ -4,13 +4,25 @@ drugs (using the same drug-target landscape framework as the main manuscript).
 
 Each "candidate" entry: (disease, gene/target, log2FC, qvalue, drug-class, specific drugs,
 investigational alternatives, novelty status — pending literature check).
+
+SUPERSEDED (v29). This script produced the v26-v28 analysis and is retained so
+that earlier versions of the manuscript remain reconstructible. It is NOT part
+of the current pipeline. The v29 analysis refits every dataset with design-aware
+models and recomputes the scores from the fitted tables:
+
+    32_prepare_matrices.py  ->  33_refit_limma.R  ->  35/36 enrichment
+    38_extract_row_definitions.py  ->  39_rescore_from_refit.py
+    41_candidate_selection.py
+
 """
 import sys, os
 from pathlib import Path
+
+import paths
 import pandas as pd
 sys.stdout.reconfigure(encoding='utf-8')
 
-RESULTS = Path(r"C:\Users\garre\framework_expansion\results")
+RESULTS = paths.RESULTS
 
 # Drug-target → druggable agents map (extended from main manuscript's Table 2 landscape)
 DRUG_MAP = {

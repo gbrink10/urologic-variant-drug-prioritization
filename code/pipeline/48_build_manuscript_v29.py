@@ -11,6 +11,8 @@ import json
 import sys
 from pathlib import Path
 
+import paths
+
 import docx
 import pandas as pd
 from docx.enum.text import WD_ALIGN_PARAGRAPH
@@ -19,10 +21,9 @@ from docx.shared import Inches, Pt, RGBColor
 sys.stdout.reconfigure(encoding='utf-8')
 REPO = Path(__file__).resolve().parents[2]
 RF = REPO / 'results' / 'refit'
-FIG = Path(r"C:\Users\garre\framework_expansion\figures")
-SCRATCH = Path(r"C:\Users\garre\AppData\Local\Temp\claude\C--Users-garre"
-               r"\6e817035-d63f-47ec-a06b-299c00bcd5aa\scratchpad")
-OUT = Path(r"C:\Users\garre\Downloads\FDA_Drug_Repurposing_v29.docx")
+FIG = paths.FIGURES
+SCRATCH = paths.DATA / 'manuscript_parts'
+OUT = paths.OUTPUT / 'FDA_Drug_Repurposing_v29.docx'
 
 F = json.loads((RF / 'MANUSCRIPT_FACTS.json').read_text(encoding='utf-8'))
 refs = SCRATCH.joinpath('v28_refs.txt').read_text(encoding='utf-8').splitlines()
@@ -833,7 +834,7 @@ P('Scores are the sum of four partially overlapping dimensions (genomic or '
 # =====================================================================
 # Supplementary tables generated alongside
 # =====================================================================
-SUP = Path(r"C:\Users\garre\Downloads\v29_supplementary")
+SUP = paths.OUTPUT / 'v29_supplementary'
 SUP.mkdir(parents=True, exist_ok=True)
 
 full = master.merge(prov[['N', 'scoring_gene', 'arm', 'refit_context', 'E_basis',

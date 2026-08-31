@@ -22,6 +22,8 @@ Writes: figures/Figure3_SarcUC.png, figures/Figure4_SCBC.png
 import sys
 from pathlib import Path
 
+import paths
+
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
@@ -36,7 +38,7 @@ sys.stdout.reconfigure(encoding='utf-8')
 REPO = Path(__file__).resolve().parents[2]
 RF = REPO / 'results' / 'refit'
 DEDIR = REPO / 'data' / 'DE_results'
-FIG = Path(r"C:\Users\garre\framework_expansion\figures")
+FIG = paths.FIGURES
 PANEL = FIG / 'panelC'
 plt.rcParams.update({'figure.dpi': 200, 'savefig.dpi': 300, 'font.size': 9,
                      'font.family': 'sans-serif'})

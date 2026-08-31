@@ -9,6 +9,8 @@ figures/chatgpt_schematics/ for provenance).
 """
 import sys, json
 from pathlib import Path
+
+import paths
 import numpy as np
 import pandas as pd
 import matplotlib
@@ -19,8 +21,8 @@ import matplotlib.image as mpimg
 from matplotlib.patches import FancyBboxPatch
 sys.stdout.reconfigure(encoding='utf-8')
 
-RESULTS = Path(r"C:\Users\garre\framework_expansion\results")
-FIGURES = Path(r"C:\Users\garre\framework_expansion\figures")
+RESULTS = paths.RESULTS
+FIGURES = paths.FIGURES
 SCHEMATICS = FIGURES / 'chatgpt_schematics'
 
 plt.rcParams.update({
@@ -246,7 +248,7 @@ def panel_c_schematic(ax, png_path, title):
 # Figure 2 — RMC
 # =====================================================================
 print("Generating Figure 2: RMC (panels A/B matplotlib + Panel C ChatGPT)")
-xl_path = Path(r"C:\Users\garre\framework_expansion\data\GSE180999_DE.xlsx")
+xl_path = paths.RAW / 'GSE180999' / 'GSE180999_rnaseq_rmc_cell_lines_differential_expression.xlsx'
 rmc2c = pd.read_excel(xl_path, sheet_name='RMC2C+SMARCB1')
 rmc219 = pd.read_excel(xl_path, sheet_name='RMC219+SMARCB1')
 rmc2c.columns = ['gene', 'l2fc_12h_RMC2C', 'q_12h_RMC2C',

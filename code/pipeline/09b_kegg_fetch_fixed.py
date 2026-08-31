@@ -29,9 +29,11 @@ Disease-context pathways (for context-aware enrichment):
 """
 import sys, requests, json
 from pathlib import Path
+
+import paths
 sys.stdout.reconfigure(encoding='utf-8')
 
-OUT = Path(r"C:\Users\garre\framework_expansion\results\kegg_pathways.json")
+OUT = paths.RESULTS / 'KEGG_PATHWAYS_18.json'
 
 PATHWAYS = {
     # Drug-class pathways

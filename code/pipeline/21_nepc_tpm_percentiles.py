@@ -21,10 +21,12 @@ import gzip
 import sys
 from pathlib import Path
 
+import paths
+
 import pandas as pd
 
 sys.stdout.reconfigure(encoding='utf-8')
-DATA = Path(r"C:\Users\garre\framework_expansion\data")
+DATA = paths.DATA
 REPO = Path(__file__).resolve().parents[2]
 OUT = REPO / 'results' / 'NEPC_TPM_PERCENTILES.csv'
 

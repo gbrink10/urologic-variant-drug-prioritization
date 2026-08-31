@@ -17,15 +17,27 @@ We require:
 
 Output: ranked list of SMARCB1-loss-driven genes (candidate drug targets),
 with concordance information across both cell lines.
+
+SUPERSEDED (v29). This script produced the v26-v28 analysis and is retained so
+that earlier versions of the manuscript remain reconstructible. It is NOT part
+of the current pipeline. The v29 analysis refits every dataset with design-aware
+models and recomputes the scores from the fitted tables:
+
+    32_prepare_matrices.py  ->  33_refit_limma.R  ->  35/36 enrichment
+    38_extract_row_definitions.py  ->  39_rescore_from_refit.py
+    41_candidate_selection.py
+
 """
 import sys
 from pathlib import Path
+
+import paths
 import pandas as pd
 import numpy as np
 sys.stdout.reconfigure(encoding='utf-8')
 
-DATA = Path(r"C:\Users\garre\framework_expansion\data\GSE180999_DE.xlsx")
-RESULTS = Path(r"C:\Users\garre\framework_expansion\results")
+DATA = paths.RAW / 'GSE180999' / 'GSE180999_rnaseq_rmc_cell_lines_differential_expression.xlsx'
+RESULTS = paths.RESULTS
 RESULTS.mkdir(parents=True, exist_ok=True)
 
 # Load both sheets

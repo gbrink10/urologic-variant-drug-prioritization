@@ -1,0 +1,3 @@
+context,like_for_like,n_genes,logFC_correlation,max_abs_logFC_difference,t_correlation,n_sig_python,n_sig_R,jaccard_significant
+SarcUC,True,29377,1.0,0.0,0.999832,10652,10711,0.9898
+PSCC,False,67528,1.0,0.0,0.994729,30701,13947,0.4543

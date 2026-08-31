@@ -6,9 +6,21 @@ Columns per row:
   Prior proposal status (citation or 'framework-novel') | Trial readiness
 
 28 rows = 14 validation + 14 discovery (12 candidates + 1 known-prior + 1 negative biomarker).
+
+SUPERSEDED (v29). This script produced the v26-v28 analysis and is retained so
+that earlier versions of the manuscript remain reconstructible. It is NOT part
+of the current pipeline. The v29 analysis refits every dataset with design-aware
+models and recomputes the scores from the fitted tables:
+
+    32_prepare_matrices.py  ->  33_refit_limma.R  ->  35/36 enrichment
+    38_extract_row_definitions.py  ->  39_rescore_from_refit.py
+    41_candidate_selection.py
+
 """
 import sys
 from pathlib import Path
+
+import paths
 import pandas as pd
 sys.stdout.reconfigure(encoding='utf-8')
 
@@ -193,6 +205,6 @@ for r in ROWS:
     print()
 
 # Save as CSV for later DOCX integration
-OUT = Path(r"C:\Users\garre\framework_expansion\results\v26_master_table1.csv")
+OUT = paths.RESULTS / 'v26_master_table1.csv'
 df.to_csv(OUT, index=False)
 print(f"Saved: {OUT}")

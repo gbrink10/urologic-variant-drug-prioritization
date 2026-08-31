@@ -14,6 +14,8 @@ import json
 import sys
 from pathlib import Path
 
+import paths
+
 import numpy as np
 import pandas as pd
 from scipy import stats
@@ -21,9 +23,9 @@ from scipy.stats import hypergeom
 
 sys.stdout.reconfigure(encoding='utf-8')
 
-DATA = Path(r"C:\Users\garre\framework_expansion\data\GSE269750_expression.txt.gz")
-CALLS = Path(r"C:\Users\garre\framework_expansion\results\SCBC_subtype_calls.csv")
-KEGG = Path(r"C:\Users\garre\framework_expansion\results\kegg_pathways.json")
+DATA = paths.RAW / 'GSE269750' / 'GSE269750_SCBC_after_batch_adjusting_after_normalization_2024_01_24.txt.gz'
+CALLS = paths.DE_RESULTS / 'SCBC_subtype_calls.csv'
+KEGG = paths.RESULTS / 'KEGG_PATHWAYS_18.json'
 REPO = Path(__file__).resolve().parents[2]
 
 with gzip.open(DATA, 'rt') as f:

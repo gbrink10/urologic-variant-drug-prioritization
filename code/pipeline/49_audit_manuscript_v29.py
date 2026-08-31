@@ -5,13 +5,15 @@ import sys
 from collections import Counter
 from pathlib import Path
 
+import paths
+
 import docx
 import pandas as pd
 
 sys.stdout.reconfigure(encoding='utf-8')
 REPO = Path(__file__).resolve().parents[2]
 RF = REPO / 'results' / 'refit'
-MS = Path(r"C:\Users\garre\Downloads\FDA_Drug_Repurposing_v29.docx")
+MS = paths.OUTPUT / 'FDA_Drug_Repurposing_v29.docx'
 
 doc = docx.Document(str(MS))
 paras = [p.text.strip() for p in doc.paragraphs]

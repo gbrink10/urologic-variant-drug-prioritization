@@ -10,10 +10,22 @@ structurally UNABLE TO TEST it.
 All values are read from the deposited result files, not hard-coded.
 
 Writes: figures/Figure5_validation_funnel.png
+
+SUPERSEDED (v29). This script produced the v26-v28 analysis and is retained so
+that earlier versions of the manuscript remain reconstructible. It is NOT part
+of the current pipeline. The v29 analysis refits every dataset with design-aware
+models and recomputes the scores from the fitted tables:
+
+    32_prepare_matrices.py  ->  33_refit_limma.R  ->  35/36 enrichment
+    38_extract_row_definitions.py  ->  39_rescore_from_refit.py
+    41_candidate_selection.py
+
 """
 import json
 import sys
 from pathlib import Path
+
+import paths
 
 import matplotlib
 matplotlib.use('Agg')
@@ -25,7 +37,7 @@ from matplotlib.patches import FancyBboxPatch, Polygon
 sys.stdout.reconfigure(encoding='utf-8')
 REPO = Path(__file__).resolve().parents[2]
 R = REPO / 'results'
-FIGURES = Path(r"C:\Users\garre\framework_expansion\figures")
+FIGURES = paths.FIGURES
 
 plt.rcParams.update({'figure.dpi': 200, 'savefig.dpi': 300, 'font.size': 9,
                      'font.family': 'sans-serif'})

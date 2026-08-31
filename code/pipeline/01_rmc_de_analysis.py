@@ -11,9 +11,21 @@ biallelic SMARCB1-null in their endogenous state). So:
 Comparison: NEG vs dox-treated (12hr + 48hr combined, or 48hr alone for
 more SMARCB1-restored steady state). Genes UP in NEG = up due to SMARCB1
 loss = candidate drug targets for RMC.
+
+SUPERSEDED (v29). This script produced the v26-v28 analysis and is retained so
+that earlier versions of the manuscript remain reconstructible. It is NOT part
+of the current pipeline. The v29 analysis refits every dataset with design-aware
+models and recomputes the scores from the fitted tables:
+
+    32_prepare_matrices.py  ->  33_refit_limma.R  ->  35/36 enrichment
+    38_extract_row_definitions.py  ->  39_rescore_from_refit.py
+    41_candidate_selection.py
+
 """
 import sys, os
 from pathlib import Path
+
+import paths
 import GEOparse
 import pandas as pd
 import numpy as np
@@ -21,8 +33,8 @@ from scipy import stats
 from statsmodels.stats.multitest import multipletests
 sys.stdout.reconfigure(encoding='utf-8')
 
-DATA_DIR = Path(r"C:\Users\garre\framework_expansion\data")
-RESULTS_DIR = Path(r"C:\Users\garre\framework_expansion\results")
+DATA_DIR = paths.DATA
+RESULTS_DIR = paths.RESULTS
 RESULTS_DIR.mkdir(parents=True, exist_ok=True)
 os.chdir(DATA_DIR)
 
