@@ -79,6 +79,35 @@ F['per_context'] = defs['Context'].value_counts().to_dict()
 _uni = pd.read_csv(RF / 'CANDIDATE_UNIVERSE.csv')
 F['funnel_entry'] = int(_uni['genes_meeting_entry_rule'].sum())
 F['funnel_in_panel'] = int(_uni['also_in_the_18_pre_specified_sets'].sum())
+_ctrl = defs[defs['N'] <= 16]
+_disc = defs[defs['N'] > 16]
+_ps = defs['Prior status'].str.upper()
+
+
+def _cls(nrow, status):
+    if status.startswith('FRAMEWORK-NOVEL'):
+        return 'novel'
+    if status.startswith('PARTIALLY NOVEL'):
+        return 'partial'
+    return 'biomarker' if nrow == 27 else 'proposed'
+
+
+defs['_cls'] = [_cls(a, b) for a, b in zip(defs['N'], _ps)]
+F['arm_control'] = {
+    'n': int(len(_ctrl)),
+    'proposed': int((defs.loc[defs['N'] <= 16, '_cls'] == 'proposed').sum()),
+}
+F['arm_discovery'] = {
+    'n': int(len(_disc)),
+    'proposed': int((defs.loc[defs['N'] > 16, '_cls'] == 'proposed').sum()),
+    'partial': int((defs.loc[defs['N'] > 16, '_cls'] == 'partial').sum()),
+    'biomarker': int((defs.loc[defs['N'] > 16, '_cls'] == 'biomarker').sum()),
+    'novel': int((defs.loc[defs['N'] > 16, '_cls'] == 'novel').sum()),
+    'diseases': 4,
+}
+assert (F['arm_discovery']['proposed'] + F['arm_discovery']['partial']
+        + F['arm_discovery']['biomarker'] + F['arm_discovery']['novel']
+        == F['arm_discovery']['n']), 'discovery classes do not sum'
 F['n_tcga_anchored'] = int((defs['N'] <= 16).sum())
 F['n_geo_anchored'] = int((defs['N'] > 16).sum())
 F['tcga_rows_freq_ge_15pct'] = int(

@@ -146,17 +146,21 @@ H('CONTEXT', 12)
 P('Key objective: Can publicly deposited genomic and transcriptomic data be '
   'interrogated systematically to identify and prioritize drugs for aggressive '
   'urologic cancers, where clinical trials are difficult to power?')
-P(f"Knowledge generated: We scored {F['n_associations']} drug-cancer "
-  f"associations across seven urologic cancers. "
-  f"{F['n_previously_proposed']} of the drugs we identified had already been "
-  f"proposed by other groups, which served as a positive control for the "
-  f"framework. {F['n_partially_novel']} extended a drug "
-  f"proposed for conventional disease, or for another organ, to a variant. One "
-  f"was a biomarker observation rather than a drug hypothesis. The remaining "
-  f"{F['n_framework_novel']} had no prior proposal in the urologic literature. "
-  f"We then used four independent data sources, none of which had contributed "
-  f"to the score, and they supported {F['funnel']['survive']} of those "
-  f"{F['n_framework_novel']} and argued against the rest.")
+P(f"Knowledge generated: The pipeline produced "
+  f"{F['n_associations']} drug-cancer associations, "
+  f"{F['arm_control']['n']} of them in the three positive controls and "
+  f"{F['arm_discovery']['n']} in the four rare cancers. All "
+  f"{F['arm_control']['proposed']} of the "
+  f"{F['arm_control']['n']} control associations recover a drug proposed "
+  f"independently by another group, which is what a working positive control "
+  f"looks like. Among the {F['arm_discovery']['n']} associations in the rare "
+  f"cancers, {F['arm_discovery']['proposed']} were previously proposed, "
+  f"{F['arm_discovery']['partial']} extend a drug from conventional disease "
+  f"or another organ, one is a biomarker observation rather than a drug "
+  f"hypothesis, and {F['arm_discovery']['novel']} had no prior proposal in "
+  f"the urologic literature. Four independent data sources, none of which had "
+  f"contributed to the score, supported {F['funnel']['survive']} of those "
+  f"{F['arm_discovery']['novel']} and argued against the rest.")
 
 H('ABSTRACT', 12)
 P(f"Purpose. Rare and variant urologic cancers are difficult to study in "
@@ -184,16 +188,17 @@ P(f"Results. We scored {F['n_associations']} drug-cancer associations: "
   f"sarcomatoid series the two tumor types had been run on separate batches of "
   f"microarray chips, so we could not compare them and scored those five "
   f"associations on how strongly each target was expressed within the "
-  f"sarcomatoid tumors instead. Of the "
-  f"{F['n_associations']} associations, {F['n_previously_proposed']} recover a "
-  f"drug already proposed elsewhere for that disease, "
-  f"{F['n_partially_novel']} extend a drug from conventional disease or "
-  f"another organ to a variant, one is the TROP2 biomarker observation, and "
-  f"{F['n_framework_novel']} had no prior proposal in the urologic literature. "
-  f"Three of those {F['n_framework_novel']} were supported by the independent "
-  f"sources: CXCR1/CXCR2 blockade and anti-CEACAM1 in renal medullary "
-  f"carcinoma, and anti-CEACAM5 conjugates in ASCL1-positive small-cell "
-  f"bladder cancer.")
+  f"sarcomatoid tumors instead. All {F['arm_control']['n']} associations from "
+  f"the positive controls recover a drug proposed independently elsewhere. Of "
+  f"the {F['arm_discovery']['n']} from the four rare cancers, "
+  f"{F['arm_discovery']['proposed']} were previously proposed, "
+  f"{F['arm_discovery']['partial']} extend a drug from conventional disease or "
+  f"another organ, one is the TROP2 biomarker observation, and "
+  f"{F['arm_discovery']['novel']} had no prior proposal in the urologic "
+  f"literature. Three of those {F['arm_discovery']['novel']} were supported by "
+  f"the independent sources: CXCR1/CXCR2 blockade and anti-CEACAM1 in renal "
+  f"medullary carcinoma, and anti-CEACAM5 conjugates in ASCL1-positive "
+  f"small-cell bladder cancer.")
 P(f"Conclusion. Public data can be used to prioritize drug hypotheses for "
   f"cancers that may never have a randomized trial. {F['funnel']['survive']} "
   f"hypotheses were supported in {F['n_survivor_contexts']} diseases. All "
@@ -267,10 +272,12 @@ P('Candidate associations were assembled from the sources below before the '
 
 H('2.1 Data sources', 11.5, 10, level=2)
 P('Five public archives were used, each for one purpose. Somatic alteration '
-  'frequencies came from The Cancer Genome Atlas Pan-Cancer Atlas 2018, '
-  'queried through cBioPortal [1,2], for urothelial bladder carcinoma '
-  '(n = 411), kidney renal clear cell carcinoma (n = 512) and prostate '
-  'adenocarcinoma (n = 494). Transcriptomic data came from ten Gene Expression '
+  'frequencies came from the best published genomic series available for '
+  'each cancer. For the three positive controls that series is The Cancer '
+  'Genome Atlas Pan-Cancer Atlas 2018, queried through cBioPortal [1,2]: '
+  'urothelial bladder carcinoma (n = 411), kidney renal clear cell '
+  'carcinoma (n = 512) and prostate adenocarcinoma (n = 494). '
+  'Transcriptomic data came from ten Gene Expression '
   'Omnibus series, listed with their accessions under Data Availability, '
   'downloaded as author-deposited matrices with their sample metadata. Pathway '
   'membership came from the Kyoto Encyclopedia of Genes and Genomes, retrieved '
@@ -278,8 +285,8 @@ P('Five public archives were used, each for one purpose. Somatic alteration '
   'clinical stage of each agent came from the Therapeutic Target Database and '
   'OpenTargets. Gene symbols were reconciled across all of these against the '
   'HGNC complete set.')
-P('The four rare-disease contexts are absent from The Cancer Genome Atlas, so '
-  'their alteration frequencies were curated from published series: Msaouel '
+P('The four rare cancers are absent from The Cancer Genome Atlas, and therefore '
+  'from cBioPortal, so their series are disease-specific: Msaouel '
   '2020 for renal medullary carcinoma [3], Chahoud 2021 [4] and Aydin 2020 [5] '
   'for penile squamous cell carcinoma, Guo 2019 for sarcomatoid urothelial '
   'carcinoma [6] and Chang 2018 for small-cell bladder cancer [7]. A rare '
@@ -417,8 +424,12 @@ H('RESULTS')
 H('3.1 The Association Table', 11.5, 10, level=2)
 ctx_counts = ', '.join(f'{k} {v}' for k, v in F['per_context'].items())
 P(f"The pipeline produced {F['n_associations']} drug-cancer associations "
-  f"across the seven contexts (Table 1; the full table with every score "
-  f"component and its provenance is Supplementary Table S1). "
+  f"(Table 1; the full table with every score component and its provenance is "
+  f"Supplementary Table S1). They fall into two groups fixed before any result "
+  f"was seen, by which data source anchors each cancer (Figure 2): "
+  f"{F['arm_control']['n']} in the three positive controls, and "
+  f"{F['arm_discovery']['n']} in the four rare cancers. The second group is "
+  f"the output of the study; the first is there to test it. "
   f"{F['tiers'].get('Strong', 0)} reach the Strong tier, "
   f"{F['tiers'].get('Moderate', 0)} Moderate and "
   f"{F['tiers'].get('Exploratory', 0)} Exploratory. Five associations from the "
@@ -431,8 +442,9 @@ P(f"The pipeline produced {F['n_associations']} drug-cancer associations "
 H('3.2 The Positive Controls', 11.5, 10, level=2)
 P(f"The three positive controls \u2014 neuroendocrine prostate cancer, "
   f"muscle-invasive bladder cancer and clear cell renal cell carcinoma "
-  f"\u2014 contributed sixteen associations, and every one of them recovers "
-  f"a drug proposed independently by another group: six "
+  f"\u2014 contributed {F['arm_control']['n']} associations, and all "
+  f"{F['arm_control']['proposed']} of them recover a drug proposed "
+  f"independently by another group: six "
   f"in neuroendocrine prostate cancer [10\u201318], seven in muscle-invasive "
   f"bladder cancer [19\u201327] and three in clear cell renal cell carcinoma "
   f"[28\u201332]. Two more previously proposed drugs appear in the rare "
@@ -463,15 +475,11 @@ P(f"In renal medullary carcinoma the deposited experiment is a SMARCB1 rescue in
   f"strongly enriched set in this context \u2014 {F['rmc_top_pathway'].replace('_', ' ')} "
   f"ranks above it at q = {F['rmc_top_q']:.4f} \u2014 so the claim is that the "
   f"axis is robustly present, not that it dominates.")
-P(f"Penile squamous cell carcinoma showed a dominant immune-hot phenotype. "
-  f"HLA-DRA is elevated at {de['HLA_DRA_pscc']['log2FC']:+.2f} "
-  f"(q = {fmt(de['HLA_DRA_pscc']['q'])}) with CXCL9 and CXCL10 elevated and "
-  f"antigen processing and presentation enriched at "
-  f"q = {q['pscc_antigen']:.4f}, converging on the established pembrolizumab "
-  f"priority [36\u201338] with partially-novel matrix metalloproteinase and "
-  f"periostin candidates [39\u201341]. This signal survives modeling the six "
-  f"normal arrays as {dsn['pscc_normal_donors']} donors rather than six "
-  f"independent samples, which was the more demanding test.")
+P(f"Penile squamous cell carcinoma is reported in the Supplementary Results "
+  f"rather than here. In brief, it showed a dominant immune-hot phenotype that "
+  f"converges on the established pembrolizumab priority [36\u201338], with "
+  f"two partially-novel candidates alongside it [39\u201341]; none of its "
+  f"associations reached the shortlist.")
 P(f"In the sarcomatoid series (Figure 4) every sarcomatoid tumor was run on a "
   f"different batch of chips from every conventional tumor. A difference "
   f"between the two groups is therefore also a difference between two batches, "
