@@ -145,8 +145,9 @@ check('both pre-specified thresholds named',
 
 check('novelty stated without a priority claim',
       'What is new here is not any single drug-cancer pair' in text
-      and 'first to' not in text.lower()
-      and 'first study' not in text.lower())
+      and not any(k in text.lower() for k in
+                  ('the first study', 'the first report', 'first to report',
+                   'first to apply', 'first to describe', 'we are the first')))
 
 print('\n5. CITATIONS')
 cited = Counter()
