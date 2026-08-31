@@ -48,45 +48,48 @@ NAMES = {
     24: 'ATR inhibition\n(sarcomatoid urothelial)',
     29: '$^{177}$Lu-DOTATATE\n(NEUROD1+ small-cell bladder)',
 }
-COLS = ['Contrast\nidentifiable', 'Score\n(of 9)', 'Transcript\nq < 0.05',
+COLS = ['Transcriptomic\nevidence', 'Score', 'Meets its arm\'s\nstandard',
         'Target in\nenriched pathway', 'Protein\naccess', 'Genetic\ndependency',
         'Compound\nactivity', 'Clinical access /\ndevelopment path']
 
 sel = sel.sort_values(['survives', 'total'], ascending=[False, False])
-if 'contrast_identifiable' not in sel.columns:
-    sel['contrast_identifiable'] = True
+if 'pathway_estimable' not in sel.columns:
+    sel['pathway_estimable'] = True
 grid, notes, rows_lbl = [], [], []
 for _, r in sel.iterrows():
     n = int(r['N'])
     p = prov[prov['N'] == n].iloc[0]
     cells, txt = [], []
 
-    ident = bool(r.get('contrast_identifiable', True))
-    cells.append(SUPPORT if ident else AGAINST)
-    txt.append('estimable' if ident else 'aliased\nwith chip')
+    # which arm the transcriptomic evidence comes from, and whether the
+    # pathway component could be computed at all for this context
+    path_ok = bool(r.get('pathway_estimable', True))
+    denom = int(r.get('total_denominator', 9) or 9)
+    arm_abundance = pd.isna(r['E_refit_q'])
+    cells.append(PARTIAL if arm_abundance else SUPPORT)
+    txt.append('abundance\n(no contrast)' if arm_abundance else 'disease\ncontrast')
 
-    # Once E0 has failed, the score and the quantities behind it are not
-    # interpretable for this disease and are withheld rather than displayed.
-    if not ident:
-        for _ in range(3):
-            cells.append(UNTESTED)
-        txt += ['not\nassigned', 'not estimable\nfor histology',
-                'not estimable\nfor histology']
-    else:
+    if True:
         total = int(r['total'])
         cells.append(SUPPORT if total >= 7 else PARTIAL if total >= 4 else AGAINST)
-        txt.append(f'{total}/9')
+        txt.append(f'{total}/{denom}')
 
         q = float(r['E_refit_q']) if pd.notna(r['E_refit_q']) else np.nan
         if np.isnan(q):
-            cells.append(UNTESTED); txt.append('n/a')
+            e_pts = int(p['E_refit']) if pd.notna(p['E_refit']) else 0
+            cells.append(SUPPORT if e_pts >= 2 else AGAINST)
+            txt.append(f'top {"5%" if e_pts >= 3 else "15%" if e_pts == 2 else "third or below"}'
+                       if e_pts else 'below\ntop third')
         elif q < 0.05:
             cells.append(SUPPORT)
             txt.append(f'q={q:.0e}' if q < 1e-3 else f'q={q:.3f}')
         else:
             cells.append(AGAINST); txt.append(f'q={q:.2f}')
 
-        if bool(r['target_in_enriched_pathway']):
+        if not path_ok:
+            cells.append(UNTESTED)
+            txt.append('not estimable\n(confounded\ncontrast)')
+        elif bool(r['target_in_enriched_pathway']):
             cells.append(SUPPORT); txt.append(f"q={float(r['pathway_q']):.3f}")
         elif pd.notna(r['pathway_q']) and float(r['pathway_q']) < 0.10:
             # the pathway is enriched but the target is not driving it
@@ -145,9 +148,9 @@ STAGES = [
     (6.4, 8.3, 10.4, f'{n_novel} no prior proposal found', '#c0392b',
      'score-independent prior-proposal audit'),
     (4.3, 7.1, 10.0, f'{n_elig} eligible', '#b9770e',
-     'estimable contrast, Moderate tier or better, q < 0.05, agent available'),
-    (2.2, 6.0, 10.0, f'{n_surv} survive the audit', '#7d6608',
-     'no contradicting layer; access matches modality'),
+     'score \u2265 4; transcriptomic standard met; agent available'),
+    (2.2, 6.0, 10.0, f'{n_surv} supported', '#7d6608',
+     'by four independent sources; none contradicts'),
     (0.2, 5.0, 9.4, f'{n_surv} hypotheses, {n_ctx} diseases', '#1e8449',
      'ranked within a disease, not across diseases'),
 ]
@@ -196,7 +199,7 @@ for s in axB.spines.values():
 axB.tick_params(length=0)
 # mark where the survivors stop
 axB.axhline(n_r - n_surv, color='#1a1a1a', lw=1.6, ls='--')
-axB.text(n_c + 0.06, n_r - n_surv, ' survive\n above', fontsize=6.6,
+axB.text(n_c + 0.06, n_r - n_surv, ' supported\n above', fontsize=6.6,
          va='center', style='italic', color='#1a1a1a')
 axB.set_title('B. Every candidate against every criterion', fontsize=10.2,
               weight='bold', pad=30, loc='left')
@@ -208,26 +211,19 @@ axB.legend(handles, labels, loc='upper center', bbox_to_anchor=(0.5, -0.03),
            ncol=4, frameon=False, fontsize=7.4)
 
 fig.text(0.5, 0.035,
-         'Criteria, all required for eligibility: E0 the contrast is estimable '
-         'separately from batch; E1 no prior urologic-oncology proposal was found; '
-         'E2 Moderate tier or better;\nE3 the transcript is re-derivable at q<0.05; '
-         'E4 an agent is in clinical development. Survival additionally requires '
-         'S1, no contradicting layer, and modality-appropriate access.\n'
-         'None of the three eligible candidates was excluded by the external '
-         'layers; all attrition here occurs at eligibility.\n'
-         'A layer that cannot evaluate a candidate is not evidence for it. '
-         'Absence of contradiction is therefore weaker than positive support, '
-         'and the lead candidate\nis the best-supported hypothesis this '
-         'framework produces rather than a validated finding. Values are read '
-         'from the deposited refit tables.',
+         'Eligibility, all four required: E1 no prior urologic-oncology proposal was found; E2 a score of 4 or better out of the points estimable for that row;\n'
+         'E3 the transcriptomic evidence meets its own arm\u2019s standard, q<0.05 on a disease contrast or the top 15% of transcripts on abundance; E4 an agent is in clinical development.\n'
+         'Support additionally requires that no independent source contradict the candidate and that target access match the modality.\n'
+         'A source that cannot evaluate a candidate is not evidence for it, so absence of contradiction is weaker than positive support. All three remain hypotheses, not validated findings.\n'
+         'Values are read from the deposited tables.',
          ha='center', fontsize=7.0, style='italic', color='#555')
 
 out = FIG / 'Figure5_candidate_selection.png'
 plt.savefig(out, bbox_inches='tight')
 plt.close()
 print(f"Saved {out} ({out.stat().st_size:,} bytes)")
-print(f"  {n_assoc} associations -> {n_novel} framework-novel -> {n_elig} "
-      f"eligible -> {n_surv} survive in {n_ctx} diseases")
+print(f"  {n_assoc} associations -> {n_novel} with no prior proposal -> "
+      f"{n_elig} eligible -> {n_surv} supported in {n_ctx} diseases")
 for _, r in sel.iterrows():
-    print(f"    row {int(r['N']):<3} {'SURVIVES' if r['survives'] else 'excluded':<9} "
+    print(f"    row {int(r['N']):<3} {'SUPPORTED' if r['survives'] else 'excluded':<10} "
           f"{r['failed_criteria'][:60]}")

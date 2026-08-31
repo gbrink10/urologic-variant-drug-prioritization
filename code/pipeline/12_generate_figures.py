@@ -77,7 +77,7 @@ def generate_figure1():
             'KIRC  n = 512   (ccRCC)',
             ha='center', va='center', fontsize=8.0, color='#0b2e4f',
             family='monospace')
-    ax.text(2.925, 5.78, '→ frozen set rows 1–16',
+    ax.text(2.925, 5.78, '→ associations 1–16',
             ha='center', va='center', fontsize=8.0, weight='bold',
             color='#0b2e4f')
 
@@ -95,7 +95,7 @@ def generate_figure1():
             'Sarc-UC: Guo 2019         SCBC: Chang 2018',
             ha='center', va='center', fontsize=7.7, color='#1d4d33',
             family='monospace')
-    ax.text(8.075, 5.78, '→ frozen set rows 17–30',
+    ax.text(8.075, 5.78, '→ associations 17–30',
             ha='center', va='center', fontsize=8.0, weight='bold',
             color='#1d4d33')
 
@@ -152,13 +152,13 @@ def generate_figure1():
                                  boxstyle='round,pad=0.05',
                                  ec='#7a4a00', fc='#fef5e7', linewidth=1.5))
     ax.text(5.50, 0.74,
-            'Frozen 30-Association Set, Re-Audited Under the Final Models',
-            ha='center', va='center', fontsize=10.2, weight='bold',
+            '30 Drug–Cancer Associations',
+            ha='center', va='center', fontsize=10.5, weight='bold',
             color='#7a4a00')
     ax.text(2.20, 0.40, '18  previously proposed',
             ha='center', va='center', fontsize=8.5, weight='bold',
             color='#0b2e4f')
-    ax.text(2.20, 0.20, '(convergent literature support)',
+    ax.text(2.20, 0.20, '(positive control)',
             ha='center', va='center', fontsize=7.3, style='italic',
             color='#0b2e4f')
     ax.text(4.85, 0.40, '6  no prior proposal found',
@@ -173,14 +173,14 @@ def generate_figure1():
     ax.text(7.30, 0.20, '(variant-specific extensions)',
             ha='center', va='center', fontsize=7.3, style='italic',
             color='#6c3483')
-    ax.text(9.50, 0.40, '1  target-loss marker',
+    ax.text(9.50, 0.40, '1  biomarker observation',
             ha='center', va='center', fontsize=8.5, weight='bold',
             color='#1d4d33')
-    ax.text(9.50, 0.20, '(TROP2-low, descriptive only)',
+    ax.text(9.50, 0.20, '(TROP2-low, not a drug hypothesis)',
             ha='center', va='center', fontsize=7.3, style='italic',
             color='#1d4d33')
 
-    # ---- Step 7: orthogonal validation of the framework-novel candidates ----
+    # ---- Step 7: independent evidence for the no-prior-proposal column ----
     # Only the framework-novel column is carried forward, so the arrow leaves
     # from beneath that column rather than from the centre of the table box.
     ax.annotate('', xy=(4.85, -0.36), xytext=(4.85, 0.05),
@@ -188,14 +188,14 @@ def generate_figure1():
     ax.text(5.05, -0.16, '6 with no prior urologic-oncology proposal found',
             ha='left', va='center', fontsize=7.4, style='italic',
             color='#c00000')
-    ax.text(5.05, -0.27, '3 eligible \u2192 3 survive, in 2 diseases',
+    ax.text(5.05, -0.27, '3 supported by the independent sources, in 2 diseases',
             ha='left', va='center', fontsize=7.0, style='italic', color='#7d6608')
 
     ax.add_patch(FancyBboxPatch((1.20, -1.31), 8.60, 0.93,
                                  boxstyle='round,pad=0.04',
                                  ec='#1e8449', fc='#d4efdf', linewidth=1.1))
     ax.text(5.50, -0.62,
-            'Step 7 — orthogonal evidence audit; no layer contributed to the score',
+            'Step 7 — independent evidence check; no source contributed to the score',
             ha='center', va='center', fontsize=9.3, weight='bold',
             color='#1a1a1a')
     ax.text(5.50, -0.90,
@@ -213,14 +213,14 @@ def generate_figure1():
     ax.add_patch(FancyBboxPatch((0.55, -2.42), 9.90, 0.94,
                                  boxstyle='round,pad=0.05',
                                  ec='#1a1a1a', fc='#1e8449', linewidth=1.4))
-    ax.text(5.50, -1.72, '3 surviving hypotheses across 2 diseases',
+    ax.text(5.50, -1.72, '3 supported hypotheses in 2 diseases',
             ha='center', va='center', fontsize=10.5, weight='bold',
             color='white')
     ax.text(5.50, -2.02,
             'renal medullary carcinoma: CXCR1/CXCR2 blockade, then anti-CEACAM1   '
             '\u00b7   ASCL1+ small-cell bladder: anti-CEACAM5\n'
-            'ranked within a disease, not across diseases; layers unable to test a '
-            'mechanism are not support',
+            'ranked within a disease, not across diseases; a source that cannot test a '
+            'mechanism is not support',
             ha='center', va='center', fontsize=7.0, style='italic',
             color='#eafaf1')
 

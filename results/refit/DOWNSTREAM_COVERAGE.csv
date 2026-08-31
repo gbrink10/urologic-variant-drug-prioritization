@@ -26,6 +26,6 @@ N,gene,framework_novel,survives,in_HPA,in_DepMap
 25,UHRF1,False,False,True,False
 26,G6PD,False,False,True,True
 27,TACSTD2,False,False,True,True
-28,CEACAM5,True,False,True,True
+28,CEACAM5,True,True,True,True
 29,SSTR2,True,False,True,True
 30,PTGS1,False,False,True,True

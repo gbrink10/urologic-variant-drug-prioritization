@@ -15,16 +15,16 @@ N,Context,Target,scoring_gene,refit_context,arm,gene_in_target,context_valid,arm
 14,ccRCC / sRCC,VEGFR multikinase,KDR,ccRCC_METS,expression,True,True,True,True,True,,-
 15,ccRCC / sRCC,HIF2α / EPAS1,EPAS1,ccRCC_METS,expression,True,True,True,True,True,,-
 16,ccRCC,CDK4/6,CDK4,ccRCC_METS,expression,True,True,True,True,True,E=2: CDK4 91.8th pct (top 8.2%) -> top-15% bin,-
-17,RMC,CXCR1 / CXCR2 (IL-8/CXCL1/CXCL2 triad),CXCL8,RMC,de,True,True,True,True,True,,-
+17,RMC,CXCR1 / CXCR2 (CXCL8/CXCL1/CXCL2/CXCL3 chemokine axis),CXCL8,RMC,de,True,True,True,True,True,,-
 18,RMC,EGFR (HBEGF ligand),HBEGF,RMC,de,True,True,True,True,True,E=3: |log2FC|>=1 with q<0.05 in the deposited DE table (verified by 14_audit_geo_score_com,-
 19,RMC,CEACAM1,CEACAM1,RMC,de,True,True,True,True,True,E=3: |log2FC|>=1 with q<0.05 in the deposited DE table (verified by 14_audit_geo_score_com,-
 20,Penile SCC,PD-1 / PD-L1 (HLA-DRA / CXCL10 immune-hot phenotype),HLA-DRA,PSCC,de,True,True,True,True,True,,-
 21,Penile SCC,MMP1 / MMP9,MMP1,PSCC,de,True,True,True,True,True,,-
 22,Penile SCC,POSTN / TGFβ axis,POSTN,PSCC,de,True,True,True,True,True,,-
-23,Sarcomatoid UC,NSD2 / WHSC1 (histone methyltransferase),NSD2,SarcUC,de,True,True,True,True,True,E=3: |log2FC|>=1 with q<0.05 in the deposited DE table (verified by 14_audit_geo_score_com,-
-24,Sarcomatoid UC,ATR / ATRIP (DNA damage response),ATR,SarcUC,de,True,True,True,True,True,E=3: |log2FC|>=1 with q<0.05 in the deposited DE table (verified by 14_audit_geo_score_com,-
-25,Sarcomatoid UC,UHRF1 (epigenetic reader),UHRF1,SarcUC,de,True,True,True,True,True,E=3: |log2FC|>=1 with q<0.05 in the deposited DE table (verified by 14_audit_geo_score_com,-
-26,Sarcomatoid UC,G6PD (pentose phosphate),G6PD,SarcUC,de,True,True,True,True,True,E=3: |log2FC|>=1 with q<0.05 in the deposited DE table (verified by 14_audit_geo_score_com,-
+23,Sarcomatoid UC,NSD2 / WHSC1 (histone methyltransferase),NSD2,SarcUC,expression,True,True,False,True,False,E=3: |log2FC|>=1 with q<0.05 in the deposited DE table (verified by 14_audit_geo_score_com,"arm ""expression"" but disease contrast available = True; arm disagrees with the v26 rationale"
+24,Sarcomatoid UC,ATR / ATRIP (DNA damage response),ATR,SarcUC,expression,True,True,False,True,False,E=3: |log2FC|>=1 with q<0.05 in the deposited DE table (verified by 14_audit_geo_score_com,"arm ""expression"" but disease contrast available = True; arm disagrees with the v26 rationale"
+25,Sarcomatoid UC,UHRF1 (epigenetic reader),UHRF1,SarcUC,expression,True,True,False,True,False,E=3: |log2FC|>=1 with q<0.05 in the deposited DE table (verified by 14_audit_geo_score_com,"arm ""expression"" but disease contrast available = True; arm disagrees with the v26 rationale"
+26,Sarcomatoid UC,G6PD (pentose phosphate),G6PD,SarcUC,expression,True,True,False,True,False,E=3: |log2FC|>=1 with q<0.05 in the deposited DE table (verified by 14_audit_geo_score_com,"arm ""expression"" but disease contrast available = True; arm disagrees with the v26 rationale"
 27,Sarcomatoid UC,TROP2 (TACSTD2 DOWNREGULATED),TACSTD2,SarcUC,de,True,True,True,True,True,,-
 28,SCBC (ASCL1+),CEACAM5 (CEA),CEACAM5,SCBC_ASCL1,de,True,True,True,True,True,,-
 29,SCBC (NEUROD1+),SSTR2 (somatostatin receptor 2),SSTR2,SCBC_NEUROD1,de,True,True,True,True,True,E=3: |log2FC|>=1 with q<0.05 in the deposited DE table (verified by 14_audit_geo_score_com,-

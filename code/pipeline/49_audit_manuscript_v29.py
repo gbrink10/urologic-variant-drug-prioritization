@@ -64,8 +64,11 @@ check('title alludes to no result',
 check('"reproducible" no longer claimed in the title', 'reproducible' not in title.lower())
 check('no "orthogonal validation" phrasing survives',
       'orthogonal validation' not in text.lower())
+# every mention of a validated finding must be a denial that this is one,
+# whether the sentence is singular or plural
+_vf = re.findall(r'(?:not (?:a )?)?validated finding', text.lower())
 check('"validated finding" only used to disclaim',
-      text.lower().count('validated finding') == text.lower().count('not a validated finding'))
+      all(v.startswith('not') for v in _vf), str(_vf))
 check('TROP2 framed as an observation, not a biomarker claim',
       'not as a predictive biomarker' in text
       and 'negative predictive biomarker' not in text)
@@ -212,12 +215,14 @@ check('within-disease priority named, not a global lead',
       'first priority within RMC' in text
       or 'the one to carry forward first' in text)
 check('no cross-disease ranking claimed',
-      'not ranked against one another across diseases' in text)
+      ('within a disease but not between diseases' in text
+       or 'not ranked against one another across diseases' in text)
+      and 'we do not rank the renal medullary and' in text.lower())
 check('three survivors across two diseases stated',
       'across 2 diseases' in text or 'across two diseases' in text
       or f"{F['n_survivor_contexts']} diseases" in text)
-check('lead hedged as hypothesis not finding',
-      'not a validated finding' in text)
+check('candidates hedged as hypotheses, not findings',
+      'not validated findings' in text or 'not a validated finding' in text)
 
 check('Zenodo concept DOI cited', '10.5281/zenodo.20217918' in text)
 check('no stale v1.0.0 version DOI cited', '10.5281/zenodo.20217919' not in text)

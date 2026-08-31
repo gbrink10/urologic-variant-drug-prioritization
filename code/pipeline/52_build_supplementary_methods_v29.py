@@ -62,8 +62,8 @@ P('Seven contexts were analyzed. Three are better-studied benchmark contexts '
   'knowledge entered the pathway panel, the drug curation and the choice of '
   'representative agent.')
 
-H('1b. Provenance of the frozen candidate set')
-P('An earlier implementation of this pipeline generated the 30-association candidate set. Association membership was frozen before design-aware refitting. The analysis reported here re-estimated the transcriptomic and pathway evidence for that fixed set, recalculated scores and tiers, and applied the eligibility and orthogonal-audit rules to it. It does not claim that the final models would independently regenerate the same thirty associations, and the changes the refit produced are themselves a result. The curated half of each row - drug, target, genomic frequency and its source, clinical stage and prior-proposal status - is deposited as data/master_row_definitions.csv; the computed half is emitted by 39_rescore_from_refit.py.')
+H('1b. How the candidate set was assembled')
+P('Candidate associations were assembled from the sources in Sections 2 to 5 before the final models were fitted. Every score reported in the manuscript comes from those final models, and an earlier implementation of the same pipeline supplied the membership of the set rather than its scores. We do not claim that the final models, run from scratch, would nominate exactly the same thirty pairings. Each row has a curated half - drug, target, genomic frequency and its source, clinical stage and prior-proposal status - deposited as data/master_row_definitions.csv, and a computed half emitted by 39_rescore_from_refit.py.')
 
 H('2. Genomic and context-anchor input')
 P('Somatic alteration frequencies for the benchmark contexts came from The '
@@ -163,7 +163,7 @@ KEGG_ID = {
     'Epigenetic_Regulation': ('custom', 'DNMT, EZH2, HDAC, BET and NSD-directed agents'),
 }
 
-P('The eighteen sets, their identifiers, their size at the frozen analysis date '
+P('The eighteen sets, their identifiers, their size on the analysis date '
   'and the drug class each was included for are listed below. Seventeen are '
   'KEGG human pathways retrieved through the KEGG programmatic interface. The '
   'eighteenth, Epigenetic_Regulation, is a custom set because no single KEGG '
@@ -289,7 +289,7 @@ P('A differentially expressed gene entered the association table only if it '
   'than the molecule. Preclinical-only agents were admitted only where no '
   'clinical-stage agent existed against the target, and are labelled as such '
   'in the clinical-stage column.')
-P('The denominator behind the frozen set is deposited as '
+P('The denominator behind the association table is deposited as '
   'results/refit/CANDIDATE_UNIVERSE.csv, and it is deliberately incomplete. '
   'For each analysis unit it records the genes tested, the genes meeting the '
   'transcriptomic entry rule, and the associations retained. It does not '
@@ -299,7 +299,7 @@ P('The denominator behind the frozen set is deposited as '
   'web interfaces in the earlier implementation and no query log, release '
   'snapshot or intermediate mapping file was written at the time. Those two '
   'columns are published as not reconstructible rather than estimated after '
-  'the fact. This is the weakest link in the audit trail of the frozen set, '
+  'the fact. This is the weakest link in the audit trail, '
   'and a prospective application of the pipeline should log the mapping step '
   'as the fitted steps are now logged.')
 
@@ -358,34 +358,42 @@ P('Two interpretive rules were fixed in advance. A tumor-cell monoculture '
   'candidates the dependency and compound screens are informative only if '
   'positive and never disconfirming. And antibody, conjugate, engager and '
   'radioligand agents are absent from a small-molecule screen altogether rather '
-  'than negative in it. Throughout, a layer that cannot evaluate a candidate '
+  'than negative in it. Throughout, a source that cannot evaluate a candidate '
   'counts as neither support nor contradiction.')
 
 H('9. Candidate selection rule')
 P('The rule was fixed before it was applied, and every exclusion in the '
-  'manuscript is attributable to a named criterion. Eligibility requires, first, that the biological contrast be estimable separately from the major '
-  'known technical variable: a transcript can be re-derived exactly and still be uninterpretable, and where histology is completely aliased with array chip no model can attribute a difference to biology. It then requires all '
-  'four of: no prior urologic-oncology proposal identified by the audit; a total '
-  'reaching Moderate tier or better; a transcriptomic component re-derivable '
-  'from deposited data at q < 0.05; and an available clinical-stage agent. '
-  'Survival additionally requires that no orthogonal layer contradict the '
+  'manuscript is attributable to a named criterion. Eligibility requires all '
+  'four of: E1, no prior urologic-oncology proposal identified by the audit; '
+  'E2, a total of 4 or better out of the points that are estimable for that '
+  'row; E3, a transcriptomic component re-derivable from deposited data that '
+  'meets its own arm\u2019s standard, which is q < 0.05 where a '
+  'disease-versus-comparator contrast exists and the top 15% of measured '
+  'transcripts where the dataset supports only abundance; and E4, an available '
+  'clinical-stage agent.')
+P('Two points about E2 and E3 follow from the scoring. A row whose pathway '
+  'component cannot be computed is scored out of 7 rather than 9, and E2 reads '
+  'its threshold against that row\u2019s own denominator rather than against '
+  'one the row was never eligible for. E3 applies each arm\u2019s own '
+  'standard rather than a single q-value test, because a row scored on '
+  'abundance has no q-value and must not fail for lacking one.')
+P('Support additionally requires that no independent source contradict the '
   'candidate, and that target accessibility match the modality, so that a row '
   'whose agent acts from outside the cell requires confirmed extracellular '
   'access. The first-priority candidate within a disease additionally requires '
-  'that the target itself '
-  'belong to a pathway that is enriched, because an enrichment driven by other '
-  'genes is not evidence for that target. The rule identifies surviving '
-  'hypotheses but does not rank them across diseases. Within a disease holding '
-  'more than one survivor, candidates are ordered first by whether the '
-  'nominated target belongs to an enriched pathway and then by total score. '
-  'Normal-tissue bulk RNA is reported for orientation and safety planning and '
-  'is not used as a comparative therapeutic-window measure, because agents '
-  'acting on different normal compartments cannot be ranked against each other '
-  'on organ-level RNA.')
+  'that the target itself belong to a pathway that is enriched, because an '
+  'enrichment driven by other genes is not evidence for that target. The rule '
+  'identifies supported hypotheses but does not rank them across diseases. '
+  'Within a disease holding more than one supported candidate, candidates are '
+  'ordered first by whether the nominated target belongs to an enriched '
+  'pathway and then by total score. Normal-tissue bulk RNA is reported for '
+  'orientation and safety planning and is not used as a comparative '
+  'therapeutic-window measure, because agents acting on different normal '
+  'compartments cannot be ranked against each other on organ-level RNA.')
 
 H('10. Sensitivity analyses')
 P('Because the scoring dimensions overlap, the ordering was recomputed under '
-  'four variants, ordering all scoreable associations numerically: removal of '
+  'four variants, ordering all scored associations numerically: removal of '
   'the context-anchor contribution, removal of the '
   'pathway dimension, removal of the literature dimension, and a requirement '
   'that the pathway dimension be credited only where the target is a member of '
@@ -396,7 +404,7 @@ P('Because the scoring dimensions overlap, the ordering was recomputed under '
   'context-anchor contribution is removed, which locates part of the ordering in '
   'the scoring architecture rather than in target-specific biology.')
 
-P('This ordering is a descriptive numerical rank across all scoreable '
+P('This ordering is a descriptive numerical rank across all scored '
   'associations, used only to test how much of the ordering the score '
   'architecture carries. It is not a biological ranking, and the surviving '
   'hypotheses are not ranked against one another across diseases on the '

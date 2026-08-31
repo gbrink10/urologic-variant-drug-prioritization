@@ -98,8 +98,9 @@ axA.axvline(0, lw=0.7, c='#bbb')
 axA.axhline(-np.log10(0.05), ls='--', lw=0.8, c='#888')
 axA.set_xlabel('log$_2$ fold change (sarcomatoid vs conventional)', fontsize=8.4)
 axA.set_ylabel('$-$log$_{10}$ q', fontsize=8.6)
-axA.set_title('A. Descriptive chip-aligned group separation\n'
-              'differences cannot be attributed to histology', fontsize=9.5,
+axA.set_title('A. Chip-aligned group separation\n'
+              'not interpretable as histology; shown for completeness',
+              fontsize=9.5,
               weight='bold', loc='left')
 axA.legend(fontsize=7.0, frameon=False, loc='upper left')
 for s_ in ('top', 'right'):
@@ -123,14 +124,14 @@ axB.axvline(-np.log10(0.05), ls='--', lw=0.8, c='#888')
 axB.set_xlabel('$-$log$_{10}$ nominal p', fontsize=8.4)
 axB.set_xlim(0, float(vals.max()) * 1.32)
 axB.set_title('B. Pathway values from the confounded comparison\n'
-              'not attributable to histology; shown for completeness only',
+              'not estimable for histology; no pathway component is scored',
               fontsize=9.5, weight='bold', loc='left')
 for s_ in ('top', 'right'):
     axB.spines[s_].set_visible(False)
 
 axs = fig.add_subplot(gs[0, 2])
 panel_c(axs, 'PanelC_SarcUC.png',
-        'C. Descriptive signals requiring independent replication')
+        'C. Targets scored on abundance within sarcomatoid tumors')
 axs.text(0.50, 0.02, 'Descriptive only: histology completely aliased with '
          'array chip', transform=axs.transAxes, ha='center', fontsize=8.0,
          weight='bold', color='#c0392b',
