@@ -1,0 +1,31 @@
+N,Context,Target,scoring_gene,refit_context,arm,gene_in_target,context_valid,arm_valid,gene_measured,agrees_with_v26,v26_rationale,review
+1,NEPC,BCL2,BCL2,NEPC_DECITABINE,expression,True,True,True,True,True,"E=2: BCL2 34.28 TPM, 88.6th pct (top 11.4%) -> top-15% bin",-
+2,NEPC,AURKA / CXCR7→AURKA axis,AURKA,NEPC_DECITABINE,expression,True,True,True,True,True,"E=2: DE arm fails (FC=-1.17, p=0.10, and negative direction); AURKA 61.0 TPM at 93.2nd pct",-
+3,NEPC,EZH2,EZH2,NEPC_DECITABINE,expression,True,True,True,True,True,,-
+4,NEPC,DNMT1/3A,DNMT1,NEPC_DECITABINE,expression,True,True,True,True,True,,-
+5,NEPC,TP53-mutated platinum-sensitive,TP53,NEPC_DECITABINE,expression,True,True,True,True,True,,-
+6,NEPC,PARP1/2 (HRR-mutated subset),PARP1,NEPC_DECITABINE,expression,True,True,True,True,True,"E=3: PARP1 267.2 TPM, 98.8th pct (top 1.2%) -> top-5% bin",-
+7,MIBC / MPBC,AURKA / AURKB,AURKA,MIBC_KINOME,de,True,True,True,True,True,,-
+8,MIBC / MPBC,PARP (ERCC2/ATM/BRCA-mutated),ATM,MIBC_KINOME,expression,True,True,True,False,False,"E=2: ATR FC=+0.55 p=0.038 (GSE130598), 0.5<=|log2FC|<1 significant",gene not measured on that platform; arm disagrees with the v26 rationale; v26 rationale names ATR
+9,MIBC / MPBC,PIK3CA (mutant),PIK3CA,MIBC_KINOME,curated,True,True,True,False,True,,gene not measured on that platform
+10,MIBC / MPBC,FGFR2 / FGFR3,FGFR3,MIBC_KINOME,de,True,True,True,True,True,"E=3: FGFR3 FC=+1.63 p=0.016 q=0.045 (GSE130598), |log2FC|>=1 significant",-
+11,MIBC / MPBC,NECTIN-4,NECTIN4,MIBC_KINOME,curated,True,True,True,False,True,,gene not measured on that platform
+12,MIBC / MPBC,PD-1 / TMB-high,CD274,MIBC_KINOME,curated,True,True,True,False,True,,gene not measured on that platform
+13,MIBC / MPBC,CDK4/6 (CDKN2A-deleted),CDK4,MIBC_KINOME,de,True,True,True,True,True,,-
+14,ccRCC / sRCC,VEGFR multikinase,KDR,ccRCC_METS,expression,True,True,True,True,True,,-
+15,ccRCC / sRCC,HIF2α / EPAS1,EPAS1,ccRCC_METS,expression,True,True,True,True,True,,-
+16,ccRCC,CDK4/6,CDK4,ccRCC_METS,expression,True,True,True,True,True,E=2: CDK4 91.8th pct (top 8.2%) -> top-15% bin,-
+17,RMC,CXCR1 / CXCR2 (IL-8/CXCL1/CXCL2 triad),CXCL8,RMC,de,True,True,True,True,True,,-
+18,RMC,EGFR (HBEGF ligand),HBEGF,RMC,de,True,True,True,True,True,E=3: |log2FC|>=1 with q<0.05 in the deposited DE table (verified by 14_audit_geo_score_com,-
+19,RMC,CEACAM1,CEACAM1,RMC,de,True,True,True,True,True,E=3: |log2FC|>=1 with q<0.05 in the deposited DE table (verified by 14_audit_geo_score_com,-
+20,Penile SCC,PD-1 / PD-L1 (HLA-DRA / CXCL10 immune-hot phenotype),HLA-DRA,PSCC,de,True,True,True,True,True,,-
+21,Penile SCC,MMP1 / MMP9,MMP1,PSCC,de,True,True,True,True,True,,-
+22,Penile SCC,POSTN / TGFβ axis,POSTN,PSCC,de,True,True,True,True,True,,-
+23,Sarcomatoid UC,NSD2 / WHSC1 (histone methyltransferase),NSD2,SarcUC,de,True,True,True,True,True,E=3: |log2FC|>=1 with q<0.05 in the deposited DE table (verified by 14_audit_geo_score_com,-
+24,Sarcomatoid UC,ATR / ATRIP (DNA damage response),ATR,SarcUC,de,True,True,True,True,True,E=3: |log2FC|>=1 with q<0.05 in the deposited DE table (verified by 14_audit_geo_score_com,-
+25,Sarcomatoid UC,UHRF1 (epigenetic reader),UHRF1,SarcUC,de,True,True,True,True,True,E=3: |log2FC|>=1 with q<0.05 in the deposited DE table (verified by 14_audit_geo_score_com,-
+26,Sarcomatoid UC,G6PD (pentose phosphate),G6PD,SarcUC,de,True,True,True,True,True,E=3: |log2FC|>=1 with q<0.05 in the deposited DE table (verified by 14_audit_geo_score_com,-
+27,Sarcomatoid UC,TROP2 (TACSTD2 DOWNREGULATED),TACSTD2,SarcUC,de,True,True,True,True,True,,-
+28,SCBC (ASCL1+),CEACAM5 (CEA),CEACAM5,SCBC_ASCL1,de,True,True,True,True,True,,-
+29,SCBC (NEUROD1+),SSTR2 (somatostatin receptor 2),SSTR2,SCBC_NEUROD1,de,True,True,True,True,True,E=3: |log2FC|>=1 with q<0.05 in the deposited DE table (verified by 14_audit_geo_score_com,-
+30,SCBC (POU2F3+),COX-1 / PTGS1,PTGS1,SCBC_POU2F3,de,True,True,True,True,True,,-

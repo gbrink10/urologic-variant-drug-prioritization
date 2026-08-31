@@ -99,12 +99,31 @@ def de_table(ctx):
 _expr_cache = {}
 
 
+# on a perturbation series the baseline arm is the only untreated reference;
+# averaging across treated samples would depress exactly the genes the
+# experiment was designed to perturb
+BASELINE = {'NEPC_DECITABINE': 'control', 'NEPC_DNMT': 'WT', 'NEPC_CXCR7': 'LKO'}
+
+
 def expr_percentile(ctx, gene):
-    """Rank of a gene's mean expression within its own dataset."""
+    """Rank of a gene's mean expression within its own dataset.
+
+    Where the series is a perturbation experiment, only the baseline samples are
+    used, so a target is never ranked on expression that the experiment itself
+    suppressed.
+    """
     if ctx not in _expr_cache:
         e = pd.read_csv(PREP / f'{ctx}_expr.csv', index_col=0)
         idx = lib_symbols.to_symbols(e.index).values
         e = e.groupby(idx).max()
+        if ctx in BASELINE:
+            meta = pd.read_csv(PREP / f'{ctx}_meta.csv')
+            col = next((c for c in ('treatment', 'genotype') if c in meta), None)
+            if col is not None:
+                keep = meta.loc[meta[col].astype(str) == BASELINE[ctx], 'sample']
+                cols = [c for c in e.columns if c in set(keep)]
+                if cols:
+                    e = e[cols]
         _expr_cache[ctx] = e.mean(axis=1)
     means = _expr_cache[ctx]
     if gene not in means.index:
@@ -115,6 +134,8 @@ def expr_percentile(ctx, gene):
 
 def score_e(row):
     ctx, gene, arm = row['refit_context'], row['scoring_gene'], row['scoring_arm']
+    if arm == 'curated':
+        return None, (f'{gene} is on no deposited platform for {ctx}'), np.nan, np.nan
     if arm == 'de':
         t = de_table(ctx)
         hit = t[t['symbol'] == gene]

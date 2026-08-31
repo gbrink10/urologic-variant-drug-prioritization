@@ -35,22 +35,35 @@ rows = ast.literal_eval(seg.split('=', 1)[1].strip())
 
 # row -> (evidence arm, refit context, gene symbol used for scoring)
 # "de"         a disease-vs-comparator contrast exists in the refit
+# "curated"    the target is on no deposited platform for this context, so no
+#              value can be derived and the curated one is retained, flagged
 # "expression" no such contrast exists, so the row is scored on absolute
 #              expression rank within its own dataset (NEPC perturbation
 #              experiments; the ccRCC series contains no normal tissue)
 SCORING = {
+    # The three NEPC series are perturbation experiments (CXCR7 knockdown,
+    # decitabine treatment, DNMT knockout), not disease-versus-normal contrasts,
+    # so every NEPC row uses the absolute-expression arm. Scoring a target on a
+    # perturbation that acts on that same target is circular: DNMT1 necessarily
+    # falls in a DNMT1 knockout, and AURKA falls when CXCR7 is knocked down,
+    # neither of which is evidence that the target is elevated in disease.
     1:  ('expression', 'NEPC_DECITABINE', 'BCL2'),
-    2:  ('de',         'NEPC_CXCR7',      'AURKA'),
+    2:  ('expression', 'NEPC_DECITABINE', 'AURKA'),
     3:  ('expression', 'NEPC_DECITABINE', 'EZH2'),
-    4:  ('de',         'NEPC_DNMT',       'DNMT1'),
+    4:  ('expression', 'NEPC_DECITABINE', 'DNMT1'),
     5:  ('expression', 'NEPC_DECITABINE', 'TP53'),
     6:  ('expression', 'NEPC_DECITABINE', 'PARP1'),
     7:  ('de',         'MIBC_KINOME',     'AURKA'),
+    # ATM is present on the kinome panel but is removed by the expression
+    # filter before fitting, so no differential estimate exists for it and
+    # the absolute-expression arm applies.
     8:  ('expression', 'MIBC_KINOME',     'ATM'),
-    9:  ('de',         'MIBC_KINOME',     'PIK3CA'),
+    # Not represented on any deposited platform for this context; these rows
+    # keep a curated value and are flagged as not re-derivable.
+    9:  ('curated',    'MIBC_KINOME',     'PIK3CA'),
     10: ('de',         'MIBC_KINOME',     'FGFR3'),
-    11: ('expression', 'MIBC_KINOME',     'NECTIN4'),
-    12: ('expression', 'MIBC_KINOME',     'CD274'),
+    11: ('curated',    'MIBC_KINOME',     'NECTIN4'),
+    12: ('curated',    'MIBC_KINOME',     'CD274'),
     13: ('de',         'MIBC_KINOME',     'CDK4'),
     # The ccRCC rows are scored on the ccRCC series, which contains tumours
     # only, so the framework's absolute-expression arm applies. GSE157256 is

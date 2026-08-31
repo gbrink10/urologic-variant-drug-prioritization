@@ -1,6 +1,6 @@
 N,Context,Drug,Target,G(0-3),E(0-3),P(0-2),L(0-1),Total,Tier,Stage,Prior status,Trial readiness
 1,NEPC,Venetoclax,BCL2,3,2,0,1,6/9,Moderate,"FDA-approved (CLL, AML)",Previously proposed (Westaby JCI 2024 [PMID 39286979]),Ready now
-2,NEPC,Alisertib (investigational),AURKA / CXCR7→AURKA axis,1,2,1,1,5/9,Moderate,Investigational (Phase II),Previously proposed (Gritsina JCI 2023 [PMID 37347559]; CXCR7→AURKA axis + in vivo alisertib validation) — framework convergent validation,Ready now
+2,NEPC,Alisertib (investigational),AURKA / CXCR7→AURKA axis,1,2,0,1,4/9,Moderate,Investigational (Phase II),Previously proposed (Gritsina JCI 2023 [PMID 37347559]; CXCR7→AURKA axis + in vivo alisertib validation) — framework convergent validation,Ready now
 3,NEPC,Tazemetostat,EZH2,2,2,1,1,6/9,Moderate,"FDA-approved (epithelioid sarcoma, FL)",Previously proposed (Fei 2024; Saggese 2025 [PMID 39878501]),Ready now
 4,NEPC,Decitabine / azacitidine,DNMT1/3A,2,3,1,1,7/9,Strong,"FDA-approved (MDS, AML)",Previously proposed (Yamada Sci Transl Med 2023 [PMID 37967200]; DNMT-KO + decitabine + B7-H3 ADC) — framework convergent validation,Ready now
 5,NEPC,Cabazitaxel + Carboplatin,TP53-mutated platinum-sensitive,3,2,1,1,7/9,Strong,FDA-approved (mCRPC),Previously proposed (Aparicio 2013; Corn Lancet Oncol 2019 [PMID 31416691]),Ready now (off-label SOC)
