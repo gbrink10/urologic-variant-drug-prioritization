@@ -11,6 +11,7 @@
  },
  "n_framework_novel": 6,
  "n_partially_novel": 5,
+ "n_biomarker_only": 1,
  "n_previously_proposed": 18,
  "per_context": {
   "MIBC / MPBC": 7,

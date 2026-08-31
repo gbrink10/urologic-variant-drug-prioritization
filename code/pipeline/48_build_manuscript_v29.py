@@ -136,21 +136,25 @@ H('CONTEXT', 12)
 P('Key objective: Can publicly deposited genomic and transcriptomic data be '
   'interrogated systematically to identify and prioritize drugs for aggressive '
   'urologic cancers, where clinical trials are difficult to power?')
-P(f"Knowledge generated: We scored {F['n_associations']} drug-cancer associations "
-  f"across seven urologic cancers. {F['n_previously_proposed']} of them recover a drug "
-  f"already proposed by other groups, which is how we checked that the method "
-  f"behaves sensibly. {F['n_framework_novel']} had no prior proposal in the "
-  f"urologic literature. Four independent data sources, none of which "
-  f"contributed to the score, then supported {F['funnel']['survive']} of "
-  f"those {F['n_framework_novel']} and argued against the rest.")
+P(f"Knowledge generated: We scored {F['n_associations']} drug-cancer "
+  f"associations across seven urologic cancers. "
+  f"{F['n_previously_proposed']} of the drugs we identified had already been "
+  f"proposed by other groups, which served as a positive control for the "
+  f"framework. {F['n_partially_novel']} extended a drug "
+  f"proposed for conventional disease, or for another organ, to a variant. One "
+  f"was a biomarker observation rather than a drug hypothesis. The remaining "
+  f"{F['n_framework_novel']} had no prior proposal in the urologic literature. "
+  f"We then used four independent data sources, none of which had contributed "
+  f"to the score, and they supported {F['funnel']['survive']} of those "
+  f"{F['n_framework_novel']} and argued against the rest.")
 
 H('ABSTRACT', 12)
 P(f"Purpose. Rare and variant urologic cancers are difficult to study in "
   f"randomized trials, so few have biomarker-directed treatment options. We "
   f"built a public-data framework that identifies and prioritizes drug targets "
-  f"for seven urologic cancers: three common ones, where the right answers are "
-  f"already known and the method can be checked, and four rare or variant ones, "
-  f"where it is asked to find something.")
+  f"for seven urologic cancers: three common cancers with established "
+  f"priorities, which serve as positive controls, and four rare or variant "
+  f"cancers for which no such reference exists.")
 P(f"Methods. Alteration frequencies, differential expression across ten Gene "
   f"Expression Omnibus datasets, enrichment across eighteen pre-specified "
   f"druggable gene sets and drug-target curation were combined into a 9-point "
@@ -172,14 +176,18 @@ P(f"Results. We scored {F['n_associations']} drug-cancer associations: "
   f"on transcript abundance within the sarcomatoid tumors, which the "
   f"confounding does not reach: four carry a total out of 7 rather than 9, and "
   f"the fifth, a proposed marker of TROP2 loss, is reported without a score "
-  f"because loss can only be shown by the comparison that is confounded. {F['n_previously_proposed']} associations recover a drug already "
-  f"proposed elsewhere for that disease. {F['n_framework_novel']} had no prior "
-  f"proposal in the urologic literature. Of those "
-  f"{F['n_framework_novel']}, {F['funnel']['survive']} were supported by the "
-  f"independent sources and {F['n_framework_novel'] - F['funnel']['survive']} "
-  f"were not: one target is not a dependency in CRISPR screens, one is not "
-  f"abundantly expressed in the disease, and one lost its transcriptomic "
-  f"support when the data were modeled correctly.")
+  f"because loss can only be shown by the comparison that is confounded. Of the "
+  f"{F['n_associations']} associations, {F['n_previously_proposed']} recover a "
+  f"drug already proposed elsewhere for that disease, "
+  f"{F['n_partially_novel']} extend a drug from conventional disease or "
+  f"another organ to a variant, one is the TROP2 biomarker observation, and "
+  f"{F['n_framework_novel']} had no prior proposal in the urologic literature. "
+  f"Of those {F['n_framework_novel']}, {F['funnel']['survive']} were supported "
+  f"by the independent sources and "
+  f"{F['n_framework_novel'] - F['funnel']['survive']} were not: one target is "
+  f"not a dependency in CRISPR screens, one is not abundantly expressed in the "
+  f"disease, and one lost its transcriptomic support when the data were "
+  f"modeled correctly.")
 P(f"Conclusion. Public data can be used to prioritize drug hypotheses for "
   f"cancers that will never have a randomized trial, provided the method is "
   f"explicit about what it cannot show. {F['funnel']['survive']} hypotheses "
@@ -634,10 +642,10 @@ P(f"Three design features of the deposited data bound what can be concluded, "
 P('The recovery of eighteen previously-proposed priorities is calibration, not '
   'independent validation: prior knowledge entered the pathway panel, the drug '
   'curation, the literature dimension and the choice of representative agent, so '
-  'the framework and the literature are not independent. It shows '
-  'that a pipeline blind to the prior-proposal classifications '
-  'during scoring behaves sensibly where the answer is known. That is '
-  'face-valid calibration, not a measurement of sensitivity or precision.')
+  'the framework and the literature are not independent. What it establishes '
+  'is that a pipeline blind to the prior-proposal classifications during '
+  'scoring recovers established priorities in well-characterized disease. That '
+  'is a positive control, not a measurement of sensitivity or precision.')
 P(f"The scoring dimensions are partially overlapping, and the composite should "
   f"be read as an ordering device rather than a measurement. The transcriptomic "
   f"and pathway dimensions share an input, and in several rows the genomic "

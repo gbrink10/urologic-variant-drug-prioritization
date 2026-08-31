@@ -53,10 +53,10 @@ P('Brinkley GJ, Greenberg J, Caso J')
 
 H('1. Contexts and their role')
 P('Seven contexts were analyzed. Three are better-studied benchmark contexts '
-  'with abundant prior literature: their purpose is to show what '
-  'the framework does where the answer is already known. Four are rare or '
-  'variant diseases where the framework is asked to prioritize without a '
-  'yardstick. The distinction is not cosmetic: recovery of established '
+  'with abundant prior literature, and serve as positive controls: their '
+  'purpose is to establish what the framework returns for diseases whose '
+  'therapeutic priorities are already documented. Four are rare or variant '
+  'diseases for which no such reference exists. The distinction is not cosmetic: recovery of established '
   'priorities in the benchmark contexts is calibration, and cannot be counted as '
   'independent validation of the output in the discovery contexts, because prior '
   'knowledge entered the pathway panel, the drug curation and the choice of '

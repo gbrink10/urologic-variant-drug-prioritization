@@ -88,6 +88,14 @@ for tier in ('Strong', 'Moderate', 'Exploratory'):
     check(f'{n_t} {tier} stated', f'{n_t} {tier}' in text)
 check('not-tiered rows disclosed',
       'out of 7 rather than 9' in text and 'not estimable' in text)
+# every association must land in exactly one novelty class, and the prose that
+# adds them up must say so, or a reader subtracting them finds rows missing
+_classes = (F['n_previously_proposed'], F['n_partially_novel'],
+            F['n_framework_novel'], F['n_biomarker_only'])
+check('novelty classes sum to the total', sum(_classes) == F['n_associations'],
+      f'{_classes} -> {sum(_classes)} vs {F["n_associations"]}')
+check('every novelty class appears in the prose',
+      all(str(c) in text for c in _classes))
 check('funnel counts stated',
       f"reduce to {F['funnel']['survive']}" in text
       and str(F['funnel']['framework_novel']) in text)

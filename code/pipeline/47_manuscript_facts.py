@@ -61,8 +61,18 @@ F['n_not_scored'] = int(len(master) - len(scoreable))
 F['tiers'] = {k: int(v) for k, v in tiers.items()}
 F['n_framework_novel'] = int(ps.str.startswith('FRAMEWORK-NOVEL').sum())
 F['n_partially_novel'] = int(ps.str.startswith('PARTIALLY NOVEL').sum())
+# Row 27 nominates TROP2 loss as a marker of target availability. It is a
+# previously reported observation but not a drug hypothesis, so it is counted
+# on its own rather than inflating the recovered-drug count.
+F['n_biomarker_only'] = 1
 F['n_previously_proposed'] = int(F['n_associations'] - F['n_framework_novel']
-                                 - F['n_partially_novel'] - 1)
+                                 - F['n_partially_novel']
+                                 - F['n_biomarker_only'])
+# the four classes must exhaust the set, so that no association can go missing
+# from a sentence that adds them up
+assert (F['n_previously_proposed'] + F['n_partially_novel']
+        + F['n_framework_novel'] + F['n_biomarker_only']
+        == F['n_associations']), 'novelty classes do not sum to the total'
 F['per_context'] = defs['Context'].value_counts().to_dict()
 
 # the sarcomatoid rows are scored on abundance within the sarcomatoid samples;
