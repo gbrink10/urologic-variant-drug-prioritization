@@ -72,7 +72,9 @@ for _, d in defs.iterrows():
         continue
     m = master[master['N'] == n].iloc[0]
     p = prov[prov['N'] == n].iloc[0]
-    total = int(str(m['Total']).split('/')[0])
+    raw_total = str(m['Total'])
+    total = (int(raw_total.split('/')[0]) if '/' in raw_total
+             else int(p['Total']))  # unscored rows keep the arithmetic total
     keys = EVIDENCE_KEYS.get(n, {})
 
     e0 = bool(d.get('contrast_identifiable', True))

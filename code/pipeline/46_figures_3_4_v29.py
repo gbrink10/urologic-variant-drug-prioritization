@@ -191,7 +191,8 @@ axB.set_yticklabels([lbl for lbl, _, _ in rows], fontsize=7.8)
 axB.set_xlabel('log$_2$ fold change vs remaining subtypes', fontsize=8.4)
 axB.set_xlim(0, max(fc for _, fc, _ in rows) * 1.35)
 axB.set_title('B. Nominated target per subtype\n'
-              'green q<0.05; red not supported by this cohort',
+              'green q<0.05; red not supported by this cohort. COX-1 direction '
+              'unresolved',
               fontsize=9.5, weight='bold', loc='left')
 for s_ in ('top', 'right'):
     axB.spines[s_].set_visible(False)

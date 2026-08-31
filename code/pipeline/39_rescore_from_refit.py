@@ -194,6 +194,11 @@ def score_p(row):
 
 out, prov = [], []
 for _, r in defs.iterrows():
+    # A contrast that cannot be separated from batch yields numbers that are
+    # arithmetically correct and scientifically uninterpretable. Such rows are
+    # reported descriptively and are given no score or tier, rather than being
+    # scored and then explained away.
+    identifiable = bool(r.get('contrast_identifiable', True))
     e, e_basis, fc, q = score_e(r)
     # a target absent from its dataset's platform cannot be scored from data;
     # the row keeps its curated value and is flagged as not re-derivable
@@ -206,9 +211,14 @@ for _, r in defs.iterrows():
     total = g + e + p + l
     tier = ('Strong' if total >= 7 else 'Moderate' if total >= 4
             else 'Exploratory' if total >= 1 else 'None')
+    if not identifiable:
+        e_disp = p_disp = total_disp = 'not estimable'
+        tier = 'Not scored (confounded cohort)'
+    else:
+        e_disp, p_disp, total_disp = e, p, f'{total}/9'
     out.append({'N': r['N'], 'Context': r['Context'], 'Drug': r['Drug'],
-                'Target': r['Target'], 'G(0-3)': g, 'E(0-3)': e, 'P(0-2)': p,
-                'L(0-1)': l, 'Total': f'{total}/9', 'Tier': tier,
+                'Target': r['Target'], 'G(0-3)': g, 'E(0-3)': e_disp,
+                'P(0-2)': p_disp, 'L(0-1)': l, 'Total': total_disp, 'Tier': tier,
                 'Stage': r['Stage'], 'Prior status': r['Prior status'],
                 'Trial readiness': r['Trial readiness']})
     prov.append({'N': r['N'], 'Context': r['Context'], 'Target': r['Target'],
@@ -219,7 +229,8 @@ for _, r in defs.iterrows():
                  'E_basis': e_basis, 'refit_log2FC': fc, 'refit_q': q,
                  'P_refit': p, 'P_published': r['published_P'],
                  'P_basis': p_basis, 'pathway_q': pq,
-                 'G_curated': g, 'L_curated': l, 'Total': total, 'Tier': tier})
+                 'G_curated': g, 'L_curated': l, 'Total': total, 'Tier': tier,
+                 'scoreable': identifiable})
 
 mt = pd.DataFrame(out)
 pv = pd.DataFrame(prov)

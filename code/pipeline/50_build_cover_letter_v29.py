@@ -5,7 +5,7 @@ that "every score component is machine-checkable" while conceding that 13 of 30
 were not, and described findings that the refit has since dissolved. It is
 rebuilt here rather than patched.
 
-Writes: Downloads/Cover_Letter_v30.docx
+Writes: Downloads/Cover_Letter_v31.docx
 """
 import json
 import sys
@@ -19,7 +19,7 @@ from docx.shared import Pt
 sys.stdout.reconfigure(encoding='utf-8')
 REPO = Path(__file__).resolve().parents[2]
 RF = REPO / 'results' / 'refit'
-OUT = paths.OUTPUT / 'Cover_Letter_v30.docx'
+OUT = paths.OUTPUT / 'Cover_Letter_v31.docx'
 F = json.loads((RF / 'MANUSCRIPT_FACTS.json').read_text(encoding='utf-8'))
 
 TITLE = ('An Auditable Public-Data Framework for Prioritizing Biomarker-Matched '

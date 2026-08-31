@@ -50,9 +50,13 @@ def de_of(n):
 
 
 # ---- counts --------------------------------------------------------------
-tiers = master['Tier'].value_counts().to_dict()
+NOT_SCORED = 'Not scored (confounded cohort)'
+scoreable = master[master['Tier'] != NOT_SCORED]
+tiers = scoreable['Tier'].value_counts().to_dict()
 ps = defs['Prior status'].astype(str)
 F['n_associations'] = int(len(master))
+F['n_scoreable'] = int(len(scoreable))
+F['n_not_scored'] = int(len(master) - len(scoreable))
 F['tiers'] = {k: int(v) for k, v in tiers.items()}
 F['n_framework_novel'] = int(ps.str.startswith('FRAMEWORK-NOVEL').sum())
 F['n_partially_novel'] = int(ps.str.startswith('PARTIALLY NOVEL').sum())

@@ -50,7 +50,7 @@ NAMES = {
 }
 COLS = ['Contrast\nidentifiable', 'Score\n(of 9)', 'Transcript\nq < 0.05',
         'Target in\nenriched pathway', 'Protein\naccess', 'Genetic\ndependency',
-        'Compound\nactivity', 'Agent\navailable']
+        'Compound\nactivity', 'Clinical access /\ndevelopment path']
 
 sel = sel.sort_values(['survives', 'total'], ascending=[False, False])
 if 'contrast_identifiable' not in sel.columns:
@@ -80,7 +80,11 @@ for _, r in sel.iterrows():
     if bool(r['target_in_enriched_pathway']):
         cells.append(SUPPORT); txt.append(f"q={float(r['pathway_q']):.3f}")
     elif pd.notna(r['pathway_q']) and float(r['pathway_q']) < 0.10:
+        # a pathway is enriched but the target is not one of the genes driving it
         cells.append(PARTIAL); txt.append('other\ngenes')
+    elif pd.notna(r['pathway_q']):
+        # the target does sit in a pre-specified set; that set is not enriched
+        cells.append(AGAINST); txt.append('set not\nenriched')
     else:
         cells.append(UNTESTED); txt.append('not in\npanel')
 
@@ -194,9 +198,13 @@ axB.legend(handles, labels, loc='upper center', bbox_to_anchor=(0.5, -0.03),
            ncol=4, frameon=False, fontsize=7.4)
 
 fig.text(0.5, 0.035,
-         'Criteria: E0 contrast estimable separately from batch; E2 Moderate tier '
-         'or better; E3 transcript re-derivable at q<0.05; E4 clinical-stage agent; '
-         'S1 no contradicting layer.\n'
+         'Criteria, all required for eligibility: E0 the contrast is estimable '
+         'separately from batch; E1 no prior urologic-oncology proposal was found; '
+         'E2 Moderate tier or better;\nE3 the transcript is re-derivable at q<0.05; '
+         'E4 an agent is in clinical development. Survival additionally requires '
+         'S1, no contradicting layer, and modality-appropriate access.\n'
+         'None of the three eligible candidates was excluded by the external '
+         'layers; all attrition here occurs at eligibility.\n'
          'A layer that cannot evaluate a candidate is not evidence for it. '
          'Absence of contradiction is therefore weaker than positive support, '
          'and the lead candidate\nis the best-supported hypothesis this '

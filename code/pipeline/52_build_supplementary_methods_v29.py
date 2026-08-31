@@ -4,7 +4,7 @@ The v28 file documented the six pipeline steps only. It predates the refit, so
 it described elementary per-gene tests, a fixed gene universe, and no selection
 rule, none of which is what the v30 analysis does.
 
-Writes: output/Supplementary_Methods_v30.docx
+Writes: output/Supplementary_Methods_v31.docx
 """
 import json
 import sys
@@ -18,7 +18,7 @@ from docx.shared import Pt
 
 sys.stdout.reconfigure(encoding='utf-8')
 RF = paths.REFIT
-OUT = paths.OUTPUT / 'Supplementary_Methods_v30.docx'
+OUT = paths.OUTPUT / 'Supplementary_Methods_v31.docx'
 F = json.loads((RF / 'MANUSCRIPT_FACTS.json').read_text(encoding='utf-8'))
 summary = pd.read_csv(RF / 'REFIT_SUMMARY.csv')
 manifest = pd.read_csv(paths.PREPARED / 'PREPARED_MANIFEST.csv')

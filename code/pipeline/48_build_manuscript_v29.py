@@ -5,7 +5,7 @@ is computed from the result tables. The prose and the deposit therefore cannot
 disagree - the failure mode that produced 42 field-level differences between the
 v28 text and its own CSV.
 
-Writes: Downloads/FDA_Drug_Repurposing_v30.docx
+Writes: Downloads/FDA_Drug_Repurposing_v31.docx
 """
 import json
 import sys
@@ -23,7 +23,7 @@ REPO = Path(__file__).resolve().parents[2]
 RF = REPO / 'results' / 'refit'
 FIG = paths.FIGURES
 SCRATCH = paths.DATA / 'manuscript_parts'
-OUT = paths.OUTPUT / 'FDA_Drug_Repurposing_v30.docx'
+OUT = paths.OUTPUT / 'FDA_Drug_Repurposing_v31.docx'
 
 F = json.loads((RF / 'MANUSCRIPT_FACTS.json').read_text(encoding='utf-8'))
 refs = SCRATCH.joinpath('v28_refs.txt').read_text(encoding='utf-8').splitlines()
@@ -120,7 +120,7 @@ H('CONTEXT', 12)
 P('Key objective: Can publicly deposited genomic and transcriptomic data be '
   'interrogated systematically enough, and transparently enough to be audited, '
   'to prioritize biomarker-anchored drug hypotheses for aggressive urologic '
-  'cancers that will not support dedicated trials?')
+  'cancers for which dedicated biomarker-matched trials are difficult to power?')
 P(f"Knowledge generated: One pipeline, applied uniformly to three benchmark and "
   f"four rare or variant contexts, produced {F['n_associations']} drug-cancer "
   f"associations. Design-aware reanalysis of the primary data changed eight of "
@@ -144,11 +144,15 @@ P(f"Methods. Alteration frequencies, differential expression across ten Gene "
   f"models (limma and edgeR). Candidates were then assessed against four "
   f"orthogonal sources that took no part in scoring and reduced by an "
   f"explicit rule stated before it was applied.")
-P(f"Results. {F['n_associations']} drug-cancer associations emerged: "
+P(f"Results. The frozen set of {F['n_associations']} associations was "
+  f"re-audited under the final models. {F['n_scoreable']} remained "
+  f"scoreable: "
   f"{F['tiers'].get('Strong', 0)} Strong-tier, {F['tiers'].get('Moderate', 0)} "
-  f"Moderate-tier and {F['tiers'].get('Exploratory', 0)} Exploratory-tier, "
-  f"including one candidate target-loss marker (trophoblast "
-  f"cell-surface antigen 2 loss, log\u2082 fold change "
+  f"Moderate-tier and {F['tiers'].get('Exploratory', 0)} Exploratory-tier. "
+  f"The remaining {F['n_not_scored']}, all from one series in which histology "
+  f"is completely aliased with array chip, are reported descriptively and "
+  f"given no score, including a candidate target-loss marker (trophoblast "
+  f"cell-surface antigen 2, log\u2082 fold change "
   f"{de['TACSTD2_sarc']['log2FC']:+.2f}). "
   f"{F['n_previously_proposed']} recovered priorities proposed independently "
   f"elsewhere. {F['n_framework_novel']} had no prior urologic-oncology proposal "
@@ -193,7 +197,7 @@ P('Aggressive and variant urologic histologies are a high-need setting. Renal '
   'of these diseases that evidence is unlikely to arrive on current incentives.')
 P('We therefore asked whether public molecular data could be interrogated '
   'systematically enough to prioritize biomarker-anchored drug hypotheses across '
-  'several such contexts at once. Three common source diseases are included '
+  'several such contexts at once. Three better-studied benchmark contexts are included '
   'deliberately as benchmarks: they have abundant prior literature, so the '
   'framework\u2019s ability to recover established priorities in them calibrates '
   'what its output means in the rare contexts, where no such yardstick exists. '
@@ -301,13 +305,21 @@ print('front matter and methods written')
 # =====================================================================
 H('RESULTS')
 
-H('3.1 Framework Output', 11.5, 10)
+H('3.1 The Audited Set', 11.5, 10)
 ctx_counts = ', '.join(f'{k} {v}' for k, v in F['per_context'].items())
-P(f"Applying the pipeline produced {F['n_associations']} drug-cancer "
-  f"associations (Table 1; the complete table with all score components is "
-  f"Supplementary Table S1): {F['tiers'].get('Strong', 0)} Strong-tier, "
+P(f"An earlier implementation of the pipeline generated a set of "
+  f"{F['n_associations']} drug-cancer associations. That set was frozen before "
+  f"the design-aware refit, and the final framework was then used to re-audit "
+  f"it, so what follows reports how the evidence, scores and eligibility of a "
+  f"fixed candidate set change once the primary data are modeled properly, "
+  f"rather than presenting a fresh list (Table 1; the complete table is "
+  f"Supplementary Table S1). {F['n_scoreable']} of the {F['n_associations']} "
+  f"remain scoreable: {F['tiers'].get('Strong', 0)} Strong-tier, "
   f"{F['tiers'].get('Moderate', 0)} Moderate-tier and "
-  f"{F['tiers'].get('Exploratory', 0)} Exploratory-tier. Per context: "
+  f"{F['tiers'].get('Exploratory', 0)} Exploratory-tier. The remaining "
+  f"{F['n_not_scored']}, all from the one series in which histology is "
+  f"completely aliased with array chip, carry no score or tier and are reported "
+  f"descriptively. Per context: "
   f"{ctx_counts}. Each row carries its score decomposition, clinical-development "
   f"stage, prior-proposal status and the specific dataset and gene on which its "
   f"transcriptomic component rests.")
@@ -361,7 +373,7 @@ P(f"Sarcomatoid urothelial carcinoma (Figure 3) yielded nuclear receptor-binding
   f"G6PD [43] candidates, and one candidate target-loss marker: "
   f"trophoblast cell-surface antigen 2, encoded by TACSTD2, is downregulated "
   f"({de['TACSTD2_sarc']['log2FC']:+.2f}, q = {fmt(de['TACSTD2_sarc']['q'])}), "
-  f"concordant with three independent pathology reports [44\u201346] and "
+  f"concordant with two independent pathology reports [44,45] and "
   f"which would be expected to reduce target availability for sacituzumab "
   f"govitecan, though no treated cases are analyzed here and the predictive "
   f"value is unestablished, "
@@ -384,7 +396,11 @@ P(f"Lineage-stratified small-cell bladder cancer (Figure 4), classified by "
   f"POU2F3-positive tumors show arachidonic-acid metabolism enrichment "
   f"(q = {q['pou2f3_arachidonic']:.3f}) with PTGS1 elevated "
   f"({de['PTGS1_pou2f3']['log2FC']:+.2f}, q = {fmt(de['PTGS1_pou2f3']['q'])}), "
-  f"supporting non-selective cyclooxygenase inhibition [49]. The "
+  f"identifying a lineage-specific arachidonic-acid and COX-1 program whose "
+  f"therapeutic direction requires functional testing rather than establishing "
+  f"that inhibiting it would help: in the tuft-cell biology this program is "
+  f"named for, prostaglandin signaling has been reported to restrain rather "
+  f"than promote tumorigenesis [49]. The "
   f"NEUROD1-positive somatostatin receptor 2 association does not survive: the "
   f"fold change reproduces ({de['SSTR2_neurod1']['log2FC']:+.2f}) but it does "
   f"not reach significance under a batch-adjusted subtype contrast "
@@ -448,10 +464,13 @@ P(f"Compound-level activity was read from the PRISM Repurposing screen across "
 P(f"Signature reversal against the LINCS L1000 libraries [52,53] was recomputed "
   f"on the refitted gene lists, and the result differs from what we previously "
   f"reported. {F['lincs']['n_sig_reversal']} of {F['lincs']['n_terms']} "
-  f"reversal terms reach q < 0.05 across the eight analysis units, which are "
-  f"the seven contexts with the three small-cell lineage subtypes counted "
-  f"separately and the hereditary leiomyomatosis series included; correction "
-  f"was applied by Enrichr within each library and unit, "
+  f"reversal terms reach q < 0.05 among the top twenty-five returned for each "
+  f"of the eight analysis units, which are renal medullary carcinoma, penile "
+  f"squamous cell carcinoma, sarcomatoid urothelial carcinoma, "
+  f"muscle-invasive bladder cancer, the hereditary leiomyomatosis series and "
+  f"the three small-cell lineage subtypes; because those terms are already "
+  f"the most significant returned, the proportion is descriptive rather than "
+  f"a global result, "
   f"and nominated agents do now appear, palbociclib and erlotinib among them. "
   f"Neither is context-specific: palbociclib surfaces in hereditary "
   f"leiomyomatosis renal cell cancer, sarcomatoid urothelial carcinoma and "
@@ -481,12 +500,24 @@ P(f"CXCR1/CXCR2 blockade is the lead candidate. It scores {lead['total']}/9, its
   f"chemokine axis is elevated consistently in both patient-derived lines, its "
   f"target lies in a pathway that is itself enriched "
   f"(q = {q['rmc_chemokine']:.4f}) rather than borrowing an enrichment driven by "
-  f"other genes, both receptors are confirmed at the membrane, normal kidney "
-  f"expression is negligible, and the antagonist class is clinical-stage with "
-  f"established safety. Anti-CEACAM1 is the second survivor at "
-  f"{second['total']}/9, but it is weaker on two counts that matter: its target "
-  f"is not a member of the enriched pathway, and its normal-kidney expression is "
-  f"{F['hpa']['CEACAM1_kidney']} against {F['hpa']['CXCR1_kidney']} for CXCR1.")
+  f"other genes, both receptors are confirmed membrane proteins, and the "
+  f"antagonist class is clinical-stage with "
+  f"prior human pharmacology and safety characterization. Anti-CEACAM1 is the "
+  f"second survivor at {second['total']}/9 but ranks below the lead because "
+  f"CEACAM1 belongs to none of the enriched pathways, so its score carries no "
+  f"pathway-level support, and because tumor-specific surface protein "
+  f"abundance and therapeutic index in renal medullary carcinoma are "
+  f"unestablished.")
+P(f"Anti-CEACAM5 conjugates in ASCL1-positive small-cell bladder cancer are "
+  f"the third survivor. CEACAM5 is strongly subtype-enriched "
+  f"({de['CEACAM5_ascl1']['log2FC']:+.2f}, q = {fmt(de['CEACAM5_ascl1']['q'])}), "
+  f"confirmed at the membrane, near-absent in normal bladder "
+  f"({F['hpa']['nTPM']['CEACAM5']} normalized transcripts per million), and "
+  f"the class is in active clinical development. It is not the lead because "
+  f"CEACAM5 belongs to none of the eighteen pre-specified sets, so no "
+  f"pathway-level evidence supports it, and because subtype-specific protein "
+  f"expression, internalization and payload sensitivity in small-cell "
+  f"bladder cancer are all unestablished.")
 P('One qualification travels with the lead. The dependency and compound screens '
   'do not endorse it so much as they cannot test it: a mechanism operating '
   'through myeloid recruitment is invisible to tumor-cell monoculture, so their '
@@ -759,6 +790,11 @@ P('Supplementary Methods: full procedural detail for the six pipeline steps and 
 
 H('AI USAGE DISCLOSURE', 12)
 for para in back['AI USAGE DISCLOSURE']:
+    # the inherited paragraph predates the refit and says Python only
+    para = para.replace('All analyses were executed by author-run Python '
+                        'analytical scripts',
+                        'All analyses were executed by author-run Python and R '
+                        'scripts')
     P(para, size=10)
 P('All analyses were executed by author-run Python and R scripts; the '
   'differential-expression refit uses the Bioconductor packages limma and '
@@ -852,9 +888,20 @@ for _, r in novel_rows.sort_values('N').iterrows():
     srow = sel[sel['N'] == r['N']]
     if len(srow):
         srow = srow.iloc[0]
+        # spell the exclusion out; codes are opaque and were being truncated
+        PLAIN = {
+            23: 'Excluded: contrast completely aliased with array chip, and '
+                'DepMap shows no dependency in the nominated stratum',
+            24: 'Excluded: contrast completely aliased with array chip, and '
+                'total below Moderate tier after refitting',
+            29: 'Excluded: transcriptomic support does not survive refitting '
+                f"(q = {de['SSTR2_neurod1']['q']:.3f}), and no enriched pathway "
+                'contains the target',
+        }
         status = ('LEAD HYPOTHESIS' if int(r['N']) == 17 else
-                  'survives the audit' if bool(srow['survives']) else
-                  'excluded: ' + str(srow['failed_criteria'])[:56])
+                  'Survives the audit' if bool(srow['survives']) else
+                  PLAIN.get(int(r['N']),
+                            'Excluded: ' + str(srow['failed_criteria'])))
     else:
         status = ''
     nxt = {17: 'immunocompetent model with an intact myeloid compartment',
@@ -875,13 +922,18 @@ add_row([', '.join(str(int(x)) for x in sorted(partial_rows['N'])), 'various',
                    partial_rows['Tier'].value_counts().to_dict().items()),
          'not evaluated as discovery', 'see Supplementary Table S1'])
 
-add_row(['', 'CANDIDATE TARGET-LOSS MARKER', '', '', '', ''], bold=True)
-neg = merged[merged['N'] == 27].iloc[0]
-accounted.add(27)
-add_row([27, neg['Context'], 'TROP2 (TACSTD2) loss \u2014 sacituzumab govitecan',
-         f"{neg['Total']} \u00b7 {neg['Tier']}",
-         'descriptive; contrast not identifiable',
-         'protein-level confirmation in a non-confounded cohort'])
+add_row(['', 'DESCRIPTIVE ONLY \u2014 COMPLETELY CONFOUNDED COHORT, NOT SCORED',
+         '', '', '', ''], bold=True)
+# rows already listed under their novelty class are not repeated here
+unscored = merged[(merged['Tier'] == 'Not scored (confounded cohort)')
+                  & (~merged['N'].isin(accounted))]
+for _, r in unscored.sort_values('N').iterrows():
+    accounted.add(int(r['N']))
+    label = ('TROP2 (TACSTD2) loss \u2014 candidate target-loss marker'
+             if int(r['N']) == 27 else f"{r['Drug']} \u2014 {r['Target']}")
+    add_row([r['N'], r['Context'], label, 'not estimable',
+             'histology aliased with array chip',
+             'independent, non-confounded cohort before any scoring'])
 
 missing = sorted(set(merged['N']) - accounted)
 assert not missing, f'Table 1 omits associations {missing}'
@@ -900,7 +952,7 @@ P('Scores sum four partially overlapping dimensions (genomic or context-anchor '
 # =====================================================================
 # Supplementary tables generated alongside
 # =====================================================================
-SUP = paths.OUTPUT / 'v30_supplementary'
+SUP = paths.OUTPUT / 'v31_supplementary'
 SUP.mkdir(parents=True, exist_ok=True)
 
 full = master.merge(prov[['N', 'scoring_gene', 'arm', 'refit_context', 'E_basis',

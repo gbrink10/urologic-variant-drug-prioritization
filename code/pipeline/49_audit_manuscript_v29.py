@@ -13,7 +13,7 @@ import pandas as pd
 sys.stdout.reconfigure(encoding='utf-8')
 REPO = Path(__file__).resolve().parents[2]
 RF = REPO / 'results' / 'refit'
-MS = paths.OUTPUT / 'FDA_Drug_Repurposing_v30.docx'
+MS = paths.OUTPUT / 'FDA_Drug_Repurposing_v31.docx'
 
 doc = docx.Document(str(MS))
 paras = [p.text.strip() for p in doc.paragraphs]

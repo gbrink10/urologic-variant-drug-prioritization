@@ -1,9 +1,11 @@
 {
  "n_associations": 30,
+ "n_scoreable": 25,
+ "n_not_scored": 5,
  "tiers": {
-  "Moderate": 15,
+  "Moderate": 12,
   "Strong": 10,
-  "Exploratory": 5
+  "Exploratory": 3
  },
  "n_framework_novel": 6,
  "n_partially_novel": 5,

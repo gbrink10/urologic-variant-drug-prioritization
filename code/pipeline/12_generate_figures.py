@@ -119,7 +119,7 @@ def generate_figure1():
          '#f4cccc', '#922b21'),
         (1.98, 'Step 5',
          '9-point Molecular Prioritization Score',
-         'Genomic / context-anchor (0–3)  +  GEO (0–3)  +  '
+         'Genomic / context-anchor (0–3)  +  Transcriptomic (0–3)  +  '
          'KEGG (0–2)  +  Literature (0–1)',
          '#ead1dc', '#6c3483'),
         (1.10, 'Step 6',
@@ -166,7 +166,7 @@ def generate_figure1():
     ax.text(4.85, 0.20, '(in the urologic-oncology literature)',
             ha='center', va='center', fontsize=7.3, style='italic',
             color='#c00000')
-    ax.text(7.30, 0.40, '5  partially novel',
+    ax.text(7.30, 0.40, '5  partial precedents',
             ha='center', va='center', fontsize=8.5, weight='bold',
             color='#6c3483')
     ax.text(7.30, 0.20, '(variant-specific extensions)',
@@ -184,7 +184,7 @@ def generate_figure1():
     # from beneath that column rather than from the centre of the table box.
     ax.annotate('', xy=(4.85, -0.36), xytext=(4.85, 0.05),
                 arrowprops=dict(arrowstyle='->', lw=1.8, color='#c00000'))
-    ax.text(5.05, -0.16, '6 framework-novel candidates carried forward',
+    ax.text(5.05, -0.16, '6 with no prior urologic-oncology proposal found',
             ha='left', va='center', fontsize=7.4, style='italic',
             color='#c00000')
     ax.text(5.05, -0.30, '3 eligible \u2192 3 survive the audit',
