@@ -202,11 +202,19 @@ for s_ in ('top', 'right'):
 axc = fig.add_subplot(gs[0, 2])
 panel_c(axc, 'PanelC_SCBC.png', 'C. Proposed lineage mechanisms')
 # the NEUROD1 branch does not survive the refit, so say so on the panel
-axc.text(0.50, 0.02, 'NEUROD1 branch not supported by this cohort (q = 0.363)',
+axc.text(0.50, 0.055, 'NEUROD1 branch not supported by this cohort (q = 0.363)',
          transform=axc.transAxes, ha='center', fontsize=8.0, weight='bold',
          color='#c0392b',
          bbox=dict(boxstyle='round,pad=0.35', facecolor='#fdecea',
                    edgecolor='#c0392b', linewidth=1.0))
+# the schematic draws aspirin as an inhibitor; the data support a perturbation
+# axis, not a direction, so the panel says so rather than leaving the bar to
+# assert it
+axc.text(0.50, 0.005,
+         'POU2F3 panel: COX-1 perturbation axis — therapeutic direction '
+         'unresolved; aspirin shown as an available non-selective inhibitor',
+         transform=axc.transAxes, ha='center', fontsize=7.2, style='italic',
+         color='#4a4a4a')
 out4 = FIG / 'Figure4_SCBC.png'
 plt.savefig(out4, bbox_inches='tight')
 plt.close()

@@ -1,0 +1,14 @@
+analysis_unit,context,genes_tested,genes_meeting_entry_rule,entry_rule,druggable_genes_mapped,drug_classes_reviewed,associations_retained_in_frozen_set,note
+ccRCC_METS,ccRCC,21242,0,q < 0.05 and log2FC > 0.5 (up),not reconstructible,not reconstructible,3,"no normal comparator in the series, so the entry rule is the absolute-expression arm rather than a contrast; the contrast count is 0 by construction"
+HLRCC,HLRCC,22469,2190,q < 0.05 and log2FC > 0.5 (up),not reconstructible,not reconstructible,0,
+MIBC_KINOME,MIBC,489,142,q < 0.05 and log2FC > 0.5 (up),not reconstructible,not reconstructible,7,"targeted 489-gene kinome panel, not a transcriptome"
+NEPC_CXCR7,NEPC,12582,454,q < 0.05 and log2FC > 0.5 (up),not reconstructible,not reconstructible,0,
+NEPC_DECITABINE,NEPC,14835,1974,q < 0.05 and log2FC > 0.5 (up),not reconstructible,not reconstructible,6,
+NEPC_DNMT,NEPC,13858,1722,q < 0.05 and log2FC > 0.5 (up),not reconstructible,not reconstructible,0,
+PSCC,PSCC,67528,10910,q < 0.05 and log2FC > 0.5 (up),not reconstructible,not reconstructible,3,probe-level rows on a HTA 2.0 array; distinct genes are fewer
+SarcUC,SarcUC,29377,1276,q < 0.05 and log2FC > 0.5 (up),not reconstructible,not reconstructible,5,"probe-level rows; histology aliased with array chip, so the count is descriptive and no row is scored from it"
+SCBC_ASCL1,SCBC,20802,225,q < 0.05 and log2FC > 0.5 (up),not reconstructible,not reconstructible,1,
+SCBC_NEUROD1,SCBC,20802,10,q < 0.05 and log2FC > 0.5 (up),not reconstructible,not reconstructible,1,
+SCBC_POU2F3,SCBC,20802,107,q < 0.05 and log2FC > 0.5 (up),not reconstructible,not reconstructible,1,
+SCBC_YAP1,SCBC,20802,2,q < 0.05 and log2FC > 0.5 (up),not reconstructible,not reconstructible,0,
+RMC,RMC,23841,187,"up in both patient-derived models (q < 0.05, log2FC > 0.5 in each)",not reconstructible,not reconstructible,3,no sample-level matrix is deposited; counts come from the author differential-expression tables for the two models

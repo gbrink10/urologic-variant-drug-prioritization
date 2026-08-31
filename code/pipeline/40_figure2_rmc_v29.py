@@ -91,7 +91,7 @@ axB.set_yticks(ypos); axB.set_yticklabels(present, fontsize=8.6)
 axB.axvline(0, lw=0.8, c='#333')
 axB.set_xlabel('log$_2$ fold change (higher in SMARCB1-null disease state)',
                fontsize=8.2)
-axB.set_title('B. Chemokine axis, each line separately\n'
+axB.set_title('B. Nominated RMC signals, each line separately\n'
               f'pathway q = {chem_q:.4f} on the both-lines set',
               fontsize=9.3, weight='bold', loc='left')
 axB.legend(fontsize=7.4, frameon=False, loc='lower right')

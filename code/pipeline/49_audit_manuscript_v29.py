@@ -22,6 +22,9 @@ for t in doc.tables:
     for r in t.rows:
         for c in r.cells:
             text += "\n" + c.text
+# the reference list carries article titles using phrasing the body must not
+# use, so claims are checked against the body alone
+body = text.split("REFERENCES", 1)[0]
 
 F = json.loads((RF / 'MANUSCRIPT_FACTS.json').read_text(encoding='utf-8'))
 master = pd.read_csv(RF / 'MASTER_TABLE_V29.csv')  # v30 rebuild, same filename
@@ -67,7 +70,10 @@ check('marker described as target-loss, not predictive',
       'candidate target-loss marker' in text
       and 'negative predictive biomarker' not in text)
 check('no claim of established predictive value',
-      'predictive value is unestablished' in text)
+      ('predictive validity is unestablished' in text
+       or 'predictive value is unestablished' in text)
+      and 'predicts non-response' not in body
+      and 'predictive biomarker' not in body)
 check('framework-novel language replaced with a search statement',
       'no prior urologic-oncology proposal' in text)
 
@@ -83,7 +89,9 @@ check(f"chemokine q = {F['q']['rmc_chemokine']:.4f}",
 check('SSTR2 non-significant q reported',
       f"{F['de']['SSTR2_neurod1']['q']:.3f}" in text)
 check('ATR effect reported', f"{F['de']['ATR_sarc']['log2FC']:+.2f}" in text)
-check('TACSTD2 effect reported', f"{F['de']['TACSTD2_sarc']['log2FC']:+.2f}" in text)
+check('TACSTD2 direction stated and its estimate located',
+      'lower trophoblast cell-surface antigen 2' in text
+      and 'Supplementary Table S1' in text)
 check('two-line correlation reported', str(F['rmc']['r_between_lines']) in text)
 check('both-lines gene count reported', str(F['rmc']['up_both']) in text)
 check('CXCR1 vs CEACAM1 window contrasted',
@@ -106,8 +114,9 @@ check('scoring dimensions called partially overlapping',
       'partially overlapping' in text)
 check('correction scope stated',
       'within each context' in text and 'not across contexts' in text)
-check('10% threshold pre-specified and named',
-      '10%' in text and 'pre-specified' in text)
+check('both pre-specified thresholds named',
+      'q < 0.05' in text and 'q < 0.10' in text
+      and 'pre-specified' in text)
 
 print('\n5. CITATIONS')
 cited = Counter()

@@ -39,6 +39,7 @@ python code/pipeline/48_build_manuscript_v29.py    # writes the v31 document
 python code/pipeline/50_build_cover_letter_v29.py
 python code/pipeline/52_build_supplementary_methods_v29.py
 python code/pipeline/53_audit_row_mapping.py         # row-mapping audit
+python code/pipeline/54_candidate_universe.py        # denominator + audit deposit
 python code/pipeline/49_audit_manuscript_v29.py    # 69 checks, all must pass
 ```
 
@@ -63,6 +64,23 @@ header of each script that uses them.
 | `results/refit/` | everything the v31 manuscript cites |
 | `figures/` | the five manuscript figures |
 | `output/` | the built manuscript, cover letter, supplementary methods and tables |
+
+## What the audit trail does not cover
+
+The candidate denominator is deposited as `results/refit/CANDIDATE_UNIVERSE.csv`
+and is deliberately incomplete. It records, per analysis unit, the genes tested,
+the genes meeting the transcriptomic entry rule and the associations retained. It
+does not record how many of those genes mapped to a druggable target or how many
+drug classes were set aside: that mapping was done by hand against the
+Therapeutic Target Database and OpenTargets web interfaces in the earlier
+implementation, and no query log or release snapshot was written. Those two
+columns are published as not reconstructible rather than estimated after the fact.
+
+The prior-proposal audit (`results/refit/PRIOR_PROPOSAL_AUDIT.csv`) carries the
+per-row classification with its citations, the search template and the counting
+rules. It was performed by one author and not duplicated by a second reviewer,
+and the exact per-row query strings were not logged, which is why the paper calls
+it score-independent rather than independent.
 
 ## The frozen candidate set
 

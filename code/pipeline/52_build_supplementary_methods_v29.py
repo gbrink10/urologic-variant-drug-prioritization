@@ -7,6 +7,7 @@ rule, none of which is what the v30 analysis does.
 Writes: output/Supplementary_Methods_v31.docx
 """
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -51,8 +52,8 @@ P('An Auditable Public-Data Framework for Prioritizing Biomarker-Matched Drug '
 P('Brinkley GJ, Greenberg J, Caso J')
 
 H('1. Contexts and their role')
-P('Seven contexts were analyzed. Three are common source diseases with abundant '
-  'prior literature and are used as benchmarks: their purpose is to show what '
+P('Seven contexts were analyzed. Three are better-studied benchmark contexts '
+  'with abundant prior literature: their purpose is to show what '
   'the framework does where the answer is already known. Four are rare or '
   'variant diseases where the framework is asked to prioritize without a '
   'yardstick. The distinction is not cosmetic: recovery of established '
@@ -134,15 +135,88 @@ P('Eighteen pathway or gene sets were fixed before any context-specific '
   'test on targeted panels. Benjamini-Hochberg correction was applied across the '
   'eighteen sets within each context. It was not applied across contexts, across '
   'drug candidates, or across the downstream comparisons, and reported q-values '
-  'should be read with that scope in mind. A 10% false-discovery threshold was '
-  'pre-specified for this exploratory setting; values between 5% and 10% are '
-  'described as suggestive rather than significant. Both a q-based and a p-based '
+  'should be read with that scope in mind. Two thresholds were pre-specified. '
+  'Differential-expression significance is q < 0.05. Pathway enrichment uses an '
+  'exploratory q < 0.10, and values between 0.05 and 0.10 are described as '
+  'suggestive rather than conventionally significant. Both a q-based and a p-based '
   'gene list were run so that the dependence of each enrichment on the '
   'significance rule is visible in the deposited tables.')
 
+KEGG_ID = {
+    'Cell_Cycle': ('hsa04110', 'CDK4/6 and cell-cycle inhibitors'),
+    'Apoptosis': ('hsa04210', 'BCL-2 and IAP-directed agents'),
+    'HIF1_signaling': ('hsa04066', 'HIF-2alpha inhibitors'),
+    'VEGF_signaling': ('hsa04370', 'VEGF/VEGFR inhibitors'),
+    'Homologous_Recombination': ('hsa03440', 'PARP inhibitors'),
+    'PI3K_AKT_signaling': ('hsa04151', 'PI3K, AKT and mTOR inhibitors'),
+    'p53_signaling': ('hsa04115', 'MDM2 and WEE1/ATR-directed agents'),
+    'Chemokine_signaling': ('hsa04062', 'CXCR1/CXCR2 antagonists'),
+    'Cytokine_receptor_interaction': ('hsa04060', 'cytokine-receptor-directed biologics'),
+    'Antigen_processing_presentation': ('hsa04612', 'immune-hot context marker'),
+    'PDL1_PD1_checkpoint': ('hsa05235', 'PD-1/PD-L1 checkpoint inhibitors'),
+    'Pentose_phosphate_pathway': ('hsa00030', 'G6PD inhibitors'),
+    'Arachidonic_acid_metabolism': ('hsa00590', 'COX-1/COX-2 inhibitors'),
+    'Neuroactive_ligand_receptor': ('hsa04080', 'somatostatin-receptor-directed agents'),
+    'Prostate_cancer': ('hsa05215', 'disease-context set'),
+    'Bladder_cancer': ('hsa05219', 'disease-context set'),
+    'Renal_cell_carcinoma': ('hsa05211', 'disease-context set'),
+    'Epigenetic_Regulation': ('custom', 'DNMT, EZH2, HDAC, BET and NSD-directed agents'),
+}
+
+P('The eighteen sets, their identifiers, their size at the frozen analysis date '
+  'and the drug class each was included for are listed below. Seventeen are '
+  'KEGG human pathways retrieved through the KEGG programmatic interface. The '
+  'eighteenth, Epigenetic_Regulation, is a custom set because no single KEGG '
+  'pathway spans the chromatin-directed drug classes: it is the union of the '
+  'DNMT, PRC2/EZH, SWI-SNF, lysine methyltransferase, lysine demethylase, HDAC '
+  'and sirtuin, histone acetyltransferase and bromodomain, and UHRF reader '
+  'families, assembled from the gene families themselves and deposited in '
+  'results/KEGG_PATHWAYS_18.json alongside the seventeen retrieved sets. All '
+  'nineteen thousand-odd member symbols were normalized to current HGNC '
+  'nomenclature before use.')
+
+_sets = json.loads((paths.RESULTS / 'KEGG_PATHWAYS_18.json')
+                   .read_text(encoding='utf-8'))
+tp = doc.add_table(rows=1, cols=4)
+tp.style = 'Table Grid'
+for c, hh in zip(tp.rows[0].cells,
+                 ('Set', 'Identifier', 'Genes', 'Included for')):
+    c.paragraphs[0].add_run(hh).bold = True
+for name, genes in _sets.items():
+    ident, cls = KEGG_ID.get(name, ('', ''))
+    row = tp.add_row()
+    for c, v in zip(row.cells,
+                    (name.replace('_', ' '), ident, str(len(genes)), cls)):
+        c.paragraphs[0].add_run(v).font.size = Pt(8.6)
+for _r in tp.rows:
+    for _c in _r.cells:
+        for _p in _c.paragraphs:
+            for _run in _p.runs:
+                _run.font.size = Pt(8.6)
+doc.add_paragraph()
+
 H('6. Prioritization score')
+P('The genomic or context-anchor dimension is binned by alteration frequency in '
+  'the source or disease cohort: 3 points above 30%, 2 points from 15% to 30% '
+  'inclusive, 1 point from 5% up to but not including 15%, and 0 below 5% or '
+  'where the gene is not assessed in the cohort. Frequencies falling exactly on '
+  '15% or 30% take the higher bin. Where a disease is defined by a single '
+  'alteration - renal medullary carcinoma by SMARCB1 loss, small-cell bladder '
+  'cancer by TP53 and RB1 - the anchor value certifies that the samples '
+  'represent the disease and says nothing about the nominated target, which is '
+  'why the sensitivity analysis removes it.')
+P('The literature dimension is separate from the prior-proposal audit and must '
+  'not be read as its inverse. It awards 1 point for a PubMed-indexed '
+  'mechanistic or clinical report linking the agent or its class to the '
+  'nominated target, in any disease. The prior-proposal audit asks a narrower '
+  'question: whether that pairing has been proposed in the urologic-oncology '
+  'literature specifically. An association can therefore hold a mechanistic '
+  'literature point from a non-urologic context and still be classified as '
+  'having no prior urologic-oncology proposal; anti-CEACAM5 in ASCL1-positive '
+  'small-cell bladder cancer is exactly that case. The two are kept apart so '
+  'that the novelty classification cannot be an artefact of the score.')
 P('Each association receives 0 to 9 points across four dimensions: genomic or '
-  'context-anchor evidence (0-3, by alteration frequency), transcriptomic '
+  'context-anchor evidence (0-3, binned as above), transcriptomic '
   'evidence (0-3), pathway evidence (0-2) and external mechanistic-literature '
   'concordance (0-1). The dimensions are partially overlapping rather than '
   'independent, and are described that way: the transcriptomic and pathway '
@@ -153,15 +227,21 @@ P('The transcriptomic dimension uses whichever of two arms applies. Where a '
   'disease-versus-comparator contrast exists, 3 points are given for a '
   'significant change with absolute log2 fold change at least 1, 2 for 0.5 to 1, '
   '1 for a smaller significant change, and 0 where the change does not reach '
-  'q < 0.05. Where no such contrast exists, because the series contains no '
-  'comparator tissue or is a perturbation experiment, the absolute-expression '
+  'q < 0.05. The absolute-expression arm applies where the available dataset '
+  'does not provide an interpretable disease-state-versus-comparator contrast '
+  'for the nominated target. A perturbation experiment is not automatically in '
+  'this arm: the renal medullary series is a SMARCB1 rescue, and its '
+  'rescued-versus-null comparison is itself an interpretable disease-state '
+  'contrast, so it is scored on the contrast arm. The absolute-expression '
   'arm applies: 3 points for the top 5% of measured transcripts, 2 for the top '
   '15%, 1 for the top third. The pathway dimension gives 2 points where the '
   'pathway is enriched at the pre-specified threshold and the target is a member '
   'of that pathway’s defining set, and 1 where only one of those holds.')
 P('Both data-derived dimensions are emitted by one function from the deposited '
-  'fitted tables, so the manuscript table and the deposited table cannot '
-  'diverge. Where a target is absent from its platform the row retains a curated '
+  'fitted tables, so the manuscript table and the deposited table are generated '
+  'from a shared source and reconciled by an automated check '
+  '(49_audit_manuscript_v29.py). That reduces the risk of divergence; it does '
+  'not make divergence logically impossible. Where a target is absent from its platform the row retains a curated '
   'value and is flagged as not re-derivable, individually, in Supplementary '
   'Table S1. Totals map to Strong (7-9), Moderate (4-6) and Exploratory (1-3) '
   'tiers, which express strength of evidence within this framework only.')
@@ -175,6 +255,80 @@ P('The audit was performed after scoring was complete, so that prior proposals '
   'does not count. The resulting label is a statement about what the '
   'pre-specified search found in the urologic literature, not a claim of '
   'biological precedence.')
+P('The procedure is reported in full, including its limits. Searches were run '
+  'on PubMed with no date or language restriction, using the template '
+  '("<target>" OR "<drug>" OR "<drug class>") AND ("<disease>" OR its '
+  'synonyms), with reviews, position papers and ClinicalTrials.gov '
+  'registrations screened alongside primary reports. A primary report, review, '
+  'position paper or trial registration proposing the agent or its class '
+  'against the nominated target in a urologic-oncology context counts as a '
+  'prior proposal; conference abstracts and patents do not. Three limits '
+  'apply. The audit was performed by one author, classifications were not '
+  'duplicated by a second independent reviewer, and no adjudication procedure '
+  'was therefore required. The exact per-row query strings were not logged when '
+  'the searches were run, so the template rather than the string is what is '
+  'deposited. For these reasons the audit is described throughout as '
+  'score-independent - it could not be influenced by the score, because it '
+  'followed it - and not as independent in the dual-reviewer sense. The '
+  'per-row classification, its supporting citations and PubMed identifiers, '
+  'the template and these limits are deposited as '
+  'results/refit/PRIOR_PROPOSAL_AUDIT.csv.')
+
+H('7b. Drug-target curation and the candidate denominator')
+P('A differentially expressed gene entered the association table only if it '
+  'mapped to an agent that could be evaluated clinically. Candidate entry '
+  'required the transcriptomic entry condition for its context, a protein '
+  'product with a described binding or degradation modality, and at least one '
+  'agent against it in human study. Where several agents shared a target, the '
+  'representative agent was chosen by clinical stage first, then by the '
+  'specificity of the target engagement, then by whether human pharmacokinetic '
+  'and safety data were published; rows naming a class rather than a molecule '
+  'do so because no single agent dominated on those grounds. Discontinued '
+  'agents were retained where the class remains in development and are '
+  'labelled as discontinued, since the hypothesis is about the target rather '
+  'than the molecule. Preclinical-only agents were admitted only where no '
+  'clinical-stage agent existed against the target, and are labelled as such '
+  'in the clinical-stage column.')
+P('The denominator behind the frozen set is deposited as '
+  'results/refit/CANDIDATE_UNIVERSE.csv, and it is deliberately incomplete. '
+  'For each analysis unit it records the genes tested, the genes meeting the '
+  'transcriptomic entry rule, and the associations retained. It does not '
+  'record how many of those genes mapped to a druggable target, or how many '
+  'drug classes were considered and set aside, because the mapping was '
+  'performed by hand against the Therapeutic Target Database and OpenTargets '
+  'web interfaces in the earlier implementation and no query log, release '
+  'snapshot or intermediate mapping file was written at the time. Those two '
+  'columns are published as not reconstructible rather than estimated after '
+  'the fact. This is the weakest link in the audit trail of the frozen set, '
+  'and a prospective application of the pipeline should log the mapping step '
+  'as the fitted steps are now logged.')
+
+_uni = pd.read_csv(RF / 'CANDIDATE_UNIVERSE.csv')
+tu = doc.add_table(rows=1, cols=5)
+tu.style = 'Table Grid'
+for c, hh in zip(tu.rows[0].cells,
+                 ('Analysis unit', 'Genes tested', 'Meeting entry rule',
+                  'Druggable genes mapped', 'Retained')):
+    c.paragraphs[0].add_run(hh).bold = True
+for _, r in _uni.iterrows():
+    row = tu.add_row()
+    for c, v in zip(row.cells,
+                    (r['analysis_unit'], f"{int(r['genes_tested']):,}",
+                     f"{int(r['genes_meeting_entry_rule']):,}",
+                     r['druggable_genes_mapped'],
+                     str(int(r['associations_retained_in_frozen_set'])))):
+        c.paragraphs[0].add_run(str(v))
+for _r in tu.rows:
+    for _c in _r.cells:
+        for _p in _c.paragraphs:
+            for _run in _p.runs:
+                _run.font.size = Pt(8.6)
+doc.add_paragraph()
+P('Counts are rows of the fitted table, which are probes on the two array '
+  'platforms and genes elsewhere; the clear cell unit has no normal '
+  'comparator, so its contrast count is zero by construction and its rows are '
+  'scored on the absolute-expression arm. Per-unit notes are in the deposited '
+  'file.')
 
 H('8. Orthogonal evidence audit')
 P('Four sources that took no part in scoring were interrogated after the table '
@@ -217,7 +371,8 @@ P('The rule was fixed before it was applied, and every exclusion in the '
   'Survival additionally requires that no orthogonal layer contradict the '
   'candidate, and that target accessibility match the modality, so that a row '
   'whose agent acts from outside the cell requires confirmed extracellular '
-  'access. The lead candidate additionally requires that the target itself '
+  'access. The first-priority candidate within a disease additionally requires '
+  'that the target itself '
   'belong to a pathway that is enriched, because an enrichment driven by other '
   'genes is not evidence for that target. The rule identifies surviving '
   'hypotheses but does not rank them across diseases. Within a disease holding '
@@ -230,14 +385,22 @@ P('The rule was fixed before it was applied, and every exclusion in the '
 
 H('10. Sensitivity analyses')
 P('Because the scoring dimensions overlap, the ordering was recomputed under '
-  'four variants: removal of the context-anchor contribution, removal of the '
+  'four variants, ordering all scoreable associations numerically: removal of '
+  'the context-anchor contribution, removal of the '
   'pathway dimension, removal of the literature dimension, and a requirement '
   'that the pathway dimension be credited only where the target is a member of '
-  'the enriched set. Results are in Supplementary Table S2. The lead candidate '
-  'holds first place under the full score, under removal of the literature '
+  'the enriched set. Results are in Supplementary Table S2. The renal medullary '
+  'CXCR1/CXCR2 candidate holds first place in that global arithmetic score '
+  'ordering under the full score, under removal of the literature '
   'dimension and under the membership requirement, but falls to fourth when the '
   'context-anchor contribution is removed, which locates part of the ordering in '
   'the scoring architecture rather than in target-specific biology.')
+
+P('This ordering is a descriptive numerical rank across all scoreable '
+  'associations, used only to test how much of the ordering the score '
+  'architecture carries. It is not a biological ranking, and the surviving '
+  'hypotheses are not ranked against one another across diseases on the '
+  'strength of it.')
 
 H('11. Software and reproducibility')
 P('Analyses ran under Python 3.10 (numpy, scipy, pandas, matplotlib, '
@@ -248,9 +411,10 @@ P('Analyses ran under Python 3.10 (numpy, scipy, pandas, matplotlib, '
   'is deposited and used as a cross-check: on the like-for-like design the two '
   'engines agree on log-fold changes to within 2 × 10⁻¹⁴ and '
   'share 99% of significant genes. The manuscript itself is generated from the '
-  'deposited result tables, so its numbers and the deposit cannot diverge, and '
-  'an audit script checks fifty-three properties of the finished document '
-  'against the data.')
+  'deposited result tables rather than typed, and an audit script checks '
+  'sixty-nine properties of the finished document against the data. That '
+  'makes divergence between the manuscript and the deposit detectable rather '
+  'than impossible.')
 
 H('12. Per-dataset design summary')
 P('The table below records what was fitted for each context. The full version, '
@@ -271,16 +435,43 @@ extra = pd.DataFrame([{ 'context': 'RMC (GSE180999)',
              'q < 0.05 separately in each model, with the larger line-specific '
              'q reported'}])
 summary = pd.concat([summary, extra], ignore_index=True)
-summary['notes'] = (summary['notes'].astype(str)
-                    .str.replace('nan', 'no preliminary expression filter applied',
-                                 regex=False)
-                    .str.replace('NA of', 'no filter applied; of', regex=False))
+def _readable(v):
+    s = str(v)
+    if s in ('nan', 'NA', ''):
+        return 'No preliminary expression filter was applied.'
+    s = s.replace('NA of ', 'No preliminary expression filter was applied; of ')
+    s = s.replace('no filter applied; of ',
+                  'No preliminary expression filter was applied; of ')
+    # 'of 26473 features passed expression filter; dropped 32 ...' reads as a
+    # fragment; say what was removed and what remained
+    m = re.search(r'of (\d+) features passed expression filter; '
+                  r'dropped (\d+) non-?finite/constant rows', s)
+    if m:
+        total, dropped = int(m.group(1)), int(m.group(2))
+        s = (f'No preliminary expression filter was applied; {dropped} '
+             f'non-finite or constant rows were removed from {total:,} '
+             f'features, leaving {total - dropped:,}.')
+    return s[0].upper() + s[1:] if s else s
+
+summary['notes'] = summary['notes'].map(_readable)
 for _, r in summary.iterrows():
     row = t.add_row()
     for c, v in zip(row.cells, (r['context'], r['method'], str(r['notes']))):
         c.text = ''
         run = c.paragraphs[0].add_run(str(v))
         run.font.size = Pt(8)
+
+
+# every table header repeats when the table breaks across a page
+from docx.oxml.ns import qn
+from docx.oxml import OxmlElement
+
+for _t in doc.tables:
+    _tr = _t.rows[0]._tr
+    _pr = _tr.get_or_add_trPr()
+    _h = OxmlElement('w:tblHeader')
+    _h.set(qn('w:val'), 'true')
+    _pr.append(_h)
 
 doc.save(str(OUT))
 d2 = docx.Document(str(OUT))
