@@ -81,6 +81,14 @@ check('no claim of established predictive value',
 check('framework-novel language replaced with a search statement',
       'no prior urologic-oncology proposal' in text)
 
+# Methods must carry named subsections including a statistics section, and must
+# not restate the selection criteria the pipeline no longer applies
+_subs = [t for t in paras if re.match(r'^2\.\d ', t)]
+check('Methods has named subsections', len(_subs) >= 5, str(_subs))
+check('Methods has a statistics section',
+      any('statistical' in t.lower() for t in _subs), str(_subs))
+check('the retired E0 criterion is gone', 'E0' not in text)
+
 print('\n3. NUMBERS MATCH THE DEPOSIT')
 check(f"association count {F['n_associations']}", str(F['n_associations']) in text)
 # only the three comparable tiers are quoted in the prose; rows with an
@@ -226,10 +234,10 @@ for _, r in sel.iterrows():
 check('within-disease priority named, not a global lead',
       'first priority within RMC' in text
       or 'the one to carry forward first' in text)
+# the Abstract no longer carries the ranking caveat; Results 3.5 and the
+# Conclusions do, which is where a reader acts on it
 check('no cross-disease ranking claimed',
       'within a disease, not between diseases' in text
-      and 'we do not rank a candidate in one disease against a candidate in '
-          'another' in text.lower()
       and 'we do not rank the renal medullary candidates against the '
           'small-cell bladder candidate' in text.lower())
 check('three survivors across two diseases stated',
