@@ -47,8 +47,8 @@ def P(t, size=10.5, italic=False):
 
 
 H('Supplementary Methods', 15, 0)
-P('An Auditable Public-Data Framework for Prioritizing Biomarker-Matched Drug '
-  'Hypotheses Across Benchmark and Rare Urologic Cancers', italic=True)
+P('A Public-Data Framework for Prioritizing Biomarker-Matched Drug '
+  'Hypotheses Across Rare and Variant Urologic Cancers', italic=True)
 P('Brinkley GJ, Greenberg J, Caso J')
 
 H('1. Contexts and their role')

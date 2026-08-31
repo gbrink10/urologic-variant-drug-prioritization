@@ -127,14 +127,14 @@ second = next(s for s in surv if s['N'] != 17)
 # =====================================================================
 # Front matter
 # =====================================================================
-TITLE = ('An Auditable Public-Data Framework for Prioritizing Biomarker-Matched '
-         'Drug Hypotheses Across Benchmark and Rare Urologic Cancers')
+TITLE = ('A Public-Data Framework for Prioritizing Biomarker-Matched Drug '
+         'Hypotheses Across Rare and Variant Urologic Cancers')
 p = doc.add_paragraph()
 r = p.add_run(TITLE)
 r.bold = True
 r.font.size = Pt(15)
 
-P('Running Title: Auditable Drug-Hypothesis Prioritization in Urologic Cancers')
+P('Running Title: Public-Data Drug Prioritization in Rare Urologic Cancers')
 P('Authors: Garrett J. Brinkley, MD\u00b9; Jacob Greenberg, MD\u00b9; '
   'Jorge Caso, MD\u00b9')
 P('Affiliations: \u00b9Department of Urology, Tulane University School of '
