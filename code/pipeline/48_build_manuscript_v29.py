@@ -19,6 +19,14 @@ from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.shared import Inches, Pt, RGBColor
 
 sys.stdout.reconfigure(encoding='utf-8')
+
+# Zenodo. The concept DOI is stable and always resolves to the newest archived
+# version; the version DOI is minted when a GitHub release is cut and must be
+# updated here before submission. Both are cited in Data Availability.
+# 20217919 is the v1.0.0 archive from May 2026 and is NOT this version, so it
+# is deliberately not cited here. Set ZENODO_VERSION_DOI once a release is cut.
+ZENODO_CONCEPT_DOI = 'doi:10.5281/zenodo.20217918'
+ZENODO_VERSION_DOI = None
 REPO = Path(__file__).resolve().parents[2]
 RF = REPO / 'results' / 'refit'
 FIG = paths.FIGURES
@@ -687,8 +695,12 @@ P('All datasets used are publicly available without restriction. Genomic '
   'from the Therapeutic Target Database and OpenTargets. All analysis scripts, '
   'the fitted differential-expression tables, the enrichment tables, the master '
   'association table with per-row scoring provenance, the candidate-selection '
-  'table and the figure-generation code are archived at GitHub '
-  '(github.com/gbrink10/urologic-variant-drug-prioritization) and at Zenodo. '
+  'table, the candidate denominator, the prior-proposal audit and the '
+  'figure-generation code are archived at GitHub '
+  '(github.com/gbrink10/urologic-variant-drug-prioritization) and at Zenodo '
+  f'({ZENODO_CONCEPT_DOI}, which resolves to the most recent archived version'
+  + (f'; this manuscript corresponds to {ZENODO_VERSION_DOI}' if ZENODO_VERSION_DOI
+     else '') + '). '
   'The pipeline runs end to end from the deposited code; the large primary '
   'deposits are re-downloaded by the first script rather than mirrored.')
 

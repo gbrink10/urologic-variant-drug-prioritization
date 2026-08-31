@@ -202,5 +202,12 @@ check('three survivors across two diseases stated',
 check('lead hedged as hypothesis not finding',
       'not a validated finding' in text)
 
+check('Zenodo concept DOI cited', '10.5281/zenodo.20217918' in text)
+check('no stale v1.0.0 version DOI cited', '10.5281/zenodo.20217919' not in text)
+
 print('\n' + '=' * 66)
 print(f'RESULT: {ok} passed, {bad} failed')
+if 'corresponds to doi:' not in text:
+    print('NOTE: no version-specific Zenodo DOI is cited yet. Cut a GitHub '
+          'release, then set ZENODO_VERSION_DOI in 48_build_manuscript_v29.py '
+          'and rebuild before submitting.')

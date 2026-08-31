@@ -135,6 +135,14 @@ the current pipeline. In particular, the earlier enrichment used a fixed
 20,000-gene universe and did not normalise gene symbols, which silently dropped
 renamed genes — including IL8/CXCL8 — from the pathways they define.
 
+## Archive
+
+Concept DOI [10.5281/zenodo.20217918](https://doi.org/10.5281/zenodo.20217918) —
+always resolves to the most recent archived version. Cutting a GitHub release
+mints a new version DOI under it; `.zenodo.json` supplies the deposit metadata.
+After minting, set `ZENODO_VERSION_DOI` in `code/pipeline/48_build_manuscript_v29.py`
+and rebuild, and the audit stops warning.
+
 ## Citation
 
 Brinkley GJ, Greenberg J, Caso J. *An Auditable Public-Data Framework for
