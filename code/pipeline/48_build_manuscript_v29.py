@@ -300,8 +300,7 @@ P(f"Candidates were generated one cancer at a time. For each cancer we took "
   f"from the three positive controls carry an alteration frequency of 15% or "
   f"more, while {F['geo_rows_no_recurrent_alteration']} of the "
   f"{F['n_geo_anchored']} from the rare cancers score zero, because there the "
-  f"nominated target is not itself recurrently altered (Figure 1, Steps 1a and "
-  f"1b).")
+  f"nominated target is not itself recurrently altered (Figure 2).")
 P(f"Membership in the eighteen pre-specified gene sets was not a condition of "
   f"entry. Those sets contribute points to the score and supply the "
   f"pathway-level evidence; a gene could be nominated without belonging to any "
@@ -456,7 +455,7 @@ P(f"In renal medullary carcinoma the deposited experiment is a SMARCB1 rescue in
   f"{rmc['CXCL2']['RMC2C']:+.2f} and {rmc['CXCL2']['RMC219']:+.2f}, CXCL3 "
   f"{rmc['CXCL3']['RMC2C']:+.2f} and {rmc['CXCL3']['RMC219']:+.2f} \u2014 with "
   f"KEGG chemokine signaling enriched on the both-lines set at "
-  f"q = {q['rmc_chemokine']:.4f} (Figure 2), coherent with the neutrophil-rich "
+  f"q = {q['rmc_chemokine']:.4f} (Figure 3), coherent with the neutrophil-rich "
   f"microenvironment described in this disease [33]. This nominates the "
   f"CXCR1/CXCR2 antagonist class, and carcinoembryonic antigen-related cell adhesion "
   f"molecule 1 alongside it (CEACAM1 {rmc['CEACAM1']['RMC2C']:+.2f} and "
@@ -473,7 +472,7 @@ P(f"Penile squamous cell carcinoma showed a dominant immune-hot phenotype. "
   f"periostin candidates [39\u201341]. This signal survives modeling the six "
   f"normal arrays as {dsn['pscc_normal_donors']} donors rather than six "
   f"independent samples, which was the more demanding test.")
-P(f"In the sarcomatoid series (Figure 3) every sarcomatoid tumor was run on a "
+P(f"In the sarcomatoid series (Figure 4) every sarcomatoid tumor was run on a "
   f"different batch of chips from every conventional tumor. A difference "
   f"between the two groups is therefore also a difference between two batches, "
   f"and no model can separate them, so we report no sarcomatoid-versus-"
@@ -498,7 +497,7 @@ P(f"TROP2, the target of sacituzumab govitecan, reads lower in the sarcomatoid "
   f"2024. We report it as an observation for an independent cohort, not as a "
   f"predictive biomarker, and it carries no score.")
 
-P(f"Lineage-stratified small-cell bladder cancer (Figure 4), classified by "
+P(f"Lineage-stratified small-cell bladder cancer (Figure 5), classified by "
   f"lineage transcription factor [47], produced three subtype-specific "
   f"associations. ASCL1-positive tumors show CEACAM5 elevation "
   f"({de['CEACAM5_ascl1']['log2FC']:+.2f}, q = {fmt(de['CEACAM5_ascl1']['q'])}), "
@@ -589,7 +588,7 @@ P(f"Signature reversal against the LINCS L1000 libraries [52,53], recomputed on 
   f"any candidate; complete rankings and corrected values are deposited.")
 
 H('3.5 The Surviving Hypotheses', 11.5, 10, level=2)
-P(f"Applying the rule (Figure 5), the {F['funnel']['framework_novel']} "
+P(f"Applying the rule (Figure 6), the {F['funnel']['framework_novel']} "
   f"associations with no prior proposal in the urologic literature reduce to "
   f"{F['funnel']['survive']}, and each of the three that stop does so for a "
   f"reason drawn from the evidence rather than from a limitation of our "
@@ -814,11 +813,25 @@ FIGURES = [
      'pre-specified druggable pathway or gene sets against each dataset’s own '
      'measured-gene universe; drug-target curation; a 9-point prioritization '
      'score; and a score-independent PubMed prior-proposal audit performed only after '
-     'scoring. Step 7 is the orthogonal evidence audit, whose four layers '
+     'scoring. Step 7 is the independent evidence check, whose four sources '
      'contributed nothing to any score. The shortlist is produced by a rule '
      'fixed before it was applied.'),
-    ('Figure2_RMC.png', 6.9,
-     'Figure 2. Renal medullary carcinoma. (A) Effect in RMC-2C against effect '
+    ('Figure2_selection_routes.png', 6.9,
+     'Figure 2. How each of the 30 associations was nominated. Every gene '
+     'shown met the same two requirements: it stood out in its own cancer, and '
+     'an agent against it could be evaluated clinically. The routes differ '
+     'only in what standing out could mean, which depends on whether that '
+     'cancer has a genomic cohort. (A) The three positive controls do, so '
+     'genes were ranked by how often they are altered. (B) The four rare '
+     'cancers do not, so genes were ranked by differential expression; TROP2 '
+     'is negative because it was nominated as a marker of loss. (C) The '
+     'sarcomatoid series supports no interpretable contrast, so its genes are '
+     'ranked by abundance within the tumors instead. Filled markers are genes '
+     'belonging to one of the eighteen pre-specified gene sets and open '
+     'markers are genes that are not: panel membership contributes points to '
+     'the score, but it was never a condition of entry.'),
+    ('Figure3_RMC.png', 6.9,
+     'Figure 3. Renal medullary carcinoma. (A) Effect in RMC-2C against effect '
      'in RMC219 for every gene measured in both lines. The genome-wide '
      'correlation is weak, so requiring consistent change in both lines is a '
      'stringent filter rather than a formality; genes passing it are highlighted, '
@@ -828,8 +841,8 @@ FIGURES = [
      'CXCR2 are receptors on the neutrophil, not on the tumor cell, which is '
      'why a tumor-cell monoculture cannot test this hypothesis in either '
      'direction.'),
-    ('Figure3_SarcUC.png', 6.9,
-     'Figure 3. Sarcomatoid urothelial carcinoma. Every sarcomatoid sample was '
+    ('Figure4_SarcUC.png', 6.9,
+     'Figure 4. Sarcomatoid urothelial carcinoma. Every sarcomatoid sample was '
      'run on an array chip carrying no conventional sample, and vice versa, so '
      'histology and chip are completely aliased. (A) The separation between the '
      'two chip-aligned groups, shown for completeness; it cannot be read as a '
@@ -839,8 +852,8 @@ FIGURES = [
      'rather than 9. (C) The nominated targets, which are scored instead on how '
      'abundant each transcript is within the sarcomatoid tumors themselves, a '
      'quantity the aliasing does not reach.'),
-    ('Figure4_SCBC.png', 6.9,
-     'Figure 4. Lineage-stratified small-cell bladder cancer. (A) Subtype '
+    ('Figure5_SCBC.png', 6.9,
+     'Figure 5. Lineage-stratified small-cell bladder cancer. (A) Subtype '
      'composition by lineage transcription factor. (B) The nominated target in '
      'each subtype with its q-value from the batch-adjusted subtype contrast; '
      'somatostatin receptor 2 in NEUROD1-positive tumors does not reach '
@@ -851,8 +864,8 @@ FIGURES = [
      'perturbation axis with aspirin as a pharmacologically available '
      'non-selective inhibitor rather than a COX-2-selective agent; the '
      'therapeutic direction is unresolved and requires functional testing.'),
-    ('Figure5_candidate_selection.png', 6.9,
-     'Figure 5. Candidate selection under a rule fixed in advance. (A) '
+    ('Figure6_candidate_selection.png', 6.9,
+     'Figure 6. Candidate selection under a rule fixed in advance. (A) '
      'Attrition from the full association table to the three supported '
      'hypotheses, with the criterion applied at each stage. (B) Every '
      'association with no prior urologic-oncology proposal, against every '
@@ -927,7 +940,7 @@ P('Claude (Anthropic) and ChatGPT (OpenAI) were used for coding assistance, '
   'and edgeR 4.10.1. No artificial-intelligence-generated data entered any '
   'quantitative analysis, and every prior-proposal classification and score '
   'assignment was verified by the authors, who take responsibility for the '
-  'content and conclusions. The mechanism schematics in Figures 2C, 3C and 4C '
+  'content and conclusions. The mechanism schematics in Figures 3C, 4C and 5C '
   'were produced with GPT-4o image generation from prompts written against the '
   'deposited scoring data and checked element by element against the analysis '
   'before use; the prompts, the unedited originals and the corrections applied '

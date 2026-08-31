@@ -11,7 +11,7 @@ candidate.
   B  the chemokine axis gene by gene, both lines shown separately
   C  mechanism schematic, checked molecule by molecule before use
 
-Writes: figures/Figure2_RMC.png
+Writes: figures/Figure3_RMC.png
 """
 import sys
 from pathlib import Path
@@ -108,7 +108,7 @@ axC.axis('off')
 axC.set_title('C. Proposed mechanism and point of blockade', fontsize=9.3,
               weight='bold', loc='left')
 
-out = FIG / 'Figure2_RMC.png'
+out = FIG / 'Figure3_RMC.png'
 plt.savefig(out, bbox_inches='tight')
 plt.close()
 print(f"Saved {out} ({out.stat().st_size:,} bytes)")

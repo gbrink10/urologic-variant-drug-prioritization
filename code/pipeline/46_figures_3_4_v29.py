@@ -17,7 +17,7 @@ wrong twice over: PTGS1/COX-1 is an intracellular enzyme, and the POU2F3-COX
 association is partially novel rather than framework-novel. The heading is now
 descriptive.
 
-Writes: figures/Figure3_SarcUC.png, figures/Figure4_SCBC.png
+Writes: figures/Figure4_SarcUC.png, figures/Figure5_SCBC.png
 """
 import sys
 from pathlib import Path
@@ -137,7 +137,7 @@ axs.text(0.50, 0.02, 'Descriptive only: histology completely aliased with '
          weight='bold', color='#c0392b',
          bbox=dict(boxstyle='round,pad=0.35', facecolor='#fdecea',
                    edgecolor='#c0392b', linewidth=1.0))
-out3 = FIG / 'Figure3_SarcUC.png'
+out3 = FIG / 'Figure4_SarcUC.png'
 plt.savefig(out3, bbox_inches='tight')
 plt.close()
 print(f"Saved {out3.name} ({out3.stat().st_size:,} bytes)")
@@ -216,7 +216,7 @@ axc.text(0.50, 0.005,
          'unresolved; aspirin shown as an available non-selective inhibitor',
          transform=axc.transAxes, ha='center', fontsize=7.2, style='italic',
          color='#4a4a4a')
-out4 = FIG / 'Figure4_SCBC.png'
+out4 = FIG / 'Figure5_SCBC.png'
 plt.savefig(out4, bbox_inches='tight')
 plt.close()
 print(f"Saved {out4.name} ({out4.stat().st_size:,} bytes)")

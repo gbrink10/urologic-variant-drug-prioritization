@@ -50,7 +50,7 @@ for sec in ('CONTEXT', 'ABSTRACT', 'INTRODUCTION', 'MATERIALS AND METHODS',
             'CONFLICTS OF INTEREST', 'ETHICS STATEMENT',
             'SUPPLEMENTARY MATERIALS', 'AI USAGE DISCLOSURE'):
     check(f'section {sec}', sec in paras)
-check('5 figures embedded', len(doc.inline_shapes) == 5, str(len(doc.inline_shapes)))
+check('6 figures embedded', len(doc.inline_shapes) == 6, str(len(doc.inline_shapes)))
 check('one condensed table in the main text', len(doc.tables) == 1)
 subs = [t for t in paras if re.match(r'^3\.\d ', t)]
 check('six Results subsections', len(subs) == 6, str([x[:22] for x in subs]))
