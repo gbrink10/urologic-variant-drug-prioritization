@@ -106,10 +106,17 @@ check(f"chemokine q = {F['q']['rmc_chemokine']:.4f}",
       f"{F['q']['rmc_chemokine']:.4f}" in text)
 check('SSTR2 non-significant q reported',
       f"{F['de']['SSTR2_neurod1']['q']:.3f}" in text)
+def _ord(v):
+    i = int(round(v))
+    suf = 'th' if 10 <= i % 100 <= 20 else {1: 'st', 2: 'nd', 3: 'rd'}.get(i % 10, 'th')
+    return f'{i}{suf}'
+
+
 check('ATR abundance percentile reported',
-      f"{F['abundance_pct']['ATR']['pct']:.0f}th percentile" in text)
+      f"{_ord(F['abundance_pct']['ATR']['pct'])}" in text)
 check('TROP2 direction stated without a scored claim',
-      'does read lower in the' in text and 'Supplementary Table S1' in text)
+      'reads lower in the sarcomatoid samples' in text
+      and 'it carries no score' in text)
 check('two-line correlation reported', str(F['rmc']['r_between_lines']) in text)
 check('both-lines gene count reported', str(F['rmc']['up_both']) in text)
 check('CXCR1 vs CEACAM1 window contrasted',
@@ -165,10 +172,9 @@ check('anti-CEACAM5 successor agent named',
 check('seclidemstat no longer attached to the NSD2 row',
       'SP-2577' not in text and 'seclidemstat' not in text.lower())
 check('the confounding and its consequence are both stated',
-      'no model can tell them apart' in text
-      and 'not estimable' in text)
+      'no model can separate them' in text and 'not estimable' in text)
 check('sarcomatoid rows scored on the arm their data supports',
-      'abundant a transcript is within the sarcomatoid' in text)
+      'how abundant each transcript is within the sarcomatoid tumors' in text)
 check('PRISM no longer claims absence of off-target cytotoxicity',
       'absence of off-target cytotoxicity' not in text)
 check('normal-tissue RNA not used as a therapeutic-window claim',
@@ -215,9 +221,11 @@ check('within-disease priority named, not a global lead',
       'first priority within RMC' in text
       or 'the one to carry forward first' in text)
 check('no cross-disease ranking claimed',
-      ('within a disease but not between diseases' in text
-       or 'not ranked against one another across diseases' in text)
-      and 'we do not rank the renal medullary and' in text.lower())
+      'within a disease, not between diseases' in text
+      and 'we do not rank a candidate in one disease against a candidate in '
+          'another' in text.lower()
+      and 'we do not rank the renal medullary candidates against the '
+          'small-cell bladder candidate' in text.lower())
 check('three survivors across two diseases stated',
       'across 2 diseases' in text or 'across two diseases' in text
       or f"{F['n_survivor_contexts']} diseases" in text)
