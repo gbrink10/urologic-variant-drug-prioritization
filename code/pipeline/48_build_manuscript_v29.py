@@ -246,12 +246,24 @@ P('We therefore asked whether public molecular data could be interrogated '
   'included deliberately as positive controls. Their treatment priorities are '
   'already documented, so whether the pipeline returns those priorities tells '
   'us how much weight to give its output in the rare cancers, where nothing is '
-  'documented to check it against. Two design choices support that reading. '
-  'Candidates were generated and scored before any of them was classified as '
-  'previously proposed or not, so agreement with the literature cannot have '
-  'been engineered. And the rule that narrows candidates to a shortlist was '
-  'written before it was applied, so every exclusion points to a stated '
-  'criterion rather than to our judgement.')
+  'documented to check it against. Two design choices support that reading. We '
+  'scored every candidate before classifying any of them as previously '
+  'proposed or not, so agreement with the literature could not have been '
+  'engineered. And we wrote the shortlist rule before we applied it, so any '
+  'candidate we drop can be traced to a specific criterion rather than to our '
+  'opinion.')
+P(f"What is new here is not any single drug-cancer pair. "
+  f"{F['n_previously_proposed']} of the {F['n_associations']} associations we "
+  f"report were proposed by other groups first, and we say so in each case. "
+  f"What is new is that one pipeline runs across seven urologic cancers at "
+  f"once, with well-studied cancers included in the same run as positive "
+  f"controls, and that it reports what it cannot support alongside what it "
+  f"can: the candidates that dissolved once the data were modeled properly, "
+  f"the candidate an independent screen contradicted, and a drug class our own "
+  f"gene panel made it impossible to find. Repurposing work in these rare "
+  f"cancers has been done one disease at a time, which leaves no way to judge "
+  f"whether a method that produced a plausible answer in one would produce one "
+  f"in another.")
 
 # =====================================================================
 # Methods
