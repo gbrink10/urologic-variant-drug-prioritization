@@ -16,7 +16,6 @@ data/raw_matrices/
 data/prepared/*_expr.csv
 data/hgnc_complete_set.txt
 data/cache/
-data/manuscript_parts/
 output/
 body.txt
 results_sec.txt

@@ -1,0 +1,19 @@
+{
+ "CRediT AUTHOR STATEMENT": [
+  "G.J.B.: Conceptualization; Data curation; Formal analysis; Investigation; Methodology; Software; Visualization; Writing \u2014 original draft. J.G.: Conceptualization; Investigation; Methodology; Validation; Writing \u2014 review & editing. J.C.: Conceptualization; Validation; Writing \u2014 review & editing; Supervision. All authors read and approved the final manuscript."
+ ],
+ "FUNDING": [
+  "No external funding was received for this study. The analysis used exclusively publicly available datasets; computational resources were provided by the authors' institution."
+ ],
+ "CONFLICTS OF INTEREST": [
+  "The authors declare no financial conflicts of interest relevant to this work."
+ ],
+ "ETHICS STATEMENT": [
+  "This study used exclusively de-identified, publicly available data from TCGA (via cBioPortal) and NCBI GEO. No new patient data were collected, no human subjects were recruited, and no animal experiments were performed (ARRIVE guidelines do not apply). Institutional Review Board approval beyond that obtained by the originating consortia for the underlying data deposits is not required for secondary analysis of these public resources at our institution."
+ ],
+ "AI USAGE DISCLOSURE": [
+  "Claude (Anthropic) and ChatGPT (OpenAI) large-language-model artificial-intelligence tools were used for coding assistance (Python analytical-script drafting and debugging), literature-audit organization (PubMed query suggestion and citation formatting), language editing, and manuscript-structure suggestions. All analyses were executed by author-run Python scripts using publicly available datasets (The Cancer Genome Atlas via cBioPortal, Gene Expression Omnibus, Therapeutic Target Database, OpenTargets, Kyoto Encyclopedia of Genes and Genomes); no artificial-intelligence-generated data was used in any quantitative analysis. All PubMed novelty classifications, score component assignments, drug-target interpretations, and final manuscript text were reviewed and approved by the human authors, who take full responsibility for the content and the conclusions drawn.",
+  "Table 1 \u2014 Master Drug\u2013Cancer Association Landscape Across Seven Aggressive Urologic Cancer Contexts",
+  "Master Table 1. Thirty drug\u2013cancer associations identified by the unified public-data pipeline across seven aggressive urologic cancer contexts. Score components (G/E/P/L): G = genomic / context-anchor evidence (0\u20133 points; either target-level alteration frequency or disease-defining anchor alteration as enumerated in Supplementary Table S5); E = Gene Expression Omnibus transcriptomic evidence (0\u20133 points), Kyoto Encyclopedia of Genes and Genomes P = pathway / gene-set enrichment (0\u20132 points), and L = external mechanistic-literature concordance (0 or 1 point; supports biological plausibility, distinct from the prior-proposal novelty audit); components sum to 0\u20139. Tier: Strong (7\u20139), Moderate (4\u20136), Exploratory (1\u20133). Prior-proposal status determined by independent PubMed audit using a urologic-oncology-literature-only standard (prior proposals from non-urologic cancers do not count as urologic-oncology prior). Citations provided inline. Negative biomarker: clinically-actionable predicted non-response."
+ ]
+}
