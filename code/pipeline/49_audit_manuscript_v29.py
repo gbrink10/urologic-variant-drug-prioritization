@@ -143,6 +143,11 @@ check('both pre-specified thresholds named',
       'q < 0.05' in text and 'q < 0.10' in text
       and 'pre-specified' in text)
 
+check('novelty stated without a priority claim',
+      'What is new here is not any single drug-cancer pair' in text
+      and 'first to' not in text.lower()
+      and 'first study' not in text.lower())
+
 print('\n5. CITATIONS')
 cited = Counter()
 for m in re.finditer(r'\[([0-9,\u2013\-\s]+)\]', text):
