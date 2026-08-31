@@ -27,6 +27,18 @@
  },
  "funnel_entry": 19199,
  "funnel_in_panel": 658,
+ "arm_control": {
+  "n": 16,
+  "proposed": 16
+ },
+ "arm_discovery": {
+  "n": 14,
+  "proposed": 2,
+  "partial": 5,
+  "biomarker": 1,
+  "novel": 6,
+  "diseases": 4
+ },
  "n_tcga_anchored": 16,
  "n_geo_anchored": 14,
  "tcga_rows_freq_ge_15pct": 13,
