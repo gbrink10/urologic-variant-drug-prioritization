@@ -213,6 +213,10 @@
   "n_lines": 578,
   "bortezomib": -4.175,
   "erlotinib_uro": -0.932,
+  "erlotinib_nonuro": -0.054,
+  "erlotinib_q": 0.0032,
+  "ve822_q": 0.2664,
+  "polydatin_q": 0.1771,
   "cxcr_quartet": {
    "reparixin": -0.035,
    "navarixin": 0.092,

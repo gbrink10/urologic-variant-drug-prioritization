@@ -98,8 +98,9 @@ check('penile technical replicates disclosed',
       f"{F['design']['pscc_normal_donors']} donors" in text)
 check('LINCS no longer called a null comparator',
       'null comparator' not in text.lower())
-check('LINCS non-specificity stated', 'not context-specific' in text
-      or 'Neither is context-specific' in text)
+check('LINCS non-specificity stated',
+      'lacked context specificity' in text
+      or 'not context-specific' in text)
 check('score sensitivity result stated', 'sensitivity analysis' in text.lower())
 check('scoring dimensions called partially overlapping',
       'partially overlapping' in text)

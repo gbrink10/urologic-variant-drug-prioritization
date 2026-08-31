@@ -98,8 +98,14 @@ for name, (mtrows, note, monoculture_valid) in DRUGS.items():
     kidv = vals.reindex(kid_ids).dropna()
     rmc = vals.get(RMC_ID, np.nan)
 
-    p_uro = (float(stats.mannwhitneyu(urov, allv, alternative='less').pvalue)
-             if len(urov) >= 3 else np.nan)
+    # Compare urothelial against NON-urothelial lines. Testing urothelial
+    # against the whole panel compares a subset with a group that contains it,
+    # which is not an independent comparison. Two-sided Welch, as the
+    # Supplementary Methods state; the direction is read from the means.
+    nonurov = vals.drop(index=[i for i in uro_ids if i in vals.index],
+                        errors='ignore').dropna()
+    p_uro = (float(stats.ttest_ind(urov, nonurov, equal_var=False).pvalue)
+             if len(urov) >= 3 and len(nonurov) >= 3 else np.nan)
     rmc_pct = float((allv < rmc).mean() * 100) if pd.notna(rmc) else np.nan
 
     if not monoculture_valid:
@@ -126,11 +132,30 @@ for name, (mtrows, note, monoculture_valid) in DRUGS.items():
         'lfc_RMC_line': round(float(rmc), 3) if pd.notna(rmc) else None,
         'RMC_percentile_of_all_lines': round(rmc_pct, 1) if pd.notna(rmc_pct) else None,
         'pct_all_lines_sensitive': round(float((allv < SENSITIVE).mean() * 100), 1),
-        'p_urothelial_vs_all': f'{p_uro:.3g}' if pd.notna(p_uro) else None,
+        'n_nonurothelial_lines': len(nonurov),
+        'mean_lfc_nonurothelial': (round(float(nonurov.mean()), 3)
+                                   if len(nonurov) else None),
+        'p_urothelial_vs_nonurothelial': f'{p_uro:.3g}' if pd.notna(p_uro) else None,
+        'p_raw': p_uro,
         'verdict': verdict,
     })
 
 out = pd.DataFrame(rows)
+
+# Benjamini-Hochberg across the compounds actually tested, so nominal and
+# corrected values are distinguishable in the deposited table
+mask = out['p_raw'].notna() if 'p_raw' in out.columns else pd.Series(False, index=out.index)
+out['q_urothelial_vs_nonurothelial'] = np.nan
+if mask.any():
+    pv = out.loc[mask, 'p_raw'].astype(float).values
+    order = np.argsort(pv)
+    m = len(pv)
+    ranked = pv[order] * m / (np.arange(m) + 1)
+    ranked = np.minimum.accumulate(ranked[::-1])[::-1]
+    q = np.empty(m)
+    q[order] = np.minimum(ranked, 1.0)
+    out.loc[mask, 'q_urothelial_vs_nonurothelial'] = np.round(q, 4)
+out = out.drop(columns=['p_raw'], errors='ignore')
 out.to_csv(OUT, index=False)
 show = ['drug', 'master_table_rows', 'mean_lfc_all_lines', 'mean_lfc_urothelial',
         'lfc_RMC_line', 'pct_all_lines_sensitive', 'verdict']

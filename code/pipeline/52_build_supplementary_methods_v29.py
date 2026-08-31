@@ -61,6 +61,9 @@ P('Seven contexts were analyzed. Three are common source diseases with abundant 
   'knowledge entered the pathway panel, the drug curation and the choice of '
   'representative agent.')
 
+H('1b. Provenance of the frozen candidate set')
+P('An earlier implementation of this pipeline generated the 30-association candidate set. Association membership was frozen before design-aware refitting. The analysis reported here re-estimated the transcriptomic and pathway evidence for that fixed set, recalculated scores and tiers, and applied the eligibility and orthogonal-audit rules to it. It does not claim that the final models would independently regenerate the same thirty associations, and the changes the refit produced are themselves a result. The curated half of each row - drug, target, genomic frequency and its source, clinical stage and prior-proposal status - is deposited as data/master_row_definitions.csv; the computed half is emitted by 39_rescore_from_refit.py.')
+
 H('2. Genomic and context-anchor input')
 P('Somatic alteration frequencies for the benchmark contexts came from The '
   'Cancer Genome Atlas Pan-Cancer Atlas 2018 through the cBioPortal programmatic '
@@ -188,7 +191,10 @@ P('Protein-level evidence came from the Human Protein Atlas: curated protein '
   'expression tertile where the hypothesis rests on over-expression, with '
   'genotype and expression from CCLE through cBioPortal. Compound activity came '
   'from the PRISM Repurposing 19Q4 primary screen, comparing urothelial lines '
-  'against the panel by two-sided Welch t-test. Signature reversal was tested '
+  'against NON-urothelial lines by two-sided Welch t-test with '
+  'Benjamini-Hochberg correction across the compounds tested; comparing them '
+  'against the whole panel would test a subset against a group containing it. '
+  'Signature reversal was tested '
   'through the Enrichr interface against the LINCS L1000 chemical-perturbation '
   'libraries, with the up-perturbation library reported as an internal control '
   'so that a compound appearing in both directions can be recognized as '
@@ -213,8 +219,14 @@ P('The rule was fixed before it was applied, and every exclusion in the '
   'whose agent acts from outside the cell requires confirmed extracellular '
   'access. The lead candidate additionally requires that the target itself '
   'belong to a pathway that is enriched, because an enrichment driven by other '
-  'genes is not evidence for that target, and among candidates meeting that '
-  'condition the widest therapeutic window in the organ of origin.')
+  'genes is not evidence for that target. The rule identifies surviving '
+  'hypotheses but does not rank them across diseases. Within a disease holding '
+  'more than one survivor, candidates are ordered first by whether the '
+  'nominated target belongs to an enriched pathway and then by total score. '
+  'Normal-tissue bulk RNA is reported for orientation and safety planning and '
+  'is not used as a comparative therapeutic-window measure, because agents '
+  'acting on different normal compartments cannot be ranked against each other '
+  'on organ-level RNA.')
 
 H('10. Sensitivity analyses')
 P('Because the scoring dimensions overlap, the ordering was recomputed under '
@@ -251,9 +263,21 @@ for c, h in zip(t.rows[0].cells, ('Context', 'Model fitted', 'Note')):
     r = c.paragraphs[0].add_run(h)
     r.bold = True
     r.font.size = Pt(8.5)
+# the renal medullary series is not in the refit summary because no
+# sample-level matrix exists for it; it is described explicitly instead
+extra = pd.DataFrame([{ 'context': 'RMC (GSE180999)',
+    'method': 'author DE spreadsheet; two independent patient-derived models',
+    'notes': 'no sample-level matrix deposited; required log2FC > 0.5 and '
+             'q < 0.05 separately in each model, with the larger line-specific '
+             'q reported'}])
+summary = pd.concat([summary, extra], ignore_index=True)
+summary['notes'] = (summary['notes'].astype(str)
+                    .str.replace('nan', 'no preliminary expression filter applied',
+                                 regex=False)
+                    .str.replace('NA of', 'no filter applied; of', regex=False))
 for _, r in summary.iterrows():
     row = t.add_row()
-    for c, v in zip(row.cells, (r['context'], r['method'], str(r['notes'])[:90])):
+    for c, v in zip(row.cells, (r['context'], r['method'], str(r['notes']))):
         c.text = ''
         run = c.paragraphs[0].add_run(str(v))
         run.font.size = Pt(8)

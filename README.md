@@ -2,7 +2,7 @@
 
 Code and results for the manuscript *An Auditable Public-Data Framework for
 Prioritizing Biomarker-Matched Drug Hypotheses Across Benchmark and Rare
-Urologic Cancers* (v29).
+Urologic Cancers* (v31).
 
 The framework applies one pipeline uniformly to seven contexts — three common
 diseases that serve as benchmarks and four rare or variant diseases where it is
@@ -35,9 +35,11 @@ python code/pipeline/40_figure2_rmc_v29.py
 python code/pipeline/42_figure5_selection_v29.py
 python code/pipeline/46_figures_3_4_v29.py
 python code/pipeline/47_manuscript_facts.py
-python code/pipeline/48_build_manuscript_v29.py
+python code/pipeline/48_build_manuscript_v29.py    # writes the v31 document
 python code/pipeline/50_build_cover_letter_v29.py
-python code/pipeline/49_audit_manuscript_v29.py    # 53 checks, all must pass
+python code/pipeline/52_build_supplementary_methods_v29.py
+python code/pipeline/53_audit_row_mapping.py         # row-mapping audit
+python code/pipeline/49_audit_manuscript_v29.py    # 69 checks, all must pass
 ```
 
 Requirements: Python 3.10 with numpy, scipy, pandas, matplotlib, python-docx,
@@ -58,8 +60,21 @@ header of each script that uses them.
 | `code/pipeline/lib_limma.py` | independent Python implementation of the moderated-t machinery, used as a cross-check on the R results |
 | `code/manuscript_build/` | scripts that produced the v25–v28 manuscripts; kept for reconstructibility, not part of the current pipeline |
 | `data/master_row_definitions.csv` | the curated half of the association table: drug, target, genomic frequency, stage, prior-proposal status |
-| `results/refit/` | everything the v29 manuscript cites |
+| `results/refit/` | everything the v31 manuscript cites |
 | `figures/` | the five manuscript figures |
+| `output/` | the built manuscript, cover letter, supplementary methods and tables |
+
+## The frozen candidate set
+
+An earlier implementation generated the 30-association candidate set. Membership
+was frozen before the design-aware refit; the current pipeline re-estimates the
+transcriptomic and pathway evidence for that fixed set, recalculates scores and
+tiers, and applies the eligibility and orthogonal-audit rules to it. It does not
+claim that the final models would independently regenerate the same thirty
+associations — the changes the refit produced are themselves a result.
+
+Five sarcomatoid rows carry no score: histology and array chip are completely
+aliased in GSE128192, so their contrast fails the E0 identifiability criterion.
 
 ## How the association table is built
 
@@ -89,7 +104,7 @@ manuscript table and the deposited table came to disagree in 42 fields.
 - **GSE180999 deposits no sample-level matrix**, only an author
   differential-expression spreadsheet, so a cell-line × treatment × time model
   cannot be fitted from deposited data. `36_rmc_reanalysis.py` instead treats the
-  two patient-derived lines as two biological replicates and scores only genes
+  two patient-derived lines as two independent models and scores only genes
   changing consistently in both.
 - Rows whose target is absent from its platform keep a curated value and are
   flagged in the provenance table rather than silently scored.

@@ -1,24 +1,24 @@
-drug,master_table_rows,note,monoculture_is_valid_test,n_lines,mean_lfc_all_lines,mean_lfc_urothelial,mean_lfc_kidney,lfc_RMC_line,RMC_percentile_of_all_lines,pct_all_lines_sensitive,p_urothelial_vs_all,verdict
-reparixin,17,CXCR1/CXCR2 antagonist,False,572,-0.11,-0.035,-0.21,-0.215,36.0,11.7,0.89,no tumour-cell-autonomous activity (expected; mechanism is microenvironmental and untestable here)
-navarixin,17,CXCR1/CXCR2 antagonist,False,574,0.063,0.092,0.041,-0.027,39.7,5.4,0.796,no tumour-cell-autonomous activity (expected; mechanism is microenvironmental and untestable here)
-AZD5069,17,CXCR1/CXCR2 antagonist,False,571,-0.118,-0.244,-0.291,-0.113,47.6,14.9,0.0778,no tumour-cell-autonomous activity (expected; mechanism is microenvironmental and untestable here)
-danirixin,17,CXCR1/CXCR2 antagonist,False,547,-0.011,0.048,0.063,-0.034,46.4,4.6,0.754,no tumour-cell-autonomous activity (expected; mechanism is microenvironmental and untestable here)
-erlotinib,18,"EGFR inhibitor, RMC positive control",True,572,-0.091,-0.932,0.161,-0.23,40.4,30.9,3.01e-05,active in urothelial lines
-VE-822,24,ATR inhibitor (berzosertib),True,548,-0.855,-1.266,-1.242,-1.904,19.9,60.6,0.039,active in urothelial lines
-polydatin,26,nominated with 6-aminonicotinamide for G6PD,True,538,-0.532,-1.367,1.156,0.595,77.0,49.8,0.0122,active in urothelial lines
-celecoxib,30,COX inhibitor,True,565,0.151,0.167,-0.033,-0.229,16.6,5.1,0.648,not active at screened dose
-aspirin,30,COX inhibitor,True,550,-0.806,-0.753,-1.005,-0.907,42.2,75.5,0.825,active in urothelial lines
-venetoclax,1,BCL2 inhibitor,True,557,-0.378,-0.552,-0.519,-0.415,45.4,37.7,0.0216,active in urothelial lines
-alisertib,"2, 7",aurora kinase inhibitor,True,558,-0.31,-0.683,0.172,0.564,78.0,40.3,0.0783,active in urothelial lines
-tazemetostat,3,EZH2 inhibitor,True,538,-0.514,-0.536,-0.312,-0.869,29.4,47.0,0.427,active in urothelial lines
-decitabine,4,hypomethylating agent,True,568,-1.075,-1.507,-0.755,-1.648,27.6,70.2,0.00927,active in urothelial lines
-azacitidine,4,hypomethylating agent,True,569,-0.441,-0.615,-0.02,-0.067,71.0,43.8,0.0912,active in urothelial lines
-olaparib,6,PARP inhibitor,True,567,0.177,0.14,0.716,0.899,90.5,14.1,0.255,not active at screened dose
-talazoparib,8,PARP inhibitor,True,572,-1.048,-1.401,0.02,-1.594,30.9,63.1,0.161,active in urothelial lines
-alpelisib,9,PI3K inhibitor,True,574,-0.124,-0.468,0.111,0.364,75.6,23.2,0.0171,not active at screened dose
-erdafitinib,10,FGFR inhibitor,True,547,-0.045,0.002,-0.348,-0.461,15.5,14.4,0.638,not active at screened dose
-palbociclib,13,CDK4/6 inhibitor,True,569,0.276,0.225,-0.113,-0.013,33.0,12.7,0.433,not active at screened dose
-abemaciclib,16,CDK4/6 inhibitor,True,570,0.133,0.134,-0.628,-0.782,14.6,22.1,0.435,active in the RMC line specifically
-pazopanib,14,VEGFR multikinase inhibitor,True,557,-0.073,-0.06,0.031,0.06,56.9,16.2,0.591,not active at screened dose
-marimastat,21,MMP inhibitor,True,574,-0.217,-0.387,-0.067,-0.301,40.8,22.8,0.0282,not active at screened dose
-bortezomib,n/a,proteasome inhibitor - panel-coverage probe and pan-active positive control,True,571,-4.175,-4.413,-4.74,-6.783,0.5,99.8,0.189,broadly cytotoxic (active but not selective)
+drug,master_table_rows,note,monoculture_is_valid_test,n_lines,mean_lfc_all_lines,mean_lfc_urothelial,mean_lfc_kidney,lfc_RMC_line,RMC_percentile_of_all_lines,pct_all_lines_sensitive,n_nonurothelial_lines,mean_lfc_nonurothelial,p_urothelial_vs_nonurothelial,verdict,q_urothelial_vs_nonurothelial
+reparixin,17,CXCR1/CXCR2 antagonist,False,572,-0.11,-0.035,-0.21,-0.215,36.0,11.7,548,-0.113,0.17,no tumour-cell-autonomous activity (expected; mechanism is microenvironmental and untestable here),0.3909
+navarixin,17,CXCR1/CXCR2 antagonist,False,574,0.063,0.092,0.041,-0.027,39.7,5.4,550,0.062,0.679,no tumour-cell-autonomous activity (expected; mechanism is microenvironmental and untestable here),0.918
+AZD5069,17,CXCR1/CXCR2 antagonist,False,571,-0.118,-0.244,-0.291,-0.113,47.6,14.9,547,-0.113,0.153,no tumour-cell-autonomous activity (expected; mechanism is microenvironmental and untestable here),0.3909
+danirixin,17,CXCR1/CXCR2 antagonist,False,547,-0.011,0.048,0.063,-0.034,46.4,4.6,523,-0.014,0.343,no tumour-cell-autonomous activity (expected; mechanism is microenvironmental and untestable here),0.5628
+erlotinib,18,"EGFR inhibitor, RMC positive control",True,572,-0.091,-0.932,0.161,-0.23,40.4,30.9,548,-0.054,0.00014,active in urothelial lines,0.0032
+VE-822,24,ATR inhibitor (berzosertib),True,548,-0.855,-1.266,-1.242,-1.904,19.9,60.6,524,-0.836,0.0517,active in urothelial lines,0.2664
+polydatin,26,nominated with 6-aminonicotinamide for G6PD,True,538,-0.532,-1.367,1.156,0.595,77.0,49.8,516,-0.496,0.0231,active in urothelial lines,0.1771
+celecoxib,30,COX inhibitor,True,565,0.151,0.167,-0.033,-0.229,16.6,5.1,541,0.15,0.839,not active at screened dose,0.9438
+aspirin,30,COX inhibitor,True,550,-0.806,-0.753,-1.005,-0.907,42.2,75.5,527,-0.809,0.572,active in urothelial lines,0.8227
+venetoclax,1,BCL2 inhibitor,True,557,-0.378,-0.552,-0.519,-0.415,45.4,37.7,533,-0.37,0.0695,active in urothelial lines,0.2664
+alisertib,"2, 7",aurora kinase inhibitor,True,558,-0.31,-0.683,0.172,0.564,78.0,40.3,534,-0.293,0.139,active in urothelial lines,0.3909
+tazemetostat,3,EZH2 inhibitor,True,538,-0.514,-0.536,-0.312,-0.869,29.4,47.0,516,-0.513,0.894,active in urothelial lines,0.9438
+decitabine,4,hypomethylating agent,True,568,-1.075,-1.507,-0.755,-1.648,27.6,70.2,544,-1.056,0.0173,active in urothelial lines,0.1771
+azacitidine,4,hypomethylating agent,True,569,-0.441,-0.615,-0.02,-0.067,71.0,43.8,545,-0.433,0.276,active in urothelial lines,0.489
+olaparib,6,PARP inhibitor,True,567,0.177,0.14,0.716,0.899,90.5,14.1,543,0.179,0.72,not active at screened dose,0.9205
+talazoparib,8,PARP inhibitor,True,572,-1.048,-1.401,0.02,-1.594,30.9,63.1,548,-1.032,0.242,active in urothelial lines,0.4636
+alpelisib,9,PI3K inhibitor,True,574,-0.124,-0.468,0.111,0.364,75.6,23.2,550,-0.109,0.0602,not active at screened dose,0.2664
+erdafitinib,10,FGFR inhibitor,True,547,-0.045,0.002,-0.348,-0.461,15.5,14.4,523,-0.048,0.56,not active at screened dose,0.8227
+palbociclib,13,CDK4/6 inhibitor,True,569,0.276,0.225,-0.113,-0.013,33.0,12.7,545,0.278,0.79,not active at screened dose,0.9438
+abemaciclib,16,CDK4/6 inhibitor,True,570,0.133,0.134,-0.628,-0.782,14.6,22.1,546,0.133,0.999,active in the RMC line specifically,0.9985
+pazopanib,14,VEGFR multikinase inhibitor,True,557,-0.073,-0.06,0.031,0.06,56.9,16.2,533,-0.074,0.903,not active at screened dose,0.9438
+marimastat,21,MMP inhibitor,True,574,-0.217,-0.387,-0.067,-0.301,40.8,22.8,550,-0.21,0.162,not active at screened dose,0.3909
+bortezomib,n/a,proteasome inhibitor - panel-coverage probe and pan-active positive control,True,571,-4.175,-4.413,-4.74,-6.783,0.5,99.8,547,-4.165,0.226,broadly cytotoxic (active but not selective),0.4636

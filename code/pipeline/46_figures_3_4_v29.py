@@ -193,16 +193,14 @@ axB.set_yticks(ypos)
 axB.set_yticklabels([lbl for lbl, _, _ in rows], fontsize=7.8)
 axB.set_xlabel('log$_2$ fold change vs remaining subtypes', fontsize=8.4)
 axB.set_xlim(0, max(fc for _, fc, _ in rows) * 1.35)
-axB.set_title('B. Nominated target per subtype\n'
-              'green q<0.05; red not supported by this cohort. COX-1 direction '
-              'unresolved',
+axB.set_title('B. Nominated target by subtype\n'
+              'green q<0.05; red unsupported; COX-1 direction unresolved',
               fontsize=9.5, weight='bold', loc='left')
 for s_ in ('top', 'right'):
     axB.spines[s_].set_visible(False)
 
 axc = fig.add_subplot(gs[0, 2])
-panel_c(axc, 'PanelC_SCBC.png',
-        'C. Proposed lineage-stratified therapeutic hypotheses')
+panel_c(axc, 'PanelC_SCBC.png', 'C. Proposed lineage mechanisms')
 # the NEUROD1 branch does not survive the refit, so say so on the panel
 axc.text(0.50, 0.02, 'NEUROD1 branch not supported by this cohort (q = 0.363)',
          transform=axc.transAxes, ha='center', fontsize=8.0, weight='bold',

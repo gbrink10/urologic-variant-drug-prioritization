@@ -218,6 +218,7 @@ P('We therefore asked whether public molecular data could be interrogated '
 # Methods
 # =====================================================================
 H('MATERIALS AND METHODS')
+P('An earlier implementation generated the 30-association candidate set. Association membership was frozen before design-aware refitting. The present analysis re-estimated the transcriptomic and pathway evidence, recalculated scores and tiers, and applied the eligibility and orthogonal-audit rules to that fixed set, rather than claiming that the final models independently regenerated the same thirty associations.')
 P('We applied one six-step pipeline uniformly to all seven contexts, set out in '
   'Figure 1: a genomic or context-anchor value; per-context differential '
   'expression across ten Gene Expression Omnibus datasets; upper-tail '
@@ -337,18 +338,15 @@ P(f"An earlier implementation of the pipeline generated a set of "
   f"transcriptomic component rests.")
 
 H('3.2 Benchmark Recovery', 11.5, 10, level=2)
-P(f"The three benchmark contexts contributed sixteen associations, every one of "
-  f"which recovers a priority proposed independently elsewhere \u2014 six in "
+P(f"The three benchmark contexts contributed sixteen associations, every one "
+  f"recovering a priority proposed independently elsewhere: six in "
   f"neuroendocrine prostate cancer [10\u201318], seven in muscle-invasive "
   f"bladder cancer [19\u201327] and three in clear cell renal cell carcinoma "
-  f"[28\u201332]. Two further previously-proposed priorities arise in the "
-  f"rare-disease contexts, erlotinib in renal medullary carcinoma and "
-  f"pembrolizumab in penile squamous cell carcinoma [34,35], giving "
-  f"{F['n_previously_proposed']} in all. This is calibration rather than "
-  f"independent validation: prior knowledge influenced the pathway panel, the "
-  f"drug curation and the choice of representative agent, so recovery shows the "
-  f"framework behaves sensibly where the answer is known, not that its novel "
-  f"output is correct.")
+  f"[28\u201332], with erlotinib in renal medullary carcinoma and "
+  f"pembrolizumab in penile squamous cell carcinoma [34,35] adding two more "
+  f"in the discovery contexts, {F['n_previously_proposed']} in all. This is "
+  f"calibration, not independent validation: prior knowledge influenced the "
+  f"pathway panel, the drug curation and the choice of representative agent.")
 
 H('3.3 Discovery Contexts', 11.5, 10, level=2)
 P(f"In renal medullary carcinoma the deposited experiment is a SMARCB1 rescue in "
@@ -378,7 +376,11 @@ P(f"Penile squamous cell carcinoma showed a dominant immune-hot phenotype. "
   f"periostin candidates [39\u201341]. This signal survives modeling the six "
   f"normal arrays as {dsn['pscc_normal_donors']} donors rather than six "
   f"independent samples, which was the more demanding test.")
-P(f"Sarcomatoid urothelial carcinoma (Figure 3) yielded nuclear receptor-binding "
+P(f"The sarcomatoid series was not inferentially usable: histology and array "
+  f"chip are completely aliased, so no model can attribute any difference to "
+  f"sarcomatoid biology rather than to processing, and every value below is "
+  f"descriptive. With that stated first, the series (Figure 3) yielded "
+  f"nuclear receptor-binding "
   f"SET domain protein 2 (NSD2 {de['NSD2_sarc']['log2FC']:+.2f}, "
   f"q = {fmt(de['NSD2_sarc']['q'])}) with epigenetic regulation enriched at "
   f"q = {q['sarc_epigenetic']:.3f}, together with partially-novel UHRF1 [42] and "
@@ -386,18 +388,13 @@ P(f"Sarcomatoid urothelial carcinoma (Figure 3) yielded nuclear receptor-binding
   f"trophoblast cell-surface antigen 2, encoded by TACSTD2, is lower in the "
   f"sarcomatoid-labeled group ({de['TACSTD2_sarc']['log2FC']:+.2f}, "
   f"q = {fmt(de['TACSTD2_sarc']['q'])}), concordant with two independent "
-  f"pathology reports [44,45]. Lower TROP2 would be expected to reduce target "
+  f"pathology reports [44,45]; a third series reports the same tissue set for "
+  f"NECTIN-4 [46]. Lower TROP2 would be expected to reduce target "
   f"availability for sacituzumab "
   f"govitecan, though no treated cases are analyzed here and the predictive "
   f"value is unestablished, "
   f"whose accelerated approval in metastatic urothelial carcinoma was withdrawn "
-  f"in November 2024. Every sarcomatoid estimate in this paragraph carries a "
-  f"caveat that applies to the whole context: sarcomatoid and conventional "
-  f"samples share no array chip, so histology and batch are completely "
-  f"aliased and no model can attribute these differences to biology rather "
-  f"than to processing. The rows are reported descriptively and are excluded "
-  f"from the shortlist for that reason. The ataxia telangiectasia and "
-  f"Rad3-related kinase candidate "
+  f"in November 2024. The ataxia telangiectasia and Rad3-related kinase candidate "
   f"that the previous analysis carried does not survive refitting: its effect is "
   f"{de['ATR_sarc']['log2FC']:+.2f} at q = {fmt(de['ATR_sarc']['q'])}, below the "
   f"framework\u2019s own entry threshold.")
@@ -443,12 +440,11 @@ P(f"{F['hpa']['n_surface_required']} associations depend on extracellular "
   f"there ({F['hpa']['CXCR1_kidney']}) but is expressed on circulating "
   f"myeloid cells that a CXCR1/CXCR2 antagonist is intended to act upon, so "
   f"the two cannot be ranked against each other on organ RNA. Delta-like "
-  f"ligand 3 is undetectable in normal bladder "
-  f"({F['hpa']['nTPM']['DLL3']}) and somatostatin receptor 2 near-absent "
-  f"({F['hpa']['nTPM']['SSTR2']}), while trophoblast cell-surface antigen 2 is "
-  f"abundant in normal urothelium ({F['hpa']['nTPM']['TACSTD2']}), which is what "
-  f"makes its loss in sarcomatoid disease interpretable rather than a "
-  f"low-baseline artefact.")
+  f"ligand 3 and somatostatin receptor 2 are both near-undetectable in normal "
+  f"bladder, while trophoblast cell-surface antigen 2 is abundant there "
+  f"({F['hpa']['nTPM']['TACSTD2']} normalized transcripts per million), which "
+  f"is what makes its loss interpretable rather than a low-baseline artifact. "
+  f"Per-target values are in Supplementary Table S1.")
 P(f"DepMap CRISPR screens ask whether a cell requires a gene, a more demanding "
   f"question than whether it is abundantly expressed [55]; gene effect is "
   f"reported on the Chronos scale, where more negative means more required. "
@@ -466,9 +462,20 @@ P(f"DepMap CRISPR screens ask whether a cell requires a gene, a more demanding "
   f"antibody, conjugate and radioligand rows the screen is not the right test "
   f"at all: CEACAM1 is recorded as {F['depmap']['CEACAM1_verdict']}.")
 P(f"Compound-level activity was read from the PRISM Repurposing screen across "
-  f"{F['prism']['n_lines']} cell lines [51]. It calibrates — bortezomib "
-  f"gives {F['prism']['bortezomib']:.2f} and erlotinib is markedly more active "
-  f"in urothelial lines ({F['prism']['erlotinib_uro']:.2f}) — but the four "
+  f"{F['prism']['n_lines']} cell lines [51], comparing urothelial against "
+  f"non-urothelial lines by two-sided Welch test with Benjamini-Hochberg "
+  f"correction across the compounds tested. It calibrates: bortezomib is "
+  f"broadly cytotoxic ({F['prism']['bortezomib']:.2f}) without being "
+  f"urothelial-selective, and erlotinib is markedly more active in urothelial "
+  f"lines ({F['prism']['erlotinib_uro']:.2f} versus "
+  f"{F['prism']['erlotinib_nonuro']:.2f}; q = {F['prism']['erlotinib_q']:.4f}), "
+  f"consistent with its role as the renal medullary positive control. Two "
+  f"compounds that a weaker comparison had marked selective do not survive "
+  f"this one: the ATR inhibitor VE-822 (q = {F['prism']['ve822_q']:.2f}) and "
+  f"polydatin (q = {F['prism']['polydatin_q']:.2f}) are not significantly more "
+  f"active in urothelial lines once they are compared against non-urothelial "
+  f"lines rather than against a panel containing them, and once multiplicity "
+  f"is accounted for. The four "
   f"screened CXCR1/CXCR2 antagonists show no tumor-cell-autonomous activity in "
   f"any lineage. This is expected rather than negative: the proposed mechanism "
   f"is blockade of myeloid recruitment, which a tumor-cell monoculture cannot "
@@ -476,26 +483,16 @@ P(f"Compound-level activity was read from the PRISM Repurposing screen across "
   f"show no strong tumor-cell-autonomous cytotoxicity at the screened "
   f"concentration, which is what a microenvironment-directed mechanism "
   f"predicts; it says nothing about normal-cell, myeloid or organ toxicity.")
-P(f"Signature reversal against the LINCS L1000 libraries [52,53] was recomputed "
-  f"on the refitted gene lists, and the result differs from what we previously "
-  f"reported. {F['lincs']['n_sig_reversal']} of {F['lincs']['n_terms']} "
-  f"reversal terms reach q < 0.05 among the top twenty-five returned for each "
-  f"of the eight analysis units, which are renal medullary carcinoma, penile "
-  f"squamous cell carcinoma, sarcomatoid urothelial carcinoma, "
-  f"muscle-invasive bladder cancer, the hereditary leiomyomatosis series and "
-  f"the three small-cell lineage subtypes; because those terms are already "
-  f"the most significant returned, the proportion is descriptive rather than "
-  f"a global result, "
-  f"and nominated agents do now appear, palbociclib and erlotinib among them. "
-  f"Neither is context-specific: palbociclib surfaces in hereditary "
-  f"leiomyomatosis renal cell cancer, sarcomatoid urothelial carcinoma and "
-  f"muscle-invasive bladder cancer alike, and erlotinib surfaces in sarcomatoid "
-  f"disease rather than in the renal medullary context where it is the positive "
-  f"control. No nominated agent reaches rank 1 in any context, and the lists are "
+P(f"Signature reversal against the LINCS L1000 libraries [52,53], recomputed on "
+  f"the refitted gene lists across eight analysis units, recovered several "
+  f"nominated agents, but none ranked first in its intended context and the "
+  f"same agents appeared across unrelated contexts and lineages: palbociclib "
+  f"surfaces in three, and erlotinib in sarcomatoid disease rather than in the "
+  f"renal medullary context where it is the positive control. The lists are "
   f"dominated by heat shock protein 90, mitogen-activated protein kinase kinase "
-  f"and multi-kinase perturbagens profiled in unrelated lineages. Connectivity "
-  f"therefore remains uninformative here, for a more specific reason than "
-  f"before.")
+  f"and multi-kinase perturbagens profiled in unrelated lineages. The layer "
+  f"therefore lacked context specificity and was not used to support or exclude "
+  f"any candidate; complete rankings and corrected values are deposited.")
 
 H('3.5 The Surviving Hypotheses', 11.5, 10, level=2)
 P(f"Applying the rule set out above (Figure 5), the "
@@ -599,14 +596,11 @@ P(f"The clearest demonstration of that last point is what happened when the "
   f"public-data prioritization that does not refit what it reuses.")
 P(f"Three design features of the deposited data bound what can be concluded, "
   f"and none was visible in the summary tables the earlier analysis relied on. "
-  f"In the sarcomatoid series all {dsn['sarc_chips_sarc_only'] + dsn['sarc_chips_uc_only']} "
-  f"arrays are hybridized such that sarcomatoid and conventional samples share "
-  f"no chip: {dsn['sarc_chips_sarc_only']} chips carry sarcomatoid samples only "
-  f"and {dsn['sarc_chips_uc_only']} carry conventional samples only, with "
-  f"{dsn['sarc_chips_mixed']} mixed. Batch and biology are therefore completely "
-  f"confounded there, a model including chip is not estimable, and every "
-  f"sarcomatoid association, including the trophoblast cell-surface antigen 2 "
-  f"biomarker, must be read with that in mind. The clear cell renal series "
+  f"The sarcomatoid confounding described in Results 3.3 is the clearest case: "
+  f"{dsn['sarc_chips_sarc_only']} chips carry sarcomatoid samples only and "
+  f"{dsn['sarc_chips_uc_only']} carry conventional samples only, none both, so "
+  f"a model including chip is not estimable and those five rows are unscored. "
+  f"The clear cell renal series "
   f"contains {dsn['ccrcc_samples']} tumors and no normal tissue, so those rows "
   f"are scored on absolute expression rather than a disease contrast; the "
   f"metastatic-versus-non-metastatic contrast that the series does support "
@@ -673,7 +667,7 @@ P(f"The final design-aware framework re-audited a frozen set of "
   f"that can be audited and contradicted. CXCR1/CXCR2 blockade in renal "
   f"medullary carcinoma is the highest-priority experimental hypothesis it "
   f"produces. All candidates remain hypotheses requiring disease-specific "
-  f"validation, and broader progress requires universal tumor sequencing and a "
+  f"validation, and broader progress would benefit from wider tumor sequencing and a "
   f"histology-labeled, machine-accessible biorepository.")
 
 print('discussion and conclusions written')
@@ -732,18 +726,15 @@ FIGURES = [
      'why a tumor-cell monoculture cannot test this hypothesis in either '
      'direction.'),
     ('Figure3_SarcUC.png', 6.9,
-     'Figure 3. Sarcomatoid urothelial carcinoma. (A) Differential expression '
-     'from the limma refit, 28 sarcomatoid versus 84 conventional tumors, with '
-     'the nominated targets labeled; ATR lies close to the origin, which is why '
-     'its association does not survive. (B) Pathway enrichment, with sets '
-     'meeting the pre-specified 10% false-discovery threshold shown in green and '
-     'starred and nominal-only sets in gold. (C) Nominated targets by '
-     'subcellular compartment: NSD2, UHRF1 and the ATR-ATRIP complex are '
-     'nuclear, G6PD is cytoplasmic, and trophoblast cell-surface antigen 2 is '
-     'drawn sparse at the membrane to indicate loss. Sarcomatoid and '
-     'conventional samples share no array chip in this series, so batch and '
-     'biology cannot be separated; all panels should be read with that '
-     'limitation.'),
+     'Figure 3. Sarcomatoid urothelial carcinoma as a data-identifiability '
+     'failure. (A) Descriptive chip-aligned group separation between samples '
+     'labeled sarcomatoid and conventional. Because histology and array chip '
+     'are completely aliased, the effect estimates and q-values cannot be '
+     'attributed to histology. (B) Pathway values from the same confounded '
+     'comparison, shown descriptively and not used for scoring. (C) '
+     'Subcellular localization of the descriptive signals, which require '
+     'confirmation in an independent, non-confounded cohort. No transcriptomic '
+     'or pathway score was assigned to any sarcomatoid association.'),
     ('Figure4_SCBC.png', 6.9,
      'Figure 4. Lineage-stratified small-cell bladder cancer. (A) Subtype '
      'composition by lineage transcription factor. (B) The nominated target in '
@@ -833,7 +824,7 @@ P('Claude (Anthropic) and ChatGPT (OpenAI) were used for coding assistance, '
   'deposited scoring data and checked element by element against the analysis '
   'before use; the prompts, the unedited originals and the corrections applied '
   'are deposited with the code.', size=10)
-for para in []:
+for para in []:  # the inherited v28 paragraph duplicates the statement above
     # the inherited paragraph predates the refit and says Python only
     para = para.replace('All analyses were executed by author-run Python '
                         'analytical scripts',
@@ -936,8 +927,9 @@ for _, r in novel_rows.sort_values('N').iterrows():
         PLAIN = {
             23: 'Excluded: contrast completely aliased with array chip, and '
                 'DepMap shows no dependency in the nominated stratum',
-            24: 'Excluded: contrast completely aliased with array chip, and '
-                'total below Moderate tier after refitting',
+            24: 'Excluded: E0 failed, histology completely aliased with array '
+                'chip, so no framework score was assigned; the descriptive '
+                'chip-aligned effect was small',
             29: 'Excluded: transcriptomic support does not survive refitting '
                 f"(q = {de['SSTR2_neurod1']['q']:.3f}), and no enriched pathway "
                 'contains the target',

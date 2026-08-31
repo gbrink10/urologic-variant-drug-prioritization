@@ -169,6 +169,14 @@ F['prism'] = {
     'n_lines': 578,
     'bortezomib': float(pri.loc[pri['drug'] == 'bortezomib', 'mean_lfc_all_lines'].iloc[0]),
     'erlotinib_uro': float(pri.loc[pri['drug'] == 'erlotinib', 'mean_lfc_urothelial'].iloc[0]),
+    'erlotinib_nonuro': float(pri.loc[pri['drug'] == 'erlotinib',
+                                      'mean_lfc_nonurothelial'].iloc[0]),
+    'erlotinib_q': float(pri.loc[pri['drug'] == 'erlotinib',
+                                 'q_urothelial_vs_nonurothelial'].iloc[0]),
+    've822_q': float(pri.loc[pri['drug'] == 'VE-822',
+                             'q_urothelial_vs_nonurothelial'].iloc[0]),
+    'polydatin_q': float(pri.loc[pri['drug'] == 'polydatin',
+                                 'q_urothelial_vs_nonurothelial'].iloc[0]),
     'cxcr_quartet': {d: float(pri.loc[pri['drug'] == d, 'mean_lfc_urothelial'].iloc[0])
                      for d in ('reparixin', 'navarixin', 'AZD5069', 'danirixin')
                      if (pri['drug'] == d).any()},
