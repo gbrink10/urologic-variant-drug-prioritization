@@ -89,10 +89,14 @@ check('Methods has a statistics section',
       any('statistical' in t.lower() for t in _subs), str(_subs))
 check('the retired E0 criterion is gone', 'E0' not in text)
 check('the selection rule for the 30 is stated',
-      'most altered pathways and genes in each cancer' in text
-      and 'search for drugs against them' in text.lower())
-check('the funnel numbers match the deposit',
-      f"{F['funnel_entry']:,}" in text and str(F['funnel_in_panel']) in text)
+      'we took the genes that stood out' in text
+      and 'searched the Therapeutic Target Database and OpenTargets' in text)
+check('the entry-rule denominator matches the deposit',
+      f"{F['funnel_entry']:,}" in text)
+# the eighteen sets score candidates, they do not gate them, and the paper must
+# not imply otherwise
+check('panel membership not presented as a condition of entry',
+      'not a condition of entry' in text)
 
 # a reader must be able to tell which three cancers are the positive controls
 _PC = ('neuroendocrine prostate cancer', 'muscle-invasive bladder cancer',
