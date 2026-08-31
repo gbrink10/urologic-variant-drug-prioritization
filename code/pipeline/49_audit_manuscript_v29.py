@@ -89,6 +89,16 @@ check('Methods has a statistics section',
       any('statistical' in t.lower() for t in _subs), str(_subs))
 check('the retired E0 criterion is gone', 'E0' not in text)
 
+# a reader must be able to tell which three cancers are the positive controls
+_PC = ('neuroendocrine prostate cancer', 'muscle-invasive bladder cancer',
+       'clear cell renal cell carcinoma')
+_intro = text.split('MATERIALS AND METHODS', 1)[0]
+check('positive controls named in the Introduction',
+      'included deliberately as positive controls' in _intro
+      and all(c in _intro.lower() for c in _PC))
+check('positive controls named again in Methods and Results',
+      all(text.lower().count(c) >= 3 for c in _PC))
+
 print('\n3. NUMBERS MATCH THE DEPOSIT')
 check(f"association count {F['n_associations']}", str(F['n_associations']) in text)
 # only the three comparable tiers are quoted in the prose; rows with an

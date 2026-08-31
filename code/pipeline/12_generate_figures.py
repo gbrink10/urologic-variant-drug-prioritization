@@ -43,19 +43,19 @@ def generate_figure1():
     ax.text(5.5, 8.75,
             'Figure 1. Public-Data Prioritization of Drug Hypotheses',
             ha='center', fontsize=13, weight='bold', color='#1a1a1a')
-    ax.text(5.5, 8.45, 'Benchmark Calibration and Rare-Context Prioritization',
+    ax.text(5.5, 8.45, 'Positive Controls and Rare-Cancer Prioritization',
             ha='center', fontsize=11.5, weight='bold', color='#1a1a1a')
 
     ax.add_patch(FancyBboxPatch((0.4, 7.75), 10.2, 0.55,
                                  boxstyle='round,pad=0.04',
                                  ec='#1a1a1a', fc='#1a3a5c', linewidth=1.2))
-    ax.text(5.5, 8.13, '3 Benchmark Contexts  +  4 Rare / Variant Discovery Contexts',
+    ax.text(5.5, 8.13, '3 Positive Controls  +  4 Rare / Variant Discovery Cancers',
             ha='center', va='center', fontsize=10.5, weight='bold',
             color='white')
     ax.text(5.5, 7.88,
-            'NEPC   |   MIBC   |   ccRCC   |   RMC   |   PSCC   |   '
-            'Sarcomatoid UC   |   SCBC',
-            ha='center', va='center', fontsize=8.5, color='#e8e8e8',
+            'positive controls:  NEPC  |  MIBC  |  ccRCC          '
+            'discovery:  RMC  |  PSCC  |  Sarcomatoid UC  |  SCBC',
+            ha='center', va='center', fontsize=8.3, color='#e8e8e8',
             style='italic')
     ax.annotate('', xy=(5.5, 7.35), xytext=(5.5, 7.70),
                 arrowprops=dict(arrowstyle='->', lw=1.5, color='#444'))
@@ -69,7 +69,7 @@ def generate_figure1():
     ax.text(2.925, 6.85, 'Step 1a — TCGA Pan-Cancer Atlas',
             ha='center', va='center', fontsize=9.2, weight='bold',
             color='#0b2e4f')
-    ax.text(2.925, 6.55, 'Source-disease cohorts',
+    ax.text(2.925, 6.55, 'Positive-control cohorts',
             ha='center', va='center', fontsize=8.2, style='italic',
             color='#1a1a1a')
     ax.text(2.925, 6.22,

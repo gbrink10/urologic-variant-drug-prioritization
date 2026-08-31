@@ -238,6 +238,12 @@ P('We therefore asked whether public molecular data could be interrogated '
   'engineered. And we wrote the shortlist rule before we applied it, so any '
   'candidate we drop can be traced to a specific criterion rather than to our '
   'opinion.')
+P('Three better-studied cancers are included deliberately as positive controls: '
+  'neuroendocrine prostate cancer, muscle-invasive bladder cancer and '
+  'clear cell renal cell carcinoma. Their treatment priorities are already '
+  'documented, so whether the pipeline returns those priorities tells us '
+  'how much weight to give its output in the four rare cancers, where '
+  'nothing is documented to check it against.')
 P(f"What is new here is not any single drug-cancer pair. "
   f"{F['n_previously_proposed']} of the {F['n_associations']} associations we "
   f"report were proposed by other groups first, and we say so in each case. "
@@ -279,7 +285,12 @@ P('The four rare-disease contexts are absent from The Cancer Genome Atlas, so '
   'transcriptomic nomination was not restricted to recurrently altered genes.')
 
 H('2.2 The pipeline', 11.5, 10, level=2)
-P('One pipeline was applied to all seven contexts (Figure 1). It takes a '
+P('One pipeline was applied to all seven cancers (Figure 1). Three are the positive '
+  'controls \u2014 neuroendocrine prostate cancer, muscle-invasive bladder '
+  'cancer and clear cell renal cell carcinoma \u2014 and four are the rare '
+  'or variant cancers the framework is asked to prioritize: renal medullary '
+  'carcinoma, penile squamous cell carcinoma, sarcomatoid urothelial '
+  'carcinoma and small-cell bladder cancer. The pipeline takes a '
   'genomic or context-anchor value; fits per-context differential expression '
   'across the ten transcriptomic series; tests enrichment across eighteen '
   'pre-specified druggable pathway or gene sets; maps differentially expressed '
@@ -381,9 +392,11 @@ P(f"The pipeline produced {F['n_associations']} drug-cancer associations "
   f"pairing has been proposed before, and the dataset and gene its "
   f"transcriptomic component rests on.")
 
-H('3.2 Benchmark Recovery', 11.5, 10, level=2)
-P(f"The three benchmark contexts contributed sixteen associations, and every "
-  f"one of them recovers a drug proposed independently by another group: six "
+H('3.2 The Positive Controls', 11.5, 10, level=2)
+P(f"The three positive controls \u2014 neuroendocrine prostate cancer, "
+  f"muscle-invasive bladder cancer and clear cell renal cell carcinoma "
+  f"\u2014 contributed sixteen associations, and every one of them recovers "
+  f"a drug proposed independently by another group: six "
   f"in neuroendocrine prostate cancer [10\u201318], seven in muscle-invasive "
   f"bladder cancer [19\u201327] and three in clear cell renal cell carcinoma "
   f"[28\u201332]. Two more previously proposed drugs appear in the rare "
