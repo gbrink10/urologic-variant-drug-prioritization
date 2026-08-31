@@ -454,7 +454,7 @@ P(f"The three positive controls \u2014 neuroendocrine prostate cancer, "
   f"exists, and it is not independent validation, for the reason given in the "
   f"Discussion.")
 
-H('3.3 Discovery Contexts', 11.5, 10, level=2)
+H('3.3 The Rare Cancers', 11.5, 10, level=2)
 P(f"In renal medullary carcinoma the deposited experiment is a SMARCB1 rescue in "
   f"two patient-derived lines. Across the {rmc['genes_measured_both']:,} genes "
   f"measured in both, the genome-wide correlation between lines is only "
@@ -474,24 +474,6 @@ P(f"In renal medullary carcinoma the deposited experiment is a SMARCB1 rescue in
   f"strongly enriched set in this context \u2014 {F['rmc_top_pathway'].replace('_', ' ')} "
   f"ranks above it at q = {F['rmc_top_q']:.4f} \u2014 so the claim is that the "
   f"axis is robustly present, not that it dominates.")
-P(f"Penile squamous cell carcinoma is reported in the Supplementary Results "
-  f"rather than here. In brief, it showed a dominant immune-hot phenotype that "
-  f"converges on the established pembrolizumab priority [36\u201338], with "
-  f"two partially-novel candidates alongside it [39\u201341]; none of its "
-  f"associations reached the shortlist.")
-P(f"The sarcomatoid series is reported in full in the Supplementary Results "
-  f"(Supplementary Figure S1). In brief, every sarcomatoid tumor was run on a "
-  f"different batch of chips from every conventional tumor, so a difference "
-  f"between the two groups is also a difference between two batches and no "
-  f"model can separate them. We therefore report no sarcomatoid-versus-"
-  f"conventional comparison and scored these five associations on transcript "
-  f"abundance within the sarcomatoid tumors instead, which the confounding "
-  f"does not reach. UHRF1, NSD2 and G6PD are highly abundant there and ATR is "
-  f"not; the pathway component is not estimable for this context, so these "
-  f"rows carry a total out of 7 rather than 9 and no tier. Neither of its two "
-  f"candidates without a prior proposal reached the shortlist. TROP2 is "
-  f"reported there as an observation for an independent cohort, not as a "
-  f"predictive biomarker, and it carries no score.")
 P(f"Lineage-stratified small-cell bladder cancer (Figure 3), classified by "
   f"lineage transcription factor [47], produced three subtype-specific "
   f"associations. ASCL1-positive tumors show CEACAM5 elevation "
@@ -514,10 +496,28 @@ P(f"Lineage-stratified small-cell bladder cancer (Figure 3), classified by "
 
 print('results 3.1-3.3 written')
 
-H('3.4 Orthogonal Evidence Audit', 11.5, 10, level=2)
-P('Most discovery associations and many benchmark associations are nominated '
+P(f"The sarcomatoid series is reported in full in the Supplementary Results "
+  f"(Supplementary Figure S1). In brief, every sarcomatoid tumor was run on a "
+  f"different batch of chips from every conventional tumor, so a difference "
+  f"between the two groups is also a difference between two batches and no "
+  f"model can separate them. We therefore report no sarcomatoid-versus-"
+  f"conventional comparison and scored these five associations on transcript "
+  f"abundance within the sarcomatoid tumors instead, which the confounding "
+  f"does not reach. UHRF1, NSD2 and G6PD are highly abundant there and ATR is "
+  f"not; the pathway component is not estimable for this context, so these "
+  f"rows carry a total out of 7 rather than 9 and no tier. Neither of its two "
+  f"candidates without a prior proposal reached the shortlist. TROP2 is "
+  f"reported there as an observation for an independent cohort, not as a "
+  f"predictive biomarker, and it carries no score.")
+P(f"Penile squamous cell carcinoma is reported in the Supplementary Results "
+  f"rather than here. In brief, it showed a dominant immune-hot phenotype that "
+  f"converges on the established pembrolizumab priority [36\u201338], with "
+  f"two partially-novel candidates alongside it [39\u201341]; none of its "
+  f"associations reached the shortlist.")
+H('3.4 The Independent Evidence Check', 11.5, 10, level=2)
+P('Most associations in the rare cancers, and many in the positive controls, are nominated '
   'from transcript abundance, a weaker claim than several modalities require; '
-  'benchmark rows resting on curated non-transcriptomic evidence are flagged '
+  'rows resting on curated non-transcriptomic evidence are flagged '
   'individually in Supplementary Table S1. The nominated targets were assessed '
   'against four sources that took no part in scoring. These audit rather than '
   'validate: each can find a candidate wanting, none can establish that it '
@@ -744,10 +744,13 @@ P('Section 3.6 makes a further limitation concrete: because candidate generation
 
 H('CONCLUSIONS')
 P(f"We scored {F['n_associations']} drug-cancer associations across three "
-  f"benchmark and four rare or variant urologic cancers using only public data. "
-  f"{F['n_previously_proposed']} recovered a drug proposed independently "
-  f"elsewhere, which is the positive control, and "
-  f"{F['n_framework_novel']} had no prior proposal in the urologic literature. "
+  f"positive-control and four rare or variant urologic cancers using only "
+  f"public data. "
+  f"All {F['arm_control']['n']} associations from the positive controls "
+  f"recovered a drug proposed independently elsewhere, and of the "
+  f"{F['arm_discovery']['n']} from the rare cancers "
+  f"{F['arm_discovery']['novel']} had no prior proposal in the urologic "
+  f"literature. "
   f"A rule fixed in advance, together with four independent data sources that "
   f"took no part in scoring, reduced those {F['n_framework_novel']} to "
   f"{F['funnel']['survive']}. The contribution is not any single drug-cancer "
@@ -769,7 +772,7 @@ print('discussion and conclusions written')
 # =====================================================================
 H('DATA AVAILABILITY')
 P('All datasets used are publicly available without restriction. Genomic '
-  'alteration frequencies for the benchmark contexts were extracted from The '
+  'alteration frequencies for the three positive controls were extracted from The '
   'Cancer Genome Atlas Pan-Cancer Atlas 2018 via cBioPortal. Ten Gene Expression '
   'Omnibus accessions provided transcriptomic evidence: GSE199274, GSE216053 and '
   'GSE216052 (neuroendocrine prostate cancer); GSE130598 (muscle-invasive '
@@ -801,7 +804,7 @@ FIGURES = [
      'Figure 1. The pipeline, from context definition to the supported '
      'hypotheses. Steps 1 to 6 build the association table: genomic or '
      'context-anchor input from The '
-     'Cancer Genome Atlas for the three benchmark contexts and from published '
+     'Cancer Genome Atlas for the three positive controls and from published '
      'series for the four rare or variant contexts; differential expression '
      'across ten Gene Expression Omnibus datasets fitted with a design-aware, '
      'platform-appropriate model; hypergeometric enrichment across eighteen '
@@ -883,8 +886,12 @@ for key in ('CRediT AUTHOR STATEMENT', 'FUNDING', 'CONFLICTS OF INTEREST',
         P(para, size=10)
 
 H('SUPPLEMENTARY MATERIALS', 12)
-P('Supplementary Methods: full procedural detail for the six pipeline steps and '
-  'the four orthogonal evidence layers, including data releases, model '
+P('Supplementary Results: the sarcomatoid urothelial carcinoma findings in '
+  'full with Supplementary Figure S1, the penile squamous cell carcinoma '
+  'findings in full, and the per-gene nomination routes with Supplementary '
+  'Figure S2. '
+  'Supplementary Methods: full procedural detail for the pipeline steps and '
+  'the four independent evidence sources, including data releases, model '
   'specifications, thresholds and statistical tests. '
   'Supplementary Table S1: the complete association table, all rows and all '
   'score components, with the dataset and gene underlying each transcriptomic '
@@ -991,7 +998,7 @@ _tblPr.append(_mar)
 
 accounted = set()
 
-add_row(['', 'BENCHMARK RECOVERY \u2014 calibration, not discovery', '', '', '', ''],
+add_row(['', 'POSITIVE CONTROLS \u2014 calibration, not discovery', '', '', '', ''],
         bold=True)
 for ctxs, label in ((('NEPC',), 'Neuroendocrine prostate'),
                     (('MIBC / MPBC',), 'Muscle-invasive bladder'),
