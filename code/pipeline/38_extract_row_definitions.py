@@ -128,12 +128,31 @@ DRUG_OVERRIDE = {
     28: 'Precemtabart tocentecan (M9140), anti-CEACAM5 ADC',
 }
 
-# Whether the biological contrast in each context can be estimated separately
-# from the major known technical variable. GSE128192 hybridised every sarcomatoid
-# sample on a chip carrying no conventional sample and vice versa, so histology
-# and chip are completely aliased and no model can separate them.
-IDENTIFIABLE = {
-    'SarcUC': False,
+# GSE128192 hybridised every sarcomatoid sample on a chip carrying no
+# conventional sample and vice versa, so histology and chip are completely
+# aliased. Two consequences, and only two.
+#
+# The sarcomatoid-versus-conventional CONTRAST is not estimable, and neither is
+# the pathway enrichment computed from that contrast's gene list.
+#
+# Abundance within the sarcomatoid samples is untouched by the aliasing: it
+# involves no between-group comparison. The scoring rule already specifies the
+# absolute-expression arm wherever a dataset provides no interpretable
+# disease-versus-comparator contrast, so that is the arm these rows take.
+CONTRAST_ESTIMABLE = {'SarcUC': False}
+PATHWAY_ESTIMABLE = {'SarcUC': False}
+
+# consequence of the above: these four rows score on abundance, not on the
+# confounded contrast
+ARM_OVERRIDE = {23: 'expression', 24: 'expression',
+                25: 'expression', 26: 'expression'}
+
+# Row 27 nominates TROP2 *loss* as a target-availability marker. An abundance
+# rank cannot demonstrate loss, and the only comparison that could is the
+# confounded one, so this row alone carries no transcriptomic component.
+E_NOT_ESTIMABLE = {
+    27: 'nominated as a loss marker; abundance cannot demonstrate loss and the '
+        'only contrast that could is aliased with array chip',
 }
 
 # Whether an agent against this target is currently in clinical development, as
@@ -154,9 +173,12 @@ for r in rows:
         'genomic_score_curated': r[4], 'literature_score_curated': r[7],
         'Stage': STAGE_OVERRIDE.get(n, r[8]),
         'Prior status': r[9], 'Trial readiness': r[10],
-        'scoring_arm': arm, 'refit_context': ctx, 'scoring_gene': gene,
+        'scoring_arm': ARM_OVERRIDE.get(n, arm),
+        'refit_context': ctx, 'scoring_gene': gene,
         'pathway_for_component': PATHWAY.get(n, ''),
-        'contrast_identifiable': IDENTIFIABLE.get(ctx, True),
+        'contrast_estimable': CONTRAST_ESTIMABLE.get(ctx, True),
+        'pathway_estimable': PATHWAY_ESTIMABLE.get(ctx, True),
+        'E_not_estimable_reason': E_NOT_ESTIMABLE.get(n, ''),
         'clinical_stage_agent': AGENT_AVAILABLE.get(
             n, not any(w in f"{r[8]} {r[10]}".lower()
                        for w in ('discontinued', 'withdrawn'))),

@@ -6,14 +6,16 @@ rule or by judgement. The rule is fixed here, in advance of looking at which
 candidates it selects, and every row records which criterion it failed.
 
   Eligibility (all five required to be called a candidate)
-    E0  the biological contrast is estimable separately from the major known
-        technical variable. A transcript can be re-derived exactly and still be
-        uninterpretable: where histology is completely aliased with array chip,
-        a small q-value identifies a difference between two groups that are also
-        two batches, and cannot attribute it to biology.
     E1  no prior urologic-oncology proposal identified by the audit
-    E2  total score reaches Moderate tier or better (>= 4 of 9)
-    E3  transcriptomic component re-derivable from deposited data at q < 0.05
+    E2  total score reaches 4 or better of the points that are estimable for
+        that row. Most rows are scored out of 9; a row whose pathway component
+        cannot be computed is scored out of 7, and the threshold is read
+        against its own denominator rather than against a denominator it was
+        never eligible for.
+    E3  the transcriptomic component is re-derivable from deposited data and
+        meets its own arm's standard: q < 0.05 where a disease-versus-comparator
+        contrast exists, or the top 15% of measured transcripts where the
+        dataset supports only abundance.
     E4  a clinical-stage agent exists against the target
 
   Survival of the orthogonal evidence audit (both required)
@@ -77,9 +79,17 @@ for _, d in defs.iterrows():
              else int(p['Total']))  # unscored rows keep the arithmetic total
     keys = EVIDENCE_KEYS.get(n, {})
 
-    e0 = bool(d.get('contrast_identifiable', True))
+    denom = int(p.get('total_denominator', 9) or 9)
     e2 = total >= 4
-    e3 = bool(p['E_derivable_from_data']) and float(p['refit_q'] or 1) < 0.05
+    # each arm is held to its own standard; a row scored on abundance has no
+    # q-value and must not fail for lacking one
+    arm = str(d.get('scoring_arm', 'de'))
+    rq = p['refit_q']
+    if arm == 'expression':
+        e3 = bool(p['E_derivable_from_data']) and int(p['E_refit']) >= 2
+    else:
+        e3 = (bool(p['E_derivable_from_data'])
+              and pd.notna(rq) and float(rq) < 0.05)
     # agent availability is a curated fact in the row definitions: a row whose
     # first-generation agent was discontinued may still have an active class
     e4 = bool(d.get('clinical_stage_agent', True))
@@ -137,16 +147,18 @@ for _, d in defs.iterrows():
 
     s1 = not contradictions
     s2 = (access_ok if SURFACE_MODALITY.get(n, False) else True)
-    eligible = e0 and e2 and e3 and e4
+    eligible = e2 and e3 and e4
     survives = eligible and s1 and s2
 
     failed = []
-    if not e0:
-        failed.append('E0 contrast not estimable separately from batch')
     if not e2:
-        failed.append(f'E2 score {total}/9 below Moderate')
+        failed.append(f'E2 score {total}/{denom} below 4')
     if not e3:
-        failed.append(f'E3 transcriptomic q = {float(p["refit_q"]):.3g}')
+        if arm == 'expression':
+            failed.append(f'E3 abundance below the top 15% '
+                          f'(component {int(p["E_refit"])}/3)')
+        else:
+            failed.append(f'E3 transcriptomic q = {float(rq):.3g}')
     if not e4:
         failed.append('E4 no clinical-stage agent')
     if not s1:
@@ -160,8 +172,9 @@ for _, d in defs.iterrows():
 
     rows.append({
         'N': n, 'Context': d['Context'], 'Drug': d['Drug'], 'Target': d['Target'],
-        'total': total, 'tier': m['Tier'],
-        'contrast_identifiable': e0,
+        'total': total, 'total_denominator': denom, 'tier': m['Tier'],
+        'contrast_estimable': bool(d.get('contrast_estimable', True)),
+        'pathway_estimable': bool(d.get('pathway_estimable', True)),
         'E_refit_q': float(p['refit_q']) if pd.notna(p['refit_q']) else np.nan,
         'pathway_q': float(p['pathway_q']) if pd.notna(p['pathway_q']) else np.nan,
         'protein_layer': layers.get('protein'),

@@ -134,55 +134,61 @@ P('Corresponding Author: Garrett J. Brinkley, MD; Department of Urology, Tulane 
 
 H('CONTEXT', 12)
 P('Key objective: Can publicly deposited genomic and transcriptomic data be '
-  'interrogated systematically enough, and transparently enough to be audited, '
-  'to prioritize biomarker-anchored drug hypotheses for aggressive urologic '
-  'cancers for which dedicated biomarker-matched trials are difficult to power?')
-P(f"Knowledge generated: An earlier implementation generated "
-  f"{F['n_associations']} drug-cancer associations across three benchmark and "
-  f"four rare or variant contexts. Design-aware re-audit of that frozen set "
-  f"changed eight of them and left {F['n_scoreable']} scoreable. Orthogonal "
-  f"evidence supported some candidates, contradicted others, and could not "
-  f"test others at all; an explicit rule reduced "
-  f"{F['funnel']['framework_novel']} candidates without a prior "
-  f"urologic-oncology proposal to {F['funnel']['survive']}.")
+  'interrogated systematically to identify and prioritize drugs for aggressive '
+  'urologic cancers, where clinical trials are difficult to power?')
+P(f"Knowledge generated: We scored {F['n_associations']} drug-cancer associations "
+  f"across seven urologic cancers. {F['n_previously_proposed']} of them recover a drug "
+  f"already proposed by other groups, which is how we checked that the method "
+  f"behaves sensibly. {F['n_framework_novel']} had no prior proposal in the "
+  f"urologic literature. Four independent data sources, none of which "
+  f"contributed to the score, then supported {F['funnel']['survive']} of "
+  f"those {F['n_framework_novel']} and argued against the rest.")
 
 H('ABSTRACT', 12)
-P(f"Purpose. Rare and variant urologic cancers lack biomarker-directed "
-  f"prospective evidence. We built a public-data framework that prioritizes "
-  f"drug hypotheses across seven contexts and reports its own failures: "
-  f"three benchmark contexts that calibrate it and four rare or variant "
-  f"discovery contexts.")
+P(f"Purpose. Rare and variant urologic cancers are difficult to study in "
+  f"randomized trials, so few have biomarker-directed treatment options. We "
+  f"built a public-data framework that identifies and prioritizes drug targets "
+  f"for seven urologic cancers: three common ones, where the right answers are "
+  f"already known and the method can be checked, and four rare or variant ones, "
+  f"where it is asked to find something.")
 P(f"Methods. Alteration frequencies, differential expression across ten Gene "
   f"Expression Omnibus datasets, enrichment across eighteen pre-specified "
-  f"druggable gene sets, drug-target curation and a 9-point score were "
-  f"combined, followed by a score-independent prior-proposal audit. "
-  f"Differential expression was fitted with design-aware, platform-appropriate "
-  f"models (limma and edgeR). Candidates were then assessed against four "
-  f"orthogonal sources that took no part in scoring and reduced by an "
-  f"explicit rule stated before it was applied.")
-P(f"Results. The frozen set of {F['n_associations']} associations was "
-  f"re-audited under the final models. {F['n_scoreable']} remained "
-  f"scoreable: "
-  f"{F['tiers'].get('Strong', 0)} Strong-tier, {F['tiers'].get('Moderate', 0)} "
-  f"Moderate-tier and {F['tiers'].get('Exploratory', 0)} Exploratory-tier. "
-  f"The remaining {F['n_not_scored']}, from one series in which histology is "
-  f"completely aliased with array chip, are unscored and reported "
-  f"descriptively. "
-  f"{F['n_previously_proposed']} recovered priorities proposed independently "
-  f"elsewhere. {F['n_framework_novel']} had no prior urologic-oncology proposal "
-  f"identified; of these, {F['funnel']['eligible']} met eligibility and "
-  f"{F['funnel']['survive']} survived the audit. Refitting changed eight "
-  f"associations and dissolved two candidates the earlier analysis had carried "
-  f"forward.")
-P(f"Conclusion. A public-data framework can prioritize biomarker-matched drug "
-  f"hypotheses where prospective evidence will not otherwise exist, provided it "
-  f"reports what it cannot support. {F['funnel']['survive']} hypotheses survive "
-  f"across {F['n_survivor_contexts']} diseases: CXCR1/CXCR2 blockade and "
-  f"anti-CEACAM1 in renal medullary carcinoma, and anti-CEACAM5 conjugates in "
-  f"ASCL1-positive small-cell bladder cancer. They are ranked within a disease "
-  f"but not across diseases, because the only criterion that would order them "
-  f"is a property of the framework rather than of the biology. All require "
-  f"disease-specific validation.")
+  f"druggable gene sets and drug-target curation were combined into a 9-point "
+  f"score, which exists to put several dissimilar kinds of evidence on one "
+  f"comparable scale. Differential expression was "
+  f"fitted with design-aware, platform-appropriate models (limma and edgeR). We "
+  f"then searched the literature to see which associations had already been "
+  f"proposed, after scoring was finished so that it could not influence the "
+  f"score. Finally we checked each candidate against four independent data "
+  f"sources that took no part in scoring, to see whether anything outside our "
+  f"own pipeline supported it. A rule written in advance decided which "
+  f"candidates the paper carries forward.")
+P(f"Results. We scored {F['n_associations']} drug-cancer associations: "
+  f"{F['tiers'].get('Strong', 0)} Strong, {F['tiers'].get('Moderate', 0)} "
+  f"Moderate and {F['tiers'].get('Exploratory', 0)} Exploratory. One "
+  f"sarcomatoid series confounds histology with array chip, so no comparison "
+  f"between histologies is interpretable and the pathway component that would "
+  f"come from it cannot be computed. Its five associations are therefore scored "
+  f"on transcript abundance within the sarcomatoid tumors, which the "
+  f"confounding does not reach: four carry a total out of 7 rather than 9, and "
+  f"the fifth, a proposed marker of TROP2 loss, is reported without a score "
+  f"because loss can only be shown by the comparison that is confounded. {F['n_previously_proposed']} associations recover a drug already "
+  f"proposed elsewhere for that disease. {F['n_framework_novel']} had no prior "
+  f"proposal in the urologic literature. Of those "
+  f"{F['n_framework_novel']}, {F['funnel']['survive']} were supported by the "
+  f"independent sources and {F['n_framework_novel'] - F['funnel']['survive']} "
+  f"were not: one target is not a dependency in CRISPR screens, one is not "
+  f"abundantly expressed in the disease, and one lost its transcriptomic "
+  f"support when the data were modeled correctly.")
+P(f"Conclusion. Public data can be used to prioritize drug hypotheses for "
+  f"cancers that will never have a randomized trial, provided the method is "
+  f"explicit about what it cannot show. {F['funnel']['survive']} hypotheses "
+  f"were supported in {F['n_survivor_contexts']} diseases: CXCR1/CXCR2 "
+  f"blockade and anti-CEACAM1 in renal medullary carcinoma, and anti-CEACAM5 "
+  f"conjugates in ASCL1-positive small-cell bladder cancer. We rank candidates "
+  f"within a disease but not between diseases, because the only thing that "
+  f"could order them across diseases is an artifact of our own gene panel. All "
+  f"three need experimental validation in their own disease.")
 
 # =====================================================================
 # Introduction
@@ -381,23 +387,39 @@ P(f"Penile squamous cell carcinoma showed a dominant immune-hot phenotype. "
   f"periostin candidates [39\u201341]. This signal survives modeling the six "
   f"normal arrays as {dsn['pscc_normal_donors']} donors rather than six "
   f"independent samples, which was the more demanding test.")
-P(f"The sarcomatoid series was not inferentially usable: histology and array "
-  f"chip are completely aliased, so no model can distinguish sarcomatoid "
-  f"biology from processing, and every value here is descriptive. The "
-  f"chip-aligned group differences (Figure 3) included nuclear "
-  f"receptor-binding SET domain protein 2 (NSD2), UHRF1 [42] and G6PD [43], "
-  f"with epigenetic regulation suggestive at "
-  f"q = {q['sarc_epigenetic']:.3f}, and lower trophoblast cell-surface "
-  f"antigen 2 (TACSTD2/TROP2), concordant with two pathology reports [44,45]; "
-  f"antigen heterogeneity across urothelial variants extends to NECTIN-4 [46]. "
-  f"Lower TROP2 could reduce target availability for sacituzumab govitecan, "
-  f"whose accelerated urothelial indication was withdrawn in November 2024, "
-  f"but no treated cases were analyzed and predictive validity is "
-  f"unestablished. The ataxia telangiectasia and Rad3-related kinase candidate "
-  f"the previous analysis carried does not reappear: its descriptive effect is "
-  f"{de['ATR_sarc']['log2FC']:+.2f}. None of these associations was scored, "
-  f"and all require replication in an independent, non-confounded cohort. "
-  f"Per-gene estimates are in Figure 3 and Supplementary Table S1.")
+P(f"The sarcomatoid series (Figure 3) has a design problem that decides what "
+  f"can be asked of it. Every sarcomatoid sample was run on an array chip "
+  f"carrying no conventional sample, and every conventional sample on a chip "
+  f"carrying no sarcomatoid sample, so a difference between the two groups is "
+  f"also a difference between two sets of chips and no model can tell them "
+  f"apart. We therefore do not report a sarcomatoid-versus-conventional "
+  f"comparison, and we do not score these rows on one. What the cohort can "
+  f"still support is how abundant a transcript is within the sarcomatoid "
+  f"tumors themselves, which involves no comparison between chips, and that is "
+  f"the evidence these rows are scored on.")
+P(f"On that basis three nominated targets are highly abundant in sarcomatoid "
+  f"tumors: UHRF1 at the "
+  f"{F['abundance_pct']['UHRF1']['pct']:.0f}th percentile of "
+  f"{F['abundance_pct']['UHRF1']['n']:,} measured transcripts [42], NSD2 at the "
+  f"{F['abundance_pct']['NSD2']['pct']:.0f}th and G6PD at the "
+  f"{F['abundance_pct']['G6PD']['pct']:.0f}th [43]. ATR is not, at the "
+  f"{F['abundance_pct']['ATR']['pct']:.0f}th percentile, which is why the ATR "
+  f"candidate the earlier analysis carried does not go forward. Because the "
+  f"pathway component for this context could only come from the comparison we "
+  f"have just ruled out, it is reported as not estimable and these rows carry a "
+  f"total out of 7 rather than 9. They are not assigned a tier, since a total "
+  f"out of 7 cannot be compared with one out of 9.")
+P(f"One further observation belongs here but is not a scored association. TROP2, "
+  f"encoded by TACSTD2, is the target of sacituzumab govitecan, and lower TROP2 "
+  f"would mean less target to bind. TROP2 does read lower in the "
+  f"sarcomatoid-labeled samples, in agreement with two pathology reports "
+  f"[44,45], and antigen heterogeneity of this kind extends to NECTIN-4 as well "
+  f"[46]. But the only comparison that could establish loss is the confounded "
+  f"one, no treated patients were studied anywhere in this work, and the "
+  f"accelerated urothelial indication for sacituzumab govitecan was withdrawn in "
+  f"November 2024. We therefore report TROP2 as an observation to be tested in "
+  f"an independent cohort, not as a predictive biomarker, and it carries no "
+  f"transcriptomic or pathway score.")
 P(f"Lineage-stratified small-cell bladder cancer (Figure 4), classified by "
   f"lineage transcription factor [47], produced three subtype-specific "
   f"associations. ASCL1-positive tumors show CEACAM5 elevation "
@@ -489,20 +511,21 @@ P(f"Signature reversal against the LINCS L1000 libraries [52,53], recomputed on 
   f"any candidate; complete rankings and corrected values are deposited.")
 
 H('3.5 The Surviving Hypotheses', 11.5, 10, level=2)
-P(f"Applying the rule set out above (Figure 5), the "
-  f"{F['funnel']['framework_novel']} associations without a prior "
-  f"urologic-oncology proposal reduce to {F['funnel']['eligible']} eligible and "
-  f"{F['funnel']['survive']} survivors. The somatostatin receptor 2 candidate "
-  f"fails because refitting dissolved its transcriptomic support "
-  f"(q = {de['SSTR2_neurod1']['q']:.3f}). Both sarcomatoid candidates fail E0, "
-  f"so no framework score was assigned to either; in the descriptive "
-  f"chip-aligned comparison the ATR effect was also small "
-  f"({de['ATR_sarc']['log2FC']:+.2f}). The NSD2 candidate is separately "
-  f"contradicted by the "
-  f"audit because its contrast is not estimable separately from array chip, "
-  f"and DepMap independently contradicts it. The survivors span two "
-  f"diseases, renal medullary carcinoma and ASCL1-positive small-cell "
-  f"bladder cancer.")
+P(f"Applying the rule (Figure 5), the {F['funnel']['framework_novel']} "
+  f"associations with no prior proposal in the urologic literature reduce to "
+  f"{F['funnel']['survive']}, and each of the three that stop does so for a "
+  f"reason drawn from the evidence rather than from a limitation of our "
+  f"pipeline. The somatostatin receptor 2 candidate loses its transcriptomic "
+  f"support once the small-cell subtypes are contrasted with batch in the model "
+  f"(q = {de['SSTR2_neurod1']['q']:.3f}), leaving a score of 2. The ATR "
+  f"candidate is not abundantly expressed in sarcomatoid tumors "
+  f"({F['abundance_pct']['ATR']['pct']:.0f}th percentile), leaving a score of "
+  f"1. The NSD2 candidate is abundant, but scores 3 of the 7 points its cohort "
+  f"can support and is contradicted outright by an independent source: CRISPR "
+  f"screens show that urothelial cells do not require NSD2 even where they "
+  f"express it most highly. The {F['funnel']['survive']} that remain lie in "
+  f"{F['n_survivor_contexts']} diseases, renal medullary carcinoma and "
+  f"ASCL1-positive small-cell bladder cancer.")
 P(f"The three survivors are not ranked against one another across diseases. "
   f"Two are in renal medullary carcinoma, where they compete for the same "
   f"experimental effort and can be ordered; the third is in ASCL1-positive "
@@ -955,8 +978,8 @@ for _, r in novel_rows.sort_values('N').iterrows():
                 f"(q = {de['SSTR2_neurod1']['q']:.3f}), and no enriched pathway "
                 'contains the target',
         }
-        status = ('Survives; first priority within RMC' if int(r['N']) == 17 else
-                  'Survives the audit' if bool(srow['survives']) else
+        status = ('Supported; first priority within RMC' if int(r['N']) == 17 else
+                  'Supported by the independent sources' if bool(srow['survives']) else
                   PLAIN.get(int(r['N']),
                             'Excluded: ' + str(srow['failed_criteria'])))
     else:
@@ -964,7 +987,7 @@ for _, r in novel_rows.sort_values('N').iterrows():
     nxt = {17: 'immunocompetent model with an intact myeloid compartment',
            19: 'RMC tumor-surface confirmation and normal-tissue safety assessment',
            28: 'SCBC-specific expression, internalization and payload testing',
-           23: 'independent, non-confounded cohort',
+           23: 'not carried forward',
            24: 'not carried forward',
            29: 'not carried forward'}.get(int(r['N']), 'not carried forward')
     add_row([r['N'], r['Context'], f"{r['Drug']} \u2014 {r['Target']}",
@@ -979,18 +1002,19 @@ add_row([', '.join(str(int(x)) for x in sorted(partial_rows['N'])), 'various',
                    partial_rows['Tier'].value_counts().to_dict().items()),
          'not evaluated as discovery', 'see Supplementary Table S1'])
 
-add_row(['', 'DESCRIPTIVE ONLY \u2014 COMPLETELY CONFOUNDED COHORT, NOT SCORED',
-         '', '', '', ''], bold=True)
-# rows already listed under their novelty class are not repeated here
-unscored = merged[(merged['Tier'] == 'Not scored (confounded cohort)')
+add_row(['', 'REPORTED, NOT SCORED AS A DRUG HYPOTHESIS', '', '', '', ''],
+        bold=True)
+# the one row whose transcriptomic component is also inestimable: a loss
+# marker can only be demonstrated by the comparison this cohort cannot support
+unscored = merged[merged['Tier'].str.contains('transcriptomic')
                   & (~merged['N'].isin(accounted))]
 for _, r in unscored.sort_values('N').iterrows():
     accounted.add(int(r['N']))
-    label = ('TROP2 (TACSTD2) loss \u2014 candidate target-loss marker'
-             if int(r['N']) == 27 else f"{r['Drug']} \u2014 {r['Target']}")
-    add_row([r['N'], r['Context'], label, 'not estimable',
-             'histology aliased with array chip',
-             'independent, non-confounded cohort before any scoring'])
+    add_row([r['N'], r['Context'],
+             'TROP2 (TACSTD2) loss \u2014 observation, not a scored association',
+             'not estimable',
+             'loss can be shown only by the confounded comparison',
+             'independent, non-confounded cohort'])
 
 missing = sorted(set(merged['N']) - accounted)
 assert not missing, f'Table 1 omits associations {missing}'

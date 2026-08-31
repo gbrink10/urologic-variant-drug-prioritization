@@ -8,6 +8,7 @@ a number can only be wrong if the analysis is wrong.
 Writes: results/refit/MANUSCRIPT_FACTS.json
 """
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -64,6 +65,18 @@ F['n_previously_proposed'] = int(F['n_associations'] - F['n_framework_novel']
                                  - F['n_partially_novel'] - 1)
 F['per_context'] = defs['Context'].value_counts().to_dict()
 
+# the sarcomatoid rows are scored on abundance within the sarcomatoid samples;
+# the manuscript quotes the percentile, so read it back from the provenance
+# table rather than restating it
+_pv = pd.read_csv(RF / 'SCORING_PROVENANCE_V29.csv')
+F['abundance_pct'] = {}
+for _n, _g in ((23, 'NSD2'), (24, 'ATR'), (25, 'UHRF1'), (26, 'G6PD')):
+    _b = str(_pv.loc[_pv['N'] == _n, 'E_basis'].iloc[0])
+    _m = re.search(r'at ([0-9.]+)th percentile of ([0-9,]+)', _b)
+    if _m:
+        F['abundance_pct'][_g] = {'pct': float(_m.group(1)),
+                                  'n': int(_m.group(2).replace(',', ''))}
+
 # ---- funnel --------------------------------------------------------------
 F['funnel'] = {'framework_novel': int(len(sel)),
                'eligible': int(sel['eligible'].sum()),
@@ -104,6 +117,7 @@ F['n_pathways_surviving'] = {
 F['de'] = {'CXCL8_rmc': de_of(17), 'CEACAM1_rmc': de_of(19),
            'HLA_DRA_pscc': de_of(20), 'NSD2_sarc': de_of(23),
            'ATR_sarc': de_of(24), 'TACSTD2_sarc': de_of(27),
+           'UHRF1_sarc': de_of(25), 'G6PD_sarc': de_of(26),
            'CEACAM5_ascl1': de_of(28), 'SSTR2_neurod1': de_of(29),
            'PTGS1_pou2f3': de_of(30)}
 

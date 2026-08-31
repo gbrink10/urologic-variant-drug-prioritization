@@ -1,11 +1,13 @@
 {
  "n_associations": 30,
- "n_scoreable": 25,
- "n_not_scored": 5,
+ "n_scoreable": 30,
+ "n_not_scored": 0,
  "tiers": {
   "Moderate": 12,
   "Strong": 10,
-  "Exploratory": 3
+  "Not tiered (pathway component not estimable)": 4,
+  "Exploratory": 3,
+  "Not tiered (pathway and transcriptomic component not estimable)": 1
  },
  "n_framework_novel": 6,
  "n_partially_novel": 5,
@@ -21,6 +23,24 @@
   "SCBC (ASCL1+)": 1,
   "SCBC (NEUROD1+)": 1,
   "SCBC (POU2F3+)": 1
+ },
+ "abundance_pct": {
+  "NSD2": {
+   "pct": 96.1,
+   "n": 20363
+  },
+  "ATR": {
+   "pct": 73.2,
+   "n": 20363
+  },
+  "UHRF1": {
+   "pct": 98.9,
+   "n": 20363
+  },
+  "G6PD": {
+   "pct": 90.8,
+   "n": 20363
+  }
  },
  "funnel": {
   "framework_novel": 6,
@@ -61,17 +81,17 @@
   {
    "N": 23,
    "target": "NSD2 / WHSC1 (histone methyltransferase)",
-   "reason": "E0 contrast not estimable separately from batch; S1 DepMap: no dependency in the nominated stratum"
-  },
-  {
-   "N": 24,
-   "target": "ATR / ATRIP (DNA damage response)",
-   "reason": "E0 contrast not estimable separately from batch; E2 score 2/9 below Moderate; E3 transcriptomic q = 0.0831"
+   "reason": "E2 score 3/7 below 4; S1 DepMap: no dependency in the nominated stratum"
   },
   {
    "N": 29,
    "target": "SSTR2 (somatostatin receptor 2)",
-   "reason": "E2 score 2/9 below Moderate; E3 transcriptomic q = 0.363"
+   "reason": "E2 score 2/9 below 4; E3 transcriptomic q = 0.363"
+  },
+  {
+   "N": 24,
+   "target": "ATR / ATRIP (DNA damage response)",
+   "reason": "E2 score 1/7 below 4; E3 abundance below the top 15% (component 1/3)"
   }
  ],
  "q": {
@@ -114,16 +134,24 @@
    "q": 2.67503877703762e-05
   },
   "NSD2_sarc": {
-   "log2FC": 1.25832939954587,
-   "q": 1.26568494526104e-13
+   "log2FC": null,
+   "q": null
   },
   "ATR_sarc": {
-   "log2FC": 0.177482678255587,
-   "q": 0.0830846702168365
+   "log2FC": null,
+   "q": null
   },
   "TACSTD2_sarc": {
    "log2FC": -2.06423418924647,
    "q": 9.64661587834248e-19
+  },
+  "UHRF1_sarc": {
+   "log2FC": null,
+   "q": null
+  },
+  "G6PD_sarc": {
+   "log2FC": null,
+   "q": null
   },
   "CEACAM5_ascl1": {
    "log2FC": 6.44545376254699,

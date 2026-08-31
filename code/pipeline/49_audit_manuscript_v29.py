@@ -66,32 +66,39 @@ check('no "orthogonal validation" phrasing survives',
       'orthogonal validation' not in text.lower())
 check('"validated finding" only used to disclaim',
       text.lower().count('validated finding') == text.lower().count('not a validated finding'))
-check('marker described as target-loss, not predictive',
-      'candidate target-loss marker' in text
+check('TROP2 framed as an observation, not a biomarker claim',
+      'not as a predictive biomarker' in text
       and 'negative predictive biomarker' not in text)
 check('no claim of established predictive value',
-      ('predictive validity is unestablished' in text
-       or 'predictive value is unestablished' in text)
+      ('not as a predictive biomarker' in text
+       or 'predictive validity is unestablished' in text)
       and 'predicts non-response' not in body
-      and 'predictive biomarker' not in body)
+      and body.count('predictive biomarker')
+      == body.count('not as a predictive biomarker'))
 check('framework-novel language replaced with a search statement',
       'no prior urologic-oncology proposal' in text)
 
 print('\n3. NUMBERS MATCH THE DEPOSIT')
 check(f"association count {F['n_associations']}", str(F['n_associations']) in text)
-for tier, n in F['tiers'].items():
-    check(f'{n} {tier}-tier stated', f'{n} {tier}-tier' in text or f'{n} {tier}' in text)
+# only the three comparable tiers are quoted in the prose; rows with an
+# inestimable component carry a total out of a smaller denominator and are
+# deliberately not tiered, so there is no count for them to match
+for tier in ('Strong', 'Moderate', 'Exploratory'):
+    n_t = F['tiers'].get(tier, 0)
+    check(f'{n_t} {tier} stated', f'{n_t} {tier}' in text)
+check('not-tiered rows disclosed',
+      'out of 7 rather than 9' in text and 'not estimable' in text)
 check('funnel counts stated',
-      f"{F['funnel']['eligible']} eligible" in text
-      and f"{F['funnel']['survive']} survivors" in text)
+      f"reduce to {F['funnel']['survive']}" in text
+      and str(F['funnel']['framework_novel']) in text)
 check(f"chemokine q = {F['q']['rmc_chemokine']:.4f}",
       f"{F['q']['rmc_chemokine']:.4f}" in text)
 check('SSTR2 non-significant q reported',
       f"{F['de']['SSTR2_neurod1']['q']:.3f}" in text)
-check('ATR effect reported', f"{F['de']['ATR_sarc']['log2FC']:+.2f}" in text)
-check('TACSTD2 direction stated and its estimate located',
-      'lower trophoblast cell-surface antigen 2' in text
-      and 'Supplementary Table S1' in text)
+check('ATR abundance percentile reported',
+      f"{F['abundance_pct']['ATR']['pct']:.0f}th percentile" in text)
+check('TROP2 direction stated without a scored claim',
+      'does read lower in the' in text and 'Supplementary Table S1' in text)
 check('two-line correlation reported', str(F['rmc']['r_between_lines']) in text)
 check('both-lines gene count reported', str(F['rmc']['up_both']) in text)
 check('CXCR1 vs CEACAM1 window contrasted',
@@ -146,9 +153,11 @@ check('anti-CEACAM5 successor agent named',
       'precemtabart' in text.lower() or 'M9140' in text)
 check('seclidemstat no longer attached to the NSD2 row',
       'SP-2577' not in text and 'seclidemstat' not in text.lower())
-check('identifiability gate disclosed',
-      'aliased' in text and 'no model can attribute' in text)
-check('sarcomatoid rows reported descriptively', 'reported descriptively' in text)
+check('the confounding and its consequence are both stated',
+      'no model can tell them apart' in text
+      and 'not estimable' in text)
+check('sarcomatoid rows scored on the arm their data supports',
+      'abundant a transcript is within the sarcomatoid' in text)
 check('PRISM no longer claims absence of off-target cytotoxicity',
       'absence of off-target cytotoxicity' not in text)
 check('normal-tissue RNA not used as a therapeutic-window claim',

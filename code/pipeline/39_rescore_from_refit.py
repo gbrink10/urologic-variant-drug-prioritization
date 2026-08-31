@@ -104,6 +104,11 @@ _expr_cache = {}
 # experiment was designed to perturb
 BASELINE = {'NEPC_DECITABINE': 'control', 'NEPC_DNMT': 'WT', 'NEPC_CXCR7': 'LKO'}
 
+# Where a series holds more than one histology and the contrast between them is
+# not estimable, abundance is ranked within the group the hypothesis is about,
+# so that no between-group comparison enters the score.
+WITHIN_GROUP = {'SarcUC': ('group', 'SARC')}
+
 
 def expr_percentile(ctx, gene):
     """Rank of a gene's mean expression within its own dataset.
@@ -114,8 +119,24 @@ def expr_percentile(ctx, gene):
     """
     if ctx not in _expr_cache:
         e = pd.read_csv(PREP / f'{ctx}_expr.csv', index_col=0)
-        idx = lib_symbols.to_symbols(e.index).values
-        e = e.groupby(idx).max()
+        if ctx in MAPS:
+            # array platforms index by probe; collapse to the symbol the probe
+            # annotation gives, taking the brightest probe per gene
+            sym = pd.Series([MAPS[ctx].get(str(i), '') for i in e.index],
+                            index=e.index)
+            sym = pd.Series(lib_symbols.normalize(sym).values, index=e.index)
+            e = e[sym.values != '']
+            e = e.groupby(sym[sym.values != ''].values).max()
+        else:
+            idx = lib_symbols.to_symbols(e.index).values
+            e = e.groupby(idx).max()
+        if ctx in WITHIN_GROUP:
+            col, val = WITHIN_GROUP[ctx]
+            meta = pd.read_csv(PREP / f'{ctx}_meta.csv')
+            keep = set(meta.loc[meta[col].astype(str) == val, 'sample'])
+            cols = [c for c in e.columns if c in keep]
+            if cols:
+                e = e[cols]
         if ctx in BASELINE:
             meta = pd.read_csv(PREP / f'{ctx}_meta.csv')
             col = next((c for c in ('treatment', 'genotype') if c in meta), None)
@@ -198,7 +219,12 @@ for _, r in defs.iterrows():
     # arithmetically correct and scientifically uninterpretable. Such rows are
     # reported descriptively and are given no score or tier, rather than being
     # scored and then explained away.
-    identifiable = bool(r.get('contrast_identifiable', True))
+    contrast_ok = bool(r.get('contrast_estimable', True))
+    pathway_ok = bool(r.get('pathway_estimable', True))
+    e_blocked = str(r.get('E_not_estimable_reason', '') or '')
+    # pandas reads an empty CSV cell as NaN, whose str() is truthy
+    if e_blocked.lower() in ('nan', 'none'):
+        e_blocked = ''
     e, e_basis, fc, q = score_e(r)
     # a target absent from its dataset's platform cannot be scored from data;
     # the row keeps its curated value and is flagged as not re-derivable
@@ -211,11 +237,33 @@ for _, r in defs.iterrows():
     total = g + e + p + l
     tier = ('Strong' if total >= 7 else 'Moderate' if total >= 4
             else 'Exploratory' if total >= 1 else 'None')
-    if not identifiable:
-        e_disp = p_disp = total_disp = 'not estimable'
-        tier = 'Not scored (confounded cohort)'
+    # Only the components the data cannot support are withheld. A row is not
+    # blanked because one of its four dimensions is inestimable.
+    if e_blocked:
+        e, e_basis = 0, f'not estimable: {e_blocked}'
+    denom = 9
+    e_disp, p_disp = e, p
+    if e_blocked:
+        e_disp, denom = 'not estimable', denom - 3
+    if not pathway_ok:
+        p_disp, denom = 'not estimable', denom - 2
+        p, p_basis = 0, ('not estimable: the only enrichment available for this '
+                         'context is computed on a contrast aliased with array '
+                         'chip')
+    total = g + e + p + l
+    total_disp = f'{total}/{denom}'
+    if denom == 9:
+        tier = ('Strong' if total >= 7 else 'Moderate' if total >= 4
+                else 'Exploratory' if total >= 1 else 'None')
     else:
-        e_disp, p_disp, total_disp = e, p, f'{total}/9'
+        # a total out of a smaller denominator is not comparable to a 9-point
+        # tier, so it is reported without one rather than given a false rank
+        missing = []
+        if not pathway_ok:
+            missing.append('pathway')
+        if e_blocked:
+            missing.append('transcriptomic')
+        tier = 'Not tiered (' + ' and '.join(missing) + ' component not estimable)'
     out.append({'N': r['N'], 'Context': r['Context'], 'Drug': r['Drug'],
                 'Target': r['Target'], 'G(0-3)': g, 'E(0-3)': e_disp,
                 'P(0-2)': p_disp, 'L(0-1)': l, 'Total': total_disp, 'Tier': tier,
@@ -230,7 +278,9 @@ for _, r in defs.iterrows():
                  'P_refit': p, 'P_published': r['published_P'],
                  'P_basis': p_basis, 'pathway_q': pq,
                  'G_curated': g, 'L_curated': l, 'Total': total, 'Tier': tier,
-                 'scoreable': identifiable})
+                 'total_denominator': denom,
+                 'contrast_estimable': contrast_ok,
+                 'pathway_estimable': pathway_ok})
 
 mt = pd.DataFrame(out)
 pv = pd.DataFrame(prov)
