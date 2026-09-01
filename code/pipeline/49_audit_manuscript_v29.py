@@ -145,6 +145,11 @@ check('positive controls named in the Introduction',
 check('positive controls named again in Methods and Results',
       all(text.lower().count(c) >= 3 for c in _PC))
 
+_abs_i = paras.index('ABSTRACT')
+_int_i = paras.index('INTRODUCTION')
+_abs_w = sum(len(re.findall(r'\S+', t)) for t in paras[_abs_i + 1:_int_i] if t)
+check(f'abstract within 300 words ({_abs_w})', _abs_w <= 300, str(_abs_w))
+
 print('\n3. NUMBERS MATCH THE DEPOSIT')
 check(f"association count {F['n_associations']}", str(F['n_associations']) in text)
 # only the three comparable tiers are quoted in the prose; rows with an
