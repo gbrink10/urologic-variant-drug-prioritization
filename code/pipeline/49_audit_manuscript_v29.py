@@ -257,7 +257,7 @@ check('normal-tissue RNA not used as a therapeutic-window claim',
 check('tarlatamab approval history stated',
       'accelerated approval' in text and 'traditional approval' in text)
 check('sacituzumab withdrawal month corrected', 'November 2024' in both)
-check('LINCS analysis units explained', 'eight analysis units' in text)
+check('LINCS comparison count explained', 'the eight comparisons' in text)
 # published reference titles keep their own spelling, so test the prose only
 _body_only = chr(10).join(
     t for t in paras

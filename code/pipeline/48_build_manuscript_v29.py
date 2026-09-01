@@ -532,12 +532,13 @@ P('Most associations in the rare cancers, and many in the positive controls, are
   'from transcript abundance, a weaker claim than several modalities require; '
   'rows resting on curated non-transcriptomic evidence are flagged '
   'individually in Supplementary Table S1. The nominated targets were assessed '
-  'against four sources that took no part in scoring. These audit rather than '
-  'validate: each can find a candidate wanting, none can establish that it '
-  'works, and each is blind to some candidates by construction.')
+  'against four sources that took no part in scoring. These sources audit rather '
+  'than validate. Each can argue against a candidate, none can establish that '
+  'an agent works, and each is unable to evaluate some candidates at all.')
 P(f"A total of {F['hpa']['n_surface_required']} associations depend on extracellular "
   f"access and all {F['hpa']['n_confirmed']} are confirmed against the Human "
-  f"Protein Atlas [50], which establishes modality-compatible localization "
+  f"Protein Atlas [50], which establishes that the protein sits where the "
+  f"agent can reach it "
   f"rather than protein abundance in the tumor. Normal-tissue RNA is "
   f"reported for orientation only and is not a therapeutic-window "
   f"comparison: CEACAM1 is substantially expressed in normal kidney "
@@ -548,50 +549,55 @@ P(f"A total of {F['hpa']['n_surface_required']} associations depend on extracell
   f"ligand 3 and somatostatin receptor 2 are both near-undetectable in normal "
   f"bladder, while trophoblast cell-surface antigen 2 is abundant there "
   f"({F['hpa']['nTPM']['TACSTD2']} normalized transcripts per million), which "
-  f"is what makes its loss interpretable rather than a low-baseline artifact. "
+  f"means a reduction there is measurable rather than a low-baseline "
+  f"artifact. "
   f"Per-target values are in Supplementary Table S1.")
 P(f"DepMap CRISPR screens ask whether a cell requires a gene, a more demanding "
   f"question than whether it is abundantly expressed [55]; gene effect is "
   f"reported on the Chronos scale, where more negative means more required. "
   f"Across {F['depmap']['n_urothelial_lines']} urothelial lines, stratified by "
-  f"genotype and target expression from CCLE via cBioPortal [56], it "
-  f"calibrates: RPL5 scores {F['depmap']['RPL5']:.2f} with every line dependent, "
+  f"genotype and target expression from CCLE via cBioPortal [56], the screen "
+  f"behaved as expected: RPL5 scores {F['depmap']['RPL5']:.2f} with every line dependent, "
   f"and PIK3CA-mutant lines are selectively dependent on PIK3CA "
   f"({F['depmap']['PIK3CA_mut']:.2f} versus {F['depmap']['PIK3CA_wt']:.2f}). "
-  f"It also contradicts one of our own candidates: NSD2 is "
+  f"The screen also contradicted one of our own candidates: NSD2 is "
   f"{F['depmap']['NSD2_verdict']} even in the lines expressing it most highly "
   f"({F['depmap']['NSD2_high']:+.2f}), which is why that candidate does not "
   f"survive. ATR is a genuine but pan-essential dependency, so the target is "
   f"required while the sarcomatoid-specific rationale gains no support. For "
-  f"antibody, conjugate and radioligand rows the screen is not the right test "
-  f"at all: CEACAM1 is recorded as {F['depmap']['CEACAM1_verdict']}.")
+  f"antibody, conjugate and radioligand rows the screen does not apply, "
+  f"because those agents deliver a payload and do not require the target to be "
+  f"essential. CEACAM1 is recorded on that basis as not evaluable.")
 P(f"Compound-level activity was read from the PRISM Repurposing screen across "
   f"{F['prism']['n_lines']} cell lines [51], comparing urothelial against "
   f"non-urothelial lines by two-sided Welch test with Benjamini-Hochberg "
-  f"correction across the compounds tested. It calibrates: bortezomib is "
+  f"correction across the compounds tested. The screen behaved as expected: "
+  f"bortezomib is "
   f"broadly cytotoxic ({F['prism']['bortezomib']:.2f}) without being "
   f"urothelial-selective, and erlotinib is markedly more active in urothelial "
   f"lines ({F['prism']['erlotinib_uro']:.2f} versus "
   f"{F['prism']['erlotinib_nonuro']:.2f}; q = {F['prism']['erlotinib_q']:.4f}), "
   f"consistent with its role as the renal medullary positive control. Two "
-  f"compounds that a weaker comparison had marked selective do not survive "
+  f"compounds that an earlier, weaker comparison had called selective were "
+  f"not selective under "
   f"this one: the ATR inhibitor VE-822 (q = {F['prism']['ve822_q']:.2f}) and "
   f"polydatin (q = {F['prism']['polydatin_q']:.2f}) are not significantly more "
   f"active in urothelial lines once they are compared against non-urothelial "
   f"lines rather than against a panel containing them, and once multiplicity "
   f"is accounted for. The four "
   f"screened CXCR1/CXCR2 antagonists show no tumor-cell-autonomous activity in "
-  f"any lineage, which is what a microenvironment-directed mechanism predicts "
-  f"rather than a negative result; it says nothing about normal-cell, myeloid "
-  f"or organ toxicity.")
+  f"any lineage. A mechanism that acts through myeloid recruitment would not "
+  f"be expected to show such activity, so this is not evidence against the "
+  f"candidate; it also says nothing about normal-cell, myeloid or organ "
+  f"toxicity.")
 P(f"Signature reversal against the LINCS L1000 libraries [52,53], recomputed on "
-  f"the refitted gene lists across eight analysis units, recovered several "
+  f"the refitted gene lists across the eight comparisons, recovered several "
   f"nominated agents, but none ranked first in its intended context and the "
   f"same agents appeared across unrelated contexts and lineages: palbociclib "
   f"surfaces in three, and erlotinib in sarcomatoid disease rather than in the "
   f"renal medullary context where it is the positive control. The lists are "
   f"dominated by heat shock protein 90 and multi-kinase perturbagens profiled "
-  f"in unrelated lineages. The layer "
+  f"in unrelated lineages. This source "
   f"therefore lacked context specificity and was not used to support or exclude "
   f"any candidate; complete rankings and corrected values are deposited.")
 
@@ -677,26 +683,25 @@ print('results 3.4-3.6 written')
 # Discussion
 # =====================================================================
 H('DISCUSSION')
-P('A central problem in rare and variant urologic cancers is that the patient '
-  'numbers needed to power dedicated biomarker-matched trials are not, and may '
-  'never be, available. The associations in Table 1 show that a public-data '
-  'framework can nonetheless prioritize biologically coherent hypotheses across '
-  'several such contexts, and can be reported together with the places it '
-  'fails.')
-P(f"The clearest demonstration of that last point is what happened when the "
-  f"primary data were refitted with models matched to how each dataset was "
-  f"built. Eight associations "
+P('In this study, we show that public molecular data can be used to prioritize '
+  'drug hypotheses in cancers that cannot support a dedicated trial, and that '
+  'the same procedure will report where it fails. The patient numbers needed '
+  'to power dedicated biomarker-matched trials in these cancers are not, and '
+  'may never be, available, and the associations in Table 1 were assembled '
+  'without them.')
+P(f"Refitting the primary data with models matched to how each dataset was "
+  f"built changed the results. Eight associations "
   f"changed, and two candidates carried forward by the earlier analysis were "
-  f"no longer supported: the somatostatin receptor 2 row, which had the most attractive "
-  f"translational package of any candidate we produced, and the ATR row. Neither "
-  f"failed because of new data; both failed because the original elementary "
-  f"per-gene tests ignored replicate structure and batch. A framework that had "
-  f"not been rebuilt from primary data would have carried both into a "
-  f"manuscript. We report this because the same risk applies to any "
-  f"public-data prioritization that does not refit what it reuses.")
+  f"no longer supported: the somatostatin receptor 2 row, which had been the "
+  f"most clinically developed candidate in the table, and the ATR row. Neither "
+  f"failed because of new data. Both failed because the original per-gene "
+  f"tests ignored replicate structure and batch. An analysis that reused the "
+  f"deposited summary statistics would have carried both forward, and the same "
+  f"risk applies to any public-data prioritization that does not refit what it "
+  f"reuses.")
 P(f"Three design features of the deposited data bound what can be concluded, "
   f"and none was visible in the summary tables the earlier analysis relied on. "
-  f"The sarcomatoid confounding of Rare and Variant Cancers is the clearest: "
+  f"The confounding in the sarcomatoid series is the clearest case: "
   f"{dsn['sarc_chips_sarc_only']} chips carry sarcomatoid samples only and "
   f"{dsn['sarc_chips_uc_only']} carry conventional samples only, none both, so "
   f"a model including chip is not estimable and those five rows are unscored. "
@@ -704,7 +709,7 @@ P(f"Three design features of the deposited data bound what can be concluded, "
   f"contains {dsn['ccrcc_samples']} tumors and no normal tissue, so those rows "
   f"are scored on absolute expression rather than a disease contrast, and the "
   f"metastatic contrast the series does support yields "
-  f"{dsn['ccrcc_q05_genes']} gene at q < 0.05. And the hereditary "
+  f"{dsn['ccrcc_q05_genes']} gene at q < 0.05. The hereditary "
   f"leiomyomatosis series, used previously as though it spoke to clear cell "
   f"disease, is a different disease, reported here as adjacent-disease "
   f"mechanistic context only.")
@@ -727,7 +732,7 @@ P(f"The scoring dimensions are partially overlapping, and the composite should "
   f"sensitivity analysis (Supplementary Table S2), which orders all scored "
   f"associations numerically to test the score architecture and not to rank "
   f"hypotheses across diseases, the renal medullary candidate falls from "
-  f"first to {ordinal(s2_lead_no_anchor)} when the anchor contribution is "
+  f"first to {ordinal(s2_lead_no_anchor)} when the genomic score is "
   f"removed and to {ordinal(s2_lead_no_pathway)} when the pathway dimension "
   f"is dropped, "
   f"while it remains first when the literature dimension is removed and when the "
@@ -735,7 +740,8 @@ P(f"The scoring dimensions are partially overlapping, and the composite should "
   f"ordering is therefore carried by the architecture rather than by "
   f"target-specific biology, and the shortlist should be read with that in "
   f"mind.")
-P(f"Remaining limitations are bounded by what is public. Rare-disease sample "
+P(f"Our study has limitations, and most are bounded by what is public. "
+  f"Rare-disease sample "
   f"sizes are modest. Enrichment was corrected within context across eighteen "
   f"sets and not across contexts or downstream comparisons. The transcriptomic "
   f"dimension is not uniformly transcriptomic: where a target is absent from its "
@@ -746,7 +752,7 @@ P(f"Remaining limitations are bounded by what is public. Rare-disease sample "
   f"across both was required. Finally, the urologic-only novelty standard is "
   f"deliberately conservative and says nothing about biological precedence "
   f"outside urology.")
-P('What the Approach Could Not Find makes a further limitation concrete: because candidate generation '
+P('One further limitation follows from the design. Because candidate generation '
   'is bounded by the pre-specified panel, any druggable axis absent from it is '
   'invisible however strong its expression signal. DLL3 is the clearest case and '
   'proteasome inhibition in renal medullary carcinoma [57] a second, so panel '
@@ -755,8 +761,8 @@ P('What the Approach Could Not Find makes a further limitation concrete: because
   'immediate interest, including primary bladder adenocarcinoma, urachal '
   'carcinoma, plasmacytoid urothelial carcinoma and translocation renal cell '
   'carcinoma, have no histology-labeled cohort of adequate size and could not '
-  'be analyzed. The forward requirement is infrastructural rather than '
-  'algorithmic.')
+  'be analyzed. Progress here depends on better data being deposited rather '
+  'than on a better algorithm.')
 
 P(f"In conclusion, we scored {F['n_associations']} drug-cancer associations "
   f"across three "
