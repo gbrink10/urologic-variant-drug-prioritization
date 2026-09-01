@@ -238,7 +238,7 @@ for m in re.finditer(r'\[([0-9,\u2013\-\s]+)\]', text):
 refnums = sorted(int(re.match(r'^\s*(\d{1,2})\.', t).group(1)) for t in paras
                  if re.match(r'^\s*\d{1,2}\.\s+\S', t)
                  and ('doi' in t.lower() or 'PMID' in t))
-check('57 references, contiguous', refnums == list(range(1, 58)),
+check('61 references, contiguous', refnums == list(range(1, 62)),
       f'n={len(refnums)}')
 missing = [n for n in refnums if cited[n] == 0]
 over = sorted(n for n in cited if n not in refnums)
@@ -309,10 +309,7 @@ check('within-disease priority named, not a global lead',
 # restatement was removed as duplicative
 check('no cross-disease ranking claimed',
       'within a disease, not between diseases' in text
-      and 'ranked within a disease but not across diseases' in text.lower()
-      or 'within a disease, not between diseases' in text
-      and 'to rank across diseases we would have to separate them'
-      in text.lower())
+      and 'could separate them across diseases' in text)
 check('three survivors across two diseases stated',
       'across 2 diseases' in text or 'across two diseases' in text
       or f"{F['n_survivor_contexts']} diseases" in text)

@@ -55,3 +55,7 @@
 55. Tsherniak A, Vazquez F, Montgomery PG, Weir BA, Kryukov G, Cowley GS, et al. Defining a cancer dependency map. Cell. 2017;170(3):564–576.e16. doi:10.1016/j.cell.2017.06.010. [PMID: 28753430]
 56. Cerami E, Gao J, Dogrusoz U, Gross BE, Sumer SO, Aksoy BA, et al. The cBio cancer genomics portal: an open platform for exploring multidimensional cancer genomics data. Cancer Discov. 2012;2(5):401–404. doi:10.1158/2159-8290.CD-12-0095. [PMID: 22588877]
 57. Ronnen EA, Kondagunta GV, Motzer RJ. Medullary renal cell carcinoma and response to therapy with bortezomib. J Clin Oncol. 2006;24(9):e14. doi:10.1200/JCO.2005.05.0344. [PMID: 16549825]
+58. Barrett T, Wilhite SE, Ledoux P, Evangelista C, Kim IF, Tomashevsky M, et al. NCBI GEO: archive for functional genomics data sets - update. Nucleic Acids Res. 2013;41(D1):D991-D995. doi:10.1093/nar/gks1193. [PMID: 23193258]
+59. Zhou Y, Zhang Y, Zhao D, Yu X, Shen X, Zhou Y, et al. TTD: Therapeutic Target Database describing target druggability information. Nucleic Acids Res. 2024;52(D1):D1465-D1477. doi:10.1093/nar/gkad751. [PMID: 37713619]
+60. Ochoa D, Hercules A, Carmona M, Suveges D, Baker J, Malangone C, et al. The next-generation Open Targets Platform: reimagined, redesigned, rebuilt. Nucleic Acids Res. 2023;51(D1):D1353-D1359. doi:10.1093/nar/gkac1046. [PMID: 36399499]
+61. Kanehisa M, Goto S. KEGG: Kyoto Encyclopedia of Genes and Genomes. Nucleic Acids Res. 2000;28(1):27-30. doi:10.1093/nar/28.1.27. [PMID: 10592173]
