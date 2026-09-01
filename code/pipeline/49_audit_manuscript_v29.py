@@ -58,15 +58,21 @@ def check(label, cond, detail=''):
 
 print('1. STRUCTURE')
 for sec in ('CONTEXT', 'ABSTRACT', 'INTRODUCTION', 'MATERIALS AND METHODS',
-            'RESULTS', 'DISCUSSION', 'CONCLUSIONS', 'DATA AVAILABILITY',
+            'RESULTS', 'DISCUSSION', 'DATA AVAILABILITY',
             'REFERENCES', 'CRediT AUTHOR STATEMENT', 'FUNDING',
             'CONFLICTS OF INTEREST', 'ETHICS STATEMENT',
             'SUPPLEMENTARY MATERIALS', 'AI USAGE DISCLOSURE'):
     check(f'section {sec}', sec in paras)
 check('4 figures embedded', len(doc.inline_shapes) == 4, str(len(doc.inline_shapes)))
 check('one condensed table in the main text', len(doc.tables) == 1)
-subs = [t for t in paras if re.match(r'^3\.\d ', t)]
-check('six Results subsections', len(subs) == 6, str([x[:22] for x in subs]))
+# JCO CCI uses unnumbered title-case subsection headings
+RES_SUBS = ('The Association Table', 'Positive Controls',
+            'Rare and Variant Cancers', 'Independent Evidence',
+            'Supported Hypotheses', 'What the Approach Could Not Find')
+check('six Results subsections', all(h in paras for h in RES_SUBS),
+      str([h for h in RES_SUBS if h not in paras]))
+check('Discussion closes with a conclusion',
+      'In conclusion, we scored' in text)
 
 print('\n2. TITLE AND FRAMING')
 title = paras[0]
@@ -96,10 +102,17 @@ check('framework-novel language replaced with a search statement',
 
 # Methods must carry named subsections including a statistics section, and must
 # not restate the selection criteria the pipeline no longer applies
-_subs = [t for t in paras if re.match(r'^2\.\d ', t)]
-check('Methods has named subsections', len(_subs) >= 5, str(_subs))
-check('Methods has a statistics section',
-      any('statistical' in t.lower() for t in _subs), str(_subs))
+METH_SUBS = ('Data Sources', 'Candidate Selection', 'Analysis Pipeline',
+             'Prioritization Score', 'Prior-Proposal Classification',
+             'Eligibility and Support Criteria', 'Statistical Analysis')
+check('Methods has named subsections', all(h in paras for h in METH_SUBS),
+      str([h for h in METH_SUBS if h not in paras]))
+# terms this paper coined and must not reintroduce
+JARGON = ('design-aware', 'platform-appropriate', 'context-anchor',
+          'load-bearing', 'ordering device', 'measured-gene universe',
+          'upper-tail', 'score-independent')
+check('no invented jargon', not [j for j in JARGON if j in text.lower()],
+      str([j for j in JARGON if j in text.lower()]))
 check('the retired E0 criterion is gone', 'E0' not in text)
 # the paper's premise is repurposing, so the clinical stage of every agent must
 # be stated and must add up
