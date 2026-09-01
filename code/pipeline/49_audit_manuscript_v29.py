@@ -124,12 +124,16 @@ check('the selection rule for the 30 is stated',
       'Genes were ranked by alteration frequency' in text
       and 'searched against the Therapeutic Target Database and OpenTargets'
       in text)
+check('per-cancer counts match the deposit',
+      (F['rows_per_cancer_min'], F['rows_per_cancer_max'],
+       F['rows_per_rare_min'], F['rows_per_rare_max']) == (3, 7, 3, 5)
+      and 'three to seven' in text and 'three to five' in text)
 check('the entry-rule denominator matches the deposit',
       f"{F['funnel_entry']:,}" in text)
 # the eighteen sets score candidates, they do not gate them, and the paper must
 # not imply otherwise
 check('panel membership not presented as a condition of entry',
-      'not a condition of entry' in text)
+      'used to score candidates, not' in text and 'to choose them' in text)
 
 # a reader must be able to tell which three cancers are the positive controls
 _PC = ('neuroendocrine prostate cancer', 'muscle-invasive bladder cancer',

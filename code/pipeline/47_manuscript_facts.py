@@ -120,6 +120,22 @@ F['stage'] = {
 assert (F['stage']['approved'] + F['stage']['in_trials']
         + F['stage']['preclinical'] == F['n_associations']), \
     'clinical stages do not sum to the association count'
+# associations carried forward per cancer, with the small-cell subtypes and
+# the two clear cell rows grouped into their diseases
+def _disease(c):
+    if c.startswith('SCBC'):
+        return 'Small-cell bladder'
+    if c.startswith('ccRCC'):
+        return 'Clear cell renal'
+    return c
+
+
+_per = defs['Context'].map(_disease).value_counts()
+_rare = defs.loc[defs['N'] > 16, 'Context'].map(_disease).value_counts()
+F['rows_per_cancer_min'] = int(_per.min())
+F['rows_per_cancer_max'] = int(_per.max())
+F['rows_per_rare_min'] = int(_rare.min())
+F['rows_per_rare_max'] = int(_rare.max())
 F['n_tcga_anchored'] = int((defs['N'] <= 16).sum())
 F['n_geo_anchored'] = int((defs['N'] > 16).sum())
 F['tcga_rows_freq_ge_15pct'] = int(

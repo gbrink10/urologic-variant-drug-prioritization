@@ -45,6 +45,10 @@
   "preclinical": 2,
   "clinically_available": 28
  },
+ "rows_per_cancer_min": 3,
+ "rows_per_cancer_max": 7,
+ "rows_per_rare_min": 3,
+ "rows_per_rare_max": 5,
  "n_tcga_anchored": 16,
  "n_geo_anchored": 14,
  "tcga_rows_freq_ge_15pct": 13,
