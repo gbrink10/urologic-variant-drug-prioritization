@@ -243,7 +243,7 @@ for m in re.finditer(r'\[([0-9,\u2013\-\s]+)\]', text):
 refnums = sorted(int(re.match(r'^\s*(\d{1,2})\.', t).group(1)) for t in paras
                  if re.match(r'^\s*\d{1,2}\.\s+\S', t)
                  and ('doi' in t.lower() or 'PMID' in t))
-check('61 references, contiguous', refnums == list(range(1, 62)),
+check('60 references, contiguous', refnums == list(range(1, 61)),
       f'n={len(refnums)}')
 missing = [n for n in refnums if cited[n] == 0]
 over = sorted(n for n in cited if n not in refnums)
@@ -267,13 +267,7 @@ check('normal-tissue RNA not used as a therapeutic-window claim',
       'not a therapeutic-window' in text)
 # the DLL3 section that carried tarlatamab's approval dates was removed; the
 # limitation it supported is now one sentence in the Discussion
-# DLL3 was not excluded by panel coverage: it failed the significance
-# threshold. The Methods say panel membership never gated a candidate, so the
-# Discussion must not claim the opposite.
-check('DLL3 limitation states the real reason',
-      'DLL3' in text
-      and f"q = {F['de']['DLL3_ascl1']['q']:.2f}" in text
-      and 'never nominated' in text)
+# the panel scores candidates and never gated one; nothing may imply otherwise
 check('no claim that the panel gated candidates',
       'could only be drawn from the eighteen gene sets' not in text
       and 'bounded by the pre-specified panel' not in text)

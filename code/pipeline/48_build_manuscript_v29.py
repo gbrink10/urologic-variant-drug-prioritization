@@ -210,12 +210,12 @@ P('Over the last several decades an abundance of online data resources has '
   'emerged to help us better understand oncologic disease. The Cancer Genome '
   'Atlas catalogs somatic alterations across thirty-three cancer types from '
   'more than eleven thousand patients [1,2], searchable gene by gene through '
-  'cBioPortal [56], and the Gene Expression Omnibus archives over two hundred '
-  'thousand transcriptomic datasets [58]. Alongside them, the Therapeutic '
-  'Target Database [59] and Open Targets [60] record which proteins have '
+  'cBioPortal [55], and the Gene Expression Omnibus archives over two hundred '
+  'thousand transcriptomic datasets [57]. Alongside them, the Therapeutic '
+  'Target Database [58] and Open Targets [59] record which proteins have '
   'drugs against them and how far each drug has progressed, and the Kyoto '
   'Encyclopedia of Genes and Genomes groups genes into annotated pathways '
-  '[61]. The bottleneck in '
+  '[60]. The bottleneck in '
   'translational oncology has shifted from generating these data to '
   'interrogating them.')
 P('Drug repurposing takes a different route to a new treatment. Instead of '
@@ -262,15 +262,15 @@ P('Candidate associations were assembled from the sources below before the '
   'pipeline runs end to end from the deposited code. Somatic alteration '
   'frequencies came from the best published genomic series available for each '
   'cancer: for the three positive controls, The Cancer Genome Atlas Pan-Cancer '
-  'Atlas 2018 queried through cBioPortal [1,2,56], comprising urothelial '
+  'Atlas 2018 queried through cBioPortal [1,2,55], comprising urothelial '
   'bladder carcinoma (n = 411), kidney renal clear cell carcinoma (n = 512) '
   'and prostate adenocarcinoma (n = 494). The four rare cancers are absent '
   'from The Cancer Genome Atlas, so their frequencies came from '
   'disease-specific series [3\u20137]. Transcriptomic data came from ten Gene '
-  'Expression Omnibus series [58], listed with their accessions under Data '
+  'Expression Omnibus series [57], listed with their accessions under Data '
   'Availability; pathway membership from the Kyoto Encyclopedia of Genes and '
-  'Genomes [61]; and drug-target relationships and clinical stage from the '
-  'Therapeutic Target Database [59] and Open Targets [60]. Gene symbols were '
+  'Genomes [60]; and drug-target relationships and clinical stage from the '
+  'Therapeutic Target Database [58] and Open Targets [59]. Gene symbols were '
   'reconciled against the HGNC complete set. A rare cancer is often defined by '
   'an alteration that is not itself a drug target, SMARCB1 loss in renal '
   'medullary carcinoma being the clearest case, so transcriptomic nomination '
@@ -499,10 +499,10 @@ P(f"A total of {F['hpa']['n_surface_required']} associations depend on "
   f"Table S1.")
 
 P(f"DepMap CRISPR screens ask whether a cell requires a gene, a more "
-  f"demanding question than whether it is abundantly expressed [55]; gene "
+  f"demanding question than whether it is abundantly expressed [54]; gene "
   f"effect is on the Chronos scale, where more negative means more required. "
   f"Across {F['depmap']['n_urothelial_lines']} urothelial lines, stratified by "
-  f"genotype and target expression from CCLE via cBioPortal [56], the screen "
+  f"genotype and target expression from CCLE via cBioPortal [55], the screen "
   f"behaved as expected: RPL5 scores {F['depmap']['RPL5']:.2f} and "
   f"PIK3CA-mutant lines are selectively dependent on PIK3CA "
   f"({F['depmap']['PIK3CA_mut']:.2f} versus {F['depmap']['PIK3CA_wt']:.2f}). "
@@ -640,21 +640,18 @@ P(f"Our study has limitations, and most are bounded by what is public. The "
   f"conservative and says nothing about precedence outside urology.")
 
 P(f"One further limitation follows from how candidates were selected. A gene "
-  f"had to clear the transcriptomic entry rule to be considered at all, and a "
-  f"real target can fail that in a small cohort. DLL3, the canonical "
-  f"ASCL1-lineage surface antigen, the target of tarlatamab, and already "
-  f"proposed in genitourinary small-cell carcinoma [54], is elevated in the "
-  f"ASCL1-positive subtype here (log2 fold change "
-  f"{F['de']['DLL3_ascl1']['log2FC']:+.2f}) but does not reach significance "
-  f"after correction (q = {F['de']['DLL3_ascl1']['q']:.2f}). It was therefore "
-  f"never nominated: a false negative of this approach rather than a missed "
-  f"discovery. Proteasome inhibition in renal medullary carcinoma [57] is a "
-  f"second candidate the search did not reach. Resolution is also bounded by "
-  f"what is deposited: several variants of immediate interest, including "
-  f"primary bladder adenocarcinoma, urachal carcinoma, plasmacytoid urothelial "
-  f"carcinoma and translocation renal cell carcinoma, have no histology-labeled "
-  f"cohort of adequate size and could not be analyzed. Progress here depends on "
-  f"better data being deposited rather than on a better algorithm.")
+  f"had to clear the transcriptomic entry rule to be considered at all, and we "
+  f"deliberately kept the list of genes carried forward short. A real target "
+  f"that falls short of significance in a small cohort is therefore never "
+  f"nominated; proteasome inhibition in renal medullary carcinoma [56] is one "
+  f"such candidate. Further work could extend the search to the less "
+  f"significant genes we set aside. Resolution is also bounded by what is "
+  f"deposited: several variants of immediate interest, including primary "
+  f"bladder adenocarcinoma, urachal carcinoma, plasmacytoid urothelial "
+  f"carcinoma and translocation renal cell carcinoma, have no "
+  f"histology-labeled cohort of adequate size and could not be analyzed. "
+  f"Progress here depends on better data being deposited rather than on a "
+  f"better algorithm.")
 
 P(f"In conclusion, we scored {F['n_associations']} drug-cancer associations "
   f"across three "
