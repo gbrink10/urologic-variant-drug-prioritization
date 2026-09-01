@@ -144,32 +144,38 @@ P('Corresponding Author: Garrett J. Brinkley, MD; Department of Urology, Tulane 
 
 H('CONTEXT', 12)
 P('Key objective: Can publicly deposited genomic and transcriptomic data be '
-  'interrogated systematically to identify and prioritize drugs for aggressive '
-  'urologic cancers, where clinical trials are difficult to power?')
-P(f"Knowledge generated: The pipeline produced "
-  f"{F['n_associations']} drug-cancer associations, "
-  f"{F['arm_control']['n']} of them in the three positive controls and "
-  f"{F['arm_discovery']['n']} in the four rare cancers. "
-  f"All {F['arm_control']['n']} control associations recover a drug proposed "
-  f"independently by another group, which is what a working positive control "
-  f"looks like. Among the {F['arm_discovery']['n']} associations in the rare "
-  f"cancers, {F['arm_discovery']['proposed']} were previously proposed, "
+  'interrogated systematically to identify and prioritize drugs that are '
+  'already FDA-approved, or in clinical trials for a different disease, for '
+  'aggressive urologic cancers where trials are difficult to power?')
+P(f"Knowledge generated: The pipeline produced {F['n_associations']} "
+  f"drug-cancer associations, {F['arm_control']['n']} of them in the three "
+  f"positive controls and {F['arm_discovery']['n']} in the four rare "
+  f"cancers. Every drug is one that already exists: "
+  f"{F['stage']['approved']} are FDA-approved and "
+  f"{F['stage']['in_trials']} are in clinical trials for another disease, "
+  f"leaving {F['stage']['preclinical']} preclinical agents nominated where "
+  f"nothing clinical-stage targets that protein. All "
+  f"{F['arm_control']['n']} control associations recover a drug proposed "
+  f"independently by another group or already in trials. Among the "
+  f"{F['arm_discovery']['n']} associations in the rare cancers, "
+  f"{F['arm_discovery']['proposed']} were previously proposed, "
   f"{F['arm_discovery']['partial']} extend a drug from conventional disease "
   f"or another organ, one is a biomarker observation rather than a drug "
   f"hypothesis, and {F['arm_discovery']['novel']} had no prior proposal in "
-  f"the urologic literature. Four independent data sources, none of which had "
-  f"contributed to the score, supported {F['funnel']['survive']} of those "
-  f"{F['arm_discovery']['novel']} and argued against the rest.")
+  f"the urologic literature. Four independent data sources supported "
+  f"{F['funnel']['survive']} of those {F['arm_discovery']['novel']} and "
+  f"argued against the rest.")
 
 H('ABSTRACT', 12)
 P(f"Purpose. Rare and variant urologic cancers are difficult to study in "
   f"randomized trials, so few have biomarker-directed treatment options. We "
   f"built a public-data framework that identifies and prioritizes drug targets "
-  f"for rare aggressive urologic malignancies.")
-P(f"Methods. For each cancer we took the genes that stood out, by alteration "
-  f"frequency where The Cancer Genome Atlas provides a cohort and by "
-  f"differential expression where it does not, and searched for drugs "
-  f"against them. Alteration frequencies, differential expression across ten Gene "
+  f"for rare aggressive urologic malignancies, restricted to agents that are "
+  f"already FDA-approved or in clinical trials for another disease.")
+P(f"Methods. The Cancer Genome Atlas and the Gene Expression Omnibus were used "
+  f"to identify the most altered and most differentially expressed genes in "
+  f"each of these cancers, and we then searched for existing drugs against "
+  f"them. Alteration frequencies, differential expression across ten Gene "
   f"Expression Omnibus datasets, enrichment across eighteen pre-specified "
   f"druggable gene sets and drug-target curation were combined into a 9-point "
   f"score, which exists to put several dissimilar kinds of evidence on one "
@@ -226,7 +232,10 @@ P('Drug repurposing takes a different route to a new treatment. Instead of '
   'or already in trials, can be matched to a disease it was not designed for. '
   'A drug that has been through trials arrives with its human dosing and side '
   'effects already known, which is most of what makes it worth trying '
-  'somewhere new.')
+  'somewhere new. We therefore restricted candidates to agents that are '
+  'already FDA-approved, or already in clinical trials for another disease, '
+  'so that anything the framework nominates could in principle be tested '
+  'without first developing a molecule.')
 P('Aggressive and variant urologic histologies are in high need of novel '
   'therapies. Renal '
   'medullary carcinoma, penile squamous cell carcinoma, sarcomatoid urothelial '

@@ -39,6 +39,12 @@
   "novel": 6,
   "diseases": 4
  },
+ "stage": {
+  "approved": 19,
+  "in_trials": 9,
+  "preclinical": 2,
+  "clinically_available": 28
+ },
  "n_tcga_anchored": 16,
  "n_geo_anchored": 14,
  "tcga_rows_freq_ge_15pct": 13,

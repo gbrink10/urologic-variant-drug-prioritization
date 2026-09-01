@@ -108,6 +108,18 @@ F['arm_discovery'] = {
 assert (F['arm_discovery']['proposed'] + F['arm_discovery']['partial']
         + F['arm_discovery']['biomarker'] + F['arm_discovery']['novel']
         == F['arm_discovery']['n']), 'discovery classes do not sum'
+_st = defs['Stage'].astype(str)
+_approved = _st.str.contains('FDA-approved', case=False)
+_preclin = _st.str.contains('Preclinical', case=False)
+F['stage'] = {
+    'approved': int(_approved.sum()),
+    'in_trials': int((~_approved & ~_preclin).sum()),
+    'preclinical': int(_preclin.sum()),
+    'clinically_available': int((~_preclin).sum()),
+}
+assert (F['stage']['approved'] + F['stage']['in_trials']
+        + F['stage']['preclinical'] == F['n_associations']), \
+    'clinical stages do not sum to the association count'
 F['n_tcga_anchored'] = int((defs['N'] <= 16).sum())
 F['n_geo_anchored'] = int((defs['N'] > 16).sum())
 F['tcga_rows_freq_ge_15pct'] = int(

@@ -101,6 +101,12 @@ check('Methods has named subsections', len(_subs) >= 5, str(_subs))
 check('Methods has a statistics section',
       any('statistical' in t.lower() for t in _subs), str(_subs))
 check('the retired E0 criterion is gone', 'E0' not in text)
+# the paper's premise is repurposing, so the clinical stage of every agent must
+# be stated and must add up
+check('clinical stage of the agents stated',
+      f"{F['stage']['approved']} are FDA-approved" in text
+      and f"{F['stage']['in_trials']} are in clinical trials" in text
+      and str(F['stage']['preclinical']) in text)
 check('the selection rule for the 30 is stated',
       'we took the genes that stood out' in text
       and 'searched the Therapeutic Target Database and OpenTargets' in text)
