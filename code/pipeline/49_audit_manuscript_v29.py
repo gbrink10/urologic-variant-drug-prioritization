@@ -267,8 +267,16 @@ check('normal-tissue RNA not used as a therapeutic-window claim',
       'not a therapeutic-window' in text)
 # the DLL3 section that carried tarlatamab's approval dates was removed; the
 # limitation it supported is now one sentence in the Discussion
-check('DLL3 panel-coverage limitation retained',
-      'DLL3' in text and 'panel coverage should be re-audited' in text)
+# DLL3 was not excluded by panel coverage: it failed the significance
+# threshold. The Methods say panel membership never gated a candidate, so the
+# Discussion must not claim the opposite.
+check('DLL3 limitation states the real reason',
+      'DLL3' in text
+      and f"q = {F['de']['DLL3_ascl1']['q']:.2f}" in text
+      and 'never nominated' in text)
+check('no claim that the panel gated candidates',
+      'could only be drawn from the eighteen gene sets' not in text
+      and 'bounded by the pre-specified panel' not in text)
 check('sacituzumab withdrawal month corrected', 'November 2024' in both)
 check('LINCS comparison count explained', 'the eight comparisons' in text)
 # published reference titles keep their own spelling, so test the prose only

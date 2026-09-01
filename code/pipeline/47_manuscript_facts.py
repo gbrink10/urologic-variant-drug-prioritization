@@ -44,6 +44,17 @@ def q_of(ctx, pathway):
     return float(h['qvalue_BH'].iloc[0]) if len(h) else None
 
 
+def _de_row(unit, gene):
+    """A gene's fitted effect in one context, read from the refit table."""
+    t = pd.read_csv(RF / f'DE_{unit}.csv')
+    qc = next(c for c in ('adj.P.Val', 'q', 'FDR') if c in t.columns)
+    lc = next(c for c in ('logFC', 'log2FC') if c in t.columns)
+    h = t[t['gene'].astype(str).str.upper() == gene.upper()]
+    if not len(h):
+        return {'log2FC': None, 'q': None}
+    return {'log2FC': float(h[lc].iloc[0]), 'q': float(h[qc].iloc[0])}
+
+
 def de_of(n):
     r = prov[prov['N'] == n].iloc[0]
     return {'log2FC': None if pd.isna(r['refit_log2FC']) else float(r['refit_log2FC']),
@@ -196,6 +207,7 @@ F['de'] = {'CXCL8_rmc': de_of(17), 'CEACAM1_rmc': de_of(19),
            'HLA_DRA_pscc': de_of(20), 'NSD2_sarc': de_of(23),
            'ATR_sarc': de_of(24), 'TACSTD2_sarc': de_of(27),
            'UHRF1_sarc': de_of(25), 'G6PD_sarc': de_of(26),
+           'DLL3_ascl1': _de_row('SCBC_ASCL1', 'DLL3'),
            'CEACAM5_ascl1': de_of(28), 'SSTR2_neurod1': de_of(29),
            'PTGS1_pou2f3': de_of(30)}
 

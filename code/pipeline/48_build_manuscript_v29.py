@@ -401,7 +401,7 @@ P(f"The pipeline produced {F['n_associations']} drug-cancer associations "
   f"(Table 1; the full table with every score component is Supplementary Table "
   f"S1), in two groups fixed before any result was seen: "
   f"{F['arm_control']['n']} in the three positive controls and "
-  f"{F['arm_discovery']['n']} in the four rare cancers. "
+  f"{F['arm_discovery']['n']} in the four rare cancers. Of these, "
   f"{F['tiers'].get('Strong', 0)} reach the Strong tier, "
   f"{F['tiers'].get('Moderate', 0)} Moderate and "
   f"{F['tiers'].get('Exploratory', 0)} Exploratory; five sarcomatoid "
@@ -623,8 +623,7 @@ P(f"The four score dimensions overlap, so the total orders candidates rather "
   f"the disease rather than one in the nominated target: renal medullary "
   f"carcinoma is almost always SMARCB1-deficient, which says nothing about "
   f"CXCR1 or CXCR2. Removing that score in the sensitivity analysis moves the "
-  f"renal medullary candidate from first to "
-  f"{ordinal(s2_lead_no_anchor)} (Supplementary Table S2), so part of the "
+  f"renal medullary candidate from first to third (Supplementary Table S2), so part of the "
   f"ordering comes from how the score is built rather than from the biology of "
   f"the target.")
 P(f"Our study has limitations, and most are bounded by what is public. The "
@@ -640,20 +639,22 @@ P(f"Our study has limitations, and most are bounded by what is public. The "
   f"required. Finally, the urologic-only novelty standard is deliberately "
   f"conservative and says nothing about precedence outside urology.")
 
-P('One further limitation follows from the design. Candidates could only be '
-  'drawn from the eighteen gene sets we specified in advance, so a drug target '
-  'that none of those sets contains could never be nominated, no matter how '
-  'strongly its gene was expressed. DLL3, the target of tarlatamab '
-  'and already proposed in genitourinary small-cell carcinoma [54], is the '
-  'clearest case, and '
-  'proteasome inhibition in renal medullary carcinoma [57] a second, so panel '
-  'coverage should be re-audited against newly approved drug classes before '
-  'reuse. Resolution is also bounded by what is deposited: several variants of '
-  'immediate interest, including primary bladder adenocarcinoma, urachal '
-  'carcinoma, plasmacytoid urothelial carcinoma and translocation renal cell '
-  'carcinoma, have no histology-labeled cohort of adequate size and could not '
-  'be analyzed. Progress here depends on better data being deposited rather '
-  'than on a better algorithm.')
+P(f"One further limitation follows from how candidates were selected. A gene "
+  f"had to clear the transcriptomic entry rule to be considered at all, and a "
+  f"real target can fail that in a small cohort. DLL3, the canonical "
+  f"ASCL1-lineage surface antigen, the target of tarlatamab, and already "
+  f"proposed in genitourinary small-cell carcinoma [54], is elevated in the "
+  f"ASCL1-positive subtype here (log2 fold change "
+  f"{F['de']['DLL3_ascl1']['log2FC']:+.2f}) but does not reach significance "
+  f"after correction (q = {F['de']['DLL3_ascl1']['q']:.2f}). It was therefore "
+  f"never nominated: a false negative of this approach rather than a missed "
+  f"discovery. Proteasome inhibition in renal medullary carcinoma [57] is a "
+  f"second candidate the search did not reach. Resolution is also bounded by "
+  f"what is deposited: several variants of immediate interest, including "
+  f"primary bladder adenocarcinoma, urachal carcinoma, plasmacytoid urothelial "
+  f"carcinoma and translocation renal cell carcinoma, have no histology-labeled "
+  f"cohort of adequate size and could not be analyzed. Progress here depends on "
+  f"better data being deposited rather than on a better algorithm.")
 
 P(f"In conclusion, we scored {F['n_associations']} drug-cancer associations "
   f"across three "
@@ -917,7 +918,7 @@ _tblPr.append(_mar)
 
 accounted = set()
 
-add_row(['', 'POSITIVE CONTROLS \u2014 calibration, not discovery', '', '', '', ''],
+add_row(['', 'POSITIVE CONTROLS \u2014 not evaluated as discovery', '', '', '', ''],
         bold=True)
 for ctxs, label in ((('NEPC',), 'Neuroendocrine prostate'),
                     (('MIBC / MPBC',), 'Muscle-invasive bladder'),
@@ -930,17 +931,17 @@ for ctxs, label in ((('NEPC',), 'Neuroendocrine prostate'),
     add_row([f'{sub["N"].min()}\u2013{sub["N"].max()}', label,
              f'{len(sub)} associations, all recovering priorities proposed elsewhere',
              ', '.join(f'{v} {k}' for k, v in tiers_here.items()),
-             'calibration set', 'not carried forward as discovery'])
+             'positive control', 'not carried forward as discovery'])
 
 # previously proposed priorities arising in the rare or variant contexts
 rare_recovery = merged[merged['N'].isin([18, 20])]
 if len(rare_recovery):
-    add_row(['', 'RECOVERY WITHIN THE DISCOVERY CONTEXTS', '', '', '', ''], bold=True)
+    add_row(['', 'PREVIOUSLY PROPOSED, IN THE RARE CANCERS', '', '', '', ''], bold=True)
     for _, r in rare_recovery.iterrows():
         accounted.add(int(r['N']))
         add_row([r['N'], r['Context'], f"{r['Drug']} \u2014 {r['Target']}",
                  f"{r['Total']} \u00b7 {r['Tier']}", 'previously proposed',
-                 'supports calibration in a rare context'])
+                 'recovered in a rare cancer'])
 
 add_row(['', 'NO PRIOR UROLOGIC-ONCOLOGY PROPOSAL IDENTIFIED', '', '', '', ''],
         bold=True)
