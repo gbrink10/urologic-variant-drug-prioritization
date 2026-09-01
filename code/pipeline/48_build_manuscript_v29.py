@@ -8,7 +8,9 @@ v28 text and its own CSV.
 Writes: Downloads/FDA_Drug_Repurposing_v31.docx
 """
 import json
+import re
 import sys
+from collections import Counter
 from pathlib import Path
 
 import paths
@@ -885,6 +887,24 @@ _hdr.set(qn('w:val'), 'true')
 _trPr.append(_hdr)
 
 
+def stage_tag(stage):
+    """'FDA-approved (CLL, AML)' -> 'FDA approved'; 'Phase II/III (...)' -> 'Phase II/III'.
+
+    The curated stage string carries the indication and the trial it rests on,
+    which Table 1 has no room for. Supplementary Table S1 keeps it in full.
+    """
+    v = str(stage)
+    low = v.lower()
+    if 'preclinical' in low:
+        return 'preclinical'
+    if 'fda-approved' in low or 'fda approved' in low:
+        return 'FDA approved'
+    m = re.search(r'phase\s+(i{1,3}v?(?:\s*/\s*i{1,3}v?)*)', low)
+    if m:
+        return 'phase ' + m.group(1).upper().replace(' ', '')
+    return v.split('(')[0].strip().lower() or 'stage not curated'
+
+
 def add_row(cells, bold=False, size=8.0):
     row = t.add_row()
     trPr = row._tr.get_or_add_trPr()
@@ -895,9 +915,16 @@ def add_row(cells, bold=False, size=8.0):
         para = c.paragraphs[0]
         para.paragraph_format.space_before = Pt(0)
         para.paragraph_format.space_after = Pt(0)
-        run = para.add_run(str(v))
+        # a tuple is (main text, qualifier); the qualifier is set smaller and
+        # italic on its own line, which is how the clinical stage is shown
+        main, qual = v if isinstance(v, tuple) else (v, None)
+        run = para.add_run(str(main))
         run.font.size = Pt(size)
         run.bold = bold
+        if qual:
+            q = para.add_run('\n' + str(qual))
+            q.font.size = Pt(size - 0.8)
+            q.italic = True
     return row
 
 
@@ -925,8 +952,12 @@ for ctxs, label in ((('NEPC',), 'Neuroendocrine prostate'),
         continue
     accounted |= set(sub['N'])
     tiers_here = sub['Tier'].value_counts().to_dict()
+    _st = [stage_tag(x) for x in defs.loc[defs['N'].isin(sub['N']), 'Stage']]
+    _sc = Counter(_st)
     add_row([f'{sub["N"].min()}\u2013{sub["N"].max()}', label,
-             f'{len(sub)} associations, all recovering priorities proposed elsewhere',
+             (f'{len(sub)} associations, all recovering priorities proposed '
+              f'elsewhere',
+              '; '.join(f'{v} {k}' for k, v in _sc.most_common())),
              ', '.join(f'{v} {k}' for k, v in tiers_here.items()),
              'positive control', 'not carried forward as discovery'])
 
@@ -936,7 +967,9 @@ if len(rare_recovery):
     add_row(['', 'PREVIOUSLY PROPOSED, IN THE RARE CANCERS', '', '', '', ''], bold=True)
     for _, r in rare_recovery.iterrows():
         accounted.add(int(r['N']))
-        add_row([r['N'], r['Context'], f"{r['Drug']} \u2014 {r['Target']}",
+        add_row([r['N'], r['Context'],
+                 (f"{r['Drug']} \u2014 {r['Target']}",
+                  stage_tag(r['Stage'])),
                  f"{r['Total']} \u00b7 {r['Tier']}", 'previously proposed',
                  'recovered in a rare cancer'])
 
@@ -972,14 +1005,18 @@ for _, r in novel_rows.sort_values('N').iterrows():
            23: 'not carried forward',
            24: 'not carried forward',
            29: 'not carried forward'}.get(int(r['N']), 'not carried forward')
-    add_row([r['N'], r['Context'], f"{r['Drug']} \u2014 {r['Target']}",
+    add_row([r['N'], r['Context'],
+             (f"{r['Drug']} \u2014 {r['Target']}", stage_tag(r['Stage'])),
              f"{r['Total']} \u00b7 {r['Tier']}", status, nxt])
 
 add_row(['', 'PARTIAL PRECEDENT', '', '', '', ''], bold=True)
 accounted |= set(partial_rows['N'])
+_pst = Counter(stage_tag(x) for x in
+                defs.loc[defs['N'].isin(partial_rows['N']), 'Stage'])
 add_row([', '.join(str(int(x)) for x in sorted(partial_rows['N'])), 'various',
-         f'{len(partial_rows)} associations extending a precedent from '
-         f'conventional disease or another organ to this variant',
+         (f'{len(partial_rows)} associations extending a precedent from '
+          f'conventional disease or another organ to this variant',
+          '; '.join(f'{v} {k}' for k, v in _pst.most_common())),
          ', '.join(f'{v} {k}' for k, v in
                    partial_rows['Tier'].value_counts().to_dict().items()),
          'not evaluated as discovery', 'see Supplementary Table S1'])
@@ -993,7 +1030,10 @@ unscored = merged[merged['Tier'].str.contains('transcriptomic')
 for _, r in unscored.sort_values('N').iterrows():
     accounted.add(int(r['N']))
     add_row([r['N'], r['Context'],
-             'TROP2 (TACSTD2) loss \u2014 observation, not a scored association',
+             ('TROP2 (TACSTD2) loss \u2014 observation, not a scored '
+              'association',
+              'sacituzumab govitecan: FDA approved, urothelial indication '
+              'withdrawn 2024'),
              'not estimable',
              'loss can be shown only by the confounded comparison',
              'independent, non-confounded cohort'])
@@ -1002,7 +1042,11 @@ missing = sorted(set(merged['N']) - accounted)
 assert not missing, f'Table 1 omits associations {missing}'
 print(f'  Table 1: all {len(accounted)} associations accounted for')
 
-P('Scores sum four partially overlapping dimensions (genomic evidence '
+P('The line under each agent gives its furthest clinical stage: FDA approved '
+  'means approved somewhere, not necessarily in the cancer named here, and '
+  'the approved indication and supporting trial are given in full in '
+  'Supplementary Table S1. '
+  'Scores sum four partially overlapping dimensions (genomic evidence '
   '0\u20133, transcriptomic 0\u20133, pathway 0\u20132, external literature '
   '0\u20131) and express strength of evidence within this framework only, not '
   'established drug sensitivity. "No prior urologic-oncology proposal '
