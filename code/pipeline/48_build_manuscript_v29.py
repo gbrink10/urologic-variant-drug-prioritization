@@ -205,8 +205,8 @@ P(f"Results. We scored {F['n_associations']} drug-cancer associations: "
   f"medullary carcinoma, and anti-CEACAM5 conjugates in ASCL1-positive "
   f"small-cell bladder cancer.")
 P(f"Conclusion. Public data can be used to prioritize drug hypotheses for "
-  f"cancers that may never have a randomized trial. {F['funnel']['survive']} "
-  f"hypotheses were supported in {F['n_survivor_contexts']} diseases. All "
+  f"cancers that may never have a randomized trial. Three hypotheses were "
+  f"supported, in two diseases. All "
   f"three need experimental validation in their own disease.")
 
 # =====================================================================
@@ -224,17 +224,16 @@ P('Over the last several decades an abundance of online data resources has '
   'record which proteins have drugs against them and how far each of those '
   'drugs has progressed. The Kyoto Encyclopedia of Genes and Genomes groups '
   'genes into annotated pathways, so a signal in a single gene can be read '
-  'against the pathway it belongs to. Taken together, the bottleneck in '
-  'translational oncology has arguably shifted from generating data to '
+  'against the pathway it belongs to. The bottleneck in '
+  'translational oncology has shifted from generating these data to '
   'interrogating it.')
 P('Drug repurposing takes a different route to a new treatment. Instead of '
   'developing a new molecule, it asks whether a drug that is already approved, '
   'or already in trials, can be matched to a disease it was not designed for. '
   'A drug that has been through trials arrives with its human dosing and side '
-  'effects already known, which is most of what makes it worth trying '
-  'somewhere new. We therefore restricted candidates to agents that are '
+  'effects already known, which shortens the path to testing it in a new setting. We therefore restricted candidates to agents that are '
   'already FDA-approved, or already in clinical trials for another disease, '
-  'so that anything the framework nominates could in principle be tested '
+  'so that anything the approach nominates could be tested '
   'without first developing a molecule.')
 P('Aggressive and variant urologic histologies are in high need of novel '
   'therapies. Renal '
@@ -251,9 +250,9 @@ P('We therefore asked whether public molecular data could be interrogated '
   'across several such cancers at once. We '
   'scored every candidate before classifying any of them as previously '
   'proposed or not, so agreement with the literature could not have been '
-  'engineered. And we wrote the shortlist rule before we applied it, so any '
-  'candidate we drop can be traced to a specific criterion rather than to our '
-  'opinion.')
+  'engineered. The rule that reduces candidates to a shortlist was written '
+  'before it was applied, so every exclusion is attributable to a stated '
+  'criterion.')
 P('Three better-studied cancers are included deliberately as positive controls: '
   'neuroendocrine prostate cancer, muscle-invasive bladder cancer and '
   'clear cell renal cell carcinoma. Their treatment priorities are already '
@@ -261,8 +260,9 @@ P('Three better-studied cancers are included deliberately as positive controls: 
   'how much weight to give its output in the four rare cancers, where '
   'nothing is documented to check it against.')
 P(f"What is new here is not any single drug-cancer pair. "
-  f"{F['n_previously_proposed']} of the {F['n_associations']} associations we "
-  f"report were proposed by other groups first, and we say so in each case. "
+  f"Of the {F['n_associations']} associations reported here, "
+  f"{F['n_previously_proposed']} were proposed by other groups first, and "
+  f"each is identified as such. "
   f"What is new is a pipeline, built entirely from public sources, that "
   f"identifies novel therapeutic targets for repurposed drugs across several "
   f"cancers at once, with well-studied cancers run through it as positive "
@@ -303,13 +303,13 @@ P('The four rare cancers are absent from The Cancer Genome Atlas, and therefore 
   'transcriptomic nomination was not restricted to recurrently altered genes.')
 
 H('Candidate Selection', 11.5, 10, level=2)
-P(f"Candidates were generated one cancer at a time. For each cancer we took "
-  f"the genes that stood out \u2014 the most frequently altered, where The "
-  f"Cancer Genome Atlas provides a cohort, or the most strongly differentially "
-  f"expressed in the relevant Gene Expression Omnibus series, where it does "
-  f"not \u2014 and searched the Therapeutic Target Database and OpenTargets "
-  f"for an agent against them. A gene became an association where an agent "
-  f"existed that could be evaluated clinically. This is why the genomic "
+P(f"Candidates were generated one cancer at a time. Genes were ranked by "
+  f"alteration frequency where The Cancer Genome Atlas provides a cohort, "
+  f"and by differential expression in the relevant Gene Expression Omnibus "
+  f"series where it does not. The highest-ranked genes were then searched "
+  f"against the Therapeutic Target Database and OpenTargets, and a gene "
+  f"became an association where an agent existed that could be evaluated "
+  f"clinically. This is why the genomic "
   f"component behaves differently in the two groups: "
   f"{F['tcga_rows_freq_ge_15pct']} of the {F['n_tcga_anchored']} associations "
   f"from the three positive controls carry an alteration frequency of 15% or "
@@ -323,11 +323,10 @@ P(f"Membership in the eighteen pre-specified gene sets was not a condition of "
   f"by antibody-drug conjugates or radioligands, a modality no pathway "
   f"definition covers, and they include two of the three candidates the "
   f"independent sources went on to support.")
-P(f"This was a curated search rather than an exhaustive screen, and two things "
-  f"follow from that. \u201cMost altered\u201d and \u201cmost strongly "
-  f"expressed\u201d were applied as a ranked cut rather than a fixed "
-  f"threshold, and the search for an available agent was done by hand without "
-  f"a query log. {F['funnel_entry']:,} gene-context pairs meet a "
+P(f"This was a curated search rather than an exhaustive screen. Ranking was "
+  f"applied as a cut rather than a fixed threshold, and the search for an "
+  f"available agent was performed manually without a query log. A total of "
+  f"{F['funnel_entry']:,} gene-context pairs met a "
   f"transcriptomic entry rule of q < 0.05 with log2 fold change above 0.5, and "
   f"the great majority of those genes have no clinically evaluable agent "
   f"against them, which is the filter that leaves a table of "
@@ -438,9 +437,10 @@ P(f"The pipeline produced {F['n_associations']} drug-cancer associations "
   f"Supplementary Table S1). They fall into two groups fixed before any result "
   f"was seen, by which data source anchors each cancer (Supplementary Figure S2): "
   f"{F['arm_control']['n']} in the three positive controls, and "
-  f"{F['arm_discovery']['n']} in the four rare cancers. The second group is "
-  f"the output of the study; the first is there to test it. "
-  f"{F['tiers'].get('Strong', 0)} reach the Strong tier, "
+  f"{F['arm_discovery']['n']} in the four rare cancers. The rare-cancer "
+  f"associations are the output of the study; the positive controls test "
+  f"whether the approach behaves as expected. Of the "
+  f"{F['n_associations']}, {F['tiers'].get('Strong', 0)} reach the Strong tier, "
   f"{F['tiers'].get('Moderate', 0)} Moderate and "
   f"{F['tiers'].get('Exploratory', 0)} Exploratory. Five associations from the "
   f"sarcomatoid series carry a smaller denominator for the reason given in "
@@ -514,12 +514,14 @@ P(f"The sarcomatoid series is reported in full in the Supplementary Results "
   f"model can separate them. We therefore report no sarcomatoid-versus-"
   f"conventional comparison and scored these five associations on transcript "
   f"abundance within the sarcomatoid tumors instead, which the confounding "
-  f"does not reach. UHRF1, NSD2 and G6PD are highly abundant there and ATR is "
-  f"not; the pathway component is not estimable for this context, so these "
+  f"does not reach. UHRF1 [42], NSD2 and G6PD [43] are highly abundant "
+  f"there and ATR is not; the pathway component is not estimable for this context, so these "
   f"rows carry a total out of 7 rather than 9 and no tier. Neither of its two "
   f"candidates without a prior proposal reached the shortlist. TROP2 is "
   f"reported there as an observation for an independent cohort, not as a "
-  f"predictive biomarker, and it carries no score.")
+  f"predictive biomarker, and it carries no score. Lower TROP2 in this "
+  f"setting has been reported in two pathology series [44,45], and antigen "
+  f"heterogeneity of the same kind extends to NECTIN-4 [46].")
 P(f"Penile squamous cell carcinoma is reported in the Supplementary Results "
   f"rather than here. In brief, it showed a dominant immune-hot phenotype that "
   f"converges on the established pembrolizumab priority [36\u201338], with "
@@ -533,7 +535,7 @@ P('Most associations in the rare cancers, and many in the positive controls, are
   'against four sources that took no part in scoring. These audit rather than '
   'validate: each can find a candidate wanting, none can establish that it '
   'works, and each is blind to some candidates by construction.')
-P(f"{F['hpa']['n_surface_required']} associations depend on extracellular "
+P(f"A total of {F['hpa']['n_surface_required']} associations depend on extracellular "
   f"access and all {F['hpa']['n_confirmed']} are confirmed against the Human "
   f"Protein Atlas [50], which establishes modality-compatible localization "
   f"rather than protein abundance in the tumor. Normal-tissue RNA is "
@@ -684,8 +686,8 @@ P('A central problem in rare and variant urologic cancers is that the patient '
 P(f"The clearest demonstration of that last point is what happened when the "
   f"primary data were refitted with models matched to how each dataset was "
   f"built. Eight associations "
-  f"changed, and two candidates the earlier analysis had carried forward "
-  f"dissolved: the somatostatin receptor 2 row, which had the most attractive "
+  f"changed, and two candidates carried forward by the earlier analysis were "
+  f"no longer supported: the somatostatin receptor 2 row, which had the most attractive "
   f"translational package of any candidate we produced, and the ATR row. Neither "
   f"failed because of new data; both failed because the original elementary "
   f"per-gene tests ignored replicate structure and batch. A framework that had "
@@ -721,7 +723,7 @@ P(f"The scoring dimensions are partially overlapping, and the composite should "
   f"the "
   f"nominated target: renal medullary carcinoma is near-universally "
   f"SMARCB1-deficient, which says nothing specific about CXCR1 or CXCR2. That "
-  f"score is doing real work in the ordering. In the "
+  f"score contributes materially to the ordering. In the "
   f"sensitivity analysis (Supplementary Table S2), which orders all scored "
   f"associations numerically to test the score architecture and not to rank "
   f"hypotheses across diseases, the renal medullary candidate falls from "

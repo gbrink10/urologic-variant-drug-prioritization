@@ -121,8 +121,9 @@ check('clinical stage of the agents stated',
       and f"{F['stage']['in_trials']} are in clinical trials" in text
       and str(F['stage']['preclinical']) in text)
 check('the selection rule for the 30 is stated',
-      'we took the genes that stood out' in text
-      and 'searched the Therapeutic Target Database and OpenTargets' in text)
+      'Genes were ranked by alteration frequency' in text
+      and 'searched against the Therapeutic Target Database and OpenTargets'
+      in text)
 check('the entry-rule denominator matches the deposit',
       f"{F['funnel_entry']:,}" in text)
 # the eighteen sets score candidates, they do not gate them, and the paper must
