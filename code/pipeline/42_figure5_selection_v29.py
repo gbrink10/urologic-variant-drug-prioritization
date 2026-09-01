@@ -210,14 +210,6 @@ labels = ['+  supports', '~  partial', '\u2212  contradicts', 'n/a  cannot test'
 axB.legend(handles, labels, loc='upper center', bbox_to_anchor=(0.5, -0.03),
            ncol=4, frameon=False, fontsize=7.4)
 
-fig.text(0.5, 0.035,
-         'Eligibility, all four required: E1 no prior urologic-oncology proposal was found; E2 a score of 4 or better out of the points estimable for that row;\n'
-         'E3 the transcriptomic evidence meets its own arm\u2019s standard, q<0.05 on a disease contrast or the top 15% of transcripts on abundance; E4 an agent is in clinical development.\n'
-         'Support additionally requires that no independent source contradict the candidate and that target access match the modality.\n'
-         'A source that cannot evaluate a candidate is not evidence for it, so absence of contradiction is weaker than positive support. All three remain hypotheses, not validated findings.\n'
-         'Values are read from the deposited tables.',
-         ha='center', fontsize=7.0, style='italic', color='#555')
-
 out = FIG / 'Figure4_candidate_selection.png'
 plt.savefig(out, bbox_inches='tight')
 plt.close()

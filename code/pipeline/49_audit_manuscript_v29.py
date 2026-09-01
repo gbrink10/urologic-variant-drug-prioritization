@@ -68,8 +68,8 @@ check('one condensed table in the main text', len(doc.tables) == 1)
 # JCO CCI uses unnumbered title-case subsection headings
 RES_SUBS = ('The Association Table', 'Positive Controls',
             'Rare and Variant Cancers', 'Independent Evidence',
-            'Supported Hypotheses', 'What the Approach Could Not Find')
-check('six Results subsections', all(h in paras for h in RES_SUBS),
+            'Supported Hypotheses')
+check('five Results subsections', all(h in paras for h in RES_SUBS),
       str([h for h in RES_SUBS if h not in paras]))
 check('Discussion closes with a conclusion',
       'In conclusion, we scored' in text)
@@ -191,6 +191,8 @@ print('\n4. NEW LIMITATIONS ARE STATED')
 check('sarcomatoid batch confounding disclosed',
       'share no chip' in text or 'confounded' in text)
 check('ccRCC has no normal tissue disclosed', 'no normal tissue' in text)
+check('TCGA coverage limitation stated',
+      'covers the three positive controls but none of' in text)
 check('HLRCC demoted to adjacent disease', 'adjacent-disease' in text)
 check('penile technical replicates disclosed',
       f"{F['design']['pscc_normal_donors']} donors" in text)
@@ -258,8 +260,10 @@ check('PRISM no longer claims absence of off-target cytotoxicity',
       'absence of off-target cytotoxicity' not in text)
 check('normal-tissue RNA not used as a therapeutic-window claim',
       'not a therapeutic-window' in text)
-check('tarlatamab approval history stated',
-      'accelerated approval' in text and 'traditional approval' in text)
+# the DLL3 section that carried tarlatamab's approval dates was removed; the
+# limitation it supported is now one sentence in the Discussion
+check('DLL3 panel-coverage limitation retained',
+      'DLL3' in text and 'panel coverage should be re-audited' in text)
 check('sacituzumab withdrawal month corrected', 'November 2024' in both)
 check('LINCS comparison count explained', 'the eight comparisons' in text)
 # published reference titles keep their own spelling, so test the prose only
@@ -301,10 +305,14 @@ check('within-disease priority named, not a global lead',
       or 'the one to carry forward first' in text)
 # the Abstract no longer carries the ranking caveat; Results 3.5 and the
 # Conclusions do, which is where a reader acts on it
+# the point is made in Results and in the Abstract; the Conclusions
+# restatement was removed as duplicative
 check('no cross-disease ranking claimed',
       'within a disease, not between diseases' in text
-      and 'we do not rank the renal medullary candidates against the '
-          'small-cell bladder candidate' in text.lower())
+      and 'ranked within a disease but not across diseases' in text.lower()
+      or 'within a disease, not between diseases' in text
+      and 'to rank across diseases we would have to separate them'
+      in text.lower())
 check('three survivors across two diseases stated',
       'across 2 diseases' in text or 'across two diseases' in text
       or f"{F['n_survivor_contexts']} diseases" in text)
