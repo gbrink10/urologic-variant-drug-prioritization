@@ -99,7 +99,76 @@ if _s1.exists():
     _cr.font.size = Pt(9)
     _cr.italic = True
 
-H('S2. Penile squamous cell carcinoma')
+H('S2. The four independent sources, in plain terms')
+P('After every association had been scored, we checked each candidate against '
+  'four public resources that had taken no part in the scoring. The point of '
+  'this step was to see whether anything outside our own pipeline agreed or '
+  'disagreed. None of the four can show that a drug works in a patient. Each '
+  'can, at most, make a candidate look better or worse, and each is blind to '
+  'some candidates by design. The raw output of all four is deposited, one '
+  'file per source, so any reader can repeat the comparison.')
+
+P('The Human Protein Atlas. What it is: a public catalogue that has stained '
+  'normal human tissues for thousands of proteins and recorded where in the '
+  'cell each protein sits and how much of it different organs contain. What we '
+  'used it for: ten of our candidates are antibodies, antibody-drug conjugates '
+  'or radioligands, which have to bind their target from outside the cell. We '
+  'looked up each of those targets and asked whether the protein is actually '
+  'on the cell surface. All ten were. We also recorded how much of each target '
+  'is present in the normal organ the cancer arises in, as orientation for '
+  'later safety work. What it cannot tell us: how much of the protein is on '
+  'the tumor, since the Atlas stains normal tissue, and nothing about whether '
+  'blocking the target helps. Raw data: HPA_PROTEIN_VALIDATION.csv.')
+
+P('DepMap. What it is: a project that has switched off each gene, one at a '
+  'time, in more than a thousand cancer cell lines using CRISPR, and recorded '
+  'how much each line needed that gene to survive. The result is a number per '
+  'gene per line on the Chronos scale, where a more negative number means the '
+  'cell depended on the gene more. What we used it for: asking whether the '
+  'cancer actually needs the gene we nominated, which is a harder test than '
+  'asking whether the gene is switched on. We read the values for our targets '
+  'across the urothelial lines, split by genotype. The screen behaved as '
+  'expected on genes with known answers, and it contradicted one of our own '
+  'candidates: NSD2 was not required even in the lines expressing it most '
+  'strongly, which is part of why that candidate was not carried forward. What '
+  'it cannot tell us: anything about a drug that delivers a payload, such as '
+  'an antibody-drug conjugate, because that kind of agent kills the cell '
+  'whether or not the target is essential. Raw data: DEPMAP_STRATIFIED.csv.')
+
+P('The PRISM Repurposing screen. What it is: a screen in which roughly 4,500 '
+  'existing drugs were applied to hundreds of barcoded cancer cell lines at '
+  'once, giving a growth measurement for each drug in each line. What we used '
+  'it for: asking whether the compounds we nominated are more active against '
+  'urothelial cancer lines than against other lineages. We compared urothelial '
+  'lines with non-urothelial lines by two-sided Welch test and corrected for '
+  'multiple compounds. This is where two candidates an earlier, weaker '
+  'comparison had called selective turned out not to be. What it cannot tell '
+  'us: anything about a drug that works through the immune system or the '
+  'surrounding tissue rather than on the tumor cell itself, because the screen '
+  'contains only tumor cells in a dish; and nothing about toxicity to normal '
+  'tissue. Raw data: PRISM_DRUG_SENSITIVITY.csv.')
+
+P('LINCS L1000. What it is: a library recording how the expression of about a '
+  'thousand genes changes after cells are treated with each of thousands of '
+  'drugs. If a disease turns a set of genes up and a drug turns the same genes '
+  'down, that drug is a candidate for reversing the disease state. What we '
+  'used it for: taking the genes each cancer turned up and asking which drugs '
+  'reverse that pattern. What we found: several of our nominated agents did '
+  'appear, but none ranked first in the cancer it was nominated for, and the '
+  'same agents appeared in unrelated cancers as well, so the comparison was '
+  'not specific enough to tell candidates apart. We therefore used it neither '
+  'to support nor to exclude any candidate, and report it here for '
+  'completeness. Raw data: LINCS_CONNECTIVITY_V29.csv.')
+
+P('How the four were combined. A candidate was recorded as supported only if '
+  'no source contradicted it and the target was reachable by the kind of agent '
+  'proposed. A source that could not evaluate a candidate counted as neither '
+  'support nor contradiction, which matters because silence from a tumor-cell '
+  'screen about a drug that acts on the immune system is not evidence against '
+  'that drug. Every candidate against every source is shown in Figure 4 and '
+  'recorded row by row in CANDIDATE_SELECTION.csv.')
+
+H('S3. Penile squamous cell carcinoma')
 P('Penile squamous cell carcinoma showed a dominant immune-hot phenotype. '
   'HLA-DRA is elevated at +8.92 (q = 2.7 x 10^-5) with CXCL9 and CXCL10 '
   'elevated and antigen processing and presentation enriched at q = 0.0031, '
@@ -110,7 +179,7 @@ P('Penile squamous cell carcinoma showed a dominant immune-hot phenotype. '
   'three associations was classified as having no prior urologic-oncology '
   'proposal, so none entered the shortlist rule.')
 
-H('S3. How each association was nominated')
+H('S4. How each association was nominated')
 P('The two nomination routes are drawn per gene in Supplementary Figure S2. '
   'Every gene shown met the same two requirements: it stood out in its own '
   'cancer, and an agent against it could be evaluated clinically. The routes '

@@ -224,7 +224,18 @@ check('novelty stated without a priority claim',
 check('supplement carries the sarcomatoid results',
       'S1. Sarcomatoid urothelial carcinoma' in supp)
 check('supplement carries the penile results',
-      'S2. Penile squamous cell carcinoma' in supp)
+      'S3. Penile squamous cell carcinoma' in supp)
+check('supplement explains the four independent sources in plain terms',
+      'The four independent sources, in plain terms' in supp
+      and all(k in supp for k in ('Human Protein Atlas. What it is',
+                                  'DepMap. What it is',
+                                  'PRISM Repurposing screen. What it is',
+                                  'LINCS L1000. What it is')))
+check('each source names its raw data file',
+      all(k in supp for k in ('HPA_PROTEIN_VALIDATION.csv',
+                              'DEPMAP_STRATIFIED.csv',
+                              'PRISM_DRUG_SENSITIVITY.csv',
+                              'LINCS_CONNECTIVITY_V29.csv')))
 check('main text points at both',
       'Supplementary Figure S1' in text and 'Supplementary Results' in text)
 
@@ -243,7 +254,7 @@ for m in re.finditer(r'\[([0-9,\u2013\-\s]+)\]', text):
 refnums = sorted(int(re.match(r'^\s*(\d{1,2})\.', t).group(1)) for t in paras
                  if re.match(r'^\s*\d{1,2}\.\s+\S', t)
                  and ('doi' in t.lower() or 'PMID' in t))
-check('61 references, contiguous', refnums == list(range(1, 62)),
+check('65 references, contiguous', refnums == list(range(1, 66)),
       f'n={len(refnums)}')
 missing = [n for n in refnums if cited[n] == 0]
 over = sorted(n for n in cited if n not in refnums)

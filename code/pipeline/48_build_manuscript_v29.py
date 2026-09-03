@@ -566,7 +566,9 @@ P(f"Signature reversal against the LINCS L1000 libraries [57,58], recomputed "
   f"rankings are deposited.")
 
 H('Supported Hypotheses', 11.5, 10, level=2)
-P(f"Applying the rule (Figure 4), the {F['funnel']['framework_novel']} "
+P(f"Figure 4 and Table 1 together give the whole set: every association, the "
+  f"criterion each one met or failed, and which agents are carried forward. "
+  f"Applying the rule (Figure 4), the {F['funnel']['framework_novel']} "
   f"associations with no prior proposal in the urologic literature reduce to "
   f"{F['funnel']['survive']}, and each of the three that stop does so for a "
   f"reason drawn from the evidence rather than from a limitation of our "
@@ -625,6 +627,21 @@ P('In this study, we show that public molecular data can be used to prioritize '
   'to power dedicated biomarker-matched trials in these cancers are not, and '
   'may never be, available, and the associations in Table 1 were assembled '
   'without them.')
+P('Computational repurposing from public expression data is an established '
+  'approach, and several groups have built comparable pipelines [59]. '
+  'GETgene-AI ranks actionable cancer targets by combining mutation '
+  'frequency, differential expression and known drug-target annotation, much '
+  'as the score used here does [60]. Signature reversion against perturbation '
+  'libraries has been applied to four low-survival cancers, with the choice of '
+  'differential-expression method itself changing which candidates emerge '
+  '[61]; that sensitivity is consistent with what we found when the primary '
+  'data were refitted. Pathway2Targets prioritizes targets from pathway '
+  'membership, the same signal our eighteen gene sets supply [62]. Those '
+  'methods are built and benchmarked on common cancers, where cohorts are '
+  'large enough to support them. The contribution here is not a new algorithm '
+  'but the application of this class of method to cancers whose cohorts are '
+  'too small for one, together with positive controls run through the same '
+  'pipeline and an explicit account of what the approach could not establish.')
 P(f"Two candidates were not supported once replicate structure and batch "
   f"were included in the models: the somatostatin receptor 2 row, which had "
   f"been the most clinically developed candidate in the table, and the ATR "
@@ -668,7 +685,7 @@ P(f"One further limitation follows from how candidates were selected. A gene "
   f"had to clear the transcriptomic entry rule to be considered at all, and we "
   f"deliberately kept the list of genes carried forward short. A real target "
   f"that falls short of significance in a small cohort is therefore never "
-  f"nominated; proteasome inhibition in renal medullary carcinoma [59] is one "
+  f"nominated; proteasome inhibition in renal medullary carcinoma [63] is one "
   f"such candidate. Further work could extend the search to the less "
   f"significant genes we set aside. Resolution is also bounded by what is "
   f"deposited: several variants of immediate interest, including primary "
@@ -710,8 +727,8 @@ P('All datasets used are publicly available without restriction. Genomic '
   'Cancer Genome Atlas Pan-Cancer Atlas 2018 via cBioPortal. Ten Gene Expression '
   'Omnibus accessions provided transcriptomic evidence: GSE199274, GSE216053 and '
   'GSE216052 (neuroendocrine prostate cancer); GSE130598 (muscle-invasive '
-  'bladder cancer kinome); GSE143630 [60] (clear cell renal cell carcinoma); '
-  'GSE157256 [61] (hereditary leiomyomatosis renal cell cancer, reported as '
+  'bladder cancer kinome); GSE143630 [64] (clear cell renal cell carcinoma); '
+  'GSE157256 [65] (hereditary leiomyomatosis renal cell cancer, reported as '
   'adjacent-disease context only); GSE180999 (renal medullary carcinoma); '
   'GSE196978 (penile squamous cell carcinoma); GSE128192 (sarcomatoid versus '
   'conventional urothelial carcinoma); and GSE269750 (small-cell bladder cancer, '
@@ -828,9 +845,11 @@ for key in ('CRediT AUTHOR STATEMENT', 'FUNDING', 'CONFLICTS OF INTEREST',
 
 H('SUPPLEMENTARY MATERIALS', 12)
 P('Supplementary Results: the sarcomatoid urothelial carcinoma findings in '
-  'full with Supplementary Figure S1, the penile squamous cell carcinoma '
-  'findings in full, and the per-gene nomination routes with Supplementary '
-  'Figure S2. '
+  'full with Supplementary Figure S1; a plain-language account of the four '
+  'independent sources, what each can and cannot show, what was done with '
+  'each and which deposited file holds its raw output; the penile squamous '
+  'cell carcinoma findings in full; and the per-gene nomination routes with '
+  'Supplementary Figure S2. '
   'Supplementary Methods: full procedural detail for the pipeline steps and '
   'the four independent evidence sources, including data releases, model '
   'specifications, thresholds and statistical tests. '
