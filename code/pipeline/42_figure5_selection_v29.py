@@ -1,6 +1,10 @@
-"""Figure 5 (v29) - candidate selection under a pre-specified rule.
+"""Figure 4 - every candidate without a prior proposal, against every criterion.
 
-Rebuilt after the refit. Three things change from v28:
+All six candidates are shown. The criteria rank them into a priority tier and a
+lower-confidence tier; none is removed from the figure or from the paper, so a
+reader can see the evidence behind each one and disagree with the ordering.
+
+Three things change from v28:
 
   * the columns follow the stated selection criteria, so the reader can see
     which criterion each candidate failed rather than being told a count;
@@ -20,10 +24,8 @@ import paths
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-import matplotlib.gridspec as gridspec
 import numpy as np
 import pandas as pd
-from matplotlib.patches import FancyBboxPatch, Polygon
 
 sys.stdout.reconfigure(encoding='utf-8')
 REPO = Path(__file__).resolve().parents[2]
@@ -49,8 +51,8 @@ NAMES = {
     29: '$^{177}$Lu-DOTATATE\n(NEUROD1+ small-cell bladder)',
 }
 COLS = ['Transcriptomic\nevidence', 'Score', 'Meets its arm\'s\nstandard',
-        'Target in\nenriched pathway', 'Protein\naccess', 'Genetic\ndependency',
-        'Compound\nactivity', 'Clinical access /\ndevelopment path']
+        'Target in\nenriched pathway', 'Protein\naccess',
+        'Independent\nchecks', 'Clinical access /\ndevelopment path']
 
 sel = sel.sort_values(['survives', 'total'], ascending=[False, False])
 if 'pathway_estimable' not in sel.columns:
@@ -108,21 +110,16 @@ for _, r in sel.iterrows():
     else:
         cells.append(UNTESTED); txt.append('n/a')
 
-    dl = str(r['dependency_layer'])
+    # the dependency and compound screens are one column: for five of the six
+    # rows neither screen can speak to the candidate at all
+    dl, cl = str(r['dependency_layer']), str(r['compound_layer'])
     if dl.startswith('no dependency'):
-        cells.append(AGAINST); txt.append('none')
-    elif 'not selective' in dl:
-        cells.append(PARTIAL); txt.append('pan-\nessential')
+        cells.append(AGAINST); txt.append('no CRISPR\ndependency')
+    elif 'not selective' in dl or 'active but not selective' in cl:
+        cells.append(PARTIAL)
+        txt.append('pan-essential;\nnot selective')
     else:
         cells.append(UNTESTED); txt.append('cannot\ntest')
-
-    cl = str(r['compound_layer'])
-    if 'active but not selective' in cl:
-        cells.append(PARTIAL); txt.append('active,\nnot select.')
-    elif 'expected' in cl:
-        cells.append(UNTESTED); txt.append('no auto-\nnomous')
-    else:
-        cells.append(UNTESTED); txt.append('not a\nsmall mol.')
 
     if 'E4' in str(r['failed_criteria']):
         cells.append(AGAINST); txt.append('discontinued')
@@ -131,50 +128,12 @@ for _, r in sel.iterrows():
 
     grid.append(cells); notes.append(txt); rows_lbl.append(NAMES.get(n, str(n)))
 
-fig = plt.figure(figsize=(14.6, 7.4))
-gs = gridspec.GridSpec(1, 2, width_ratios=[1.0, 1.62], wspace=0.30,
-                       left=0.045, right=0.985, top=0.85, bottom=0.16)
-
-# ---------------- Panel A: attrition under the stated rule -----------------
-axA = fig.add_subplot(gs[0, 0])
-axA.set_xlim(0, 10); axA.set_ylim(0, 10); axA.axis('off')
 n_novel = len(sel)
-n_elig = int(sel['eligible'].sum())
 n_surv = int(sel['survives'].sum())
 n_ctx = int(sel[sel['survives']]['Context'].nunique())
-STAGES = [
-    (8.5, 9.5, 10.4, f'{n_assoc} drug\u2013cancer associations', '#1a3a5c',
-     'across seven contexts'),
-    (6.4, 8.3, 10.4, f'{n_novel} no prior proposal found', '#c0392b',
-     'score-independent prior-proposal audit'),
-    (4.3, 7.1, 10.0, f'{n_elig} eligible', '#b9770e',
-     'score \u2265 4; transcriptomic standard met; agent available'),
-    (2.2, 6.0, 10.0, f'{n_surv} supported', '#7d6608',
-     'by four independent sources; none contradicts'),
-    (0.2, 5.0, 9.4, f'{n_surv} hypotheses, {n_ctx} diseases', '#1e8449',
-     'ranked within a disease, not across diseases'),
-]
-for i, (y, w, fs, label, fc, sub) in enumerate(STAGES):
-    x0 = 5 - w / 2
-    axA.add_patch(FancyBboxPatch((x0, y), w, 0.95, boxstyle='round,pad=0.06',
-                                 fc=fc, ec='#1a1a1a', linewidth=1.1))
-    axA.text(5, y + 0.60, label, ha='center', va='center', fontsize=fs,
-             weight='bold', color='white')
-    axA.text(5, y + 0.24, sub, ha='center', va='center', fontsize=6.3,
-             color='#f2f2f2', style='italic')
-    if i < len(STAGES) - 1:
-        ny = STAGES[i + 1][0] + 0.95
-        nw = STAGES[i + 1][1]
-        axA.add_patch(Polygon([[x0, y], [x0 + w, y], [5 + nw / 2, ny],
-                               [5 - nw / 2, ny]], closed=True, fc='#ecf0f1',
-                              ec='#bdc3c7', lw=0.7))
-        axA.annotate('', xy=(5, ny + 0.02), xytext=(5, y - 0.02),
-                     arrowprops=dict(arrowstyle='-|>', lw=1.2, color='#555'))
-axA.set_title('A. Attrition under the stated rule', fontsize=10.2,
-              weight='bold', pad=10, loc='left')
 
-# ---------------- Panel B: criterion-by-criterion --------------------------
-axB = fig.add_subplot(gs[0, 1])
+fig = plt.figure(figsize=(9.6, 5.2))
+axB = fig.add_subplot(111)
 n_r, n_c = len(grid), len(COLS)
 for i in range(n_r):
     for j in range(n_c):
@@ -199,9 +158,10 @@ for s in axB.spines.values():
 axB.tick_params(length=0)
 # mark where the survivors stop
 axB.axhline(n_r - n_surv, color='#1a1a1a', lw=1.6, ls='--')
-axB.text(n_c + 0.06, n_r - n_surv, ' supported\n above', fontsize=6.6,
+axB.text(n_c + 0.06, n_r - n_surv, ' priority\n tier above', fontsize=6.6,
          va='center', style='italic', color='#1a1a1a')
-axB.set_title('B. Every candidate against every criterion', fontsize=10.2,
+axB.set_title(f'All {n_novel} candidates without a prior urologic-oncology '
+              f'proposal, against every criterion', fontsize=10.2,
               weight='bold', pad=30, loc='left')
 
 handles = [plt.Rectangle((0, 0), 1, 1, fc=c, ec='white')
@@ -214,8 +174,8 @@ out = FIG / 'Figure4_candidate_selection.png'
 plt.savefig(out, bbox_inches='tight')
 plt.close()
 print(f"Saved {out} ({out.stat().st_size:,} bytes)")
-print(f"  {n_assoc} associations -> {n_novel} with no prior proposal -> "
-      f"{n_elig} eligible -> {n_surv} supported in {n_ctx} diseases")
+print(f"  {n_assoc} associations -> {n_novel} with no prior proposal, all shown: "
+      f"{n_surv} priority in {n_ctx} diseases, {n_novel - n_surv} lower-confidence")
 for _, r in sel.iterrows():
-    print(f"    row {int(r['N']):<3} {'SUPPORTED' if r['survives'] else 'excluded':<10} "
-          f"{r['failed_criteria'][:60]}")
+    print(f"    row {int(r['N']):<3} {r['priority_tier']:<17} "
+          f"{r['reservation'][:58]}")

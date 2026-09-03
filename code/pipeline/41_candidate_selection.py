@@ -1,11 +1,15 @@
-"""Apply a pre-specified rule to decide which candidates the paper carries.
+"""Apply a pre-specified rule that ranks candidates; it does not discard them.
 
-The v28 funnel said "two survive orthogonal scrutiny" without stating what
-survival required, so the reader could not tell whether the set was chosen by a
-rule or by judgement. The rule is fixed here, in advance of looking at which
-candidates it selects, and every row records which criterion it failed.
+Every candidate without a prior urologic-oncology proposal is reported. The
+criteria below sort them into a priority tier and a lower-confidence tier and
+record, for each candidate in the lower tier, the specific reservation that
+placed it there. Nothing is removed from the paper on the strength of these
+criteria, so a reader who weighs the evidence differently can see every
+candidate and disagree with the ordering.
 
-  Eligibility (all five required to be called a candidate)
+The criteria are fixed in advance of looking at which candidates they rank.
+
+  Primary criteria (all required for the priority tier)
     E1  no prior urologic-oncology proposal identified by the audit
     E2  total score reaches 4 or better of the points that are estimable for
         that row. Most rows are scored out of 9; a row whose pathway component
@@ -18,14 +22,16 @@ candidates it selects, and every row records which criterion it failed.
         dataset supports only abundance.
     E4  a clinical-stage agent exists against the target
 
-  Survival of the orthogonal evidence audit (both required)
-    S1  no orthogonal layer contradicts the candidate. A layer that cannot
-        evaluate the candidate is neither support nor contradiction.
+  Consistency checks (both required for the priority tier)
+    S1  no independent source contradicts the candidate. A source that cannot
+        evaluate the candidate is neither support nor contradiction. In
+        practice these checks removed nothing that the score had not already
+        placed in the lower tier; they are reported as checks, not as a filter.
     S2  target accessibility matches the modality: rows whose agent acts from
         outside the cell require confirmed extracellular access
 
-  Lead candidate (all three required)
-    L1  survives the audit above
+  Ranking within a disease (all three required)
+    L1  in the priority tier
     L2  the target is itself a member of a pathway enriched at q < 0.10 in its
         own context - an enrichment driven by other genes is not evidence for
         this target
@@ -150,21 +156,32 @@ for _, d in defs.iterrows():
     eligible = e2 and e3 and e4
     survives = eligible and s1 and s2
 
-    failed = []
+    failed, reservations = [], []
     if not e2:
         failed.append(f'E2 score {total}/{denom} below 4')
+        reservations.append(f'scores {total} of the {denom} points estimable '
+                            f'for this row')
     if not e3:
         if arm == 'expression':
             failed.append(f'E3 abundance below the top 15% '
                           f'(component {int(p["E_refit"])}/3)')
+            reservations.append('the transcript is not among the most abundant '
+                                'in its dataset')
         else:
             failed.append(f'E3 transcriptomic q = {float(rq):.3g}')
+            reservations.append(f'differential expression is not significant '
+                                f'(q = {float(rq):.3g})')
     if not e4:
         failed.append('E4 no clinical-stage agent')
+        reservations.append('no agent has reached clinical development')
     if not s1:
         failed.append('S1 ' + '; '.join(contradictions))
+        reservations.append('an independent source contradicts it ('
+                            + '; '.join(contradictions) + ')')
     if not s2:
         failed.append('S2 extracellular access not confirmed')
+        reservations.append('extracellular access is not confirmed, and the '
+                            'proposed agent must bind from outside the cell')
 
     # does the target belong to a pathway that is actually enriched?
     target_in_enriched = (pd.notna(p['pathway_q']) and float(p['pathway_q']) < 0.10
@@ -183,21 +200,24 @@ for _, d in defs.iterrows():
         'normal_tissue_nTPM_organ_of_origin': window,
         'target_in_enriched_pathway': target_in_enriched,
         'eligible': eligible, 'survives': survives,
+        'priority_tier': 'priority' if survives else 'lower-confidence',
+        'reservation': '; '.join(reservations) or '-',
         'failed_criteria': '; '.join(failed) or '-',
     })
 
 out = pd.DataFrame(rows).sort_values(['survives', 'total'], ascending=[False, False])
 out.to_csv(RF / 'CANDIDATE_SELECTION.csv', index=False)
 
-print("PRE-SPECIFIED CANDIDATE SELECTION\n")
-print(f"{'N':<4}{'candidate':<34}{'score':>6}{'elig':>6}{'surv':>6}  failed")
+print("PRE-SPECIFIED CANDIDATE RANKING (nothing is discarded)\n")
+print(f"{'N':<4}{'candidate':<34}{'score':>6}{'tier':>18}  reservation")
 for _, r in out.iterrows():
-    print(f"{r['N']:<4}{str(r['Target'])[:32]:<34}{r['total']:>4}/9"
-          f"{str(r['eligible']):>6}{str(r['survives']):>6}  {r['failed_criteria'][:64]}")
+    print(f"{r['N']:<4}{str(r['Target'])[:32]:<34}"
+          f"{r['total']:>4}/{r['total_denominator']}"
+          f"{r['priority_tier']:>18}  {r['reservation'][:58]}")
 
 surv = out[out['survives']]
-print(f"\n{len(out)} framework-novel -> {int(out['eligible'].sum())} eligible "
-      f"-> {len(surv)} survive")
+print(f"\nall {len(out)} framework-novel candidates are reported: "
+      f"{len(surv)} priority, {len(out) - len(surv)} lower-confidence")
 out['context_priority'] = ''
 for ctx, g in surv.groupby('Context'):
     ranked = g.sort_values(['target_in_enriched_pathway', 'total'],
@@ -207,7 +227,7 @@ for ctx, g in surv.groupby('Context'):
             f'{rank} of {len(ranked)} in {ctx}'
 out.to_csv(RF / 'CANDIDATE_SELECTION.csv', index=False)
 
-print(f"\n{len(surv)} surviving hypotheses in "
+print(f"\n{len(surv)} priority hypotheses in "
       f"{surv['Context'].nunique()} diseases, ranked only within a disease:")
 for ctx, g in surv.groupby('Context'):
     ranked = g.sort_values(['target_in_enriched_pathway', 'total'],

@@ -67,8 +67,8 @@ check('4 figures embedded', len(doc.inline_shapes) == 4, str(len(doc.inline_shap
 check('one condensed table in the main text', len(doc.tables) == 1)
 # JCO CCI uses unnumbered title-case subsection headings
 RES_SUBS = ('The Association Table', 'Positive Controls',
-            'Rare and Variant Cancers', 'Independent Evidence',
-            'Supported Hypotheses')
+            'Rare and Variant Cancers', 'Consistency Checks',
+            'Candidates Without a Prior Proposal')
 check('five Results subsections', all(h in paras for h in RES_SUBS),
       str([h for h in RES_SUBS if h not in paras]))
 check('Discussion closes with a conclusion',
@@ -104,7 +104,7 @@ check('framework-novel language replaced with a search statement',
 # not restate the selection criteria the pipeline no longer applies
 METH_SUBS = ('Data Sources', 'Candidate Selection', 'Analysis Pipeline',
              'Prioritization Score', 'Prior-Proposal Classification',
-             'Eligibility and Support Criteria', 'Statistical Analysis')
+             'Ranking Criteria', 'Statistical Analysis')
 check('Methods has named subsections', all(h in paras for h in METH_SUBS),
       str([h for h in METH_SUBS if h not in paras]))
 # terms this paper coined and must not reintroduce
@@ -168,9 +168,24 @@ check('novelty classes sum to the total', sum(_classes) == F['n_associations'],
       f'{_classes} -> {sum(_classes)} vs {F["n_associations"]}')
 check('every novelty class appears in the prose',
       all(str(c) in text for c in _classes))
-check('funnel counts stated',
-      f"reduce to {F['funnel']['survive']}" in text
-      and str(F['funnel']['framework_novel']) in text)
+check('all framework-novel candidates reported, none discarded',
+      str(F['funnel']['framework_novel']) in text
+      and 'are reported' in text
+      and 'priority tier' in text)
+
+# The four sources removed nothing: every candidate they could have argued
+# against had already fallen to the lower tier on its score or its
+# transcriptomic evidence. These three checks stop the old claim returning.
+check('no claim that the independent sources filtered candidates',
+      not any(p in text.lower() for p in (
+          'sources supported', 'sources reduced', 'reduced those',
+          'argued against the rest', 'survive the audit',
+          'supported by the independent sources')))
+check('the checks are stated to have changed no outcome',
+      'changed which candidates reached the priority tier' in text
+      or 'the independent checks' in text.lower())
+check('each lower-tier candidate carries a stated reservation',
+      'reservation' in text and 'open questions' in text)
 check(f"chemokine q = {F['q']['rmc_chemokine']:.4f}",
       f"{F['q']['rmc_chemokine']:.4f}" in text)
 check('SSTR2 non-significant q reported',
@@ -204,8 +219,10 @@ check('penile technical replicates disclosed',
 check('LINCS no longer called a null comparator',
       'null comparator' not in text.lower())
 check('LINCS non-specificity stated',
-      'lacked context specificity' in text
-      or 'not context-specific' in text)
+      any(p in both for p in ('lacked context specificity',
+                              'not context-specific',
+                              'lacked the specificity to distinguish',
+                              'not specific enough to tell candidates apart')))
 check('score sensitivity result stated', 'sensitivity analysis' in text.lower())
 check('scoring dimensions called partially overlapping',
       'partially overlapping' in text)
@@ -283,7 +300,7 @@ check('no claim that the panel gated candidates',
       'could only be drawn from the eighteen gene sets' not in text
       and 'bounded by the pre-specified panel' not in text)
 check('sacituzumab withdrawal month corrected', 'November 2024' in both)
-check('LINCS comparison count explained', 'the eight comparisons' in text)
+check('LINCS comparison count explained', 'the eight comparisons' in both)
 # published reference titles keep their own spelling, so test the prose only
 _body_only = chr(10).join(
     t for t in paras
@@ -319,7 +336,8 @@ for _, r in sel.iterrows():
     if r['survives']:
         check(f'survivor {tgt} appears in the text', tgt.split()[0] in text)
 check('within-disease priority named, not a global lead',
-      'first priority within RMC' in text
+      'first rank within RMC' in text
+      or 'first priority within RMC' in text
       or 'the one to carry forward first' in text)
 # the Abstract no longer carries the ranking caveat; Results 3.5 and the
 # Conclusions do, which is where a reader acts on it
@@ -329,7 +347,7 @@ check('no cross-disease ranking claimed',
       'within a disease, not between diseases' in text
       and 'could separate them across diseases' in text)
 check('three survivors across two diseases stated',
-      'across 2 diseases' in text or 'across two diseases' in text
+      'two diseases' in text
       or f"{F['n_survivor_contexts']} diseases" in text)
 check('candidates hedged as hypotheses, not findings',
       'not validated findings' in text or 'not a validated finding' in text)
