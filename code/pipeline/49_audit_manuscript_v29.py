@@ -122,7 +122,7 @@ check('clinical stage of the agents stated',
       and str(F['stage']['preclinical']) in text)
 check('the selection rule for the 30 is stated',
       'Genes were ranked by alteration frequency' in text
-      and 'searched against the Therapeutic Target Database and OpenTargets'
+      and 'searched against the Therapeutic Target Database and Open Targets'
       in text)
 check('per-cancer counts match the deposit',
       (F['rows_per_cancer_min'], F['rows_per_cancer_max'],
@@ -243,7 +243,7 @@ for m in re.finditer(r'\[([0-9,\u2013\-\s]+)\]', text):
 refnums = sorted(int(re.match(r'^\s*(\d{1,2})\.', t).group(1)) for t in paras
                  if re.match(r'^\s*\d{1,2}\.\s+\S', t)
                  and ('doi' in t.lower() or 'PMID' in t))
-check('60 references, contiguous', refnums == list(range(1, 61)),
+check('61 references, contiguous', refnums == list(range(1, 62)),
       f'n={len(refnums)}')
 missing = [n for n in refnums if cited[n] == 0]
 over = sorted(n for n in cited if n not in refnums)
