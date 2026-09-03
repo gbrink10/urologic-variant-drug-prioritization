@@ -69,7 +69,8 @@ P('What the cohort does support is how abundant a transcript is within the '
   'comparison ruled out above, so it is reported as not estimable, and these '
   'rows carry a total out of 7 rather than 9 without a tier.')
 P('Neither sarcomatoid candidate without a prior urologic-oncology proposal '
-  'reached the shortlist. NSD2 scores 3 of the 7 points its cohort can support '
+  'reached the priority tier; both are reported with the reservation against '
+  'each. NSD2 scores 3 of the 7 points its cohort can support '
   'and is contradicted outright by an independent source, since CRISPR screens '
   'show that urothelial cells do not require NSD2 even where they express it '
   'most highly. ATR scores 1, its abundance falling below the top 15% of '
@@ -184,7 +185,7 @@ P('Penile squamous cell carcinoma showed a dominant immune-hot phenotype. '
   'signal survives modelling the six normal arrays as three donors rather than '
   'six independent samples, which is the more demanding test. None of its '
   'three associations was classified as having no prior urologic-oncology '
-  'proposal, so none entered the shortlist rule.')
+  'proposal, so none is among the candidates ranked in the manuscript.')
 
 H('S4. How each association was nominated')
 P('The two nomination routes are drawn per gene in Supplementary Figure S2. '
@@ -492,7 +493,7 @@ P('Counts are rows of the fitted table, which are probes on the two array '
   'scored on the absolute-expression arm. Per-unit notes are in the deposited '
   'file.')
 
-H('8. Orthogonal evidence audit')
+H('8. Consistency checks')
 P('Four sources that took no part in scoring were interrogated after the table '
   'was fixed. They constitute an audit rather than a validation: each can find a '
   'candidate wanting, none can establish that a candidate works, and each is '
@@ -524,9 +525,10 @@ P('Two interpretive rules were fixed in advance. A tumor-cell monoculture '
   'counts as neither support nor contradiction.')
 
 H('9. Candidate selection rule')
-P('The rule was fixed before it was applied, and every exclusion in the '
-  'manuscript is attributable to a named criterion. Eligibility requires all '
-  'four of: E1, no prior urologic-oncology proposal identified by the audit; '
+P('The criteria were fixed before they were applied. They rank candidates and '
+  'do not remove them: a candidate that fails one is reported with that '
+  'reservation stated rather than dropped, so every candidate without a prior '
+  'proposal appears in the manuscript. The priority tier requires all four of: E1, no prior urologic-oncology proposal identified by the audit; '
   'E2, a total of 4 or better out of the points that are estimable for that '
   'row; E3, a transcriptomic component re-derivable from deposited data that '
   'meets its own arm\u2019s standard, which is q < 0.05 where a '
@@ -539,14 +541,15 @@ P('Two points about E2 and E3 follow from the scoring. A row whose pathway '
   'one the row was never eligible for. E3 applies each arm\u2019s own '
   'standard rather than a single q-value test, because a row scored on '
   'abundance has no q-value and must not fail for lacking one.')
-P('Support additionally requires that no independent source contradict the '
-  'candidate, and that target accessibility match the modality, so that a row '
-  'whose agent acts from outside the cell requires confirmed extracellular '
-  'access. The first-priority candidate within a disease additionally requires '
+P('The priority tier additionally requires that no independent source '
+  'contradict the candidate, and that target accessibility match the modality, '
+  'so that a row whose agent acts from outside the cell requires confirmed '
+  'extracellular access. Neither check moved any candidate: each one a source '
+  'argued against had already fallen to the lower tier on E2 or E3. The first-priority candidate within a disease additionally requires '
   'that the target itself belong to a pathway that is enriched, because an '
-  'enrichment driven by other genes is not evidence for that target. The rule '
-  'identifies supported hypotheses but does not rank them across diseases. '
-  'Within a disease holding more than one supported candidate, candidates are '
+  'enrichment driven by other genes is not evidence for that target. The '
+  'criteria rank candidates within a disease but not across diseases. '
+  'Within a disease holding more than one priority candidate, candidates are '
   'ordered first by whether the nominated target belongs to an enriched '
   'pathway and then by total score. Normal-tissue bulk RNA is reported for '
   'orientation and safety planning and is not used as a comparative '

@@ -107,7 +107,7 @@ def generate_figure1():
     unified_steps = [
         (4.62, 'Step 2',
          'GEO transcriptomic differential expression',
-         '10 datasets  ·  limma / edgeR, design-aware model per platform  ·  BH-FDR',
+         '10 datasets  ·  limma / edgeR, a model matched to how each dataset was collected  ·  BH-FDR',
          '#fff2cc', '#806600'),
         (3.74, 'Step 3',
          '18 pre-specified druggable pathway / gene sets',
@@ -115,7 +115,7 @@ def generate_figure1():
          '#fce5cd', '#a04a00'),
         (2.86, 'Step 4',
          'Drug–target curation',
-         'Therapeutic Target Database  +  OpenTargets (release 2026.03)',
+         'Therapeutic Target Database  +  Open Targets (release 2026.03)',
          '#f4cccc', '#922b21'),
         (1.98, 'Step 5',
          '9-point Molecular Prioritization Score',
@@ -189,7 +189,8 @@ def generate_figure1():
                                  boxstyle='round,pad=0.04',
                                  ec='#1e8449', fc='#d4efdf', linewidth=1.1))
     ax.text(5.50, -0.62,
-            'Step 7 — independent evidence check; no source contributed to the score',
+            'Step 7 \u2014 consistency checks; no source contributed to a score, '
+            'and none changed the ranking',
             ha='center', va='center', fontsize=9.3, weight='bold',
             color='#1a1a1a')
     ax.text(5.50, -0.90,
@@ -207,14 +208,15 @@ def generate_figure1():
     ax.add_patch(FancyBboxPatch((0.55, -2.42), 9.90, 0.94,
                                  boxstyle='round,pad=0.05',
                                  ec='#1a1a1a', fc='#1e8449', linewidth=1.4))
-    ax.text(5.50, -1.72, '3 supported hypotheses in 2 diseases',
+    ax.text(5.50, -1.72,
+            'All 6 candidates reported \u2014 3 priority, 3 lower confidence',
             ha='center', va='center', fontsize=10.5, weight='bold',
             color='white')
     ax.text(5.50, -2.02,
-            'renal medullary carcinoma: CXCR1/CXCR2 blockade, then anti-CEACAM1   '
-            '\u00b7   ASCL1+ small-cell bladder: anti-CEACAM5\n'
-            'ranked within a disease, not across diseases; a source that cannot test a '
-            'mechanism is not support',
+            'priority: renal medullary carcinoma, CXCR1/CXCR2 blockade then '
+            'anti-CEACAM1   \u00b7   ASCL1+ small-cell bladder, anti-CEACAM5\n'
+            'lower confidence: NSD2 and ATR in sarcomatoid UC, SSTR2 in NEUROD1+ '
+            'SCBC, each reported with its reservation',
             ha='center', va='center', fontsize=7.0, style='italic',
             color='#eafaf1')
 
