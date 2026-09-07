@@ -162,10 +162,10 @@ P('Key objective: Can publicly deposited genomic and transcriptomic data be '
 P(f"Knowledge generated: The pipeline produced {F['n_associations']} "
   f"drug-cancer associations, {F['arm_control']['n']} of them in the three "
   f"positive controls and {F['arm_discovery']['n']} in the four rare "
-  f"cancers. Every drug is one that already exists: "
-  f"{F['stage']['approved']} are FDA-approved and "
-  f"{F['stage']['in_trials']} are in clinical trials for another disease, "
-  f"leaving {F['stage']['preclinical']} preclinical agents nominated where "
+  f"cancers. Every drug already exists: "
+  f"{F['stage']['approved']} are FDA-approved, "
+  f"{F['stage']['in_trials']} are in clinical trials for another disease, and "
+  f"{F['stage']['preclinical']} are preclinical agents nominated where "
   f"nothing clinical-stage targets that protein. All "
   f"{F['arm_control']['n']} control associations recover a drug proposed "
   f"independently by another group or already in trials. Among the "
@@ -174,10 +174,10 @@ P(f"Knowledge generated: The pipeline produced {F['n_associations']} "
   f"{F['arm_discovery']['partial']} extend a drug from conventional disease "
   f"or another organ, one is a biomarker observation rather than a drug "
   f"hypothesis, and {F['arm_discovery']['novel']} had no prior proposal in "
-  f"the urologic literature. Criteria fixed in advance place "
-  f"{spell(F['funnel']['survive'])} of them in a priority tier; the other "
-  f"{spell(F['arm_discovery']['novel'] - F['funnel']['survive'])} carry a "
-  f"specific reservation.")
+  f"the urologic literature. Criteria fixed in advance prioritized "
+  f"{spell(F['funnel']['survive'])} of them; for the other "
+  f"{spell(F['arm_discovery']['novel'] - F['funnel']['survive'])} we give the "
+  f"criterion each one missed.")
 
 H('ABSTRACT', 12)
 P(f"Purpose. Rare and variant urologic cancers are difficult to study in "
@@ -185,18 +185,18 @@ P(f"Purpose. Rare and variant urologic cancers are difficult to study in "
   f"built a public-data framework that identifies and prioritizes drug targets "
   f"for these cancers, restricted to agents already FDA-approved or in "
   f"clinical trials for another disease.")
-P(f"Methods. The Cancer Genome Atlas and the Gene Expression Omnibus "
-  f"identified the most altered and most differentially expressed genes in "
-  f"each cancer, and existing drugs against them were then sought in the "
-  f"Therapeutic Target Database and Open Targets. Alteration frequencies, "
+P(f"Methods. We used The Cancer Genome Atlas and the Gene Expression Omnibus "
+  f"to find the most altered and most differentially expressed genes in each "
+  f"cancer, then searched the Therapeutic Target Database and Open Targets "
+  f"for drugs against them. Alteration frequencies, "
   f"differential expression across ten datasets, "
   f"enrichment across eighteen pre-specified druggable gene sets and "
   f"drug-target curation were combined into a 9-point score. Differential "
   f"expression was fitted with models matched to how each dataset was built, "
-  f"using limma and edgeR. After scoring was complete, associations were "
-  f"classified by whether they had been proposed before, then checked against "
-  f"four independent sources that took no part in scoring. A rule written in "
-  f"advance ranked them.")
+  f"using limma and edgeR. After scoring, we classified associations by "
+  f"whether they had been proposed before, checked them against four "
+  f"independent sources not used in scoring, and ranked them by a rule "
+  f"written in advance.")
 P(f"Results. We scored {F['n_associations']} drug-cancer associations: "
   f"{F['tiers'].get('Strong', 0)} Strong, {F['tiers'].get('Moderate', 0)} "
   f"Moderate, {F['tiers'].get('Exploratory', 0)} Exploratory and "
@@ -208,12 +208,12 @@ P(f"Results. We scored {F['n_associations']} drug-cancer associations: "
   f"previously proposed, {F['arm_discovery']['partial']} extend a drug from "
   f"conventional disease or another organ, one is a biomarker observation, and "
   f"{F['arm_discovery']['novel']} had no prior proposal in the urologic "
-  f"literature. Criteria fixed in advance place {F['funnel']['survive']} of "
-  f"them in a priority tier, CXCR1/CXCR2 blockade and anti-CEACAM1 in renal "
-  f"medullary carcinoma and anti-CEACAM5 conjugates in ASCL1-positive "
-  f"small-cell bladder cancer; the other "
-  f"{F['arm_discovery']['novel'] - F['funnel']['survive']} carry a "
-  f"reservation.")
+  f"literature. Criteria fixed in advance prioritized "
+  f"{F['funnel']['survive']} of them: CXCR1/CXCR2 blockade and anti-CEACAM1 in "
+  f"renal medullary carcinoma, and anti-CEACAM5 conjugates in ASCL1-positive "
+  f"small-cell bladder cancer. For the other "
+  f"{F['arm_discovery']['novel'] - F['funnel']['survive']} we give the "
+  f"criterion each one missed.")
 P(f"Conclusion. Public data can be used to prioritize drug hypotheses for "
   f"cancers that may never have a randomized trial. All candidates are "
   f"reported with the evidence behind each, and every one needs experimental "
@@ -233,14 +233,12 @@ P('Over the last several decades an abundance of online data resources has '
   'proteins have '
   'drugs against them and how far each drug has progressed, and the Kyoto '
   'Encyclopedia of Genes and Genomes groups genes into annotated pathways '
-  '[7]. The bottleneck in '
-  'translational oncology has shifted from generating these data to '
-  'interrogating them.')
-P('Drug repurposing takes a different route to a new treatment. Instead of '
-  'developing a new molecule, it asks whether a drug that is already approved, '
-  'or already in trials, can be matched to a disease it was not designed for. '
-  'Such a drug arrives with its human dosing and side effects already known, '
-  'which shortens the path to testing it in a new setting. We therefore '
+  '[7]. These resources are large enough that the limiting step is now '
+  'analysis rather than data collection.')
+P('Drug repurposing matches an approved or in-trial drug to a disease it was '
+  'not developed for, rather than developing a new molecule. Human dosing and '
+  'toxicity are already established for such a drug, which shortens the path '
+  'to testing it in a new setting. We therefore '
   'restricted candidates to agents that are already FDA-approved or in '
   'clinical trials for another disease.')
 P('Against that background, aggressive and variant urologic histologies are '
@@ -250,10 +248,10 @@ P('Against that background, aggressive and variant urologic histologies are '
   '[12] each progress rapidly, resist standard chemotherapy, and lack '
   'biomarker-directed prospective evidence, either because the disease is rare or because the '
   'biomarker-defined subset is too small to power a trial. Slow accrual and '
-  'insufficient population make such trials difficult to mount, and for '
-  'several of these diseases that evidence is unlikely to arrive.')
+  'small populations make such trials difficult, and for several of these '
+  'diseases that evidence is unlikely to be generated.')
 P('We therefore asked whether public molecular data could be interrogated '
-  'systematically enough to prioritize biomarker-anchored drug hypotheses '
+  'systematically enough to prioritize biomarker-matched drug hypotheses '
   'across several such cancers at once. We refer to the sequence of steps that '
   'does this, from data retrieval to the ranked candidates, as the pipeline; '
   'it '
@@ -261,19 +259,17 @@ P('We therefore asked whether public molecular data could be interrogated '
   'included deliberately as positive controls: neuroendocrine prostate cancer, '
   'muscle-invasive bladder cancer and clear cell renal cell carcinoma. These '
   'were chosen by the authors on clinical grounds, as aggressive urologic '
-  'malignancies whose therapeutic priorities are already documented, so that '
-  'whether the pipeline returns those priorities indicates how much weight to '
-  'give its output in the four rare cancers. Two design choices make that '
-  'comparison meaningful: every candidate was scored before any was classified as previously '
-  'proposed, and the rule that ranks the candidates was written '
+  'malignancies whose therapeutic priorities are already documented. If the '
+  'pipeline recovers those priorities, its output in the four rare cancers can '
+  'be given more weight. Every candidate was scored before any was classified '
+  'as previously proposed, and the rule that ranks the candidates was written '
   'before it was applied.')
-P(f"What is new here is not any single drug-cancer pair. Of the "
-  f"{F['n_associations']} associations reported here, "
+P(f"We report a pipeline, built entirely from public sources, that identifies "
+  f"therapeutic targets for repurposed drugs across several cancers at once, "
+  f"with well-studied cancers run through it as positive controls. Of the "
+  f"{F['n_associations']} associations it produced, "
   f"{F['n_previously_proposed']} were proposed by other groups first, and each "
-  f"is identified as such. What is new is a pipeline, built entirely from "
-  f"public sources, that identifies therapeutic targets for repurposed drugs "
-  f"across several cancers at once, with well-studied cancers run through it "
-  f"as positive controls. It also identified {F['n_framework_novel']} "
+  f"is identified as such. It also identified {F['n_framework_novel']} "
   f"drug-cancer associations with no prior proposal in the urologic "
   f"literature, {spell(F['funnel']['survive'])} of which meet every criterion "
   f"we set.")
@@ -292,7 +288,7 @@ P('Candidate associations were assembled from the sources below before the '
   'from The Cancer Genome Atlas, so their frequencies came from '
   'disease-specific series [8\u201312]. Transcriptomic data came from ten Gene '
   'Expression Omnibus series [4], listed with their accessions under Data '
-  'Availability; pathway membership from the Kyoto Encyclopedia of Genes and '
+  'Availability; pathway definitions from the Kyoto Encyclopedia of Genes and '
   'Genomes [7]; and drug-target relationships and clinical stage from the '
   'Therapeutic Target Database [5] and Open Targets [6]. Gene symbols were '
   'reconciled against the HGNC complete set. A rare cancer is often defined by '
@@ -313,7 +309,7 @@ P(f"Candidates were generated one cancer at a time. Genes were ranked by "
   f"searched against the Therapeutic Target Database and Open Targets, and "
   f"became an association only where it had an agent against it that could be "
   f"evaluated clinically. "
-  f"This is why the genomic component differs between the two groups: "
+  f"The genomic component therefore differs between the two groups: "
   f"{F['tcga_rows_freq_ge_15pct']} of the {F['n_tcga_anchored']} associations "
   f"from the positive controls carry an alteration frequency of 15% or more, "
   f"while {F['geo_rows_no_recurrent_alteration']} of the "
@@ -324,15 +320,14 @@ P(f"The eighteen pre-specified gene sets were used to score candidates, not "
   f"to choose them, so a gene could be nominated without belonging to any "
   f"set. Seven of the {F['n_associations']} associations entered that way. "
   f"Six of those seven nominate a cell-surface antigen targeted by an "
-  f"antibody-drug conjugate or a radioligand. No pathway definition lists "
-  f"such a target, because pathways group genes by the biology they take "
-  f"part in rather than by whether an antibody can reach them from outside "
-  f"the cell. Two of the three candidates in the priority tier are among "
+  f"antibody-drug conjugate or a radioligand. Pathway definitions group genes "
+  f"by shared biology rather than by surface accessibility, so they exclude "
+  f"such targets. Two of the three prioritized candidates are among "
   f"these seven.")
 P(f"This was a curated search rather than an exhaustive screen: the ranking "
   f"was a cut rather than a fixed threshold, and the search for an available "
   f"agent was manual and unlogged. A total of {F['funnel_entry']:,} "
-  f"gene-context pairs met a transcriptomic entry rule of q < 0.05 with log2 "
+  f"gene-cancer pairs met a significance threshold of q < 0.05 with log2 "
   f"fold change above 0.5, and most of those genes have no clinically "
   f"evaluable agent. The table is therefore a set of hypotheses assembled "
   f"from public data, not all of the hypotheses those data could support.")
@@ -355,7 +350,7 @@ P('Each association received 0 to 9 points across four dimensions: genomic '
   '(0\u20132) and external mechanistic-literature concordance (0\u20131). '
   'The ranges were set before scoring: the two dimensions that carry the '
   'most information about a target, how often it is altered and how strongly '
-  'it is expressed, were given three points each; pathway membership two, '
+  'it is expressed, were given three points each; belonging to a gene set two, '
   'because it is a weaker and partly overlapping signal; and mechanistic '
   'literature one, because it records only that a link has been reported. '
   'The bins within each dimension are given in Supplementary Methods. '
@@ -365,28 +360,29 @@ P('Each association received 0 to 9 points across four dimensions: genomic '
   'nominated target. Totals map to Strong (7\u20139), Moderate (4\u20136) '
   'and Exploratory (1\u20133) evidence tiers, which express strength of evidence '
   'within this framework only. Where a component could not be computed it is '
-  'reported as not estimable, the total carries a smaller denominator, and the '
+  'reported as not computed, the total is out of fewer than 9 points, and the '
   'row is not assigned an evidence tier.')
 
 H('Prior-Proposal Classification', 11.5, 10, level=2)
 P('After scoring was complete, each association was classified on PubMed as '
   'having no prior urologic-oncology proposal identified, a partial precedent, '
   'or a prior proposal. Novelty was assessed against the urologic-oncology '
-  'literature only, so a prior proposal in another organ does not count. The '
-  'classification was carried out by one author and was not repeated by a '
-  'second reviewer. Because it was performed only after scoring was complete, '
-  'it could not have influenced the score; it is not, however, independent in '
-  'the sense of two reviewers classifying each association separately. The search template, '
+  'literature only, so a prior proposal in another organ does not count. '
+  'One author classified each association; no second reviewer repeated the '
+  'classification. Because it followed scoring it could not have influenced '
+  'the score, but it was not independently duplicated. The search template, '
   'the counting rules and the per-row classifications are deposited.')
 
 H('Ranking Criteria', 11.5, 10, level=2)
 P('The criteria were defined a priori, before they were applied to any '
-  'candidate. A candidate entered the priority tier only if all four of the '
+  'candidate. A candidate was prioritized only if all four of the '
   'following held:')
 for _c in ('no prior urologic-oncology proposal identified;',
-           'a total of 4 or better out of the points estimable for that row;',
+           'a total of 4 or better out of the points available for that row;',
            'a transcriptomic component re-derivable from deposited data and '
-           'strong enough for the kind of evidence it rests on; and',
+           'meeting the standard for its route, q < 0.05 on a disease '
+           'contrast or the top 15% of transcripts where only abundance is '
+           'available; and',
            'a clinical-stage agent with a documented development pathway.'):
     _p = doc.add_paragraph(_c, style='List Bullet')
     _p.paragraph_format.space_after = Pt(2)
@@ -394,8 +390,10 @@ for _c in ('no prior urologic-oncology proposal identified;',
         _r.font.size = Pt(10.5)
 P('Two consistency checks were applied in addition: that no independent '
   'source contradict the candidate, and that target accessibility match the '
-  'modality, a source unable to evaluate a candidate counting as neither. '
-  'Where a disease held more than one priority candidate, the first rank also '
+  'kind of agent proposed, a source unable to evaluate a candidate counting '
+  'as neither. '
+  'Where a disease held more than one prioritized candidate, the first rank '
+  'also '
   'required that the target belong to an enriched pathway. A candidate that '
   'missed a criterion is reported with that criterion named.')
 
@@ -418,9 +416,9 @@ P(f"Each dataset was analyzed with the model that matches how it was "
 P(f"For each of the eighteen gene sets we asked whether the genes up-regulated "
   f"in that cancer overlapped the set more than chance would predict, using a "
   f"hypergeometric test. The comparison used only the genes each dataset "
-  f"actually measured rather than every gene in the genome, because a targeted "
-  f"panel measures a few hundred genes and comparing against the whole genome "
-  f"would overstate how surprising an overlap is. Gene symbols were normalized "
+  f"measured rather than every gene in the genome, because a targeted panel "
+  f"measures a few hundred genes and a genome-wide comparison would overstate "
+  f"the enrichment. Gene symbols were normalized "
   f"to current HGNC nomenclature first.")
 P(f"Benjamini-Hochberg correction was applied across the eighteen gene sets "
   f"within each context. It was not applied across contexts, across drugs, or "
@@ -448,7 +446,7 @@ P(f"The pipeline produced {F['n_associations']} drug-cancer associations "
   f"{F['tiers'].get('Strong', 0)} reach the Strong tier, "
   f"{F['tiers'].get('Moderate', 0)} Moderate and "
   f"{F['tiers'].get('Exploratory', 0)} Exploratory; five sarcomatoid "
-  f"associations carry a smaller denominator for the reason given below and "
+  f"associations are scored out of fewer points for the reason given below and "
   f"are not assigned an evidence tier.")
 
 H('Positive Controls', 11.5, 10, level=2)
@@ -461,19 +459,19 @@ P(f"The three positive controls \u2014 neuroendocrine prostate cancer, "
   f"renal cell carcinoma [32\u201336]. Erlotinib in renal medullary carcinoma "
   f"and pembrolizumab in penile squamous cell carcinoma [37,38] add two more "
   f"in the rare cancers, {F['n_previously_proposed']} in total. This is a "
-  f"positive control rather than independent validation, for the reason given "
-  f"in the Discussion.")
+  f"positive control rather than independent validation, because prior "
+  f"knowledge entered the gene panel and the drug curation.")
 
 H('Rare and Variant Cancers', 11.5, 10, level=2)
 P(f"In renal medullary carcinoma the deposited experiment is a SMARCB1 rescue "
   f"in two patient-derived lines. Across the {rmc['genes_measured_both']:,} "
   f"genes measured in both, the correlation between lines is only "
-  f"r = {rmc['r_between_lines']}, so requiring consistent change in both is a "
-  f"stringent filter that {rmc['up_both']} genes pass. A chemokine axis is "
+  f"r = {rmc['r_between_lines']}. Requiring a consistent change in both lines "
+  f"leaves {rmc['up_both']} genes. Chemokine genes are "
   f"among them, elevated in the SMARCB1-null state in both lines (CXCL8 "
   f"{rmc['CXCL8']['RMC2C']:+.2f} and {rmc['CXCL8']['RMC219']:+.2f}, with "
   f"CXCL1, CXCL2 and CXCL3 also elevated), and KEGG chemokine signaling is "
-  f"enriched on the both-lines set at q = {q['rmc_chemokine']:.4f} (Figure 2), "
+  f"enriched among those 187 genes at q = {q['rmc_chemokine']:.4f} (Figure 2), "
   f"coherent with the neutrophil-rich microenvironment described in this "
   f"disease [39]. This nominates the CXCR1/CXCR2 antagonist class, and "
   f"CEACAM1 alongside it ({rmc['CEACAM1']['RMC2C']:+.2f} and "
@@ -488,16 +486,16 @@ P(f"Lineage-stratified small-cell bladder cancer (Figure 3), classified by "
   f"(q = {q['pou2f3_arachidonic']:.3f}) with PTGS1 elevated "
   f"({de['PTGS1_pou2f3']['log2FC']:+.2f}, q = {fmt(de['PTGS1_pou2f3']['q'])}), "
   f"identifying a lineage-specific arachidonic-acid and COX-1 program whose "
-  f"therapeutic direction requires functional testing: in the tuft-cell biology "
-  f"this program is named for, prostaglandin signaling has been reported to "
-  f"restrain rather than promote tumorigenesis [41]. The "
-  f"NEUROD1-positive somatostatin receptor 2 association does not hold up: the "
+  f"therapeutic direction requires functional testing. In tuft cells, which "
+  f"POU2F3 defines, prostaglandin signaling has been reported to restrain "
+  f"rather than promote tumorigenesis [41]. The "
+  f"NEUROD1-positive somatostatin receptor 2 association is not reproduced: the "
   f"fold change reproduces ({de['SSTR2_neurod1']['log2FC']:+.2f}) but it does "
   f"not reach significance under a batch-adjusted subtype contrast "
   f"(q = {de['SSTR2_neurod1']['q']:.3f}), and the neuroactive ligand-receptor "
-  f"set is not enriched in that subtype. The somatostatin receptor 2 paradigm "
-  f"established in small-cell lung cancer [42] does not transfer here on "
-  f"these data.")
+  f"set is not enriched in that subtype. The somatostatin receptor 2 approach "
+  f"established in small-cell lung cancer [42] is not supported by these "
+  f"data.")
 
 print('results 3.1-3.3 written')
 
@@ -507,11 +505,12 @@ P(f"The sarcomatoid series is reported in full in the Supplementary Results "
   f"groups is also a difference between batches and no model can separate "
   f"them. We therefore report no sarcomatoid-versus-conventional comparison "
   f"and scored these five associations on transcript abundance within the "
-  f"sarcomatoid tumors, which the confounding does not reach: UHRF1 [43], NSD2 "
+  f"sarcomatoid tumors, a within-group measure that the batch difference does "
+  f"not affect: UHRF1 [43], NSD2 "
   f"and G6PD [44] are highly abundant there and ATR is not. The pathway "
-  f"component is not estimable for this context, so these rows total out of 7 "
+  f"component could not be computed for this context, so these rows total out of 7 "
   f"rather than 9 and carry no evidence tier, and neither of the two candidates without "
-  f"a prior proposal reached the priority tier. TROP2 is reported there as an "
+  f"a prior proposal was prioritized. TROP2 is reported there as an "
   f"observation for an independent cohort, not as a predictive biomarker, and "
   f"carries no score [45\u201347].")
 
@@ -520,28 +519,28 @@ P(f"Penile squamous cell carcinoma is reported in the Supplementary Results "
   f"converges on the established pembrolizumab priority [48\u201350], with "
   f"two partially-novel candidates alongside it [51\u201353]; none of its "
   f"associations was without a prior proposal.")
-H('Consistency Checks', 11.5, 10, level=2)
-P('Most associations are nominated from transcript abundance, which shows only '
-  'that a gene is switched on, not that the cell depends on it or that its '
+H('Independent Checks', 11.5, 10, level=2)
+P('Most associations are nominated from transcript abundance, which shows that '
+  'a gene is transcribed but not that the cell depends on it or that its '
   'protein reaches the cell surface; rows resting on curated '
-  'non-transcriptomic evidence are flagged in Supplementary Table S1. The '
-  'nominated targets were therefore checked against four sources that took no '
-  'part in scoring. These are checks rather than validation: none can '
-  'establish that an agent works, each is unable to evaluate some candidates, '
-  'and none of them changed which candidates reached the priority tier. Full '
+  'non-transcriptomic evidence are flagged in Supplementary Table S1. '
+  'We therefore checked the nominated targets against four sources not used '
+  'in scoring. None of the four can establish that an agent works, each '
+  'is unable to evaluate some candidates, '
+  'and none of them changed which candidates were prioritized. Full '
   'results for all four are in the Supplementary Materials, including the '
   'LINCS L1000 signature-reversal analysis [54,55], which recovered several '
   'nominated agents but ranked none first in its intended context and returned '
   'the same agents across unrelated lineages; it lacked the specificity to '
   'distinguish candidates and was used neither to support nor to exclude.')
 
-P(f"The check that bears on the proposals is protein localization, because "
-  f"an antibody or conjugate that cannot reach its target is not a hypothesis "
-  f"at all. All {F['hpa']['n_surface_assoc']} associations whose agent "
+P(f"Protein localization is the check most relevant to these proposals, "
+  f"because an antibody or conjugate must reach its target from outside the "
+  f"cell. All {F['hpa']['n_surface_assoc']} associations whose agent "
   f"binds from outside the cell have confirmed extracellular access in the "
   f"Human "
-  f"Protein Atlas [56], which establishes that the protein sits where the "
-  f"agent can reach it rather than how much is present in the tumor. "
+  f"Protein Atlas [56], which shows where the protein is, not how much is "
+  f"present in the tumor. "
   f"Normal-tissue RNA is reported for orientation only and is not a "
   f"therapeutic-window comparison: "
   f"CEACAM1 is substantially expressed in normal kidney "
@@ -552,8 +551,8 @@ P(f"The check that bears on the proposals is protein localization, because "
   f"antagonist is meant to act on. Per-target values are in Supplementary "
   f"Table S1.")
 
-P(f"The dependency and compound screens behaved as expected on targets whose "
-  f"answer is already known. In DepMap [57], across "
+P(f"Both screens returned the expected result for targets with a known "
+  f"answer. In DepMap [57], across "
   f"{F['depmap']['n_urothelial_lines']} urothelial lines stratified by "
   f"genotype and target expression from CCLE via cBioPortal [3], RPL5 scores "
   f"{F['depmap']['RPL5']:.2f} on the Chronos scale, where more negative means "
@@ -569,12 +568,12 @@ P(f"The dependency and compound screens behaved as expected on targets whose "
   f"percentile of all lines, so the screen supports erlotinib in urothelial "
   f"cancer but not the renal medullary rationale it was nominated for.")
 
-P(f"Two results bear on our own candidates. Urothelial cells do not require "
+P(f"Two results apply to our own candidates. Urothelial cells do not require "
   f"NSD2 even where they express it most highly "
   f"({F['depmap']['NSD2_high']:+.2f}), and the ATR inhibitor VE-822 is not "
   f"urothelial-selective (q = {F['prism']['ve822_q']:.2f}) where an earlier, "
   f"weaker comparison had called it so. Both candidates were already outside "
-  f"the priority tier on their scores, so neither screen altered the ranking. "
+  f"the prioritized set on their scores, so neither screen altered the ranking. "
   f"Neither screen can evaluate an antibody, conjugate or radioligand, whose "
   f"agent delivers a payload rather than exploiting an essential target, nor a "
   f"mechanism that acts through myeloid recruitment rather than on the tumor "
@@ -588,13 +587,12 @@ P(f"Figure 4 and Table 1 together give the whole set: every association, how "
   f"{spell(F['funnel']['framework_novel']).capitalize()} associations had no "
   f"prior proposal in the urologic literature. "
   f"{spell(F['funnel']['survive']).capitalize()} meet every criterion and form "
-  f"the priority tier, in {spell(F['n_survivor_contexts'])} diseases: renal "
+  f"the prioritized set, in {spell(F['n_survivor_contexts'])} diseases: renal "
   f"medullary carcinoma and ASCL1-positive small-cell bladder cancer. The "
   f"other {spell(F['funnel']['framework_novel'] - F['funnel']['survive'])} "
-  f"carry a specific reservation.")
+  f"missed one, and we give the criterion in each case.")
 
-P(f"Those reservations are specific and are statements about the evidence now "
-  f"available rather than refutations. The somatostatin receptor 2 candidate, "
+P(f"The somatostatin receptor 2 candidate, "
   f"the most clinically developed agent in the table, loses its transcriptomic "
   f"support once the small-cell subtypes are contrasted with batch in the "
   f"model (q = {de['SSTR2_neurod1']['q']:.3f}), leaving a score of 2. The ATR "
@@ -605,7 +603,8 @@ P(f"Those reservations are specific and are statements about the evidence now "
   f"cells do not require it. All three remain open questions that better data "
   f"could settle.")
 
-P(f"We rank the priority tier within a disease, not between diseases. Two are in "
+P(f"We rank the prioritized candidates within a disease, not between diseases. "
+  f"Two are in "
   f"renal medullary carcinoma and compete for the same experimental effort; "
   f"the third is in ASCL1-positive small-cell bladder cancer and competes with "
   f"neither. The only feature that could separate them across diseases is "
@@ -616,43 +615,44 @@ P(f"Within renal medullary carcinoma we would carry CXCR1/CXCR2 blockade "
   f"forward first. It scores {lead['total']}/9. Its chemokine ligands are "
   f"elevated in both patient-derived lines, both receptors are confirmed "
   f"membrane proteins, and the antagonist class is already in clinical "
-  f"development with human pharmacology and safety data. What separates it "
-  f"from anti-CEACAM1 is pathway membership: CXCR1 and CXCR2 belong to a "
-  f"chemokine set enriched in both lines (q = {q['rmc_chemokine']:.4f}), and "
-  f"CEACAM1 belongs to no enriched set. That distinction is narrower than it "
-  f"looks. The enrichment is driven by the four CXCL ligands, which also "
-  f"supply this row's transcriptomic score, and neither receptor is among the "
-  f"{rmc['genes_measured_both']:,} genes the series measured, so the pathway and "
-  f"transcriptomic evidence here are not independent and the target itself was "
-  f"never observed. Anti-CEACAM1 scores {second['total']}/9: its single "
-  f"pathway point comes from a cytokine-receptor set enriched at "
-  f"q = {ceacam1_pq} that CEACAM1 does not belong to, so it falls to "
-  f"{second['total'] - 1}/9 under the membership requirement (Supplementary "
-  f"Table S2), and its surface protein abundance and therapeutic index in "
+  f"development with human pharmacology and safety data. CXCR1 and CXCR2 "
+  f"belong to a chemokine gene set enriched in both lines "
+  f"(q = {q['rmc_chemokine']:.4f}) and CEACAM1 belongs to no enriched set, "
+  f"which is the only difference between their scores. That enrichment is "
+  f"driven by the four CXCL ligands, which also supply the transcriptomic "
+  f"score for this row, and neither receptor is among the "
+  f"{rmc['genes_measured_both']:,} genes the series measured. The pathway and "
+  f"transcriptomic evidence are therefore not independent, and the target "
+  f"itself was not measured. Anti-CEACAM1 scores {second['total']}/9. Its "
+  f"single pathway point comes from a cytokine-receptor set enriched at "
+  f"q = {ceacam1_pq} to which CEACAM1 does not belong, so it scores "
+  f"{second['total'] - 1}/9 if membership is required (Supplementary "
+  f"Table S2). Its surface protein abundance and therapeutic index in "
   f"renal medullary carcinoma are both unknown.")
 P(f"Anti-CEACAM5 conjugates in ASCL1-positive small-cell bladder cancer are the "
-  f"third in the priority tier. CEACAM5 is strongly enriched in that subtype "
+  f"third prioritized candidate. CEACAM5 is strongly enriched in that subtype "
   f"({de['CEACAM5_ascl1']['log2FC']:+.2f}, "
   f"q = {fmt(de['CEACAM5_ascl1']['q'])}), confirmed at the membrane, and low "
   f"in normal bladder RNA ({F['hpa']['nTPM']['CEACAM5']} normalized "
   f"transcripts per million, which orients safety planning rather than "
   f"demonstrating a systemic therapeutic window), and the drug class is in "
-  f"active development. It is the only priority candidate in its disease. Its "
+  f"active development. It is the only prioritized candidate in that disease. Its "
   f"weaknesses are that CEACAM5 belongs to none of the eighteen pre-specified "
   f"sets, so no pathway evidence supports it, and that subtype-specific protein "
   f"expression, internalization and payload sensitivity in small-cell bladder "
   f"cancer are all untested.")
 P(f"One qualification applies to the renal medullary lead: the dependency and "
   f"compound screens cannot test a mechanism that works through myeloid "
-  f"recruitment, so their silence is not support. All three are hypotheses, "
+  f"recruitment, so the absence of a signal in either screen is not evidence "
+  f"for or against it. All three are hypotheses, "
   f"not validated findings, and the experiment that would settle this one is "
   f"CXCR1/CXCR2 blockade in an immunocompetent model with an intact myeloid "
   f"compartment.")
 
 H('DISCUSSION')
 P('In this study, we show that public molecular data can be used to prioritize '
-  'drug hypotheses in cancers that cannot support a dedicated trial, and that '
-  'the same procedure will report where it fails. The patient numbers needed '
+  'drug hypotheses in cancers that cannot support a dedicated trial. The '
+  'patient numbers needed '
   'to power dedicated biomarker-matched trials in these cancers are not, and '
   'may never be, available, and the associations in Table 1 were assembled '
   'without them.')
@@ -664,21 +664,21 @@ P('Computational repurposing from public expression data is an established '
   'libraries has been applied to four low-survival cancers, with the choice of '
   'differential-expression method itself changing which candidates emerge '
   '[61]; that sensitivity is consistent with what we found when the primary '
-  'data were refitted. Pathway2Targets prioritizes targets from pathway '
-  'membership, the same signal our eighteen gene sets supply [62]. Those '
+  'data were refitted. Pathway2Targets prioritizes targets by the pathways '
+  'they belong to, the same signal our eighteen gene sets supply [62]. Those '
   'methods are built and benchmarked on common cancers, where cohorts are '
-  'large enough to support them. The contribution here is not a new algorithm '
-  'but the application of this class of method to cancers whose cohorts are '
-  'too small for one, together with positive controls run through the same '
-  'pipeline and an explicit account of what the approach could not establish.')
-P(f"Two candidates fell to the lower-confidence tier once replicate structure "
+  'large enough to support them. We applied this class of method to cancers '
+  'whose cohorts are too small to support one, with positive controls run '
+  'through the same pipeline and a statement of what the approach could not '
+  'establish.')
+P(f"Two candidates stopped being prioritized once replicate structure "
   f"and batch "
   f"were included in the models: the somatostatin receptor 2 row, which had "
   f"been the most clinically developed candidate in the table, and the ATR "
   f"row. An analysis that reused the deposited summary statistics instead of "
-  f"refitting the primary data would have placed both in the priority tier.")
+  f"refitting the primary data would have prioritized both.")
 
-P(f"Two things bound what these results mean. Recovery of the "
+P(f"Recovery of the "
   f"{F['n_previously_proposed']} previously proposed priorities is a positive "
   f"control rather than independent validation, because prior knowledge "
   f"entered the pathway panel, the drug curation and the choice of "
@@ -713,20 +713,20 @@ P(f"Our study has limitations, and most are bounded by what is public. The "
   f"conservative and says nothing about precedence outside urology.")
 
 P(f"One further limitation follows from how candidates were selected. A gene "
-  f"had to clear the transcriptomic entry rule to be considered at all, and we "
+  f"had to reach that significance threshold to be considered at all, and we "
   f"deliberately kept the list of genes we analyzed short. In cancers this "
   f"rare, a significance threshold partly measures how little data has been "
   f"deposited rather than anything about the biology, and a real target that "
   f"falls short of significance in a small cohort is therefore never "
   f"nominated; proteasome inhibition in renal medullary carcinoma [63] is one "
   f"such candidate. Further work could extend the search to the less "
-  f"significant genes we set aside. Resolution is also bounded by what is "
-  f"deposited: several variants of immediate interest, including primary "
+  f"significant genes we set aside. Deposited data also limited the scope: "
+  f"several variants of immediate interest, including primary "
   f"bladder adenocarcinoma, urachal carcinoma, plasmacytoid urothelial "
   f"carcinoma and translocation renal cell carcinoma, have no "
   f"histology-labeled cohort of adequate size and could not be analyzed. "
-  f"Progress here depends on better data being deposited rather than on a "
-  f"better algorithm.")
+  f"Analyzing them will require larger histology-labeled cohorts to be "
+  f"deposited.")
 
 P(f"In conclusion, we scored {F['n_associations']} drug-cancer associations "
   f"across three "
@@ -737,14 +737,14 @@ P(f"In conclusion, we scored {F['n_associations']} drug-cancer associations "
   f"{F['arm_discovery']['n']} from the rare cancers "
   f"{F['arm_discovery']['novel']} had no prior proposal in the urologic "
   f"literature. "
-  f"Criteria fixed in advance place {spell(F['funnel']['survive'])} of them in "
-  f"a priority tier; the other "
-  f"{spell(F['n_framework_novel'] - F['funnel']['survive'])} carry a specific "
-  f"reservation. The contribution is not any single drug-cancer "
-  f"pair but a way of generating, calibrating and challenging drug hypotheses "
-  f"in cancers too rare for a trial, in a form that others can audit and "
-  f"contradict. Within renal medullary carcinoma we would carry CXCR1/CXCR2 "
-  f"blockade ahead of anti-CEACAM1. All three priority candidates need "
+  f"Criteria fixed in advance prioritized "
+  f"{spell(F['funnel']['survive'])} of those "
+  f"{spell(F['n_framework_novel'])}; for the other "
+  f"{spell(F['n_framework_novel'] - F['funnel']['survive'])} we give the "
+  f"criterion each one missed. The contribution is a method for generating and "
+  f"ranking drug hypotheses in cancers too rare for a trial, with the code and "
+  f"data deposited. Within renal medullary carcinoma we would carry CXCR1/CXCR2 "
+  f"blockade ahead of anti-CEACAM1. All three prioritized candidates need "
   f"experimental validation in their own disease, and broader progress would "
   f"benefit from wider tumor sequencing and from histology-labeled, "
   f"machine-accessible repositories.")
@@ -771,7 +771,7 @@ P('All datasets used are publicly available without restriction. Genomic '
   'from the Therapeutic Target Database and OpenTargets. All analysis scripts, '
   'the fitted differential-expression tables, the enrichment tables, the master '
   'association table with per-row scoring provenance, the candidate-selection '
-  'table, the candidate denominator, the prior-proposal audit and the '
+  'table, the count of gene-cancer pairs considered, the prior-proposal audit and the '
   'figure-generation code are archived at GitHub '
   '(github.com/gbrink10/urologic-variant-drug-prioritization) and at Zenodo '
   f'({ZENODO_CONCEPT_DOI}, which resolves to the most recent archived version'
@@ -795,8 +795,8 @@ FIGURES = [
      'pre-specified druggable pathway or gene sets, compared against only the '
      'genes that dataset measured; drug-target curation; a 9-point prioritization '
      'score; and a PubMed search for prior proposals, run only after '
-     'scoring was complete. Step 7 is the consistency check, whose four '
-     'sources contributed nothing to any score and changed no ranking. '
+     'scoring was complete. Step 7 checks candidates against four sources '
+     'that contributed nothing to any score and changed no ranking. '
      'Candidates are ranked by a rule fixed before it was applied; none is '
      'discarded.'),
     ('Figure2_RMC.png', 6.9,
@@ -806,7 +806,8 @@ FIGURES = [
      'stringent filter rather than a formality; genes passing it are highlighted, '
      'and the chemokine axis is labeled. (B) The chemokine axis gene by gene, '
      'each line shown separately, in disease-state orientation, with the pathway '
-     'q-value computed on the both-lines set. (C) Proposed mechanism. CXCR1 and '
+     'q-value computed on the genes changing in both lines. (C) Proposed '
+     'mechanism. CXCR1 and '
      'CXCR2 are receptors on the neutrophil, not on the tumor cell, which is '
      'why a tumor-cell monoculture cannot test this hypothesis in either '
      'direction.'),
@@ -815,8 +816,7 @@ FIGURES = [
      'composition by lineage transcription factor. (B) The nominated target in '
      'each subtype with its q-value from the batch-adjusted subtype contrast; '
      'somatostatin receptor 2 in NEUROD1-positive tumors does not reach '
-     'significance, which is why that association sits outside the priority '
-     'tier. '
+     'significance, which is why that association was not prioritized. '
      '(C) Proposed lineage-stratified therapeutic hypotheses. CEACAM5 and '
      'somatostatin receptor 2 are cell-surface targets; PTGS1/COX-1 is an '
      'intracellular enzyme on the endoplasmic reticulum, shown as a candidate '
@@ -830,18 +830,19 @@ FIGURES = [
      '~ partial, \u2212 fails the criterion or contradicts, n/a cannot test. '
      'The transcriptomic column records which arm the evidence comes from, '
      'and the next column whether it meets that arm\u2019s standard. The '
-     'pathway column reads not estimable for the sarcomatoid rows, whose only '
+     'pathway column reads not computed for the sarcomatoid rows, whose only '
      'available enrichment derives from the confounded comparison. Enrichment '
      'is credited only where the target is itself a member of the enriched '
      'pathway, since an enrichment driven by other genes is not evidence for '
-     'that target. The priority tier, above the dashed line, required all '
+     'that target. Candidates above the dashed line met all four of: '
      'four of: E1, no prior urologic-oncology proposal was found; E2, a score '
-     'of 4 or better out of the points estimable for that row; E3, '
+     'of 4 or better out of the points available for that row; E3, '
      'transcriptomic evidence strong enough for the kind it rests on, '
      'q < 0.05 on a disease contrast or the top 15% of transcripts on '
      'abundance; and E4, an agent in clinical development. Two consistency '
      'checks applied in addition: that no independent source contradict the '
-     'candidate and that target access match the modality. A source that '
+     'candidate and that the target be reachable by the kind of agent '
+     'proposed. A source that '
      'cannot evaluate a candidate is not evidence for it, so absence of '
      'contradiction is weaker than positive support. Every candidate placed '
      'below the line was placed there by E2 or E3; the independent checks '
@@ -913,10 +914,10 @@ P('Large language models (Claude, Anthropic; ChatGPT, OpenAI) were used for '
   'generate, impute or alter any data. Every quantitative result reported here '
   'was produced by author-run scripts (Python 3.10; R 4.6.1 with limma 3.68.4 '
   'and edgeR 4.10.1) operating on the deposited public data, and the '
-  'manuscript is generated from those result tables rather than transcribed. '
-  'Every prior-proposal classification, score assignment and figure element '
-  'was checked against the underlying analysis by the authors, who take full '
-  'responsibility for the content and conclusions. The schematic prompts, the '
+  'numbers in the manuscript come from those result tables. The authors '
+  'checked every prior-proposal classification, score assignment and figure '
+  'element against the underlying analysis and take full responsibility for '
+  'the content and conclusions. The schematic prompts, the '
   'unedited image originals and the corrections applied to them are deposited '
   'with the code.', size=10)
 for para in []:  # the inherited v28 paragraph duplicates the statement above
@@ -983,6 +984,14 @@ def stage_tag(stage):
     return v.split('(')[0].strip().lower() or 'stage not curated'
 
 
+TIER_PLAIN = {
+    'Not tiered (pathway component not estimable)':
+        'Not tiered (pathway component not computed)',
+    'Not tiered (pathway and transcriptomic component not estimable)':
+        'Not tiered (pathway and expression components not computed)',
+}
+
+
 def add_row(cells, bold=False, size=8.0):
     row = t.add_row()
     trPr = row._tr.get_or_add_trPr()
@@ -1029,7 +1038,8 @@ for ctxs, label in ((('NEPC',), 'Neuroendocrine prostate'),
     if not len(sub):
         continue
     accounted |= set(sub['N'])
-    tiers_here = sub['Tier'].value_counts().to_dict()
+    tiers_here = {TIER_PLAIN.get(k, k): v for k, v in
+                  sub['Tier'].value_counts().to_dict().items()}
     _st = [stage_tag(x) for x in defs.loc[defs['N'].isin(sub['N']), 'Stage']]
     _sc = Counter(_st)
     add_row([f'{sub["N"].min()}\u2013{sub["N"].max()}', label,
@@ -1048,7 +1058,7 @@ if len(rare_recovery):
         add_row([r['N'], r['Context'],
                  (f"{r['Drug']} \u2014 {r['Target']}",
                   stage_tag(r['Stage'])),
-                 f"{r['Total']} \u00b7 {r['Tier']}", 'previously proposed',
+                 f"{r['Total']} \u00b7 {TIER_PLAIN.get(r['Tier'], r['Tier'])}", 'previously proposed',
                  'recovered in a rare cancer'])
 
 add_row(['', 'NO PRIOR UROLOGIC-ONCOLOGY PROPOSAL IDENTIFIED', '', '', '', ''],
@@ -1071,10 +1081,10 @@ for _, r in novel_rows.sort_values('N').iterrows():
                 f"(q = {de['SSTR2_neurod1']['q']:.3f}), and no enriched pathway "
                 'contains the target',
         }
-        status = ('Priority tier; first rank within RMC' if int(r['N']) == 17 else
-                  'Priority tier' if bool(srow['survives']) else
+        status = ('Prioritized; first rank within RMC' if int(r['N']) == 17 else
+                  'Prioritized' if bool(srow['survives']) else
                   PLAIN.get(int(r['N']),
-                            'Lower confidence: ' + str(srow['reservation'])))
+                            'Not prioritized: ' + str(srow['reservation'])))
     else:
         status = ''
     nxt = {17: 'immunocompetent model with an intact myeloid compartment',
@@ -1088,7 +1098,7 @@ for _, r in novel_rows.sort_values('N').iterrows():
                'subtype'}.get(int(r['N']), 'not carried forward')
     add_row([r['N'], r['Context'],
              (f"{r['Drug']} \u2014 {r['Target']}", stage_tag(r['Stage'])),
-             f"{r['Total']} \u00b7 {r['Tier']}", status, nxt])
+             f"{r['Total']} \u00b7 {TIER_PLAIN.get(r['Tier'], r['Tier'])}", status, nxt])
 
 add_row(['', 'PARTIAL PRECEDENT', '', '', '', ''], bold=True)
 accounted |= set(partial_rows['N'])
@@ -1099,7 +1109,8 @@ add_row([', '.join(str(int(x)) for x in sorted(partial_rows['N'])), 'various',
           f'conventional disease or another organ to this variant',
           '; '.join(f'{v} {k}' for k, v in _pst.most_common())),
          ', '.join(f'{v} {k}' for k, v in
-                   partial_rows['Tier'].value_counts().to_dict().items()),
+                   {TIER_PLAIN.get(k, k): v for k, v in
+                    partial_rows['Tier'].value_counts().to_dict().items()}.items()),
          'not evaluated as discovery', 'see Supplementary Table S1'])
 
 add_row(['', 'REPORTED, NOT SCORED AS A DRUG HYPOTHESIS', '', '', '', ''],
@@ -1115,7 +1126,7 @@ for _, r in unscored.sort_values('N').iterrows():
               'association',
               'sacituzumab govitecan: FDA approved, urothelial indication '
               'withdrawn 2024'),
-             'not estimable',
+             'not computed',
              'loss can be shown only by the confounded comparison',
              'independent, non-confounded cohort'])
 

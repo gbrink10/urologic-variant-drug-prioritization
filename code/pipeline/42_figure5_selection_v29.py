@@ -89,7 +89,7 @@ for _, r in sel.iterrows():
 
         if not path_ok:
             cells.append(UNTESTED)
-            txt.append('not estimable\n(confounded\ncontrast)')
+            txt.append('not computed\n(confounded\ncontrast)')
         elif bool(r['target_in_enriched_pathway']):
             cells.append(SUPPORT); txt.append(f"q={float(r['pathway_q']):.3f}")
         elif pd.notna(r['pathway_q']) and float(r['pathway_q']) < 0.10:

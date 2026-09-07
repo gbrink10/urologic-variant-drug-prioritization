@@ -67,7 +67,7 @@ check('4 figures embedded', len(doc.inline_shapes) == 4, str(len(doc.inline_shap
 check('one condensed table in the main text', len(doc.tables) == 1)
 # JCO CCI uses unnumbered title-case subsection headings
 RES_SUBS = ('The Association Table', 'Positive Controls',
-            'Rare and Variant Cancers', 'Consistency Checks',
+            'Rare and Variant Cancers', 'Independent Checks',
             'Candidates Without a Prior Proposal')
 check('five Results subsections', all(h in paras for h in RES_SUBS),
       str([h for h in RES_SUBS if h not in paras]))
@@ -159,7 +159,7 @@ for tier in ('Strong', 'Moderate', 'Exploratory'):
     n_t = F['tiers'].get(tier, 0)
     check(f'{n_t} {tier} stated', f'{n_t} {tier}' in text)
 check('not-tiered rows disclosed',
-      'out of 7 rather than 9' in text and 'not estimable' in text)
+      'out of 7 rather than 9' in text and 'not computed' in text)
 # every association must land in exactly one novelty class, and the prose that
 # adds them up must say so, or a reader subtracting them finds rows missing
 _classes = (F['n_previously_proposed'], F['n_partially_novel'],
@@ -171,7 +171,7 @@ check('every novelty class appears in the prose',
 check('all framework-novel candidates reported, none discarded',
       str(F['funnel']['framework_novel']) in text
       and 'are reported' in text
-      and 'priority tier' in text)
+      and 'prioritiz' in text)
 
 # The four sources removed nothing: every candidate they could have argued
 # against had already fallen to the lower tier on its score or its
@@ -182,10 +182,16 @@ check('no claim that the independent sources filtered candidates',
           'argued against the rest', 'survive the audit',
           'supported by the independent sources')))
 check('the checks are stated to have changed no outcome',
-      'changed which candidates reached the priority tier' in text
+      'changed which candidates were prioritized' in text
       or 'the independent checks' in text.lower())
-check('each lower-tier candidate carries a stated reservation',
-      'reservation' in text and 'open questions' in text)
+# the coined word "reservation" was replaced by plain wording; the check is
+# that each non-prioritized candidate still has its failing criterion named
+check('each candidate not prioritized has its criterion named',
+      'criterion each one missed' in text and 'open questions' in text)
+check('no coined shorthand for the ranking',
+      not any(w in text.lower() for w in
+              ('priority tier', 'lower-confidence tier', 'not estimable',
+               'entry rule', 'pathway membership', 'both-lines')))
 check(f"chemokine q = {F['q']['rmc_chemokine']:.4f}",
       f"{F['q']['rmc_chemokine']:.4f}" in text)
 check('SSTR2 non-significant q reported',
@@ -232,9 +238,35 @@ check('both pre-specified thresholds named',
       'q < 0.05' in text and 'q < 0.10' in text
       and 'pre-specified' in text)
 
-check('novelty stated without a priority claim',
-      'What is new here is not any single drug-cancer pair' in text
-      and not any(k in text.lower() for k in
+# The Context, Abstract and Conclusion interpolate counts from the facts file,
+# so an overlapping edit there can splice two clauses into nonsense that still
+# passes every content check - "place three of them in three of them; for the
+# other three carry a specific we give the criterion each one missed" shipped
+# once. A 3-gram repeated within five words is the signature of that splice;
+# outside these paragraphs the same pattern is ordinary parallelism, so the
+# check is scoped to them.
+def _near_repeat(t, gap=5):
+    import re as _re
+    for _sent in _re.split(r'(?<=[.;:])\s+', t):
+        _w = [x.lower().strip('(),') for x in _sent.split()]
+        _seen = {}
+        for _i in range(len(_w) - 2):
+            _k = ' '.join(_w[_i:_i + 3])
+            if _k in _seen and _i - _seen[_k] <= gap:
+                return _sent.strip()[:90]
+            _seen[_k] = _i
+    return None
+
+
+_templated = [p for p in text.split(chr(10)) if p.strip().startswith(
+    ('Knowledge generated', 'Purpose.', 'Methods.', 'Results.', 'Conclusion.',
+     'In conclusion'))]
+_spliced = [r for r in (_near_repeat(p) for p in _templated) if r]
+check('templated paragraphs read as sentences', not _spliced,
+      '; '.join(_spliced))
+
+check('no priority claim',
+      not any(k in text.lower() for k in
                   ('the first study', 'the first report', 'first to report',
                    'first to apply', 'first to describe', 'we are the first')))
 
@@ -285,7 +317,7 @@ check('anti-CEACAM5 successor agent named',
 check('seclidemstat no longer attached to the NSD2 row',
       'SP-2577' not in text and 'seclidemstat' not in text.lower())
 check('the confounding and its consequence are both stated',
-      'no model can separate them' in text and 'not estimable' in text)
+      'no model can separate them' in text and 'not computed' in text)
 check('sarcomatoid rows scored on the arm their data supports',
       'abundance within the sarcomatoid tumors' in both
       or 'abundant a transcript is within the sarcomatoid' in both)
