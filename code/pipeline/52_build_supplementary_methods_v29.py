@@ -93,9 +93,10 @@ if _s1.exists():
         'completeness; it cannot be read as a difference between histologies. '
         '(B) Pathway values from that same comparison, which inherit the '
         'confounding, so no pathway component is scored for this context. '
-        '(C) The nominated targets, scored instead on how abundant each '
+        'The nominated targets are scored instead on how abundant each '
         'transcript is within the sarcomatoid tumors, a quantity the '
-        'confounding does not affect.')
+        'confounding does not affect; those values are given in the text '
+        'above.')
     _cr.font.size = Pt(9)
     _cr.italic = True
 

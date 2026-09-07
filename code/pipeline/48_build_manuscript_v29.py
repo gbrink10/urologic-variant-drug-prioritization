@@ -159,7 +159,10 @@ P('Key objective: Can publicly deposited genomic and transcriptomic data be '
   'interrogated systematically to identify and prioritize drugs that are '
   'already FDA-approved, or in clinical trials for a different disease, for '
   'aggressive urologic cancers where trials are difficult to power?')
-P(f"Knowledge generated: The pipeline produced {F['n_associations']} "
+P(f"Knowledge generated: Refitting each deposited dataset rather than reusing "
+  f"its published summary statistics changed which candidates qualified, and "
+  f"cost the most clinically developed agent in the table. The pipeline "
+  f"produced {F['n_associations']} "
   f"drug-cancer associations, {F['arm_control']['n']} of them in the three "
   f"positive controls and {F['arm_discovery']['n']} in the four rare "
   f"cancers. Every drug already exists: "
@@ -625,6 +628,13 @@ P('In this study, we show that public molecular data can be used to prioritize '
   'to power dedicated biomarker-matched trials in these cancers are not, and '
   'may never be, available, and the associations in Table 1 were assembled '
   'without them.')
+P(f"Two candidates stopped being prioritized once replicate structure "
+  f"and batch "
+  f"were included in the models: the somatostatin receptor 2 row, which had "
+  f"been the most clinically developed candidate in the table, and the ATR "
+  f"row. An analysis that reused the deposited summary statistics instead of "
+  f"refitting the primary data would have prioritized both.")
+
 P('Computational repurposing from public expression data is an established '
   'approach, and several groups have built comparable pipelines [59]. '
   'GETgene-AI ranks actionable cancer targets by combining mutation '
@@ -640,13 +650,6 @@ P('Computational repurposing from public expression data is an established '
   'whose cohorts are too small to support one, with positive controls run '
   'through the same pipeline and a statement of what the approach could not '
   'establish.')
-P(f"Two candidates stopped being prioritized once replicate structure "
-  f"and batch "
-  f"were included in the models: the somatostatin receptor 2 row, which had "
-  f"been the most clinically developed candidate in the table, and the ATR "
-  f"row. An analysis that reused the deposited summary statistics instead of "
-  f"refitting the primary data would have prioritized both.")
-
 P(f"Recovery of the "
   f"{F['n_previously_proposed']} previously proposed priorities is a positive "
   f"control rather than independent validation, because prior knowledge "
@@ -776,22 +779,23 @@ FIGURES = [
      'and the chemokine axis is labeled. (B) The chemokine axis gene by gene, '
      'each line shown separately, in disease-state orientation, with the pathway '
      'q-value computed on the genes changing in both lines. (C) Proposed '
-     'mechanism. CXCR1 and '
-     'CXCR2 are receptors on the neutrophil, not on the tumor cell, which is '
-     'why a tumor-cell monoculture cannot test this hypothesis in either '
-     'direction.'),
+     'mechanism. CXCR1 and CXCR2 are receptors on the neutrophil, not on the '
+     'tumor cell, which is why a tumor-cell monoculture cannot test this '
+     'hypothesis in either direction. CXCL8 binds both receptors; CXCL1, '
+     'CXCL2 and CXCL3 are CXCR2-selective. The antagonists are '
+     'CXCR2-directed agents, some with additional CXCR1 activity: AZD5069, '
+     'navarixin, reparixin and danirixin. Panel C created with '
+     'BioRender.com.'),
     ('Figure3_SCBC.png', 6.9,
      'Figure 3. Lineage-stratified small-cell bladder cancer. (A) Subtype '
      'composition by lineage transcription factor. (B) The nominated target in '
      'each subtype with its q-value from the batch-adjusted subtype contrast; '
      'somatostatin receptor 2 in NEUROD1-positive tumors does not reach '
-     'significance, which is why that association was not prioritized. '
-     '(C) Proposed lineage-stratified therapeutic hypotheses. CEACAM5 and '
-     'somatostatin receptor 2 are cell-surface targets; PTGS1/COX-1 is an '
-     'intracellular enzyme on the endoplasmic reticulum, shown as a candidate '
-     'perturbation axis with aspirin as a pharmacologically available '
-     'non-selective inhibitor rather than a COX-2-selective agent; the '
-     'therapeutic direction is unresolved and requires functional testing.'),
+     'significance, which is why that association was not prioritized. The '
+     'PTGS1 signal is a candidate perturbation axis rather than a direction: '
+     'aspirin is a pharmacologically available non-selective inhibitor, and '
+     'whether inhibition or activation is therapeutic requires functional '
+     'testing.'),
     ('Figure4_candidate_selection.png', 6.9,
      'Figure 4. Every candidate without a prior urologic-oncology proposal, '
      'against every criterion. Each cell carries a symbol as well as a color: '
@@ -953,6 +957,16 @@ def stage_tag(stage):
     return v.split('(')[0].strip().lower() or 'stage not curated'
 
 
+# the recovered agents behind each positive-control block; these are the
+# paper's only calibration evidence and no display item named them
+CONTROL_AGENTS = {
+    '1\u20136': 'recovers venetoclax, alisertib, tazemetostat, decitabine, '
+                'cabazitaxel-carboplatin, olaparib',
+    '7\u201313': 'recovers alisertib, talazoparib, alpelisib, erdafitinib, '
+                 'enfortumab vedotin, pembrolizumab, palbociclib',
+    '14\u201316': 'recovers pazopanib, belzutifan, abemaciclib',
+}
+
 TIER_PLAIN = {
     'Not tiered (pathway component not estimable)':
         'Not tiered (pathway component not computed)',
@@ -1011,12 +1025,13 @@ for ctxs, label in ((('NEPC',), 'Neuroendocrine prostate'),
                   sub['Tier'].value_counts().to_dict().items()}
     _st = [stage_tag(x) for x in defs.loc[defs['N'].isin(sub['N']), 'Stage']]
     _sc = Counter(_st)
-    add_row([f'{sub["N"].min()}\u2013{sub["N"].max()}', label,
+    rng = f'{sub["N"].min()}\u2013{sub["N"].max()}'
+    add_row([rng, label,
              (f'{len(sub)} associations, all recovering priorities proposed '
               f'elsewhere',
               '; '.join(f'{v} {k}' for k, v in _sc.most_common())),
              ', '.join(f'{v} {k}' for k, v in tiers_here.items()),
-             'positive control', 'not a discovery candidate'])
+             'positive control', CONTROL_AGENTS.get(rng, 'not a discovery candidate')])
 
 # previously proposed priorities arising in the rare or variant contexts
 rare_recovery = merged[merged['N'].isin([18, 20])]

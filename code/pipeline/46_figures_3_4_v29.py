@@ -70,8 +70,8 @@ def panel_c(ax, name, title):
 # Figure 3
 # =====================================================================
 d = de('SarcUC', SARC)
-fig = plt.figure(figsize=(15.6, 5.2))
-gs = gridspec.GridSpec(1, 3, width_ratios=[1.0, 1.0, 1.45], wspace=0.28,
+fig = plt.figure(figsize=(11.2, 5.2))
+gs = gridspec.GridSpec(1, 2, width_ratios=[1.0, 1.0], wspace=0.28,
                        left=0.05, right=0.99, top=0.84, bottom=0.13)
 
 axA = fig.add_subplot(gs[0, 0])
@@ -129,14 +129,7 @@ axB.set_title('B. Pathway values from the confounded comparison\n'
 for s_ in ('top', 'right'):
     axB.spines[s_].set_visible(False)
 
-axs = fig.add_subplot(gs[0, 2])
-panel_c(axs, 'PanelC_SarcUC.png',
-        'C. Targets scored on abundance within sarcomatoid tumors')
-axs.text(0.50, 0.02, 'Descriptive only: histology completely aliased with '
-         'array chip', transform=axs.transAxes, ha='center', fontsize=8.0,
-         weight='bold', color='#c0392b',
-         bbox=dict(boxstyle='round,pad=0.35', facecolor='#fdecea',
-                   edgecolor='#c0392b', linewidth=1.0))
+
 out3 = FIG / 'FigureS1_SarcUC.png'
 plt.savefig(out3, bbox_inches='tight')
 plt.close()
@@ -152,8 +145,8 @@ counts = meta['subtype'].value_counts()
 SUBS = [('ASCL1', 'CEACAM5', 'SCBC_ASCL1'), ('NEUROD1', 'SSTR2', 'SCBC_NEUROD1'),
         ('POU2F3', 'PTGS1', 'SCBC_POU2F3'), ('YAP1', None, 'SCBC_YAP1')]
 
-fig = plt.figure(figsize=(15.6, 5.2))
-gs = gridspec.GridSpec(1, 3, width_ratios=[0.78, 1.05, 1.6], wspace=0.30,
+fig = plt.figure(figsize=(9.4, 5.2))
+gs = gridspec.GridSpec(1, 2, width_ratios=[0.78, 1.05], wspace=0.30,
                        left=0.05, right=0.99, top=0.84, bottom=0.13)
 
 axA = fig.add_subplot(gs[0, 0])
@@ -200,22 +193,6 @@ axB.set_title('B. Nominated target by subtype\n'
 for s_ in ('top', 'right'):
     axB.spines[s_].set_visible(False)
 
-axc = fig.add_subplot(gs[0, 2])
-panel_c(axc, 'PanelC_SCBC.png', 'C. Proposed lineage mechanisms')
-# the NEUROD1 branch does not survive the refit, so say so on the panel
-axc.text(0.50, 0.055, 'NEUROD1 branch not supported by this cohort (q = 0.363)',
-         transform=axc.transAxes, ha='center', fontsize=8.0, weight='bold',
-         color='#c0392b',
-         bbox=dict(boxstyle='round,pad=0.35', facecolor='#fdecea',
-                   edgecolor='#c0392b', linewidth=1.0))
-# the schematic draws aspirin as an inhibitor; the data support a perturbation
-# axis, not a direction, so the panel says so rather than leaving the bar to
-# assert it
-axc.text(0.50, 0.005,
-         'POU2F3 panel: COX-1 perturbation axis — therapeutic direction '
-         'unresolved; aspirin shown as an available non-selective inhibitor',
-         transform=axc.transAxes, ha='center', fontsize=7.2, style='italic',
-         color='#4a4a4a')
 out4 = FIG / 'Figure3_SCBC.png'
 plt.savefig(out4, bbox_inches='tight')
 plt.close()
