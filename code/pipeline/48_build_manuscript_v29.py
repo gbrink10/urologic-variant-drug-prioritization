@@ -139,6 +139,14 @@ ceacam1_pq = f"{float(_pv.loc[_pv['N'] == 19, 'pathway_q'].iloc[0]):.4f}"
 # =====================================================================
 # Front matter
 # =====================================================================
+# ASCO's AI policy asks for tool, version, date accessed and manufacturer.
+# Fill these four in before submission; the audit fails while any still reads
+# FILL_IN, so the manuscript cannot ship with a placeholder in it.
+AI_CLAUDE_VERSION = 'FILL_IN model version'
+AI_GPT_VERSION = 'FILL_IN model version'
+AI_ACCESS_DATES = 'FILL_IN month year to month year'
+AI_BIORENDER_DATE = 'September 2026'
+
 TITLE = ('Prioritizing Repurposable Drugs for Rare and Variant Urologic '
          'Cancers From Public Data: Refitting the Primary Deposits Changes '
          'Which Candidates Qualify')
@@ -880,20 +888,23 @@ P('Supplementary Results: the sarcomatoid urothelial carcinoma findings in '
   'candidate-selection table.')
 
 H('AI USAGE DISCLOSURE', 12)
-P('Large language models (Claude, Anthropic; ChatGPT, OpenAI) were used for '
-  'four things in this work: writing and debugging the analysis code, '
-  'organizing the prior-proposal literature search, drafting and editing '
-  'manuscript text, and generating the mechanism schematics shown as panel C '
-  'of Figures 2 and 3 and of Supplementary Figure S1. They were not used to '
-  'generate, impute or alter any data. Every quantitative result reported here '
-  'was produced by author-run scripts (Python 3.10; R 4.6.1 with limma 3.68.4 '
-  'and edgeR 4.10.1) operating on the deposited public data, and the '
-  'numbers in the manuscript come from those result tables. The authors '
-  'checked every prior-proposal classification, score assignment and figure '
-  'element against the underlying analysis and take full responsibility for '
-  'the content and conclusions. The schematic prompts, the '
-  'unedited image originals and the corrections applied to them are deposited '
-  'with the code.', size=10)
+P('Large language models were used for three things in this work: writing and '
+  'debugging the analysis code, organizing the prior-proposal literature '
+  'search, and drafting and editing manuscript text. The tools were Claude '
+  '(Anthropic; ' + AI_CLAUDE_VERSION + ', accessed ' + AI_ACCESS_DATES + ') '
+  'and ChatGPT (OpenAI; ' + AI_GPT_VERSION + ', accessed ' + AI_ACCESS_DATES +
+  '). The mechanism schematic in Figure 2C was drafted with the '
+  'figure-generation tool in BioRender (Toronto, Canada; accessed ' +
+  AI_BIORENDER_DATE + ') from its scientific icon library, and each element '
+  'was checked against the cited receptor pharmacology by the authors. No AI '
+  'tool was used to generate, impute or alter any data. Every quantitative '
+  'result reported here was produced by author-run scripts (Python 3.10; '
+  'R 4.6.1 with limma 3.68.4 and edgeR 4.10.1) operating on the deposited '
+  'public data, and the numbers in the manuscript come from those result '
+  'tables. The authors checked every prior-proposal classification, score '
+  'assignment and figure element against the underlying analysis and take '
+  'full responsibility for the content and conclusions. The schematic '
+  'prompts and the unedited exports are deposited with the code.', size=10)
 for para in []:  # the inherited v28 paragraph duplicates the statement above
     # the inherited paragraph predates the refit and says Python only
     para = para.replace('All analyses were executed by author-run Python '

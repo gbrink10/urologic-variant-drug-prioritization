@@ -275,6 +275,14 @@ _body = sum(len(l.split()) for l in _lines[_i0:_i1] if l.strip())
 check(f'body {_body} words within the 4,000 cap', _body <= 4000,
       f'{_body} words, {_body - 4000} over' if _body > 4000 else '')
 
+# the AI disclosure carries placeholders for the version and access-date
+# details only the authors know; it must not ship with them unfilled
+check('AI disclosure has no unfilled placeholder', 'FILL_IN' not in text)
+check('AI disclosure names the BioRender panel',
+      'BioRender' in text and 'Figure 2C' in text)
+check('AI disclosure no longer claims AI-generated schematics in 3C or S1C',
+      'panel C of Figures 2 and 3' not in text)
+
 check('no priority claim',
       not any(k in text.lower() for k in
                   ('the first study', 'the first report', 'first to report',
