@@ -265,6 +265,16 @@ _spliced = [r for r in (_near_repeat(p) for p in _templated) if r]
 check('templated paragraphs read as sentences', not _spliced,
       '; '.join(_spliced))
 
+# The body word count was silently 629 low for several revisions because the
+# counter subtracted figure legends that sit outside the counted span. Assert
+# the true Introduction-to-Discussion count against the target journal's cap.
+_i0 = text.split(chr(10)).index('INTRODUCTION') if 'INTRODUCTION' in text.split(chr(10)) else 0
+_lines = text.split(chr(10))
+_i1 = _lines.index('DATA AVAILABILITY') if 'DATA AVAILABILITY' in _lines else len(_lines)
+_body = sum(len(l.split()) for l in _lines[_i0:_i1] if l.strip())
+check(f'body {_body} words within the 4,000 cap', _body <= 4000,
+      f'{_body} words, {_body - 4000} over' if _body > 4000 else '')
+
 check('no priority claim',
       not any(k in text.lower() for k in
                   ('the first study', 'the first report', 'first to report',

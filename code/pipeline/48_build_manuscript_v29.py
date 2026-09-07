@@ -1200,9 +1200,13 @@ d2 = docx.Document(str(OUT))
 ps = [p.text.strip() for p in d2.paragraphs]
 i0 = ps.index('INTRODUCTION')
 i1 = ps.index('DATA AVAILABILITY')
-legends = sum(len(t_.split()) for t_ in ps
+# The figure legends sit AFTER Data Availability, so they were never inside
+# the Introduction-to-Discussion span; subtracting them understated the body by
+# 563 words. A Results paragraph opening "Figure 4 and Table 1 together give..."
+# was also being mistaken for a legend and subtracted. Count the span as it is.
+body = sum(len(ps[i].split()) for i in range(i0, i1) if ps[i])
+legends = sum(len(t_.split()) for t_ in ps[i1:]
               if t_.startswith('Figure ') and len(t_.split()) > 40)
-body = sum(len(ps[i].split()) for i in range(i0, i1) if ps[i]) - legends
 a0 = ps.index('ABSTRACT')
 abstract = sum(len(ps[i].split()) for i in range(a0 + 1, a0 + 6) if ps[i])
 c0 = ps.index('CONTEXT')
