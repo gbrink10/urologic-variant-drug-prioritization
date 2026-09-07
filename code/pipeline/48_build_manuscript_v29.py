@@ -637,12 +637,11 @@ P('In this study, we show that public molecular data can be used to prioritize '
   'to power dedicated biomarker-matched trials in these cancers are not, and '
   'may never be, available, and the associations in Table 1 were assembled '
   'without them.')
-P(f"Two candidates stopped being prioritized once replicate structure "
-  f"and batch "
-  f"were included in the models: the somatostatin receptor 2 row, which had "
-  f"been the most clinically developed candidate in the table, and the ATR "
-  f"row. An analysis that reused the deposited summary statistics instead of "
-  f"refitting the primary data would have prioritized both.")
+P(f"Refitting cost two candidates, by different routes. Somatostatin "
+  f"receptor 2 reproduces its fold change but loses significance under a "
+  f"batch-adjusted subtype model, so reusing the deposited summary would have "
+  f"carried it. Refitting also showed the sarcomatoid contrast to be "
+  f"confounded with array chip, which is why ATR is scored on abundance.")
 
 P('Computational repurposing from public expression data is an established '
   'approach, and several groups have built comparable pipelines [59]. '
