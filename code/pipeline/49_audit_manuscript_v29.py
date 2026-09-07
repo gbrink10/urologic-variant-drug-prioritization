@@ -102,7 +102,7 @@ check('framework-novel language replaced with a search statement',
 
 # Methods must carry named subsections including a statistics section, and must
 # not restate the selection criteria the pipeline no longer applies
-METH_SUBS = ('Data Sources', 'Candidate Selection', 'Analysis Pipeline',
+METH_SUBS = ('Data Sources', 'Candidate Selection', 'Independent Sources',
              'Prioritization Score', 'Prior-Proposal Classification',
              'Ranking Criteria', 'Statistical Analysis')
 check('Methods has named subsections', all(h in paras for h in METH_SUBS),
