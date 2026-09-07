@@ -525,10 +525,9 @@ P('Two interpretive rules were fixed in advance. A tumor-cell monoculture '
   'counts as neither support nor contradiction.')
 
 H('9. Candidate selection rule')
-P('The criteria were fixed before they were applied. They rank candidates and '
-  'do not remove them: a candidate that fails one is reported with that '
-  'reservation stated rather than dropped, so every candidate without a prior '
-  'proposal appears in the manuscript. The priority tier requires all four of: E1, no prior urologic-oncology proposal identified by the audit; '
+P('The criteria were fixed before they were applied. A candidate that misses '
+  'one is reported with that criterion named. The priority tier requires all '
+  'four of: E1, no prior urologic-oncology proposal identified by the audit; '
   'E2, a total of 4 or better out of the points that are estimable for that '
   'row; E3, a transcriptomic component re-derivable from deposited data that '
   'meets its own arm\u2019s standard, which is q < 0.05 where a '
@@ -565,7 +564,7 @@ P('Because the scoring dimensions overlap, the ordering was recomputed under '
   'the enriched set. Results are in Supplementary Table S2. The renal medullary '
   'CXCR1/CXCR2 candidate holds first place in that global arithmetic score '
   'ordering under the full score, under removal of the literature '
-  'dimension and under the membership requirement, but falls to fourth when the '
+  'dimension and under the membership requirement, but falls to third when the '
   'context-anchor contribution is removed, which locates part of the ordering in '
   'the scoring architecture rather than in target-specific biology.')
 

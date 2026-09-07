@@ -252,6 +252,25 @@ F['design'] = {
 surface = hpa[hpa['surface_required'] == True]              # noqa: E712
 F['hpa'] = {
     'n_surface_required': int(len(surface)),
+    # the sentence built from this counts associations, not genes: CXCR1 and
+    # CXCR2 are both association 17
+    'n_surface_assoc': int(len({
+        int(float(tok)) for v in surface['rows'].astype(str)
+        for tok in v.replace(';', ',').split(',')
+        if tok.strip().replace('.', '', 1).isdigit() and float(tok) == int(float(tok))
+    })),
+    'n_surface_membrane_assoc': int(len({
+        int(float(tok))
+        for _, r in surface[surface['plasma_membrane'] == True].iterrows()
+        for tok in str(r['rows']).replace(';', ',').split(',')
+        if tok.strip().replace('.', '', 1).isdigit() and float(tok) == int(float(tok))
+    })),
+    'n_surface_secreted_assoc': int(len({
+        int(float(tok))
+        for _, r in surface[surface['plasma_membrane'] != True].iterrows()
+        for tok in str(r['rows']).replace(';', ',').split(',')
+        if tok.strip().replace('.', '', 1).isdigit() and float(tok) == int(float(tok))
+    })),
     'n_confirmed': int((surface['status'] == 'extracellular access confirmed').sum()),
     'nTPM': {g: float(hpa.loc[hpa['gene'] == g, 'nTPM_bladder'].iloc[0])
              for g in ('DLL3', 'SSTR2', 'TACSTD2', 'CEACAM5') if (hpa['gene'] == g).any()},
@@ -270,7 +289,13 @@ F['depmap'] = {
     'G6PD_high': float(deps.loc[deps['gene'] == 'G6PD', 'mean_effect_positive'].iloc[0]),
 }
 F['prism'] = {
-    'n_lines': 578,
+    'n_lines': int(pri['n_lines'].max()),
+    'erlotinib_n_lines': int(pri.loc[pri['drug'] == 'erlotinib',
+                                     'n_lines'].iloc[0]),
+    'erlotinib_rmc_pct': float(pri.loc[pri['drug'] == 'erlotinib',
+                                       'RMC_percentile_of_all_lines'].iloc[0]),
+    'erlotinib_rmc_lfc': float(pri.loc[pri['drug'] == 'erlotinib',
+                                       'lfc_RMC_line'].iloc[0]),
     'bortezomib': float(pri.loc[pri['drug'] == 'bortezomib', 'mean_lfc_all_lines'].iloc[0]),
     'erlotinib_uro': float(pri.loc[pri['drug'] == 'erlotinib', 'mean_lfc_urothelial'].iloc[0]),
     'erlotinib_nonuro': float(pri.loc[pri['drug'] == 'erlotinib',

@@ -42,7 +42,7 @@ def P(text, space=6, size=10.5, bold=False):
 for line in ('Garrett J. Brinkley, MD', 'Department of Urology',
              'Tulane University School of Medicine',
              '1430 Tulane Avenue, SL-42', 'New Orleans, Louisiana 70112, USA',
-             'garrettjbrinkley@gmail.com', '30 August 2026'):
+             'garrettjbrinkley@gmail.com', '6 September 2026'):
     P(line, space=0, size=10)
 P('')
 for line in ('Editor-in-Chief', 'JCO Clinical Cancer Informatics',
@@ -69,18 +69,20 @@ P(f'The framework scored {F["n_associations"]} drug-cancer associations across '
   f'{F["n_partially_novel"]} extend a drug from conventional disease or another '
   f'organ to a variant; one is a biomarker observation rather than a drug '
   f'hypothesis; and {F["funnel"]["framework_novel"]} had no prior proposal in '
-  f'the urologic literature. Four independent data sources that took no part in '
-  f'scoring, applied under a rule stated before it was used, supported '
-  f'{F["funnel"]["survive"]} of those {F["funnel"]["framework_novel"]} across '
-  f'two diseases and argued against the rest.')
+  f'the urologic literature. Criteria stated before they were applied place '
+  f'{F["funnel"]["survive"]} of those {F["funnel"]["framework_novel"]} in a '
+  f'priority tier across two diseases; the remaining '
+  f'{F["funnel"]["framework_novel"] - F["funnel"]["survive"]} are reported '
+  f'with the specific reservation against each, because in cancers this rare a '
+  f'threshold partly measures how little data has been deposited.')
 
 P(f'What we think earns your reviewers\u2019 time is not any single drug-cancer '
   f'pair. It is that the framework is reported together with the places it '
   f'fails, quantified rather than gestured at. Three examples. First, we '
-  f'refitted every deposited dataset with design-aware models rather than reuse '
-  f'summary statistics, and it cost us: eight associations changed and two '
-  f'candidates we had previously carried forward dissolved, including the one '
-  f'with the most attractive translational package. Second, that refit exposed '
+  f'refitted every deposited dataset with a model matched to how it was '
+  f'collected rather than reuse summary statistics, and it cost us: eight '
+  f'associations changed and two candidates fell out of the priority tier, '
+  f'including the one with the most attractive translational package. Second, that refit exposed '
   f'design features invisible in the summary tables \u2014 in one series the '
   f'sarcomatoid and conventional samples share no array chip, so batch and '
   f'biology cannot be separated, and we say so rather than report the contrast '
@@ -93,10 +95,10 @@ P(f'The manuscript fits JCO Clinical Cancer Informatics specifically because the
   f'contribution is methodological. The two data-derived score components are '
   f'emitted by one function from the deposited fitted tables, so the manuscript '
   f'table and the deposited table cannot diverge. The candidate-selection rule '
-  f'is stated before it is applied and every exclusion is attributable to a '
-  f'named criterion. A sensitivity analysis reports how far the ordering depends '
+  f'is stated before it is applied, and every candidate outside the priority '
+  f'tier is reported with the criterion it missed named. A sensitivity analysis reports how far the ordering depends '
   f'on the scoring architecture rather than the biology \u2014 the first-priority hypothesis within renal medullary carcinoma '
-  f'falls from first to fourth when the disease-anchor contribution is removed, '
+  f'falls from first to third when the disease-anchor contribution is removed, '
   f'and we state that plainly. Rows whose evidence is not re-derivable from '
   f'deposited data are flagged individually rather than left implicit.')
 
@@ -107,8 +109,12 @@ P(f'The limitations are in the manuscript rather than in a closing sentence. '
   f'is poor, which is why we required consistency across both. Our lead '
   f'candidate, CXCR1/CXCR2 blockade in renal medullary carcinoma, acts through '
   f'myeloid recruitment, so the dependency and compound screens cannot test it '
-  f'and their silence is not support; it is the best-supported hypothesis the '
-  f'framework produces, not a validated finding.')
+  f'and their silence is not support. We also report that the four '
+  f'independent sources changed no ranking in this study, and that the '
+  f'compound screen places the renal medullary line at the 40th percentile for '
+  f'the agent that serves as that disease\u2019s positive control. The lead '
+  f'candidate is the best-supported hypothesis the pipeline produces, not a '
+  f'validated finding.')
 
 P('This work has not been published previously and is not under simultaneous '
   'consideration elsewhere. All authors have read and approved the manuscript; '
@@ -116,8 +122,8 @@ P('This work has not been published previously and is not under simultaneous '
   'received. The analysis used exclusively de-identified, publicly available '
   'data. The authors declare no financial conflicts of interest relevant to this '
   'work. The manuscript includes a full AI usage disclosure, which covers the '
-  'mechanism schematics in Figures 2C, 3C and 4C and the checking they '
-  'underwent.')
+  'mechanism schematics in Figures 2C and 3C and Supplementary Figure S1C, '
+  'and the checking they underwent.')
 
 P('We would be grateful for your consideration, and are happy to suggest '
   'reviewers with expertise in computational drug repurposing, genitourinary '

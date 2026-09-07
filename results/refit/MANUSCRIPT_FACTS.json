@@ -249,6 +249,9 @@
  },
  "hpa": {
   "n_surface_required": 10,
+  "n_surface_assoc": 8,
+  "n_surface_membrane_assoc": 6,
+  "n_surface_secreted_assoc": 2,
   "n_confirmed": 10,
   "nTPM": {
    "DLL3": 0.0,
@@ -271,7 +274,10 @@
   "G6PD_high": -0.053
  },
  "prism": {
-  "n_lines": 578,
+  "n_lines": 574,
+  "erlotinib_n_lines": 572,
+  "erlotinib_rmc_pct": 40.4,
+  "erlotinib_rmc_lfc": -0.23,
   "bortezomib": -4.175,
   "erlotinib_uro": -0.932,
   "erlotinib_nonuro": -0.054,

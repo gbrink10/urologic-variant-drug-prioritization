@@ -1,8 +1,7 @@
 """Figure 4 - every candidate without a prior proposal, against every criterion.
 
-All six candidates are shown. The criteria rank them into a priority tier and a
-lower-confidence tier; none is removed from the figure or from the paper, so a
-reader can see the evidence behind each one and disagree with the ordering.
+All six candidates are shown, sorted into a priority tier and a
+lower-confidence tier by the criteria in the Methods.
 
 Three things change from v28:
 

@@ -142,10 +142,20 @@ for _, d in defs.iterrows():
             r0 = s.iloc[0]
             layers['protein'] = str(r0['status'])
             access_ok = bool(r0['plasma_membrane']) or 'confirmed' in str(r0['status'])
-            for col in ('nTPM_kidney', 'nTPM_bladder'):
-                if col in s.columns:
-                    window = float(r0[col])
-                    break
+            # pick the organ the cancer arises in, not whichever column comes
+            # first: CEACAM5 is a bladder target and was publishing the kidney
+            # value, so the deposit disagreed with the manuscript
+            ctx = str(d['Context'])
+            if ctx.startswith('RMC') or ctx.startswith('ccRCC'):
+                organ = 'nTPM_kidney'
+            elif ctx.startswith('NEPC'):
+                organ = 'nTPM_prostate'
+            elif ctx.startswith('SCBC') or ctx.startswith('MIBC') or                     ctx.startswith('Sarcomatoid'):
+                organ = 'nTPM_bladder'
+            else:
+                organ = None
+            if organ and organ in s.columns:
+                window = float(r0[organ])
         else:
             layers['protein'] = 'not in the Human Protein Atlas extract'
     else:
