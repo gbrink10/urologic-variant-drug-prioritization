@@ -47,8 +47,9 @@ def P(t, size=10.5, italic=False):
 
 
 H('Supplementary Materials', 15, 0)
-P('A Public-Data Framework for Prioritizing Biomarker-Matched Drug '
-  'Hypotheses Across Rare and Variant Urologic Cancers', italic=True)
+P('Prioritizing Repurposable Drugs for Rare and Variant Urologic '
+  'Cancers From Public Data: Refitting the Primary Deposits Changes '
+  'Which Candidates Qualify', italic=True)
 P('Brinkley GJ, Greenberg J, Caso J')
 
 H('Supplementary Results')

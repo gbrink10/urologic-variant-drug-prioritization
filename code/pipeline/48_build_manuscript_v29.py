@@ -139,8 +139,9 @@ ceacam1_pq = f"{float(_pv.loc[_pv['N'] == 19, 'pathway_q'].iloc[0]):.4f}"
 # =====================================================================
 # Front matter
 # =====================================================================
-TITLE = ('A Public-Data Framework for Prioritizing Biomarker-Matched Drug '
-         'Hypotheses Across Rare and Variant Urologic Cancers')
+TITLE = ('Prioritizing Repurposable Drugs for Rare and Variant Urologic '
+         'Cancers From Public Data: Refitting the Primary Deposits Changes '
+         'Which Candidates Qualify')
 p = doc.add_paragraph()
 r = p.add_run(TITLE)
 r.bold = True

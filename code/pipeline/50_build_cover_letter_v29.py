@@ -22,8 +22,9 @@ RF = REPO / 'results' / 'refit'
 OUT = paths.OUTPUT / 'Cover_Letter_v31.docx'
 F = json.loads((RF / 'MANUSCRIPT_FACTS.json').read_text(encoding='utf-8'))
 
-TITLE = ('A Public-Data Framework for Prioritizing Biomarker-Matched Drug '
-         'Hypotheses Across Rare and Variant Urologic Cancers')
+TITLE = ('Prioritizing Repurposable Drugs for Rare and Variant Urologic '
+         'Cancers From Public Data: Refitting the Primary Deposits Changes '
+         'Which Candidates Qualify')
 
 doc = docx.Document()
 doc.styles['Normal'].font.name = 'Calibri'

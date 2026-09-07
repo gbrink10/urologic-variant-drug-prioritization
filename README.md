@@ -1,7 +1,8 @@
 # Auditable public-data prioritization of drug hypotheses in urologic cancers
 
-Code and results for the manuscript *A Public-Data Framework for Prioritizing
-Biomarker-Matched Drug Hypotheses Across Rare and Variant Urologic Cancers* (v31).
+Code and results for the manuscript *Prioritizing Repurposable Drugs for Rare and Variant Urologic Cancers
+From Public Data: Refitting the Primary Deposits Changes Which Candidates
+Qualify* (v31).
 
 The framework applies one pipeline uniformly to seven contexts — three common
 diseases that serve as benchmarks and four rare or variant diseases where it is
@@ -148,6 +149,7 @@ release mints a new version DOI under it, with deposit metadata from
 
 ## Citation
 
-Brinkley GJ, Greenberg J, Caso J. *A Public-Data Framework for Prioritizing
-Biomarker-Matched Drug Hypotheses Across Rare and Variant Urologic Cancers.* Manuscript submitted. Code and results archived at Zenodo,
+Brinkley GJ, Greenberg J, Caso J. *Prioritizing Repurposable Drugs for Rare and Variant Urologic Cancers
+From Public Data: Refitting the Primary Deposits Changes Which Candidates
+Qualify.* Manuscript submitted. Code and results archived at Zenodo,
 doi:10.5281/zenodo.22211795.
