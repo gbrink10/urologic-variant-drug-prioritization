@@ -166,7 +166,7 @@ for i, v in enumerate(vals):
     axA.text(i, v + 0.4, str(v), ha='center', fontsize=8.4, weight='bold')
 axA.set_xticks(range(len(order)))
 axA.set_xticklabels([f'{s}+' for s in order], fontsize=8.2)
-axA.set_ylabel('tumours', fontsize=8.6)
+axA.set_ylabel('tumors', fontsize=8.6)
 axA.set_ylim(0, max(vals) * 1.2)
 axA.set_title(f'A. Lineage subtypes\nGSE269750, n = {int(sum(vals))}',
               fontsize=9.5, weight='bold', loc='left')

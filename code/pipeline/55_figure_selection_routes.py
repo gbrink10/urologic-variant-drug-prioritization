@@ -83,13 +83,23 @@ def draw(ax, sub, value, color, xlabel, title, subtitle, xlim=None,
     for ctx, grp in sub.groupby('Context', sort=False):
         headers.append((y, ctx))
         y -= 0.85
+        # the sarcomatoid contrast is confounded with array chip, so its
+        # fold changes record the nomination route and nothing more
+        _conf = str(ctx).lower().startswith('sarcomatoid') and value == 'lfc'
+        _c = GREY if _conf else color
         for _, r in grp.iterrows():
             v = float(r[value])
-            ax.plot([0, v], [y, y], color=color, lw=1.5, alpha=0.55,
+            ax.plot([0, v], [y, y], color=_c, lw=1.5, alpha=0.55,
                     zorder=1, solid_capstyle='round')
-            ax.scatter([v], [y], s=66, zorder=3, color=color,
-                       edgecolor=color, linewidth=1.5,
-                       facecolor=color if r['in_panel'] else 'white')
+            ax.scatter([v], [y], s=66, zorder=3, color=_c,
+                       edgecolor=_c, linewidth=1.5,
+                       facecolor=_c if r['in_panel'] else 'white')
+            if _conf:
+                ax.annotate('confounded contrast; shown to record the nomination '
+                            'route, not interpretable as histology',
+                            xy=(v, y), xytext=(14, 0),
+                            textcoords='offset points', fontsize=6.6,
+                            style='italic', color=GREY, va='center')
             ypos.append(y)
             labels.append(r['scoring_gene'])
             y -= 1.0
@@ -146,20 +156,12 @@ leg = [Line2D([0], [0], marker='o', color='w', markerfacecolor='#34495e',
               label='gene is in one of the 18 pre-specified sets'),
        Line2D([0], [0], marker='o', color='w', markerfacecolor='white',
               markeredgecolor='#34495e', markeredgewidth=1.5, markersize=8,
-              label='gene is not — panel membership scores a candidate, '
-                    'it never gated one')]
+              label='gene is not \u2014 belonging to a set adds points, '
+                    'it was never required')]
 fig.legend(handles=leg, loc='lower center', ncol=2, frameon=False,
            fontsize=8.6, bbox_to_anchor=(0.5, -0.012))
 
-fig.text(0.5, -0.055,
-         'Every gene shown met the same two requirements: it stood out in its '
-         'own cancer, and an agent against it could be evaluated clinically. '
-         'The routes differ only in what "stood out" could mean, which '
-         'depends on\nwhether that cancer has a genomic cohort. TROP2 in '
-         'panel B is negative because it was nominated as a loss marker. '
-         'Panel C is the sarcomatoid series, whose histology is aliased with '
-         'array chip, so no contrast is interpretable.',
-         ha='center', fontsize=8.0, style='italic', color='#5d6d7e')
+# the explanatory block that sat here is now in the figure legend
 
 out = FIG / 'FigureS2_selection_routes.png'
 plt.savefig(out, dpi=300, bbox_inches='tight', facecolor='white')

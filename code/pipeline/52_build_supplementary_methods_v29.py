@@ -204,7 +204,11 @@ if _s2.exists():
         'genes are ranked by abundance within the tumors instead. Filled '
         'markers are genes belonging to one of the eighteen pre-specified gene '
         'sets; open markers are genes outside them. Belonging to a set '
-        'added points to the score but was not required for entry.')
+        'added points to the score but was not required for entry. The '
+        'sarcomatoid rows in panel B are grey because that series '
+        'confounds histology with array chip, so their fold changes '
+        'record the nomination route and cannot be read as a difference '
+        'between histologies.')
     _r2.font.size = Pt(9)
     _r2.italic = True
 

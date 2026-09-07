@@ -73,7 +73,7 @@ r_p = np.corrcoef(x[ok], y[ok])[0, 1]
 axA.set_xlabel('log$_2$ fold change, RMC-2C', fontsize=8.6)
 axA.set_ylabel('log$_2$ fold change, RMC219', fontsize=8.6)
 axA.set_title('A. The two patient-derived lines compared\n'
-              f'genome-wide r = {r_p:.2f}; agreement is the exception',
+              f'genome-wide r = {r_p:.2f}',
               fontsize=9.3, weight='bold', loc='left')
 axA.legend(loc='lower right', fontsize=7.2, frameon=False)
 for s in ('top', 'right'):
@@ -81,19 +81,42 @@ for s in ('top', 'right'):
 
 # ---------------- B: the chemokine axis, per line --------------------------
 axB = fig.add_subplot(gs[0, 1])
-ypos = np.arange(len(present))[::-1]
+# CEACAM1 is nominated separately and is in no enriched set, so it is
+# separated from the four chemokine ligands by a gap rather than stacked with
+# them under one pathway q-value
+GAP = 0.9
+ypos = np.array([(len(present) - 1 - _i)
+                 + (0.0 if _g == 'CEACAM1' else GAP)
+                 for _i, _g in enumerate(present)])
 w = 0.38
 axB.barh(ypos + w / 2, [d.loc[g, 'l2fc_disease_48h_2C'] for g in present],
          height=w, color='#1f4e79', label='RMC-2C')
 axB.barh(ypos - w / 2, [d.loc[g, 'l2fc_disease_48h_219'] for g in present],
          height=w, color='#7fb3d5', label='RMC219')
-axB.set_yticks(ypos); axB.set_yticklabels(present, fontsize=8.6)
+axB.set_yticks(ypos)
+axB.set_yticklabels([g if g != 'CEACAM1' else 'CEACAM1' for g in present],
+                    fontsize=8.6)
 axB.axvline(0, lw=0.8, c='#333')
 axB.set_xlabel('log$_2$ fold change (higher in SMARCB1-null disease state)',
                fontsize=8.2)
-axB.set_title('B. Nominated RMC signals, each line separately\n'
-              f'pathway q = {chem_q:.4f} on the both-lines set',
+axB.set_title('B. Nominated RMC signals, each line separately',
               fontsize=9.3, weight='bold', loc='left')
+# annotate the two groups inside the axes, so the q-value is attached only to
+# the ligands that actually drive the enrichment
+_lig = [g for g in present if g != 'CEACAM1']
+_xr = max(abs(d.loc[g, 'l2fc_disease_48h_2C']) for g in present) * 1.02
+if _lig:
+    _y = [ypos[present.index(g)] for g in _lig]
+    axB.text(_xr, float(max(_y)) + 0.60,
+             f'chemokine ligands of the enriched pathway (q = {chem_q:.4f})',
+             ha='right', va='center', fontsize=6.8, style='italic',
+             color='#1f4e79')
+if 'CEACAM1' in present:
+    axB.text(_xr, float(ypos[present.index('CEACAM1')]) + 0.60,
+             'CEACAM1: nominated separately, in no enriched set',
+             ha='right', va='center', fontsize=6.8, style='italic',
+             color='#7d6608')
+axB.set_ylim(-0.8, float(max(ypos)) + 1.15)
 axB.legend(fontsize=7.4, frameon=False, loc='lower right')
 for s in ('top', 'right'):
     axB.spines[s].set_visible(False)
