@@ -142,9 +142,9 @@ ceacam1_pq = f"{float(_pv.loc[_pv['N'] == 19, 'pathway_q'].iloc[0]):.4f}"
 # ASCO's AI policy asks for tool, version, date accessed and manufacturer.
 # Fill these four in before submission; the audit fails while any still reads
 # FILL_IN, so the manuscript cannot ship with a placeholder in it.
-AI_CLAUDE_VERSION = 'FILL_IN model version'
-AI_GPT_VERSION = 'FILL_IN model version'
-AI_ACCESS_DATES = 'FILL_IN month year to month year'
+AI_CLAUDE_VERSION = 'Opus 5'
+AI_GPT_VERSION = 'GPT-6'
+AI_ACCESS_DATES = 'January to September 2026'
 AI_BIORENDER_DATE = 'September 2026'
 
 TITLE = ('Prioritizing Repurposable Drugs for Rare and Variant Urologic '
