@@ -165,8 +165,14 @@ check(f"association count {F['n_associations']}", str(F['n_associations']) in te
 for tier in ('Strong', 'Moderate', 'Exploratory'):
     n_t = F['tiers'].get(tier, 0)
     check(f'{n_t} {tier} stated', f'{n_t} {tier}' in text)
-check('not-tiered rows disclosed',
-      'out of 7 rather than 9' in text and 'not computed' in text)
+# the denominators come from the deposit rather than being written here, so
+# that a change to the score cannot leave this check asserting a stale one
+_prov = pd.read_csv(RF / 'SCORING_PROVENANCE_V29.csv')
+_dfull = int(_prov['total_denominator'].max())
+_dpart = int(_prov.loc[_prov['pathway_estimable'] == False,
+                       'total_denominator'].max())
+check(f'not-tiered rows disclosed as out of {_dpart} rather than {_dfull}',
+      f'out of {_dpart} rather than {_dfull}' in text and 'not computed' in text)
 # every association must land in exactly one novelty class, and the prose that
 # adds them up must say so, or a reader subtracting them finds rows missing
 _classes = (F['n_previously_proposed'], F['n_partially_novel'],
