@@ -321,8 +321,12 @@ for m in re.finditer(r'\[([0-9,\u2013\-\s]+)\]', text):
 refnums = sorted(int(re.match(r'^\s*(\d{1,2})\.', t).group(1)) for t in paras
                  if re.match(r'^\s*\d{1,2}\.\s+\S', t)
                  and ('doi' in t.lower() or 'PMID' in t))
-check('65 references, contiguous', refnums == list(range(1, 66)),
-      f'n={len(refnums)}')
+# the count follows the deposited reference list rather than a literal, so
+# adding a reference does not silently fail an unrelated check
+_nref = len([x for x in (REPO / 'data' / 'manuscript_parts' / 'v28_refs.txt')
+             .read_text(encoding='utf-8').splitlines() if x.strip()])
+check(f'{_nref} references, contiguous', refnums == list(range(1, _nref + 1)),
+      f'n={len(refnums)} against {_nref} in the list')
 missing = [n for n in refnums if cited[n] == 0]
 over = sorted(n for n in cited if n not in refnums)
 print(f'    uncited references: {len(missing)} -> {missing}')
