@@ -120,10 +120,12 @@ check('no invented jargon', not [j for j in JARGON if j in text.lower()],
 check('the retired E0 criterion is gone', 'E0' not in text)
 # the paper's premise is repurposing, so the clinical stage of every agent must
 # be stated and must add up
-check('clinical stage of the agents stated',
-      f"{F['stage']['approved']} are FDA-approved" in text
-      and f"{F['stage']['in_trials']} are in clinical trials" in text
-      and str(F['stage']['preclinical']) in text)
+# the counts are over drug-cancer hypotheses, not distinct drugs, so the
+# check tests the numbers rather than one phrasing of them
+check('clinical stage of the agents stated over the hypotheses',
+      f"{F['stage']['approved']} name an FDA-approved agent" in text
+      and f"{F['stage']['in_trials']} an agent in trials" in text
+      and f"{F['stage']['preclinical']} a preclinical agent" in text)
 check('the selection rule for the 30 is stated',
       'alteration frequency where TCGA provides a cohort' in text
       and 'searched against the Therapeutic Target Database and Open Targets'
@@ -171,6 +173,26 @@ _prov = pd.read_csv(RF / 'SCORING_PROVENANCE_V29.csv')
 _dfull = int(_prov['total_denominator'].max())
 _dpart = int(_prov.loc[_prov['pathway_estimable'] == False,
                        'total_denominator'].max())
+# A scripted deletion can leave a trailing coordinated clause with no
+# predicate: "...make such trials difficult, and for several of these
+# diseases." shipped that way, and the splice detector could not see it,
+# because it looks for repeats and orphaned articles rather than a lost
+# verb. This is narrow on purpose - a sentence that ends on a coordinated
+# prepositional phrase carrying no verb is a deletion scar, not prose.
+_SCAR = re.compile(
+    r',\s+(?:and|or)\s+(?:for|in|to|of|with|on|at|by|from|about)\s+'
+    r'[^.;]*\.', re.I)
+_VERBISH = re.compile(
+    r'\b(is|are|was|were|be|been|has|have|had|can|could|would|will|may|'
+    r'might|must|should|do|does|did|stood|took|gave|made|came|held|left|'
+    r'fell|met|ran|said|kept|lost|found|went|saw|set|put|built|brought|'
+    r'sought|spent|sent|arose|rose|wrote|drew|grew|knew|chose|'
+    r'\w{3,}(?:ed|ing))\b', re.I)
+_frags = [m.group(0)[:90] for _p in doc.paragraphs
+          for m in _SCAR.finditer(_p.text)
+          if not _VERBISH.search(m.group(0))]
+check(f'no sentence ends on a coordinated phrase with no verb '
+      f'({len(_frags)})', not _frags, '; '.join(_frags[:3]))
 check(f'not-tiered rows disclosed as out of {_dpart} rather than {_dfull}',
       f'out of {_dpart} rather than {_dfull}' in text and 'not computed' in text)
 # every association must land in exactly one novelty class, and the prose that
