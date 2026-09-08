@@ -199,8 +199,13 @@ check('the checks are stated to have changed no outcome',
       or 'the independent checks' in text.lower())
 # the coined word "reservation" was replaced by plain wording; the check is
 # that each non-prioritized candidate still has its failing criterion named
-check('each candidate not prioritized has its criterion named',
-      'criterion each one missed' in text and 'open questions' in text)
+# the promise is that every failed criterion is named, so test the naming
+# rather than one phrasing of the promise
+check('each candidate not prioritized has every failed criterion named',
+      'failed both the score and the transcriptomic criterion' in text
+      and 'failed both the score and the abundance criterion' in text
+      and 'failed the score criterion' in text
+      and 'open questions' in text)
 check('no coined shorthand for the ranking',
       not any(w in text.lower() for w in
               ('priority tier', 'lower-confidence tier',
@@ -231,8 +236,9 @@ print('\n4. NEW LIMITATIONS ARE STATED')
 check('sarcomatoid batch confounding disclosed',
       'share no chip' in text or 'confounded' in text)
 check('ccRCC has no normal tissue disclosed', 'no normal tissue' in text)
-check('TCGA coverage limitation stated',
-      'covers the three positive controls but none of' in text)
+check('TCGA coverage limitation stated, by histology',
+      'the four rare cancers have no cohort there at all' in text
+      and 'prostate adenocarcinoma' in text)
 check('HLRCC demoted to adjacent disease', 'adjacent-disease' in text)
 check('penile technical replicates disclosed',
       f"{F['design']['pscc_normal_donors']} donors" in text)
