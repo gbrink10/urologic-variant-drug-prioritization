@@ -313,7 +313,7 @@ P('Candidate associations were assembled from the sources below before the '
 H('Candidate Selection', 11.5, 10, level=2)
 P(f"Candidates were generated one cancer at a time. Genes were ranked by "
   f"somatic alteration frequency where TCGA provides a cohort, and "
-  f"and otherwise by the empirical Bayes moderated t-statistic from the "
+  f"otherwise by the empirical Bayes moderated t-statistic from the "
   f"corresponding GEO fit. The highest-ranked genes were reviewed manually and "
   f"three to seven genes per cancer were carried forward, the number decided "
   f"by clinical relevance rather than by a fixed threshold; the four rare "

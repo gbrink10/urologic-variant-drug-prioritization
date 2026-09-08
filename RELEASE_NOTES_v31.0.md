@@ -12,7 +12,8 @@ design-aware refitting, and the models in this release re-estimate the
 transcriptomic and pathway evidence for that fixed set, recalculate scores and
 tiers, and apply the eligibility and orthogonal-audit rules to it.
 
-Twenty-five associations remain scoreable. Five sarcomatoid rows carry no score
+Twenty-five associations carry a full 9-point score and a tier. The five
+sarcomatoid rows carry no pathway component and no tier
 because histology is completely aliased with array chip in GSE128192 and the
 contrast is therefore not estimable. Six associations without a prior
 urologic-oncology proposal reduce to three survivors across two diseases.

@@ -91,7 +91,9 @@ tiers, and applies the eligibility and orthogonal-audit rules to it. It does not
 claim that the final models would independently regenerate the same thirty
 associations — the changes the refit produced are themselves a result.
 
-Five sarcomatoid rows carry no score: histology and array chip are completely
+The five sarcomatoid rows carry no pathway component and no evidence tier,
+and four of them are scored out of 7 rather than 9: histology and array chip
+are completely
 aliased in GSE128192, so their contrast fails the E0 identifiability criterion.
 
 ## How the association table is built
