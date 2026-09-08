@@ -170,7 +170,7 @@ P('Key objective: Can publicly deposited genomic and transcriptomic data be '
   'aggressive urologic cancers where trials are difficult to power?')
 P(f"Knowledge generated: Refitting each deposited dataset rather than reusing "
   f"its published summary statistics changed which candidates qualified, and "
-  f"cost the most clinically developed agent in the table. The pipeline "
+  f"cost an FDA-approved agent its place. The pipeline "
   f"produced {F['n_associations']} "
   f"drug-cancer associations, {F['arm_control']['n']} of them in the three "
   f"positive controls and {F['arm_discovery']['n']} in the four rare "
@@ -578,7 +578,7 @@ P(f"Figure 4 and Table 1 together give the whole set: every association, how "
   f"missed one, and we give the criterion in each case.")
 
 P(f"The somatostatin receptor 2 candidate, "
-  f"the most clinically developed agent in the table, loses its transcriptomic "
+  f"the only FDA-approved agent among the six, loses its transcriptomic "
   f"support once the small-cell subtypes are contrasted with batch in the "
   f"model (q = {de['SSTR2_neurod1']['q']:.3f}), leaving a score of 2. The ATR "
   f"candidate is not strongly expressed in sarcomatoid tumors "
