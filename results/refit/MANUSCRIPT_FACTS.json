@@ -3,10 +3,10 @@
  "n_scoreable": 30,
  "n_not_scored": 0,
  "tiers": {
-  "Moderate": 12,
+  "Moderate": 10,
   "Strong": 10,
+  "Exploratory": 5,
   "Not tiered (pathway component not estimable)": 4,
-  "Exploratory": 3,
   "Not tiered (pathway and transcriptomic component not estimable)": 1
  },
  "n_framework_novel": 6,
@@ -89,7 +89,7 @@
    "N": 17,
    "target": "CXCR1 / CXCR2 (CXCL8/CXCL1/CXCL2/CXCL3 chemokine axis)",
    "drug": "CXCR2-directed antagonists, including agents with additional CXCR1 activity (AZD5069, navarixin, reparixin, danirixin)",
-   "total": 8,
+   "total": 5,
    "context": "RMC",
    "target_in_enriched": true,
    "nTPM": 0.5
@@ -98,7 +98,7 @@
    "N": 19,
    "target": "CEACAM1",
    "drug": "CM24 (anti-CEACAM1)",
-   "total": 7,
+   "total": 4,
    "context": "RMC",
    "target_in_enriched": false,
    "nTPM": 31.4
@@ -107,7 +107,7 @@
    "N": 28,
    "target": "CEACAM5 (CEA)",
    "drug": "Precemtabart tocentecan (M9140), anti-CEACAM5 ADC",
-   "total": 5,
+   "total": 4,
    "context": "SCBC (ASCL1+)",
    "target_in_enriched": false,
    "nTPM": 9.8
@@ -117,17 +117,17 @@
   {
    "N": 23,
    "target": "NSD2 / WHSC1 (histone methyltransferase)",
-   "reason": "E2 score 3/7 below 4; S1 DepMap: no dependency in the nominated stratum"
-  },
-  {
-   "N": 29,
-   "target": "SSTR2 (somatostatin receptor 2)",
-   "reason": "E2 score 2/9 below 4; E3 transcriptomic q = 0.363"
+   "reason": "E2 score 3/4 below 4; S1 DepMap: no dependency in the nominated stratum"
   },
   {
    "N": 24,
    "target": "ATR / ATRIP (DNA damage response)",
-   "reason": "E2 score 1/7 below 4; E3 abundance below the top 15% (component 1/3)"
+   "reason": "E2 score 1/4 below 4; E3 abundance below the top 15% (component 1/3)"
+  },
+  {
+   "N": 29,
+   "target": "SSTR2 (somatostatin receptor 2)",
+   "reason": "E2 score 1/6 below 4; E3 transcriptomic q = 0.363"
   }
  ],
  "q": {

@@ -212,16 +212,34 @@ P('Seven contexts were analyzed. Three are better-studied benchmark contexts '
 H('1b. How the candidate set was assembled')
 P('Candidate associations were assembled from the sources in Sections 2 to 5 before the final models were fitted. Every score reported in the manuscript comes from those final models, and an earlier implementation of the same pipeline supplied the membership of the set rather than its scores. We do not claim that the final models, run from scratch, would nominate exactly the same thirty pairings. Each row has a curated half - drug, target, genomic frequency and its source, clinical stage and prior-proposal status - deposited as data/master_row_definitions.csv, and a computed half emitted by 39_rescore_from_refit.py.')
 
-H('2. Genomic and context-anchor input')
+H('2. Genomic input, and why it is not part of the score')
 P('Somatic alteration frequencies for the benchmark contexts came from The '
-  'Cancer Genome Atlas Pan-Cancer Atlas 2018 through the cBioPortal programmatic '
-  'interface. The rare-disease contexts are not represented there, so '
-  'frequencies were curated from published genomic series. Where a rare disease '
-  'is defined by an alteration that is not the therapeutic target, that '
-  'alteration is used as a context anchor. This is recorded explicitly because '
-  'an anchor certifies that the samples represent the disease rather than '
-  'providing target-specific evidence, and the score-sensitivity analysis '
-  '(Supplementary Table S2) reports how far the ordering depends on it.')
+  'Cancer Genome Atlas Pan-Cancer Atlas 2018 through the cBioPortal '
+  'programmatic interface, and were used to rank genes for manual review. '
+  'The rare-disease contexts are not represented there, so genes in those '
+  'contexts were ranked on the moderated t-statistic from the corresponding '
+  'expression fit instead.')
+P('An earlier version of this framework also carried a curated per-row '
+  'alteration frequency as a fourth scored dimension. It is retained in '
+  'data/master_row_definitions.csv and reported with each row in '
+  'Supplementary Table S1 as disease context, and it is no longer scored. '
+  'Two things disqualified it. The per-row query was never recorded, so no '
+  'value could be checked against a named cohort. And it was not the same '
+  'quantity from row to row: in several rows it stood for the alteration '
+  'that defines the disease rather than one in the nominated target - renal '
+  'medullary carcinoma by SMARCB1 loss, small-cell bladder cancer by TP53 '
+  'and RB1 - and in others for protein prevalence rather than an alteration '
+  'at all.')
+P('58_genomic_provenance.py recomputes the value wherever a cohort exists, '
+  'by the definition cBioPortal itself uses: samples carrying a mutation, a '
+  'structural variant, or a GISTIC amplification or deep deletion in any '
+  'queried gene, over the samples profiled for both mutation and copy '
+  'number. Four of the fifteen rows with a cohort fall in the same band as '
+  'the curated value. The six neuroendocrine prostate rows have no cohort to '
+  'recompute against, because The Cancer Genome Atlas has no neuroendocrine '
+  'prostate series. Per-row results are in Supplementary Table S4. '
+  'Supplementary Table S2 reports the score with the dimension restored, and '
+  'no candidate crosses the eligibility threshold either way.')
 
 H('3. Differential expression')
 P('Ten Gene Expression Omnibus series were used. Each was fitted with the '
@@ -344,15 +362,6 @@ for _r in tp.rows:
 doc.add_paragraph()
 
 H('6. Prioritization score')
-P('The genomic or context-anchor dimension is binned by alteration frequency in '
-  'the source or disease cohort: 3 points above 30%, 2 points from 15% to 30% '
-  'inclusive, 1 point from 5% up to but not including 15%, and 0 below 5% or '
-  'where the gene is not assessed in the cohort. Frequencies falling exactly on '
-  '15% or 30% take the higher bin. Where a disease is defined by a single '
-  'alteration - renal medullary carcinoma by SMARCB1 loss, small-cell bladder '
-  'cancer by TP53 and RB1 - the anchor value certifies that the samples '
-  'represent the disease and says nothing about the nominated target, which is '
-  'why the sensitivity analysis removes it.')
 P('The literature dimension is separate from the prior-proposal audit and must '
   'not be read as its inverse. It awards 1 point for a PubMed-indexed '
   'mechanistic or clinical report linking the agent or its class to the '
@@ -363,19 +372,17 @@ P('The literature dimension is separate from the prior-proposal audit and must '
   'having no prior urologic-oncology proposal; anti-CEACAM5 in ASCL1-positive '
   'small-cell bladder cancer is exactly that case. The two are kept apart so '
   'that the novelty classification cannot be an artefact of the score.')
-P('Each association receives 0 to 9 points across four dimensions: genomic or '
-  'context-anchor evidence (0-3, binned as above), transcriptomic '
-  'evidence (0-3), pathway evidence (0-2) and external mechanistic-literature '
-  'concordance (0-1). The ranges were fixed before scoring. The two dimensions '
-  'that carry the most information about a target, how often it is altered and '
-  'how strongly it is expressed, were given three points each; belonging to a '
-  'gene set two, because it is a weaker signal that partly overlaps the '
-  'transcriptomic one; and mechanistic literature one, because it records only '
-  'that a link has been reported. The dimensions are partially overlapping rather than '
-  'independent, and are described that way: the transcriptomic and pathway '
-  'dimensions derive from the same expression data, and in several rows the '
-  'genomic dimension reflects a disease anchor rather than alteration of the '
-  'nominated target.')
+P('Each association receives 0 to 6 points across three dimensions, each '
+  'recomputed by the deposited code: transcriptomic evidence (0-3), pathway '
+  'evidence (0-2) and external mechanistic-literature concordance (0-1). The '
+  'ranges were fixed before scoring. How strongly a target is expressed in '
+  'the disease carries the most information about it and was given three '
+  'points; belonging to an enriched gene set two, because it is a weaker '
+  'signal that partly overlaps the transcriptomic one; and mechanistic '
+  'literature one, because it records only that a link has been reported. '
+  'The transcriptomic and pathway dimensions derive from the same expression '
+  'data and are partially overlapping rather than independent, which is '
+  'described as such throughout.')
 P('The transcriptomic dimension uses whichever of two arms applies. Where a '
   'disease-versus-comparator contrast exists, 3 points are given for a '
   'significant change with absolute log2 fold change at least 1, 2 for 0.5 to 1, '
@@ -396,7 +403,7 @@ P('Both data-derived dimensions are emitted by one function from the deposited '
   '(49_audit_manuscript_v29.py). That reduces the risk of divergence; it does '
   'not make divergence logically impossible. Where a target is absent from its platform the row retains a curated '
   'value and is flagged as not re-derivable, individually, in Supplementary '
-  'Table S1. Totals map to Strong (7-9), Moderate (4-6) and Exploratory (1-3) '
+  'Table S1. Totals map to Strong (5-6), Moderate (3-4) and Exploratory (1-2) '
   'tiers, which express strength of evidence within this framework only.')
 
 H('7. Prior-proposal audit')
@@ -547,17 +554,19 @@ P('A prioritized candidate additionally requires that no independent source '
   'compartments cannot be ranked against each other on organ-level RNA.')
 
 H('10. Sensitivity analyses')
-P('Because the scoring dimensions overlap, the ordering was recomputed under '
-  'four variants, ordering all scored associations numerically: removal of '
-  'the context-anchor contribution, removal of the '
-  'pathway dimension, removal of the literature dimension, and a requirement '
-  'that the pathway dimension be credited only where the target is a member of '
-  'the enriched set. Results are in Supplementary Table S2. The renal medullary '
-  'CXCR1/CXCR2 candidate holds first place in that global arithmetic score '
-  'ordering under the full score, under removal of the literature '
-  'dimension and under the membership requirement, but falls to third when the '
-  'context-anchor contribution is removed, which locates part of the ordering in '
-  'the scoring architecture rather than in target-specific biology.')
+P('Because the two data-derived dimensions overlap, the ordering was '
+  'recomputed under four variants, ordering all scored associations '
+  'numerically: removal of the pathway dimension, removal of the literature '
+  'dimension, a requirement that the pathway dimension be credited only '
+  'where the target is a member of the enriched set, and restoration of the '
+  'curated genomic dimension the score no longer carries. Results are in '
+  'Supplementary Table S2. Eligibility is unchanged under every variant '
+  'except the membership requirement, which removes the anti-CEACAM1 '
+  'candidate; the manuscript reports that in both the Abstract and Table 1. '
+  'The renal medullary CXCR1/CXCR2 candidate loses its numerical first place '
+  'when the pathway dimension is removed, which is expected, because its '
+  'pathway points and its transcriptomic points come from the same four '
+  'chemokine ligands.')
 
 P('This ordering is a descriptive numerical rank across all scored '
   'associations, used only to test how much of the ordering the score '

@@ -213,6 +213,14 @@ def score_p(row):
     return s, basis, (np.nan if q is None else q)
 
 
+# Tiers rebinned for a 6-point score, holding the same proportions the
+# 9-point bins used: the top third Strong, the middle third Moderate, the
+# bottom third Exploratory.
+def TIER(t):
+    return ('Strong' if t >= 5 else 'Moderate' if t >= 3
+            else 'Exploratory' if t >= 1 else 'None')
+
+
 out, prov = [], []
 for _, r in defs.iterrows():
     # A contrast that cannot be separated from batch yields numbers that are
@@ -233,15 +241,18 @@ for _, r in defs.iterrows():
         e = int(abs(r['published_E_value']))
         e_basis += '; NOT RE-DERIVABLE - curated value retained'
     p, p_basis, pq = score_p(r)
+    # The curated genomic value is retained as disease context and reported,
+    # but it is not scored: its per-row query was not recorded, and for several
+    # rows it is a disease-defining alteration rather than one in the
+    # nominated target, so it is not the same quantity from row to row.
     g, l = int(r['genomic_score_curated']), int(r['literature_score_curated'])
-    total = g + e + p + l
-    tier = ('Strong' if total >= 7 else 'Moderate' if total >= 4
-            else 'Exploratory' if total >= 1 else 'None')
+    total = e + p + l
+    tier = TIER(total)
     # Only the components the data cannot support are withheld. A row is not
     # blanked because one of its four dimensions is inestimable.
     if e_blocked:
         e, e_basis = 0, f'not estimable: {e_blocked}'
-    denom = 9
+    denom = 6
     e_disp, p_disp = e, p
     if e_blocked:
         e_disp, denom = 'not estimable', denom - 3
@@ -250,13 +261,12 @@ for _, r in defs.iterrows():
         p, p_basis = 0, ('not estimable: the only enrichment available for this '
                          'context is computed on a contrast aliased with array '
                          'chip')
-    total = g + e + p + l
+    total = e + p + l
     total_disp = f'{total}/{denom}'
-    if denom == 9:
-        tier = ('Strong' if total >= 7 else 'Moderate' if total >= 4
-                else 'Exploratory' if total >= 1 else 'None')
+    if denom == 6:
+        tier = TIER(total)
     else:
-        # a total out of a smaller denominator is not comparable to a 9-point
+        # a total out of a smaller denominator is not comparable to a 6-point
         # tier, so it is reported without one rather than given a false rank
         missing = []
         if not pathway_ok:
@@ -265,7 +275,7 @@ for _, r in defs.iterrows():
             missing.append('transcriptomic')
         tier = 'Not tiered (' + ' and '.join(missing) + ' component not estimable)'
     out.append({'N': r['N'], 'Context': r['Context'], 'Drug': r['Drug'],
-                'Target': r['Target'], 'G(0-3)': g, 'E(0-3)': e_disp,
+                'Target': r['Target'], 'E(0-3)': e_disp,
                 'P(0-2)': p_disp, 'L(0-1)': l, 'Total': total_disp, 'Tier': tier,
                 'Stage': r['Stage'], 'Prior status': r['Prior status'],
                 'Trial readiness': r['Trial readiness']})
@@ -277,7 +287,8 @@ for _, r in defs.iterrows():
                  'E_basis': e_basis, 'refit_log2FC': fc, 'refit_q': q,
                  'P_refit': p, 'P_published': r['published_P'],
                  'P_basis': p_basis, 'pathway_q': pq,
-                 'G_curated': g, 'L_curated': l, 'Total': total, 'Tier': tier,
+                 'G_disease_context_not_scored': g,
+                 'L_curated': l, 'Total': total, 'Tier': tier,
                  'total_denominator': denom,
                  'contrast_estimable': contrast_ok,
                  'pathway_estimable': pathway_ok})
@@ -288,13 +299,13 @@ mt.to_csv(RF / 'MASTER_TABLE_V29.csv', index=False)
 pv.to_csv(RF / 'SCORING_PROVENANCE_V29.csv', index=False)
 
 print("RESCORED MASTER TABLE\n")
-print(f"{'N':<3}{'Context':<17}{'Target':<30}{'G':>2}{'E':>2}{'P':>2}{'L':>2}"
+print(f"{'N':<3}{'Context':<17}{'Target':<30}{'E':>2}{'P':>2}{'L':>2}"
       f"{'Tot':>5}  {'Tier':<12}{'E was':>6}{'P was':>6}")
 for (_, m), (_, p) in zip(mt.iterrows(), pv.iterrows()):
     chg = '' if (p['E_refit'] == p['E_published'] and p['P_refit'] == p['P_published']) \
         else '   <-- changed'
     print(f"{m['N']:<3}{m['Context']:<17}{str(m['Target'])[:28]:<30}"
-          f"{m['G(0-3)']:>2}{m['E(0-3)']:>2}{m['P(0-2)']:>2}{m['L(0-1)']:>2}"
+          f"{m['E(0-3)']:>2}{m['P(0-2)']:>2}{m['L(0-1)']:>2}"
           f"{m['Total']:>5}  {m['Tier']:<12}{p['E_published']:>6}"
           f"{p['P_published']:>6}{chg}")
 
