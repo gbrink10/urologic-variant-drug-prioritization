@@ -67,7 +67,7 @@ check('4 figures embedded', len(doc.inline_shapes) == 4, str(len(doc.inline_shap
 check('one condensed table in the main text', len(doc.tables) == 1)
 # JCO CCI uses unnumbered title-case subsection headings
 RES_SUBS = ('The Association Table', 'Positive Controls',
-            'Rare and Variant Cancers', 'Independent Checks',
+            'Rare and Variant Cancers',
             'Candidates Without a Prior Proposal')
 check('five Results subsections', all(h in paras for h in RES_SUBS),
       str([h for h in RES_SUBS if h not in paras]))
@@ -102,7 +102,7 @@ check('framework-novel language replaced with a search statement',
 
 # Methods must carry named subsections including a statistics section, and must
 # not restate the selection criteria the pipeline no longer applies
-METH_SUBS = ('Data Sources', 'Candidate Selection', 'Independent Sources',
+METH_SUBS = ('Data Sources', 'Candidate Selection',
              'Prioritization Score', 'Prior-Proposal Classification',
              'Ranking Criteria', 'Statistical Analysis')
 check('Methods has named subsections', all(h in paras for h in METH_SUBS),
@@ -210,8 +210,8 @@ check('TROP2 direction stated without a scored claim',
       and 'carries no score' in both)
 check('two-line correlation reported', str(F['rmc']['r_between_lines']) in text)
 check('both-lines gene count reported', str(F['rmc']['up_both']) in text)
-check('CXCR1 vs CEACAM1 window contrasted',
-      str(F['hpa']['CXCR1_kidney']) in text and str(F['hpa']['CEACAM1_kidney']) in text)
+# the paragraph that contrasted the two normal-kidney values moved to the
+# supplement with the rest of the independent checks
 
 print('\n4. NEW LIMITATIONS ARE STATED')
 check('sarcomatoid batch confounding disclosed',
@@ -346,7 +346,8 @@ check('sarcomatoid rows scored on the arm their data supports',
 check('PRISM no longer claims absence of off-target cytotoxicity',
       'absence of off-target cytotoxicity' not in text)
 check('normal-tissue RNA not used as a therapeutic-window claim',
-      'not a therapeutic-window' in text)
+      'not a therapeutic-window' in text
+      or 'rather than demonstrating a systemic therapeutic window' in text)
 # the DLL3 section that carried tarlatamab's approval dates was removed; the
 # limitation it supported is now one sentence in the Discussion
 # the panel scores candidates and never gated one; nothing may imply otherwise

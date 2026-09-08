@@ -51,7 +51,7 @@ NAMES = {
 }
 COLS = ['Transcriptomic\nevidence', 'Score', 'Meets its arm\'s\nstandard',
         'Target in\nenriched pathway', 'Protein\naccess',
-        'Independent\nchecks', 'Clinical access /\ndevelopment path']
+        'Clinical access /\ndevelopment path']
 
 sel = sel.sort_values(['survives', 'total'], ascending=[False, False])
 if 'pathway_estimable' not in sel.columns:
@@ -109,16 +109,6 @@ for _, r in sel.iterrows():
     else:
         cells.append(UNTESTED); txt.append('n/a')
 
-    # the dependency and compound screens are one column: for five of the six
-    # rows neither screen can speak to the candidate at all
-    dl, cl = str(r['dependency_layer']), str(r['compound_layer'])
-    if dl.startswith('no dependency'):
-        cells.append(AGAINST); txt.append('no CRISPR\ndependency')
-    elif 'not selective' in dl or 'active but not selective' in cl:
-        cells.append(PARTIAL)
-        txt.append('pan-essential;\nnot selective')
-    else:
-        cells.append(UNTESTED); txt.append('cannot\ntest')
 
     if 'E4' in str(r['failed_criteria']):
         cells.append(AGAINST); txt.append('discontinued')

@@ -206,9 +206,8 @@ P(f"Methods. We used TCGA and GEO "
   f"drug-target curation were combined into a 9-point score. Differential "
   f"expression was fitted with models matched to how each dataset was built, "
   f"using limma and edgeR. After scoring, we classified associations by "
-  f"whether they had been proposed before, checked them against four "
-  f"independent sources not used in scoring, and ranked them by a rule "
-  f"written in advance.")
+  f"whether they had been proposed before, and ranked them by a rule written "
+  f"in advance.")
 P(f"Results. We scored {F['n_associations']} drug-cancer associations: "
   f"{F['tiers'].get('Strong', 0)} Strong, {F['tiers'].get('Moderate', 0)} "
   f"Moderate, {F['tiers'].get('Exploratory', 0)} Exploratory and "
@@ -342,14 +341,6 @@ P(f"This was a curated search rather than an exhaustive screen, and the "
   f"fold change above 0.5, and most of those genes have no clinically "
   f"evaluable agent.")
 
-H('Independent Sources', 11.5, 10, level=2)
-P('Candidates were checked against four '
-  'independent '
-  'sources that took no part in scoring: the Human Protein Atlas for '
-  'localization and normal-tissue expression, DepMap for CRISPR dependency, '
-  'the PRISM Repurposing screen for compound activity, and LINCS L1000 for '
-  'signature reversal.')
-
 H('Prioritization Score', 11.5, 10, level=2)
 P('Each association received 0 to 9 points across four dimensions: genomic '
   'evidence (0\u20133), transcriptomic evidence (0\u20133), pathway evidence '
@@ -389,11 +380,7 @@ for _c in ('no prior urologic-oncology proposal identified;',
     _p.paragraph_format.space_after = Pt(2)
     for _r in _p.runs:
         _r.font.size = Pt(10.5)
-P('Two consistency checks were applied in addition: that no independent '
-  'source contradict the candidate, and that target accessibility match the '
-  'kind of agent proposed, a source unable to evaluate a candidate counting '
-  'as neither. '
-  'Where a disease held more than one prioritized candidate, the first rank '
+P('Where a disease held more than one prioritized candidate, the first rank '
   'also '
   'required that the target belong to an enriched pathway. A candidate that '
   'missed a criterion is reported with that criterion named.')
@@ -512,60 +499,6 @@ P(f"Penile squamous cell carcinoma is reported in the Supplementary Results "
   f"converges on the established pembrolizumab priority [49\u201351], with "
   f"two partially-novel candidates alongside it [52\u201354]; none of its "
   f"associations was without a prior proposal.")
-H('Independent Checks', 11.5, 10, level=2)
-P('Most associations are nominated from transcript abundance, which shows that '
-  'a gene is transcribed but not that the cell depends on it or that its '
-  'protein reaches the cell surface. We therefore checked the nominated '
-  'targets against four sources not used in scoring. None of the four can '
-  'establish that an agent works, each is unable to evaluate some candidates, '
-  'and none of them changed which candidates were prioritized. Full '
-  'results for all four are in the Supplementary Materials, including the '
-  'LINCS L1000 signature-reversal analysis [55,56], which returned the same '
-  'agents across unrelated lineages and so could not distinguish candidates.')
-
-P(f"Protein localization is the check most relevant to these proposals, "
-  f"because an antibody or conjugate must reach its target from outside the "
-  f"cell. All {F['hpa']['n_surface_assoc']} associations whose agent "
-  f"binds from outside the cell have confirmed extracellular access in the "
-  f"Human "
-  f"Protein Atlas [57], which shows where the protein is, not how much is "
-  f"present in the tumor. "
-  f"Normal-tissue RNA is reported for orientation only and is not a "
-  f"therapeutic-window comparison: CEACAM1 is substantially expressed in "
-  f"normal kidney ({F['hpa']['CEACAM1_kidney']} normalized transcripts per "
-  f"million) and warrants protein-level safety assessment. Per-target values "
-  f"are in Supplementary Table S1.")
-
-P(f"Both screens returned the expected result for targets with a known "
-  f"answer. In DepMap [58], across "
-  f"{F['depmap']['n_urothelial_lines']} urothelial lines stratified by "
-  f"genotype and target expression from CCLE via cBioPortal [3], RPL5 scores "
-  f"{F['depmap']['RPL5']:.2f} on the Chronos scale, and PIK3CA-mutant lines "
-  f"are selectively "
-  f"dependent on PIK3CA ({F['depmap']['PIK3CA_mut']:.2f} versus "
-  f"{F['depmap']['PIK3CA_wt']:.2f}). In the PRISM Repurposing screen across "
-  f"up to {F['prism']['n_lines']} cell lines [59], compared by two-sided Welch test "
-  f"with Benjamini-Hochberg correction, erlotinib is markedly more active in "
-  f"urothelial lines ({F['prism']['erlotinib_uro']:.2f} versus "
-  f"{F['prism']['erlotinib_nonuro']:.2f}; q = {F['prism']['erlotinib_q']:.4f}). "
-  f"That comparison is urothelial, not renal medullary: the renal medullary "
-  f"line itself sits at the {ordinal(round(F['prism']['erlotinib_rmc_pct']))} "
-  f"percentile of all lines, so the screen supports erlotinib in urothelial "
-  f"cancer but not the renal medullary rationale it was nominated for.")
-
-P(f"Two results apply to our own candidates. Urothelial cells do not require "
-  f"NSD2 even where they express it most highly "
-  f"({F['depmap']['NSD2_high']:+.2f}), and the ATR inhibitor VE-822 is not "
-  f"urothelial-selective (q = {F['prism']['ve822_q']:.2f}) where an earlier, "
-  f"weaker comparison had called it so. Both candidates were already outside "
-  f"the prioritized set on their scores, so neither screen altered the ranking. "
-  f"Neither screen can evaluate an antibody, conjugate or radioligand, whose "
-  f"agent delivers a payload rather than exploiting an essential target, nor a "
-  f"mechanism that acts through myeloid recruitment rather than on the tumor "
-  f"cell; the four screened CXCR1/CXCR2 antagonists accordingly show no "
-  f"tumor-cell-autonomous activity in any lineage, which is what a "
-  f"myeloid-directed mechanism would predict.")
-
 H('Candidates Without a Prior Proposal', 11.5, 10, level=2)
 P(f"Figure 4 and Table 1 together give the whole set: every association, how "
   f"it performs against each criterion, and the evidence behind it. "
@@ -599,7 +532,8 @@ P(f"We rank the prioritized candidates within a disease, not between diseases. "
 P(f"Within renal medullary carcinoma we would carry CXCR1/CXCR2 blockade "
   f"forward first, at {lead['total']}/9. Its chemokine ligands are "
   f"elevated in both patient-derived lines, both receptors are confirmed "
-  f"membrane proteins, and the antagonist class is already in clinical "
+  f"membrane proteins in the Human Protein Atlas [55], and the "
+  f"antagonist class is already in clinical "
   f"development with human pharmacology and safety data. CXCR1 and CXCR2 "
   f"belong to a chemokine gene set enriched in both lines "
   f"(q = {q['rmc_chemokine']:.4f}) and CEACAM1 belongs to no enriched set, "
@@ -617,7 +551,8 @@ P(f"Within renal medullary carcinoma we would carry CXCR1/CXCR2 blockade "
 P(f"Anti-CEACAM5 conjugates in ASCL1-positive small-cell bladder cancer are the "
   f"third prioritized candidate. CEACAM5 is strongly enriched in that subtype "
   f"({de['CEACAM5_ascl1']['log2FC']:+.2f}, "
-  f"q = {fmt(de['CEACAM5_ascl1']['q'])}), confirmed at the membrane and low "
+  f"q = {fmt(de['CEACAM5_ascl1']['q'])}), confirmed at the membrane in the "
+  f"Human Protein Atlas [55] and low "
   f"in normal bladder RNA ({F['hpa']['nTPM']['CEACAM5']} normalized "
   f"transcripts per million, which orients safety planning rather than "
   f"demonstrating a systemic therapeutic window), and the drug class is in "
@@ -626,10 +561,9 @@ P(f"Anti-CEACAM5 conjugates in ASCL1-positive small-cell bladder cancer are the 
   f"sets, so no pathway evidence supports it, and that subtype-specific protein "
   f"expression, internalization and payload sensitivity in small-cell bladder "
   f"cancer are all untested.")
-P(f"One qualification applies to the renal medullary lead: the dependency and "
-  f"compound screens cannot test a mechanism that works through myeloid "
-  f"recruitment, so the absence of a signal in either screen is not evidence "
-  f"for or against it. All three are hypotheses, "
+P(f"One qualification applies to the renal medullary lead: its mechanism acts "
+  f"through myeloid recruitment, so no tumor-cell assay can test it in either "
+  f"direction. All three are hypotheses, "
   f"not validated findings, and the experiment that would settle this one is "
   f"CXCR1/CXCR2 blockade in an immunocompetent model with an intact myeloid "
   f"compartment.")
@@ -648,15 +582,15 @@ P(f"Refitting cost two candidates, by different routes. Somatostatin "
   f"confounded with array chip, which is why ATR is scored on abundance.")
 
 P('Computational repurposing from public expression data is an established '
-  'approach, and several groups have built comparable pipelines [60]. '
+  'approach, and several groups have built comparable pipelines [56]. '
   'GETgene-AI ranks actionable cancer targets by combining mutation '
   'frequency, differential expression and known drug-target annotation, much '
-  'as the score used here does [61]. Signature reversion against perturbation '
+  'as the score used here does [57]. Signature reversion against perturbation '
   'libraries has been applied to four low-survival cancers, with the choice of '
   'differential-expression method itself changing which candidates emerge '
-  '[62]; that sensitivity is consistent with what we found when the primary '
+  '[58]; that sensitivity is consistent with what we found when the primary '
   'data were refitted. Pathway2Targets prioritizes targets by the pathways '
-  'they belong to, the same signal our eighteen gene sets supply [63]. Those '
+  'they belong to, the same signal our eighteen gene sets supply [59]. Those '
   'methods are built and benchmarked on common cancers, where cohorts are '
   'large enough to support them. We applied this class of method to cancers '
   'whose cohorts are too small to support one, with positive controls run '
@@ -702,7 +636,7 @@ P(f"One further limitation follows from how candidates were selected. A gene "
   f"rare, a significance threshold partly measures how little data has been "
   f"deposited rather than anything about the biology, and a real target that "
   f"falls short of significance in a small cohort is therefore never "
-  f"nominated; proteasome inhibition in renal medullary carcinoma [64] is one "
+  f"nominated; proteasome inhibition in renal medullary carcinoma [60] is one "
   f"such candidate. Further work could extend the search to the less "
   f"significant genes we set aside. Deposited data also limited the scope: "
   f"several variants of immediate interest, including primary "
@@ -744,8 +678,8 @@ P('All datasets used are publicly available without restriction. Genomic '
   'Cancer Genome Atlas Pan-Cancer Atlas 2018 via cBioPortal. Ten Gene Expression '
   'Omnibus accessions provided transcriptomic evidence: GSE199274, GSE216053 and '
   'GSE216052 (neuroendocrine prostate cancer); GSE130598 (muscle-invasive '
-  'bladder cancer kinome); GSE143630 [65] (clear cell renal cell carcinoma); '
-  'GSE157256 [66] (hereditary leiomyomatosis renal cell cancer, reported as '
+  'bladder cancer kinome); GSE143630 [61] (clear cell renal cell carcinoma); '
+  'GSE157256 [62] (hereditary leiomyomatosis renal cell cancer, reported as '
   'adjacent-disease context only); GSE180999 (renal medullary carcinoma); '
   'GSE196978 (penile squamous cell carcinoma); GSE128192 (sarcomatoid versus '
   'conventional urothelial carcinoma); and GSE269750 (small-cell bladder cancer, '
@@ -761,6 +695,10 @@ P('All datasets used are publicly available without restriction. Genomic '
   f'({ZENODO_CONCEPT_DOI}, which resolves to the most recent archived version'
   + (f'; this manuscript corresponds to {ZENODO_VERSION_DOI}' if ZENODO_VERSION_DOI
      else '') + '). '
+  'The nominated targets were also checked against DepMap [63], the PRISM '
+  'Repurposing screen [64] and LINCS L1000 [65,66]; none of the three changed '
+  'which candidates were prioritized, and all three are reported in the '
+  'Supplementary Materials. '
   'The pipeline runs end to end from the deposited code; the large primary '
   'deposits are re-downloaded by the first script rather than mirrored.')
 
@@ -779,10 +717,8 @@ FIGURES = [
      'pre-specified druggable pathway or gene sets, compared against only the '
      'genes that dataset measured; drug-target curation; a 9-point prioritization '
      'score; and a PubMed search for prior proposals, run only after '
-     'scoring was complete. Step 7 checks candidates against four sources '
-     'that contributed nothing to any score and changed no ranking. '
-     'Candidates are ranked by a rule fixed before it was applied; none is '
-     'discarded.'),
+     'scoring was complete. Candidates are ranked by a rule fixed before it '
+     'was applied; none is discarded.'),
     ('Figure2_RMC.png', 6.9,
      'Figure 2. Renal medullary carcinoma. (A) Effect in RMC-2C against effect '
      'in RMC219 for every gene measured in both lines. The genome-wide '
@@ -824,14 +760,8 @@ FIGURES = [
      'of 4 or better out of the points available for that row; E3, '
      'transcriptomic evidence strong enough for the kind it rests on, '
      'q < 0.05 on a disease contrast or the top 15% of transcripts on '
-     'abundance; and E4, an agent in clinical development. Two consistency '
-     'checks applied in addition: that no independent source contradict the '
-     'candidate and that the target be reachable by the kind of agent '
-     'proposed. A source that '
-     'cannot evaluate a candidate is not evidence for it, so absence of '
-     'contradiction is weaker than positive support. Every candidate placed '
-     'below the line was placed there by E2 or E3; the independent checks '
-     'moved none.'),
+     'abundance; and E4, an agent in clinical development. Every candidate '
+     'placed below the line was placed there by E2 or E3.'),
 ]
 for name, width, legend in FIGURES:
     path = FIG / name

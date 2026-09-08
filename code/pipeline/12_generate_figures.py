@@ -38,7 +38,7 @@ plt.rcParams.update({
 def generate_figure1():
     print("Generating Figure 1: pipeline schematic")
     fig, ax = plt.subplots(figsize=(11, 11.55))
-    ax.set_xlim(0, 11); ax.set_ylim(-2.55, 9.0); ax.axis('off')
+    ax.set_xlim(0, 11); ax.set_ylim(-1.42, 9.0); ax.axis('off')
 
     ax.text(5.5, 8.75,
             'Figure 1. Public-Data Prioritization of Drug Hypotheses',
@@ -180,39 +180,19 @@ def generate_figure1():
             ha='center', va='center', fontsize=7.3, style='italic',
             color='#1d4d33')
 
-    # ---- Step 7: independent evidence for the no-prior-proposal column ----
-    # Only the framework-novel column is carried forward, so the arrow leaves
-    # from beneath that column rather than from the centre of the table box.
-    ax.annotate('', xy=(4.85, -0.36), xytext=(4.85, 0.05),
+    # the independent checks moved to the Supplementary Materials; the
+    # association table now leads straight to the reported candidates
+    ax.annotate('', xy=(4.85, -0.32), xytext=(4.85, 0.05),
                 arrowprops=dict(arrowstyle='->', lw=1.8, color='#c00000'))
-    ax.add_patch(FancyBboxPatch((1.20, -1.31), 8.60, 0.93,
-                                 boxstyle='round,pad=0.04',
-                                 ec='#1e8449', fc='#d4efdf', linewidth=1.1))
-    ax.text(5.50, -0.62,
-            'Step 7 \u2014 consistency checks; no source contributed to a score, '
-            'and none changed the ranking',
-            ha='center', va='center', fontsize=9.3, weight='bold',
-            color='#1a1a1a')
-    ax.text(5.50, -0.90,
-            'Human Protein Atlas localisation + normal tissue   ·   '
-            'DepMap CRISPR dependency (genotype-stratified)',
-            ha='center', va='center', fontsize=7.5, color='#333')
-    ax.text(5.50, -1.11,
-            'PRISM Repurposing compound activity   ·   '
-            'LINCS L1000 signature reversal',
-            ha='center', va='center', fontsize=7.5, color='#333')
 
-    ax.annotate('', xy=(5.5, -1.52), xytext=(5.5, -1.34),
-                arrowprops=dict(arrowstyle='->', lw=1.8, color='#1a1a1a'))
-
-    ax.add_patch(FancyBboxPatch((0.55, -2.42), 9.90, 0.94,
+    ax.add_patch(FancyBboxPatch((0.55, -1.28), 9.90, 0.94,
                                  boxstyle='round,pad=0.05',
                                  ec='#1a1a1a', fc='#1e8449', linewidth=1.4))
-    ax.text(5.50, -1.72,
+    ax.text(5.50, -0.58,
             'All 6 candidates reported \u2014 3 priority, 3 lower confidence',
             ha='center', va='center', fontsize=10.5, weight='bold',
             color='white')
-    ax.text(5.50, -2.02,
+    ax.text(5.50, -0.88,
             'priority: renal medullary carcinoma, CXCR1/CXCR2 blockade then '
             'anti-CEACAM1   \u00b7   ASCL1+ small-cell bladder, anti-CEACAM5\n'
             'lower confidence: NSD2 and ATR in sarcomatoid UC, SSTR2 in NEUROD1+ '
