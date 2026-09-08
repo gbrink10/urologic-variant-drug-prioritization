@@ -331,9 +331,10 @@ P(f"Candidates were generated one cancer at a time. Genes were ranked by "
 P(f"The eighteen pre-specified gene sets were used to score candidates, not "
   f"to choose them, so a gene could be nominated without belonging to any "
   f"set. Seven of the {F['n_associations']} associations entered that way. "
-  f"Six of those seven nominate a cell-surface antigen targeted by an "
-  f"antibody-drug conjugate or a radioligand, which pathway definitions do "
-  f"not group by. Two of the three prioritized candidates are among these "
+  f"Four of those seven nominate a cell-surface antigen bound by an antibody "
+  f"or an antibody-drug conjugate, which pathway definitions do not group "
+  f"by; the other three are an intracellular kinase, twice, and a secreted "
+  f"matrix protein. Two of the three prioritized candidates are among these "
   f"seven.")
 P(f"This was a curated search rather than an exhaustive screen, and the "
   f"search for an available agent was manual and unlogged. A total of {F['funnel_entry']:,} "
@@ -383,7 +384,10 @@ for _c in ('no prior urologic-oncology proposal identified;',
 P('Where a disease held more than one prioritized candidate, the first rank '
   'also '
   'required that the target belong to an enriched pathway. A candidate that '
-  'missed a criterion is reported with that criterion named.')
+  'missed a criterion is reported with that criterion named. Two further '
+  'checks fixed at the same time, that no external source contradict a '
+  'candidate and that the target be reachable by the kind of agent proposed, '
+  'changed no candidate and are reported in the Supplementary Materials.')
 
 H('Statistical Analysis', 11.5, 10, level=2)
 P(f"Each series was fitted with the model its design supports. Count-based "
@@ -500,7 +504,8 @@ P(f"The sarcomatoid series is reported in full in the Supplementary Results; "
   f"batch of chips from every conventional tumor, so a difference between the "
   f"groups is also a difference between batches and no model can separate "
   f"them. We therefore report no sarcomatoid-versus-conventional comparison "
-  f"and scored these five associations on transcript abundance within the "
+  f"and scored four of these five associations on transcript abundance "
+  f"within the "
   f"sarcomatoid tumors, which the batch difference does not affect: "
   f"UHRF1 [44], NSD2 "
   f"and G6PD [45] are highly abundant there and ATR is not. The pathway "
@@ -533,8 +538,7 @@ P(f"The somatostatin receptor 2 candidate, "
   f"candidate is not strongly expressed in sarcomatoid tumors "
   f"({ordinal(F['abundance_pct']['ATR']['pct'])} percentile), leaving a score "
   f"of 1. The NSD2 candidate is abundant but scores 3 of the 7 points its "
-  f"cohort can support, and the CRISPR result above shows that urothelial "
-  f"cells do not require it. All three remain open questions that better data "
+  f"cohort can support. All three remain open questions that better data "
   f"could settle.")
 
 P(f"We rank the prioritized candidates within a disease, not between diseases. "
@@ -781,7 +785,9 @@ FIGURES = [
      '+ supports, '
      '~ partial, \u2212 fails the criterion or contradicts, n/a cannot test. '
      'The transcriptomic column records which arm the evidence comes from, '
-     'and the next column whether it meets that arm\u2019s standard. The '
+     'the second its total score, and the third whether it meets that '
+     'arm’s standard. Protein access records whether the target is '
+     'reachable by the kind of agent proposed. The '
      'pathway column reads not computed for the sarcomatoid rows, whose only '
      'available enrichment derives from the confounded comparison. Enrichment '
      'is credited only where the target is itself a member of the enriched '
@@ -828,7 +834,7 @@ for key in ('CRediT AUTHOR STATEMENT', 'FUNDING', 'CONFLICTS OF INTEREST',
 
 H('SUPPLEMENTARY MATERIALS', 12)
 P('Supplementary Results: the sarcomatoid urothelial carcinoma findings in '
-  'in full; a plain-language account of the four '
+  'full; a plain-language account of the four '
   'independent sources, what each can and cannot show, what was done with '
   'each and which deposited file holds its raw output; the penile squamous '
   'cell carcinoma findings in full; and the per-gene nomination routes with '
@@ -1031,8 +1037,7 @@ for _, r in novel_rows.sort_values('N').iterrows():
         # spell the exclusion out; codes are opaque and were being truncated
         PLAIN = {
             23: 'Lower confidence: scores 3 of the 7 points its cohort can '
-                'support, and CRISPR screens show no dependency in the '
-                'nominated stratum',
+                'support',
             24: 'Lower confidence: the target is not abundantly expressed '
                 'in sarcomatoid tumors, at the 73rd percentile of measured '
                 'transcripts',

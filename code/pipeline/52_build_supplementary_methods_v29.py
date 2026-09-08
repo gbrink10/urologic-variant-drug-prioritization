@@ -155,7 +155,7 @@ P('How the four were used. They are checks, not a filter. A candidate was '
   'record that it changed nothing. A source that could not evaluate a '
   'candidate counted as neither support nor contradiction: a tumor-cell '
   'screen gives no information about a drug that acts on the immune '
-  'system, and that is not evidence against the drug. Every candidate against every source is shown in Figure 4 and '
+  'system, and that is not evidence against the drug. Every candidate against every source is '
   'recorded row by row in CANDIDATE_SELECTION.csv.')
 
 H('S3. Penile squamous cell carcinoma')
@@ -321,8 +321,8 @@ P('The eighteen sets, their identifiers, their size on the analysis date '
   'and sirtuin, histone acetyltransferase and bromodomain, and UHRF reader '
   'families, assembled from the gene families themselves and deposited in '
   'results/KEGG_PATHWAYS_18.json alongside the seventeen retrieved sets. All '
-  'nineteen thousand-odd member symbols were normalized to current HGNC '
-  'nomenclature before use.')
+  '2,382 member symbols across the eighteen sets, 1,731 of them distinct, '
+  'were normalized to current HGNC nomenclature before use.')
 
 _sets = json.loads((paths.RESULTS / 'KEGG_PATHWAYS_18.json')
                    .read_text(encoding='utf-8'))
