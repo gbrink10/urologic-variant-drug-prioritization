@@ -312,9 +312,9 @@ P('Candidate associations were assembled from the sources below before the '
 
 H('Candidate Selection', 11.5, 10, level=2)
 P(f"Candidates were generated one cancer at a time. Genes were ranked by "
-  f"alteration frequency where TCGA provides a cohort, and "
-  f"by differential expression in the relevant GEO series "
-  f"where it does not. The highest-ranked genes were reviewed manually and "
+  f"somatic alteration frequency where TCGA provides a cohort, and "
+  f"and otherwise by the empirical Bayes moderated t-statistic from the "
+  f"corresponding GEO fit. The highest-ranked genes were reviewed manually and "
   f"three to seven genes per cancer were carried forward, the number decided "
   f"by clinical relevance rather than by a fixed threshold; the four rare "
   f"cancers contributed three to five genes each. Each of those genes was then "
@@ -327,7 +327,7 @@ P(f"Candidates were generated one cancer at a time. Genes were ranked by "
   f"while {F['geo_rows_no_recurrent_alteration']} of the "
   f"{F['n_geo_anchored']} from the rare cancers score zero because the "
   f"nominated target is not itself recurrently altered (Supplementary "
-  f"Figure S2).")
+  f"Figure S1).")
 P(f"The eighteen pre-specified gene sets were used to score candidates, not "
   f"to choose them, so a gene could be nominated without belonging to any "
   f"set. Seven of the {F['n_associations']} associations entered that way. "
@@ -386,25 +386,40 @@ P('Where a disease held more than one prioritized candidate, the first rank '
   'missed a criterion is reported with that criterion named.')
 
 H('Statistical Analysis', 11.5, 10, level=2)
-P(f"Each dataset was analyzed with the model that matches how it was "
-  f"collected. Count-based series were filtered by expression, normalized by "
-  f"trimmed mean of M-values and fitted with voom precision weights in edgeR "
-  f"and limma; log-scale series were fitted with limma\u2019s "
-  f"variance-moderated linear model with an intensity trend. Three design "
-  f"features were modeled explicitly: the penile series contributes "
+P(f"Each series was fitted with the model its design supports. Count-based "
+  f"series were filtered with edgeR filterByExpr against the design matrix, "
+  f"normalized by the trimmed mean of M-values, given voom precision weights "
+  f"and fitted by weighted least squares in limma. Log-scale and "
+  f"already-summarized series were fitted with limma-trend, that is empirical "
+  f"Bayes moderation with the mean-variance trend estimated from the data, "
+  f"using robust hyperparameter estimation. Three design features were "
+  f"modeled explicitly. The penile series contributes "
   f"{dsn['pscc_normal_arrays']} normal arrays from "
-  f"{dsn['pscc_normal_donors']} donors, so donor was blocked by duplicate "
-  f"correlation; the muscle-invasive bladder kinome panel is matched "
-  f"tumor-normal, so patient was blocked; and each small-cell subtype was "
-  f"contrasted against the mean of the remaining subtypes with batch in the "
-  f"model. The renal medullary series is a two-cell-line rescue experiment "
-  f"with no deposited sample-level matrix, so it was treated as two "
-  f"independent patient-derived models and only genes changing consistently in "
-  f"both were carried forward.")
-P(f"For each of the eighteen gene sets we asked whether the genes up-regulated "
-  f"in that cancer overlapped the set more than chance would predict, using a "
-  f"hypergeometric test against only the genes each dataset measured, since a "
-  f"genome-wide universe would overstate enrichment on a targeted panel.")
+  f"{dsn['pscc_normal_donors']} donors, so donor entered as a random effect "
+  f"through duplicateCorrelation, consensus correlation "
+  f"{F['refit']['pscc_dupcor'].split('consensus ')[-1]}. The muscle-invasive "
+  f"bladder kinome panel is matched tumor-normal, so patient entered as a "
+  f"fixed blocking factor. Each small-cell subtype was contrasted against the "
+  f"mean of the remaining subtypes with batch as a covariate. In the "
+  f"sarcomatoid series chip and histology are collinear, so the chip "
+  f"coefficient is not estimable and no histology contrast is reported. "
+  f"The renal medullary series is a two-cell-line SMARCB1 rescue experiment "
+  f"for which the repository serves only an author-computed "
+  f"differential-expression table and no sample-level matrix, so no model "
+  f"matched to the design can be fitted. The two lines were treated as two "
+  f"independent patient-derived models rather than as an inferential cohort: "
+  f"a gene was "
+  f"required to exceed |log2 fold change| of 0.5 in the disease-state "
+  f"orientation at q < 0.05 in each line separately, and the reported q-value "
+  f"is the larger of the two line-specific values.")
+P(f"For each of the eighteen gene sets we tested whether the up-regulated genes "
+  f"in that context overlapped the set more than chance, using a one-sided "
+  f"hypergeometric test. The query set was the genes at q < 0.05 with log2 "
+  f"fold change above 0.5. The universe was "
+  f"the genes each dataset measured after filtering rather than the whole "
+  f"genome, since a genome-wide universe inflates the apparent overlap for a "
+  f"targeted panel; for the renal medullary series it is the genes measured in "
+  f"both lines.")
 P(f"Benjamini-Hochberg correction was applied across the eighteen gene sets "
   f"within each context. It was not applied across contexts, across drugs, or "
   f"across the downstream comparisons. Two thresholds were pre-specified: differential-expression "
@@ -479,8 +494,9 @@ P(f"Lineage-stratified small-cell bladder cancer (Figure 3), classified by "
 
 print('results 3.1-3.3 written')
 
-P(f"The sarcomatoid series is reported in full in the Supplementary Results "
-  f"(Supplementary Figure S1). Every sarcomatoid tumor was run on a different "
+P(f"The sarcomatoid series is reported in full in the Supplementary Results; "
+  f"Figure 4 shows why no contrast is reported. Every sarcomatoid tumor was "
+  f"run on a different "
   f"batch of chips from every conventional tumor, so a difference between the "
   f"groups is also a difference between batches and no model can separate "
   f"them. We therefore report no sarcomatoid-versus-conventional comparison "
@@ -500,7 +516,7 @@ P(f"Penile squamous cell carcinoma is reported in the Supplementary Results "
   f"two partially-novel candidates alongside it [52\u201354]; none of its "
   f"associations was without a prior proposal.")
 H('Candidates Without a Prior Proposal', 11.5, 10, level=2)
-P(f"Figure 4 and Table 1 together give the whole set: every association, how "
+P(f"Figure 5 and Table 1 together give the whole set: every association, how "
   f"it performs against each criterion, and the evidence behind it. "
   f"{spell(F['funnel']['framework_novel']).capitalize()} associations had no "
   f"prior proposal in the urologic literature. "
@@ -744,8 +760,23 @@ FIGURES = [
      'aspirin is a pharmacologically available non-selective inhibitor, and '
      'whether inhibition or activation is therapeutic requires functional '
      'testing.'),
-    ('Figure4_candidate_selection.png', 6.9,
-     'Figure 4. Every candidate without a prior urologic-oncology proposal, '
+    ('Figure4_SarcUC.png', 6.9,
+     'Figure 4. Sarcomatoid urothelial carcinoma, and why no contrast is '
+     'reported. (A) The separation between the two chip-aligned groups, shown '
+     'for completeness; it cannot be read as a difference between histologies, '
+     'because every sarcomatoid tumor was run on a different batch of chips '
+     'from every conventional tumor. (B) Pathway values from that same '
+     'comparison, which inherit the confounding, so no pathway component is '
+     'scored for this context. (C) The quantity these rows are scored on '
+     'instead: abundance within the sarcomatoid tumors, which involves no '
+     'comparison between chips and which the confounding therefore does not '
+     'affect. The dashed line is the 85th percentile, the threshold the '
+     'abundance route scores against; ATR falls below it, which is why that '
+     'candidate was not prioritized. The confounding in panels A and B is the '
+     'design flaw that the deposited summary statistics did not show and the '
+     'refit did.'),
+    ('Figure5_candidate_selection.png', 6.9,
+     'Figure 5. Every candidate without a prior urologic-oncology proposal, '
      'against every criterion. Each cell carries a symbol as well as a color: '
      '+ supports, '
      '~ partial, \u2212 fails the criterion or contradicts, n/a cannot test. '
@@ -797,11 +828,11 @@ for key in ('CRediT AUTHOR STATEMENT', 'FUNDING', 'CONFLICTS OF INTEREST',
 
 H('SUPPLEMENTARY MATERIALS', 12)
 P('Supplementary Results: the sarcomatoid urothelial carcinoma findings in '
-  'full with Supplementary Figure S1; a plain-language account of the four '
+  'in full; a plain-language account of the four '
   'independent sources, what each can and cannot show, what was done with '
   'each and which deposited file holds its raw output; the penile squamous '
   'cell carcinoma findings in full; and the per-gene nomination routes with '
-  'Supplementary Figure S2. '
+  'Supplementary Figure S1. '
   'Supplementary Methods: full procedural detail for the pipeline steps and '
   'the four independent evidence sources, including data releases, model '
   'specifications, thresholds and statistical tests. '

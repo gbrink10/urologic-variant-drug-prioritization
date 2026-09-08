@@ -84,23 +84,6 @@ P('TROP2, encoded by TACSTD2 and the target of sacituzumab govitecan, reads '
   'in November 2024. It is reported as an observation for an independent '
   'cohort, not as a predictive biomarker, and carries no score.')
 
-_s1 = paths.FIGURES / 'FigureS1_SarcUC.png'
-if _s1.exists():
-    doc.add_picture(str(_s1), width=Inches(6.5))
-    _cap = doc.add_paragraph()
-    _cr = _cap.add_run(
-        'Supplementary Figure S1. Sarcomatoid urothelial carcinoma. (A) The '
-        'separation between the two chip-aligned groups, shown for '
-        'completeness; it cannot be read as a difference between histologies. '
-        '(B) Pathway values from that same comparison, which inherit the '
-        'confounding, so no pathway component is scored for this context. '
-        'The nominated targets are scored instead on how abundant each '
-        'transcript is within the sarcomatoid tumors, a quantity the '
-        'confounding does not affect; those values are given in the text '
-        'above.')
-    _cr.font.size = Pt(9)
-    _cr.italic = True
-
 H('S2. The four independent sources, in plain terms')
 P('After every association had been scored, we checked each candidate against '
   'four public resources that had taken no part in the scoring. We asked '
@@ -187,17 +170,17 @@ P('Penile squamous cell carcinoma showed a dominant immune-hot phenotype. '
   'proposal, so none is among the candidates ranked in the manuscript.')
 
 H('S4. How each association was nominated')
-P('The two nomination routes are drawn per gene in Supplementary Figure S2. '
+P('The two nomination routes are drawn per gene in Supplementary Figure S1. '
   'Every gene shown met the same two requirements: it stood out in its own '
   'cancer, and an agent against it could be evaluated clinically. The routes '
   'differ only in what standing out could mean, which depends on whether that '
   'cancer has a genomic cohort.')
-_s2 = paths.FIGURES / 'FigureS2_selection_routes.png'
+_s2 = paths.FIGURES / 'FigureS1_selection_routes.png'
 if _s2.exists():
     doc.add_picture(str(_s2), width=Inches(6.5))
     _c2 = doc.add_paragraph()
     _r2 = _c2.add_run(
-        'Supplementary Figure S2. How each of the 30 associations was '
+        'Supplementary Figure S1. How each of the 30 associations was '
         'nominated. (A) The three positive controls have a genomic cohort, so '
         'genes were ranked by how often they are altered. (B) The four rare '
         'cancers do not, so genes were ranked by differential expression; '

@@ -63,7 +63,11 @@ for sec in ('CONTEXT', 'ABSTRACT', 'INTRODUCTION', 'MATERIALS AND METHODS',
             'CONFLICTS OF INTEREST', 'ETHICS STATEMENT',
             'SUPPLEMENTARY MATERIALS', 'AI USAGE DISCLOSURE'):
     check(f'section {sec}', sec in paras)
-check('4 figures embedded', len(doc.inline_shapes) == 4, str(len(doc.inline_shapes)))
+# JCO CCI's stated cap is six display items; five figures plus one table is at
+# it, so the check guards the cap rather than a fixed count
+_nfig, _ntab = len(doc.inline_shapes), len(doc.tables)
+check(f'{_nfig} figures + {_ntab} table within the 6 display-item cap',
+      _nfig + _ntab <= 6, f'{_nfig + _ntab} items')
 check('one condensed table in the main text', len(doc.tables) == 1)
 # JCO CCI uses unnumbered title-case subsection headings
 RES_SUBS = ('The Association Table', 'Positive Controls',
@@ -121,7 +125,7 @@ check('clinical stage of the agents stated',
       and f"{F['stage']['in_trials']} are in clinical trials" in text
       and str(F['stage']['preclinical']) in text)
 check('the selection rule for the 30 is stated',
-      'Genes were ranked by alteration frequency' in text
+      'alteration frequency where TCGA provides a cohort' in text
       and 'searched against the Therapeutic Target Database and Open Targets'
       in text)
 check('per-cancer counts match the deposit',
@@ -190,8 +194,9 @@ check('each candidate not prioritized has its criterion named',
       'criterion each one missed' in text and 'open questions' in text)
 check('no coined shorthand for the ranking',
       not any(w in text.lower() for w in
-              ('priority tier', 'lower-confidence tier', 'not estimable',
-               'entry rule', 'pathway membership', 'both-lines')))
+              ('priority tier', 'lower-confidence tier',
+               'entry rule', 'pathway membership', 'both-lines'))
+      and 'reported as not estimable' not in text.lower())
 check(f"chemokine q = {F['q']['rmc_chemokine']:.4f}",
       f"{F['q']['rmc_chemokine']:.4f}" in text)
 check('SSTR2 non-significant q reported',

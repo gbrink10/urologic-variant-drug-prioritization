@@ -13,7 +13,7 @@ Three things change from v28:
   * the values come from the refit, and the enrichment column is only credited
     when the target is itself a member of the enriched pathway.
 
-Writes: figures/Figure4_candidate_selection.png
+Writes: figures/Figure5_candidate_selection.png
 """
 import sys
 from pathlib import Path
@@ -159,7 +159,7 @@ labels = ['+  supports', '~  partial', '\u2212  contradicts', 'n/a  cannot test'
 axB.legend(handles, labels, loc='upper center', bbox_to_anchor=(0.5, -0.03),
            ncol=4, frameon=False, fontsize=7.4)
 
-out = FIG / 'Figure4_candidate_selection.png'
+out = FIG / 'Figure5_candidate_selection.png'
 plt.savefig(out, bbox_inches='tight')
 plt.close()
 print(f"Saved {out} ({out.stat().st_size:,} bytes)")
