@@ -22,9 +22,8 @@ RF = REPO / 'results' / 'refit'
 OUT = paths.OUTPUT / 'Cover_Letter_v31.docx'
 F = json.loads((RF / 'MANUSCRIPT_FACTS.json').read_text(encoding='utf-8'))
 
-TITLE = ('Prioritizing Repurposable Drugs for Rare and Variant Urologic '
-         'Cancers From Public Data: Refitting the Primary Deposits Changes '
-         'Which Candidates Qualify')
+TITLE = ('Design-Aware Reanalysis of Public Molecular Data for Drug '
+         'Prioritization in Rare and Variant Urologic Cancers')
 
 doc = docx.Document()
 doc.styles['Normal'].font.name = 'Calibri'

@@ -47,9 +47,8 @@ def P(t, size=10.5, italic=False):
 
 
 H('Supplementary Materials', 15, 0)
-P('Prioritizing Repurposable Drugs for Rare and Variant Urologic '
-  'Cancers From Public Data: Refitting the Primary Deposits Changes '
-  'Which Candidates Qualify', italic=True)
+P('Design-Aware Reanalysis of Public Molecular Data for Drug '
+  'Prioritization in Rare and Variant Urologic Cancers', italic=True)
 P('Brinkley GJ, Greenberg J, Caso J')
 
 H('Supplementary Results')

@@ -136,6 +136,20 @@ second = next(s for s in surv if s['N'] != 17)
 _pv = pd.read_csv(RF / 'SCORING_PROVENANCE_V29.csv')
 ceacam1_pq = f"{float(_pv.loc[_pv['N'] == 19, 'pathway_q'].iloc[0]):.4f}"
 
+
+def _s2v(n_, variant):
+    """A row's score under one sensitivity variant, from the same components
+    Supplementary Table S2 is built from."""
+    _r = _pv.loc[_pv['N'] == n_].iloc[0]
+    _g, _e = int(_r['G_curated']), int(_r['E_refit'])
+    _p, _l = int(_r['P_refit']), int(_r['L_curated'])
+    _member = 'target in pathway set' in str(_r['P_basis'])
+    if variant == 'full':
+        return _g + _e + _p + _l
+    if variant == 'no_anchor_and_membership':
+        return _e + (_p if _member else 0) + _l
+    raise ValueError(variant)
+
 # =====================================================================
 # Front matter
 # =====================================================================
@@ -147,9 +161,8 @@ AI_GPT_VERSION = 'GPT-6'
 AI_ACCESS_DATES = 'January to September 2026'
 AI_BIORENDER_DATE = 'September 2026'
 
-TITLE = ('Prioritizing Repurposable Drugs for Rare and Variant Urologic '
-         'Cancers From Public Data: Refitting the Primary Deposits Changes '
-         'Which Candidates Qualify')
+TITLE = ('Design-Aware Reanalysis of Public Molecular Data for Drug '
+         'Prioritization in Rare and Variant Urologic Cancers')
 p = doc.add_paragraph()
 r = p.add_run(TITLE)
 r.bold = True
@@ -164,8 +177,9 @@ P('Corresponding Author: Garrett J. Brinkley, MD; Department of Urology, Tulane 
   'University School of Medicine, New Orleans, LA; garrettjbrinkley@gmail.com')
 
 H('CONTEXT', 12)
-P('Key objective: Can publicly deposited genomic and transcriptomic data be '
-  'interrogated systematically to identify and prioritize drugs that are '
+P('Key objective: What does reanalysis under models matched to each study '
+  'design change about a curated set of repurposing hypotheses for drugs '
+  'that are '
   'already FDA-approved, or in clinical trials for a different disease, for '
   'aggressive urologic cancers where trials are difficult to power?')
 P(f"Knowledge generated: Refitting each deposited dataset rather than reusing "
@@ -197,10 +211,9 @@ P(f"Purpose. Rare and variant urologic cancers are difficult to study in "
   f"built a public-data framework that identifies and prioritizes drug targets "
   f"for these cancers, restricted to agents already FDA-approved or in "
   f"clinical trials for another disease.")
-P(f"Methods. We used TCGA and GEO "
-  f"to find the most altered and most differentially expressed genes, then "
-  f"searched the Therapeutic Target Database and Open Targets "
-  f"for drugs against them. Alteration frequencies, "
+P(f"Methods. A curated set of drug-cancer associations was assembled from "
+  f"TCGA and GEO, with agents drawn from the Therapeutic Target Database "
+  f"and Open Targets, and its membership fixed before reanalysis. Alteration frequencies, "
   f"differential expression across ten datasets, "
   f"enrichment across eighteen pre-specified druggable gene sets and "
   f"drug-target curation were combined into a 9-point score. Differential "
@@ -291,12 +304,17 @@ P(f"We report a pipeline, built entirely from public sources, that identifies "
 
 H('MATERIALS AND METHODS')
 H('Data Sources', 11.5, 10, level=2)
-P('Candidate associations were assembled from the sources below before the '
-  'final models were fitted, and every score reported here comes from those '
-  'models. Full procedural detail is in Supplementary Methods, and the '
-  'pipeline runs end to end from the deposited code. Somatic alteration '
-  'frequencies came from the best published genomic series available for each '
-  'cancer: for the three positive controls, the TCGA Pan-Cancer '
+P('This is a reassessment of a curated candidate set. Membership of the set '
+  'was fixed before the reanalysis reported here, using the sources below. '
+  'The deposited scripts reproduce the differential-expression estimates, the '
+  'enrichment tests, the score and the prioritization; they do not reproduce '
+  'the original manual mapping from genes to agents, whose per-row queries '
+  'were not retained. Full procedural detail is in Supplementary Methods. '
+  'The genomic dimension is a curated per-row value that the deposited code '
+  'does not recompute. It records how often the nominated gene, or in several '
+  'rows the alteration that defines the disease, is altered in the best '
+  'published genomic series available for that cancer: for the three positive '
+  'controls, the TCGA Pan-Cancer '
   'Atlas 2018 queried through cBioPortal [1\u20133], with cohort sizes in '
   'Figure 1. The four rare cancers are absent '
   'from TCGA, so their frequencies came from '
@@ -343,8 +361,9 @@ P(f"This was a curated search rather than an exhaustive screen, and the "
   f"evaluable agent.")
 
 H('Prioritization Score', 11.5, 10, level=2)
-P('Each association received 0 to 9 points across four dimensions: genomic '
-  'evidence (0\u20133), transcriptomic evidence (0\u20133), pathway evidence '
+P('Each association received 0 to 9 points across four dimensions: '
+  'disease-context genomic evidence (0\u20133), transcriptomic evidence '
+  '(0\u20133), pathway evidence '
   '(0\u20132) and external mechanistic-literature concordance (0\u20131). '
   'The ranges were set before scoring, weighted by how much each dimension '
   'says about a target; the reasoning and the bins within each dimension are '
@@ -354,7 +373,11 @@ P('Each association received 0 to 9 points across four dimensions: genomic '
   'and Exploratory (1\u20133) evidence tiers, which express strength of evidence '
   'within this framework only. Where a component could not be computed it is '
   'reported as not computed, the total is out of fewer than 9 points, and the '
-  'row is not assigned an evidence tier.')
+  'row is not assigned an evidence tier. A separate case arises where a target '
+  'is absent from its dataset’s platform: the transcriptomic component '
+  'then keeps its curated value, which is flagged row by row in Supplementary '
+  'Table S1 and is not a quantity re-derived from the deposited expression '
+  'data.')
 
 H('Prior-Proposal Classification', 11.5, 10, level=2)
 P('After scoring was complete, each association was classified on PubMed as '
@@ -565,8 +588,12 @@ P(f"Within renal medullary carcinoma we would carry CXCR1/CXCR2 blockade "
   f"never observed. Anti-CEACAM1 scores {second['total']}/9; its single "
   f"pathway point comes from a cytokine-receptor set enriched at "
   f"q = {ceacam1_pq} to which CEACAM1 does not belong, so it scores "
-  f"{second['total'] - 1}/9 if membership is required (Supplementary "
-  f"Table S2). Its surface protein abundance and therapeutic index in "
+  f"{second['total'] - 1}/9 if membership is required. Dropping both that "
+  f"point and the disease-level genomic points leaves "
+  f"{_s2v(19,'no_anchor_and_membership')}/9, below the threshold of 4, so its "
+  f"place among the prioritized candidates depends on how the score is "
+  f"defined in a way the other two do not (Supplementary Table S2). Its "
+  f"surface protein abundance and therapeutic index in "
   f"renal medullary carcinoma are both unknown.")
 P(f"Anti-CEACAM5 conjugates in ASCL1-positive small-cell bladder cancer are the "
   f"third prioritized candidate. CEACAM5 is strongly enriched in that subtype "
@@ -633,10 +660,16 @@ P(f"The four score dimensions overlap, so the total orders candidates rather "
   f"and in several rows the genomic score reflects an alteration that defines "
   f"the disease rather than one in the nominated target: renal medullary "
   f"carcinoma is almost always SMARCB1-deficient, which says nothing about "
-  f"CXCR1 or CXCR2. Removing that score in the sensitivity analysis moves the "
-  f"renal medullary candidate from first to third (Supplementary Table S2), so part of the "
-  f"ordering comes from how the score is built rather than from the biology of "
-  f"the target.")
+  f"CXCR1 or CXCR2. A pathway point is also awarded where the set is enriched "
+  f"even when the target is not a member of it. Removing both, the "
+  f"disease-level genomic points and the pathway points that rest on "
+  f"enrichment alone, CXCR1/CXCR2 falls from {_s2v(17,'full')} to "
+  f"{_s2v(17,'no_anchor_and_membership')} and anti-CEACAM5 from "
+  f"{_s2v(28,'full')} to {_s2v(28,'no_anchor_and_membership')}, both still at "
+  f"or above the threshold of 4; anti-CEACAM1 falls from {_s2v(19,'full')} to "
+  f"{_s2v(19,'no_anchor_and_membership')} and is no longer eligible. Its "
+  f"prioritization is therefore sensitive to how the score is defined, in a "
+  f"way the other two are not (Supplementary Table S2).")
 P(f"Our study has limitations, and most are bounded by what is public. The "
   f"Cancer Genome Atlas covers the three positive controls but none of the "
   f"four rare cancers, so their alteration frequencies come from smaller "
@@ -789,10 +822,13 @@ FIGURES = [
      'arm’s standard. Protein access records whether the target is '
      'reachable by the kind of agent proposed. The '
      'pathway column reads not computed for the sarcomatoid rows, whose only '
-     'available enrichment derives from the confounded comparison. Enrichment '
-     'is credited only where the target is itself a member of the enriched '
-     'pathway, since an enrichment driven by other genes is not evidence for '
-     'that target. Candidates above the dashed line met all four of: '
+     'available enrichment derives from the confounded comparison. The pathway '
+     'column marks whether the target is itself a member of the enriched set. '
+     'The score is less strict than the column: it awards one point for '
+     'enrichment or for membership and two for both, so a target can carry a '
+     'pathway point without appearing in the set. Supplementary Table S2 gives '
+     'every score under the membership-only rule. '
+     'Candidates above the dashed line met all four of: '
      'E1, no prior urologic-oncology proposal was found; E2, a score '
      'of 4 or better out of the points available for that row; E3, '
      'transcriptomic evidence strong enough for the kind it rests on, '
@@ -1136,11 +1172,19 @@ for _, r in prov.iterrows():
         'no_pathway': g + e + l,
         'no_literature': g + e + p_,
         'pathway_requires_membership': g + e + (p_ if member else 0) + l,
+        # the two debatable choices together: a genomic point that reflects a
+        # disease-defining alteration rather than one in the nominated target,
+        # and a pathway point from an enrichment the target is not part of
+        'no_anchor_and_membership': e + (p_ if member else 0) + l,
+        'denominator': int(str(r.get('total_denominator', 9) or 9)),
     })
 s2 = pd.DataFrame(rows)
-for col in ('full', 'no_context_anchor', 'no_pathway', 'no_literature',
-            'pathway_requires_membership'):
+VARIANTS = ('full', 'no_context_anchor', 'no_pathway', 'no_literature',
+            'pathway_requires_membership', 'no_anchor_and_membership')
+for col in VARIANTS:
     s2[f'rank_{col}'] = s2[col].rank(ascending=False, method='min').astype(int)
+    # E2 asks for 4 or better of the points estimable for that row
+    s2[f'meets_E2_{col}'] = s2[col] >= 4
 s2.to_csv(SUP / 'Supplementary_Table_S2_score_sensitivity.csv', index=False)
 
 # S3: per-dataset design summary
