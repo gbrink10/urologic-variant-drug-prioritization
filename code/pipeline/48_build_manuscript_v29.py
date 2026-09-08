@@ -161,8 +161,8 @@ AI_GPT_VERSION = 'GPT-6'
 AI_ACCESS_DATES = 'January to September 2026'
 AI_BIORENDER_DATE = 'September 2026'
 
-TITLE = ('Design-Aware Reanalysis of Public Molecular Data for Drug '
-         'Prioritization in Rare and Variant Urologic Cancers')
+TITLE = ('Prioritizing Repurposable Drugs for Rare and Variant Urologic '
+         'Cancers From Public Data')
 p = doc.add_paragraph()
 r = p.add_run(TITLE)
 r.bold = True

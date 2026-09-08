@@ -115,12 +115,8 @@ check('Methods has named subsections', all(h in paras for h in METH_SUBS),
 JARGON = ('design-aware', 'platform-appropriate', 'context-anchor',
           'load-bearing', 'ordering device', 'measured-gene universe',
           'upper-tail', 'score-independent')
-# the title uses "design-aware" deliberately; the guard still keeps it, and
-# every other coined term, out of the body
-_body_txt = text.split('INTRODUCTION', 1)[-1].lower()
-check('no invented jargon in the body',
-      not [j for j in JARGON if j in _body_txt],
-      str([j for j in JARGON if j in _body_txt]))
+check('no invented jargon', not [j for j in JARGON if j in text.lower()],
+      str([j for j in JARGON if j in text.lower()]))
 check('the retired E0 criterion is gone', 'E0' not in text)
 # the paper's premise is repurposing, so the clinical stage of every agent must
 # be stated and must add up
