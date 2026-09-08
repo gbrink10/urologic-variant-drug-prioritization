@@ -152,7 +152,10 @@ check('positive controls named again in Methods and Results',
 _abs_i = paras.index('ABSTRACT')
 _int_i = paras.index('INTRODUCTION')
 _abs_w = sum(len(re.findall(r'\S+', t)) for t in paras[_abs_i + 1:_int_i] if t)
-check(f'abstract within 300 words ({_abs_w})', _abs_w <= 300, str(_abs_w))
+# JCO Clinical Cancer Informatics caps the abstract of an Original Report
+# at 275 words and the body at 3,000, with no more than 1,000 words of
+# overrun tolerated on the body
+check(f'abstract within the 275-word cap ({_abs_w})', _abs_w <= 275, str(_abs_w))
 
 print('\n3. NUMBERS MATCH THE DEPOSIT')
 check(f"association count {F['n_associations']}", str(F['n_associations']) in text)
@@ -277,7 +280,7 @@ _i0 = text.split(chr(10)).index('INTRODUCTION') if 'INTRODUCTION' in text.split(
 _lines = text.split(chr(10))
 _i1 = _lines.index('DATA AVAILABILITY') if 'DATA AVAILABILITY' in _lines else len(_lines)
 _body = sum(len(l.split()) for l in _lines[_i0:_i1] if l.strip())
-check(f'body {_body} words within the 4,000 cap', _body <= 4000,
+check(f'body {_body} words within the 3,000-word limit plus the 1,000-word overrun', _body <= 4000,
       f'{_body} words, {_body - 4000} over' if _body > 4000 else '')
 
 # the AI disclosure carries placeholders for the version and access-date

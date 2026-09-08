@@ -39,12 +39,19 @@
   "novel": 6,
   "diseases": 4
  },
+ "n_drug_hypotheses": 29,
+ "n_biomarker_obs": 1,
  "stage": {
-  "approved": 19,
+  "approved": 18,
   "in_trials": 9,
   "preclinical": 2,
-  "clinically_available": 28
+  "clinically_available": 27
  },
+ "n_complete_score": 25,
+ "n_partial_score": 4,
+ "n_rare_hypotheses": 13,
+ "n_series_refitted": 9,
+ "n_series_total": 10,
  "rows_per_cancer_min": 3,
  "rows_per_cancer_max": 7,
  "rows_per_rare_min": 3,

@@ -119,7 +119,12 @@ F['arm_discovery'] = {
 assert (F['arm_discovery']['proposed'] + F['arm_discovery']['partial']
         + F['arm_discovery']['biomarker'] + F['arm_discovery']['novel']
         == F['arm_discovery']['n']), 'discovery classes do not sum'
-_st = defs['Stage'].astype(str)
+# development stage is a property of a drug, so the biomarker observation is
+# not counted here; it names an agent but proposes no hypothesis about it
+_drugs = defs.loc[defs['_cls'] != 'biomarker']
+F['n_drug_hypotheses'] = int(len(_drugs))
+F['n_biomarker_obs'] = int(len(defs) - len(_drugs))
+_st = _drugs['Stage'].astype(str)
 _approved = _st.str.contains('FDA-approved', case=False)
 _preclin = _st.str.contains('Preclinical', case=False)
 F['stage'] = {
@@ -129,8 +134,25 @@ F['stage'] = {
     'clinically_available': int((~_preclin).sum()),
 }
 assert (F['stage']['approved'] + F['stage']['in_trials']
-        + F['stage']['preclinical'] == F['n_associations']), \
-    'clinical stages do not sum to the association count'
+        + F['stage']['preclinical'] == F['n_drug_hypotheses']), \
+    'clinical stages do not sum to the drug-hypothesis count'
+assert F['n_drug_hypotheses'] + F['n_biomarker_obs'] == F['n_associations']
+
+# a hypothesis carries a complete score only where every component was
+# computable; the sarcomatoid rows lose the pathway component and so are
+# scored out of 7 and left untiered
+_tk = ('Strong', 'Moderate', 'Exploratory')
+F['n_complete_score'] = int(sum(F['tiers'].get(k, 0) for k in _tk))
+F['n_partial_score'] = int(F['n_drug_hypotheses'] - F['n_complete_score'])
+# the rare-cancer arm counted in hypotheses rather than entries, so the
+# prior-proposal classes sum without the biomarker observation among them
+F['n_rare_hypotheses'] = int(F['arm_discovery']['n'] - F['arm_discovery']['biomarker'])
+assert (F['arm_discovery']['proposed'] + F['arm_discovery']['partial']
+        + F['arm_discovery']['novel'] == F['n_rare_hypotheses']),     'rare-cancer prior-proposal classes do not sum to the hypothesis count'
+# nine of the ten GEO series were refitted from sample-level data; the renal
+# medullary series is deposited only as an author-computed summary table
+F['n_series_refitted'] = 9
+F['n_series_total'] = 10
 # associations carried forward per cancer, with the small-cell subtypes and
 # the two clear cell rows grouped into their diseases
 def _disease(c):
