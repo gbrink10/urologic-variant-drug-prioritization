@@ -237,7 +237,9 @@ P(f"Results. We scored {F['n_associations']} drug-cancer associations: "
   f"renal medullary carcinoma, and anti-CEACAM5 conjugates in ASCL1-positive "
   f"small-cell bladder cancer. For the other "
   f"{F['arm_discovery']['novel'] - F['funnel']['survive']} we give the "
-  f"criterion each one missed.")
+  f"criterion each one missed. Anti-CEACAM1 is the one prioritized candidate "
+  f"whose eligibility does not survive a joint sensitivity analysis of the "
+  f"score.")
 P(f"Conclusion. Public data can be used to prioritize drug hypotheses for "
   f"cancers that may never have a randomized trial. All candidates are "
   f"reported with the evidence behind each, and every one needs experimental "
@@ -311,10 +313,14 @@ P('This is a reassessment of a curated candidate set. Membership of the set '
   'the original manual mapping from genes to agents, whose per-row queries '
   'were not retained. Full procedural detail is in Supplementary Methods. '
   'The genomic dimension is a curated per-row value that the deposited code '
-  'does not recompute. It records how often the nominated gene, or in several '
-  'rows the alteration that defines the disease, is altered in the best '
-  'published genomic series available for that cancer: for the three positive '
-  'controls, the TCGA Pan-Cancer '
+  'does not recompute, and the query behind each value was not retained, so it '
+  'is read here as disease-level context rather than a frequency traceable to '
+  'a named cohort. It records how often the nominated gene, or in several '
+  'rows the alteration that defines the disease, is altered in the published '
+  'series available for that cancer. The Cancer Genome Atlas has no '
+  'neuroendocrine prostate cohort, so the neuroendocrine prostate values '
+  'reflect prostate adenocarcinoma context. Somatic alteration frequencies '
+  'for the three positive controls came from the TCGA Pan-Cancer '
   'Atlas 2018 queried through cBioPortal [1\u20133], with cohort sizes in '
   'Figure 1. The four rare cancers are absent '
   'from TCGA, so their frequencies came from '
@@ -463,24 +469,27 @@ H('RESULTS')
 
 H('The Association Table', 11.5, 10, level=2)
 ctx_counts = ', '.join(f'{k} {v}' for k, v in F['per_context'].items())
-P(f"The pipeline produced {F['n_associations']} drug-cancer associations "
+P(f"The pipeline produced {F['n_associations']} entries "
   f"(Table 1; the full table with every score component is Supplementary Table "
-  f"S1), in two groups: "
+  f"S1): {F['n_associations'] - 1} drug-cancer hypotheses and one biomarker "
+  f"observation, in two groups: "
   f"{F['arm_control']['n']} in the three positive controls and "
   f"{F['arm_discovery']['n']} in the four rare cancers. Of these, "
   f"{F['tiers'].get('Strong', 0)} reach the Strong tier, "
   f"{F['tiers'].get('Moderate', 0)} Moderate and "
-  f"{F['tiers'].get('Exploratory', 0)} Exploratory; five sarcomatoid "
-  f"associations are scored out of fewer points for the reason given below and "
-  f"are not assigned an evidence tier.")
+  f"{F['tiers'].get('Exploratory', 0)} Exploratory. Four sarcomatoid "
+  f"hypotheses are scored out of 7 rather than 9 for the reason given below "
+  f"and carry no evidence tier, and the biomarker observation carries no "
+  f"score.")
 
 H('Positive Controls', 11.5, 10, level=2)
 P(f"All {F['arm_control']['proposed']} positive-control associations recover a "
   f"drug proposed independently by another group: six in neuroendocrine "
   f"prostate cancer [15\u201323], seven "
   f"in muscle-invasive bladder cancer [24\u201332] and three in clear cell "
-  f"renal cell carcinoma [33\u201337]. Erlotinib in renal medullary carcinoma "
-  f"and pembrolizumab in penile squamous cell carcinoma [38,39] add two "
+  f"renal cell carcinoma [33\u201337]. Erlotinib in renal medullary "
+  f"carcinoma [38,39] and pembrolizumab in penile squamous cell carcinoma "
+  f"[40\u201342] add two "
   f"in the rare cancers, {F['n_previously_proposed']} in total. This is a "
   f"positive control rather than independent validation, because prior "
   f"knowledge entered the gene panel and the drug curation.")
@@ -496,12 +505,12 @@ P(f"In renal medullary carcinoma the deposited experiment is a SMARCB1 rescue "
   f"CXCL1, CXCL2 and CXCL3 also elevated), and KEGG chemokine signaling is "
   f"enriched among those 187 genes at q = {q['rmc_chemokine']:.4f} (Figure 2), "
   f"coherent with the neutrophil-rich microenvironment described in this "
-  f"disease [40]. This nominates the CXCR1/CXCR2 antagonist class, and "
+  f"disease [43]. This nominates the CXCR1/CXCR2 antagonist class, and "
   f"CEACAM1 alongside it ({rmc['CEACAM1']['RMC2C']:+.2f} and "
   f"{rmc['CEACAM1']['RMC219']:+.2f}).")
 
 P(f"Lineage-stratified small-cell bladder cancer (Figure 3), classified by "
-  f"lineage transcription factor [41], produced three subtype-specific "
+  f"lineage transcription factor [44], produced three subtype-specific "
   f"associations. ASCL1-positive tumors show CEACAM5 elevation "
   f"({de['CEACAM5_ascl1']['log2FC']:+.2f}, q = {fmt(de['CEACAM5_ascl1']['q'])}), "
   f"supporting CEACAM5-directed antibody-drug conjugates as a class; "
@@ -511,13 +520,13 @@ P(f"Lineage-stratified small-cell bladder cancer (Figure 3), classified by "
   f"a COX-1 program whose therapeutic direction requires functional "
   f"testing. In tuft cells, which "
   f"POU2F3 defines, prostaglandin signaling has been reported to restrain "
-  f"rather than promote tumorigenesis [42]. The "
+  f"rather than promote tumorigenesis [45]. The "
   f"NEUROD1-positive somatostatin receptor 2 association is not supported: the "
   f"fold change reproduces ({de['SSTR2_neurod1']['log2FC']:+.2f}) but does not "
   f"reach significance under a batch-adjusted subtype contrast "
   f"(q = {de['SSTR2_neurod1']['q']:.3f}), and the neuroactive ligand-receptor "
   f"set is not enriched in that subtype, so the approach established in "
-  f"small-cell lung cancer [43] does not carry over.")
+  f"small-cell lung cancer [46] does not carry over.")
 
 print('results 3.1-3.3 written')
 
@@ -530,17 +539,17 @@ P(f"The sarcomatoid series is reported in full in the Supplementary Results; "
   f"and scored four of these five associations on transcript abundance "
   f"within the "
   f"sarcomatoid tumors, which the batch difference does not affect: "
-  f"UHRF1 [44], NSD2 "
-  f"and G6PD [45] are highly abundant there and ATR is not. The pathway "
+  f"UHRF1 [47], NSD2 "
+  f"and G6PD [48] are highly abundant there and ATR is not. The pathway "
   f"component could not be computed for this context, so these rows total out of 7 "
   f"rather than 9 and carry no evidence tier, and neither of the two candidates without "
   f"a prior proposal was prioritized. TROP2 is reported there as an "
   f"observation, not as a predictive biomarker, and carries no score "
-  f"[46\u201348].")
+  f"[49\u201351].")
 
 P(f"Penile squamous cell carcinoma is reported in the Supplementary Results "
   f"rather than here. In brief, it showed a dominant immune-hot phenotype that "
-  f"converges on the established pembrolizumab priority [49\u201351], with "
+  f"converges on the established pembrolizumab priority [40\u201342], with "
   f"two partially-novel candidates alongside it [52\u201354]; none of its "
   f"associations was without a prior proposal.")
 H('Candidates Without a Prior Proposal', 11.5, 10, level=2)
@@ -578,7 +587,8 @@ P(f"Within renal medullary carcinoma we would carry CXCR1/CXCR2 blockade "
   f"membrane proteins in the Human Protein Atlas [55], and the "
   f"antagonist class is already in clinical "
   f"development with human pharmacology and safety data. CXCR1 and CXCR2 "
-  f"belong to a chemokine gene set enriched in both lines "
+  f"belong to a chemokine gene set enriched among the genes meeting the "
+  f"concordance criterion in both lines "
   f"(q = {q['rmc_chemokine']:.4f}) and CEACAM1 belongs to no enriched set, "
   f"which is the only difference between their scores. That enrichment is "
   f"driven by the four CXCL ligands, which also supply the transcriptomic "
@@ -884,8 +894,10 @@ P('Supplementary Results: the sarcomatoid urothelial carcinoma findings in '
   'explicit flag on any row whose component is not re-derivable from deposited '
   'data. Supplementary Table S2: score-sensitivity analysis, giving the ranking '
   'under removal of the genomic score, removal of the pathway '
-  'dimension, removal of the literature dimension, and a target-membership '
-  'requirement for the pathway dimension. Supplementary Table S3: per-dataset '
+  'dimension, removal of the literature dimension, a target-membership '
+  'requirement for the pathway dimension, and the disease-level genomic '
+  'points and enrichment-only pathway points removed together, with whether '
+  'each row still meets the score criterion under each. Supplementary Table S3: per-dataset '
   'design summary, giving the contrast, the model fitted, the blocking or batch '
   'structure, sample counts and any confounding identified. Supplementary Data: '
   'fitted differential-expression tables for every context, enrichment tables '
@@ -1083,6 +1095,8 @@ for _, r in novel_rows.sort_values('N').iterrows():
                 'contains the target',
         }
         status = ('Prioritized; first rank within RMC' if int(r['N']) == 17 else
+                  'Prioritized; eligibility sensitive to score definition '
+                  '(Supplementary Table S2)' if int(r['N']) == 19 else
                   'Prioritized' if bool(srow['survives']) else
                   PLAIN.get(int(r['N']),
                             'Not prioritized: ' + str(srow['reservation'])))
