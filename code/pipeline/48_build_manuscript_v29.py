@@ -318,13 +318,15 @@ P('This is a reassessment of a curated candidate set. The deposited scripts '
   'retained. Procedure is given in full in Supplementary Methods.')
 P('The order of decisions matters to how the score should be read. The '
   'candidate set, four scoring dimensions, component ranges and four ranking '
-  'criteria were fixed first; each dataset was then refitted; auditing the '
-  'genomic dimension against the cohorts it named came last, and removed it '
-  'from the score (Supplementary Table S4, with the reasoning in the '
-  'Discussion). The three remaining dimensions, their ranges and the four '
+  'criteria were fixed first; the datasets were then reanalyzed, with '
+  'study-specific models fitted where sample-level data were available; '
+  'auditing the '
+  'genomic dimension against the cohorts it named came last and removed it '
+  'from the score (Supplementary Table S4). The three remaining dimensions, '
+  'their ranges and the four '
   'criteria are unchanged, including the requirement of 4 or better, which '
-  'was not rescaled when the maximum fell from 9 to 6 and is therefore a '
-  'stricter bar than it was.')
+  'was not rescaled when the maximum fell from 9 to 6 and is a stricter bar '
+  'than it was.')
 P('Somatic alteration frequencies for the three positive controls came from '
   'the TCGA Pan-Cancer Atlas 2018 through cBioPortal [1\u20133], with cohort '
   'sizes in Figure 1. The Cancer Genome Atlas has no neuroendocrine prostate '
@@ -490,9 +492,8 @@ P(f"The pipeline produced {F['n_drug_hypotheses']} drug-cancer hypotheses "
   f"{F['tiers'].get('Strong', 0)} reach the Strong tier, "
   f"{F['tiers'].get('Moderate', 0)} Moderate and "
   f"{F['tiers'].get('Exploratory', 0)} Exploratory. Four sarcomatoid "
-  f"hypotheses are scored out of 4 rather than 6 for the reason given below "
-  f"and carry no evidence tier, and the biomarker observation carries no "
-  f"score.")
+  f"hypotheses are scored out of 4 rather than 6 and carry no tier, and the "
+  f"biomarker observation carries no score.")
 
 H('Positive Controls', 11.5, 10, level=2)
 P(f"All {F['arm_control']['proposed']} positive-control associations recover a "
@@ -652,13 +653,14 @@ P(f"Refitting cost two candidates, by different routes. Somatostatin "
 
 P('Computational repurposing from public expression data is established [56]. '
   'GETgene-AI combines mutation frequency, differential expression and '
-  'drug-target annotation much as the score used here does [57]; '
+  'drug-target annotation [57]; this workflow uses the same kinds of '
+  'information in candidate selection, but its score excludes genomic '
+  'frequency; '
   'Pathway2Targets prioritizes targets by the pathways they belong to, the '
-  'signal our eighteen gene sets supply [59]; and signature reversion against '
-  'perturbation libraries found the choice of differential-expression method '
-  'itself changing which candidates emerge [58], as refitting did here. Those '
-  'methods are benchmarked on common cancers with cohorts large enough to '
-  'support them. We applied the same class of method where no such cohort '
+  'signal our eighteen gene sets supply [59]; and signature reversion found '
+  'the choice of differential-expression method itself changing which '
+  'candidates emerge [58], as refitting did here. Those methods are '
+  'benchmarked on cohorts large enough to support them. We applied the same class of method where no such cohort '
   'exists, with positive controls run through the same pipeline.')
 P(f"Recovery of the "
   f"{F['n_previously_proposed']} previously proposed priorities is a positive "
@@ -1070,6 +1072,11 @@ def add_row(cells, bold=False, size=8.0):
 # the number column was taking as much width as the drug column, forcing the
 # long antagonist row to wrap; python-docx honours a width only with autofit
 # off and only when it is set on every cell
+# Word takes the column widths from tblGrid when the layout is fixed, so
+# setting them on the cells alone left every column at the default inch
+_grid = t._tbl.find(qn('w:tblGrid'))
+for _gc, _w in zip(_grid.findall(qn('w:gridCol')), COL_IN):
+    _gc.set(qn('w:w'), str(int(round(_w * 1440))))
 for _row in t.rows:
     for _c, _w in zip(_row.cells, COL_IN):
         _c.width = Inches(_w)

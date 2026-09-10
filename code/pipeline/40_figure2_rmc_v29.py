@@ -44,8 +44,8 @@ present = [g for g in AXIS if g in d.index]
 
 fig = plt.figure(figsize=(11.6, 9.4))
 gs = gridspec.GridSpec(2, 2, width_ratios=[1.0, 0.95],
-                       height_ratios=[1.0, 0.92],
-                       wspace=0.26, hspace=0.12,
+                       height_ratios=[1.0, 0.90],
+                       wspace=0.26, hspace=0.34,
                        left=0.07, right=0.985, top=0.94, bottom=0.06)
 
 # ---------------- A: agreement between the two cell lines ------------------
