@@ -116,7 +116,7 @@ P('DepMap. What it is: a project that has switched off each gene, one at a '
   'strongly. That is one of the criteria the candidate missed, '
   'which was already in the lower tier on its score. What '
   'it cannot tell us: anything about a drug that delivers a payload, such as '
-  'an antibody-drug conjugate, because that kind of agent kills the cell '
+  'an antibody-drug conjugate, because that kind of therapy kills the cell '
   'whether or not the target is essential. Raw data: DEPMAP_STRATIFIED.csv.')
 
 P('The PRISM Repurposing screen. What it is: a screen in which roughly 4,500 '
@@ -137,16 +137,16 @@ P('LINCS L1000. What it is: a library recording how the expression of about a '
   'drugs. If a disease turns a set of genes up and a drug turns the same genes '
   'down, that drug is a candidate for reversing the disease state. What we '
   'used it for: taking the genes each cancer turned up and asking which drugs '
-  'reverse that pattern, across the eight comparisons the refit supports. What we found: several of our nominated agents did '
+  'reverse that pattern, across the eight comparisons the refit supports. What we found: several of our nominated therapies did '
   'appear, but none ranked first in the cancer it was nominated for, and the '
-  'same agents appeared in unrelated cancers as well, so the comparison was '
+  'same therapies appeared in unrelated cancers as well, so the comparison was '
   'not specific enough to tell candidates apart. We therefore used it neither '
   'to support nor to exclude any candidate, and report it here for '
   'completeness. Raw data: LINCS_CONNECTIVITY_V29.csv.')
 
 P('How the four were used. They are checks, not a filter. A candidate was '
   'prioritized only if no source contradicted it and the '
-  'target was reachable by the kind of agent proposed. In practice the four '
+  'target was reachable by the kind of therapy proposed. In practice the four '
   'moved nothing: every candidate a source argued against had already been '
   'placed in the lower tier by its score or by its transcriptomic evidence, '
   'so the ranking would have been the same without them. We report them '
@@ -171,7 +171,7 @@ P('Penile squamous cell carcinoma showed a dominant immune-hot phenotype. '
 H('S4. How each association was nominated')
 P('The two nomination routes are drawn per gene in Supplementary Figure S1. '
   'Every gene shown met the same two requirements: it stood out in its own '
-  'cancer, and an agent against it could be evaluated clinically. The routes '
+  'cancer, and a therapy against it could be evaluated clinically. The routes '
   'differ only in what standing out could mean, which depends on whether that '
   'cancer has a genomic cohort.')
 _s2 = paths.FIGURES / 'FigureS1_selection_routes.png'
@@ -207,7 +207,7 @@ P('Seven contexts were analyzed. Three are better-studied benchmark contexts '
   'priorities in the benchmark contexts is calibration, and cannot be counted as '
   'independent validation of the output in the discovery contexts, because prior '
   'knowledge entered the pathway panel, the drug curation and the choice of '
-  'representative agent.')
+  'representative therapy.')
 
 H('1b. How the candidate set was assembled')
 P('Candidate associations were assembled from the sources in Sections 2 to 5 before the final models were fitted. Every score reported in the manuscript comes from those final models, and an earlier implementation of the same pipeline supplied the membership of the set rather than its scores. We do not claim that the final models, run from scratch, would nominate exactly the same thirty pairings. Each row has a curated half - drug, target, genomic frequency and its source, clinical stage and prior-proposal status - deposited as data/master_row_definitions.csv, and a computed half emitted by 39_rescore_from_refit.py.')
@@ -310,23 +310,23 @@ P('Eighteen pathway or gene sets were fixed before any context-specific '
 
 KEGG_ID = {
     'Cell_Cycle': ('hsa04110', 'CDK4/6 and cell-cycle inhibitors'),
-    'Apoptosis': ('hsa04210', 'BCL-2 and IAP-directed agents'),
+    'Apoptosis': ('hsa04210', 'BCL-2 and IAP-directed therapies'),
     'HIF1_signaling': ('hsa04066', 'HIF-2alpha inhibitors'),
     'VEGF_signaling': ('hsa04370', 'VEGF/VEGFR inhibitors'),
     'Homologous_Recombination': ('hsa03440', 'PARP inhibitors'),
     'PI3K_AKT_signaling': ('hsa04151', 'PI3K, AKT and mTOR inhibitors'),
-    'p53_signaling': ('hsa04115', 'MDM2 and WEE1/ATR-directed agents'),
+    'p53_signaling': ('hsa04115', 'MDM2 and WEE1/ATR-directed therapies'),
     'Chemokine_signaling': ('hsa04062', 'CXCR1/CXCR2 antagonists'),
     'Cytokine_receptor_interaction': ('hsa04060', 'cytokine-receptor-directed biologics'),
     'Antigen_processing_presentation': ('hsa04612', 'immune-hot context marker'),
     'PDL1_PD1_checkpoint': ('hsa05235', 'PD-1/PD-L1 checkpoint inhibitors'),
     'Pentose_phosphate_pathway': ('hsa00030', 'G6PD inhibitors'),
     'Arachidonic_acid_metabolism': ('hsa00590', 'COX-1/COX-2 inhibitors'),
-    'Neuroactive_ligand_receptor': ('hsa04080', 'somatostatin-receptor-directed agents'),
+    'Neuroactive_ligand_receptor': ('hsa04080', 'somatostatin-receptor-directed therapies'),
     'Prostate_cancer': ('hsa05215', 'disease-context set'),
     'Bladder_cancer': ('hsa05219', 'disease-context set'),
     'Renal_cell_carcinoma': ('hsa05211', 'disease-context set'),
-    'Epigenetic_Regulation': ('custom', 'DNMT, EZH2, HDAC, BET and NSD-directed agents'),
+    'Epigenetic_Regulation': ('custom', 'DNMT, EZH2, HDAC, BET and NSD-directed therapies'),
 }
 
 P('The eighteen sets, their identifiers, their size on the analysis date '
@@ -364,7 +364,7 @@ doc.add_paragraph()
 H('6. Prioritization score')
 P('The literature dimension is separate from the prior-proposal audit and must '
   'not be read as its inverse. It awards 1 point for a PubMed-indexed '
-  'mechanistic or clinical report linking the agent or its class to the '
+  'mechanistic or clinical report linking the therapy or its class to the '
   'nominated target, in any disease. The prior-proposal audit asks a narrower '
   'question: whether that pairing has been proposed in the urologic-oncology '
   'literature specifically. An association can therefore hold a mechanistic '
@@ -420,7 +420,7 @@ P('The procedure is reported in full, including its limits. Searches were run '
   '("<target>" OR "<drug>" OR "<drug class>") AND ("<disease>" OR its '
   'synonyms), with reviews, position papers and ClinicalTrials.gov '
   'registrations screened alongside primary reports. A primary report, review, '
-  'position paper or trial registration proposing the agent or its class '
+  'position paper or trial registration proposing the therapy or its class '
   'against the nominated target in a urologic-oncology context counts as a '
   'prior proposal; conference abstracts and patents do not. Three limits '
   'apply. The audit was performed by one author, classifications were not '
@@ -436,18 +436,18 @@ P('The procedure is reported in full, including its limits. Searches were run '
 
 H('7b. Drug-target curation and the candidate denominator')
 P('A differentially expressed gene entered the association table only if it '
-  'mapped to an agent that could be evaluated clinically. Candidate entry '
+  'mapped to a therapy that could be evaluated clinically. Candidate entry '
   'required the transcriptomic entry condition for its context, a protein '
   'product with a described binding or degradation modality, and at least one '
-  'agent against it in human study. Where several agents shared a target, the '
-  'representative agent was chosen by clinical stage first, then by the '
+  'therapy against it in human study. Where several therapies shared a target, the '
+  'representative therapy was chosen by clinical stage first, then by the '
   'specificity of the target engagement, then by whether human pharmacokinetic '
   'and safety data were published; rows naming a class rather than a molecule '
-  'do so because no single agent dominated on those grounds. Discontinued '
-  'agents were retained where the class remains in development and are '
+  'do so because no single therapy dominated on those grounds. Discontinued '
+  'therapies were retained where the class remains in development and are '
   'labelled as discontinued, since the hypothesis is about the target rather '
-  'than the molecule. Preclinical-only agents were admitted only where no '
-  'clinical-stage agent existed against the target, and are labelled as such '
+  'than the molecule. Preclinical-only therapies were admitted only where no '
+  'clinical-stage therapy existed against the target, and are labelled as such '
   'in the clinical-stage column.')
 P('The denominator behind the association table is deposited as '
   'results/refit/CANDIDATE_UNIVERSE.csv, and it is deliberately incomplete. '
@@ -517,7 +517,7 @@ P('Two interpretive rules were fixed in advance. A tumor-cell monoculture '
   'cannot test a mechanism that runs through the microenvironment, so for such '
   'candidates the dependency and compound screens are informative only if '
   'positive and never disconfirming. And antibody, conjugate, engager and '
-  'radioligand agents are absent from a small-molecule screen altogether rather '
+  'radioligand therapies are absent from a small-molecule screen altogether rather '
   'than negative in it. Throughout, a source that cannot evaluate a candidate '
   'counts as neither support nor contradiction.')
 
@@ -530,7 +530,7 @@ P('The criteria were fixed before they were applied. A candidate that misses '
   'meets its own arm\u2019s standard, which is q < 0.05 where a '
   'disease-versus-comparator contrast exists and the top 15% of measured '
   'transcripts where the dataset supports only abundance; and E4, an available '
-  'clinical-stage agent.')
+  'clinical-stage therapy.')
 P('Two points about E2 and E3 follow from the scoring. A row whose pathway '
   'component cannot be computed is scored out of 7 rather than 9, and E2 reads '
   'its threshold against that row\u2019s own denominator rather than against '
@@ -538,9 +538,9 @@ P('Two points about E2 and E3 follow from the scoring. A row whose pathway '
   'standard rather than a single q-value test, because a row scored on '
   'abundance has no q-value and must not fail for lacking one.')
 P('A prioritized candidate additionally requires that no independent source '
-  'contradict it, and that the target be reachable by the kind of agent '
+  'contradict it, and that the target be reachable by the kind of therapy '
   'proposed, '
-  'so that a row whose agent acts from outside the cell requires confirmed '
+  'so that a row whose therapy acts from outside the cell requires confirmed '
   'extracellular access. Neither check moved any candidate: each one a source '
   'argued against had already fallen to the lower tier on E2 or E3. The first-priority candidate within a disease additionally requires '
   'that the target itself belong to a pathway that is enriched, because an '
@@ -550,7 +550,7 @@ P('A prioritized candidate additionally requires that no independent source '
   'ordered first by whether the nominated target belongs to an enriched '
   'pathway and then by total score. Normal-tissue bulk RNA is reported for '
   'orientation and safety planning and is not used as a comparative '
-  'therapeutic-window measure, because agents acting on different normal '
+  'therapeutic-window measure, because therapies acting on different normal '
   'compartments cannot be ranked against each other on organ-level RNA.')
 
 H('10. Sensitivity analyses')
