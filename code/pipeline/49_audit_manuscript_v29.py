@@ -123,9 +123,9 @@ check('the retired E0 criterion is gone', 'E0' not in text)
 # the counts are over drug-cancer hypotheses, not distinct drugs, so the
 # check tests the numbers rather than one phrasing of them
 check('clinical stage of the agents stated over the hypotheses',
-      f"{F['stage']['approved']} name an FDA-approved agent" in text
-      and f"{F['stage']['in_trials']} an agent in trials" in text
-      and f"{F['stage']['preclinical']} a preclinical agent" in text)
+      f"{F['stage']['approved']} name an FDA-approved therapy" in text
+      and f"{F['stage']['in_trials']} a therapy in trials" in text
+      and f"{F['stage']['preclinical']} a preclinical therapy" in text)
 check('the selection rule for the 30 is stated',
       'alteration frequency where TCGA provides a cohort' in text
       and 'searched against the Therapeutic Target Database and Open Targets'

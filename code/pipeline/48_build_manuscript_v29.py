@@ -188,18 +188,18 @@ P('Key objective: What does reanalysis under models matched to each study '
 P(f"Knowledge generated: Fitting each deposited dataset under a model matched "
   f"to its design, where the deposit allows one, rather than reusing its "
   f"published summary statistics, changed which candidates qualified and "
-  f"cost an FDA-approved agent its place. It also identified a sarcomatoid "
+  f"cost an FDA-approved therapy its place. It also identified a sarcomatoid "
   f"comparison in which histology cannot be separated from array batch. "
   f"The pipeline "
   f"produced {F['n_associations']} entries, "
   f"{F['n_drug_hypotheses']} drug-cancer hypotheses and one biomarker "
   f"observation, {F['arm_control']['n']} of them in the three "
   f"positive controls and {F['arm_discovery']['n']} in the four rare "
-  f"cancers. Every agent already exists: among the "
+  f"cancers. Every therapy already exists: among the "
   f"{F['n_drug_hypotheses']} drug-cancer hypotheses, "
-  f"{F['stage']['approved']} name an FDA-approved agent, "
-  f"{F['stage']['in_trials']} an agent in trials for another disease and "
-  f"{F['stage']['preclinical']} a preclinical agent, nominated where "
+  f"{F['stage']['approved']} name an FDA-approved therapy, "
+  f"{F['stage']['in_trials']} a therapy in trials for another disease and "
+  f"{F['stage']['preclinical']} a preclinical therapy, nominated where "
   f"nothing clinical-stage targets that protein. All "
   f"{F['arm_control']['n']} control associations recover a drug proposed "
   f"independently by another group or already in trials. Among the "
@@ -217,11 +217,11 @@ H('ABSTRACT', 12)
 P(f"Purpose. Rare and variant urologic cancers are difficult to study in "
   f"randomized trials, so few have biomarker-directed treatment options. We "
   f"built a public-data framework that prioritizes drug targets for them "
-  f"among agents already approved or in trials for another disease.")
+  f"among therapies already approved or in trials for another disease.")
 P(f"Methods. A curated set of drug-cancer associations was assembled from "
-  f"TCGA and GEO, with agents from the Therapeutic Target Database and Open "
+  f"TCGA and GEO, with drugs from the Therapeutic Target Database and Open "
   f"Targets and membership fixed before reanalysis; "
-  f"{F['stage']['preclinical']} preclinical agents entered where nothing "
+  f"{F['stage']['preclinical']} preclinical therapies entered where nothing "
   f"clinical-stage targeted the protein. Differential expression across "
   f"{F['n_series_total']} datasets, enrichment across eighteen pre-specified "
   f"gene sets and mechanistic-literature concordance gave a 6-point "
@@ -278,10 +278,12 @@ P('Drug repurposing matches an approved or in-trial drug to a disease it was '
   'lower [8]. The critical challenge is '
   'identifying which approved drugs have a mechanistic rationale supported by '
   'molecular evidence in the target disease. We therefore '
-  'focused candidate selection on agents that are already FDA-approved or in '
+  'focused candidate selection on therapies that are already FDA-approved '
+  'or in '
   'clinical trials for another disease, with two preclinical exceptions '
-  'where no clinical-stage agent targeted the nominated protein. The '
-  'ranking criteria below require a clinical-stage agent, so those two are '
+  'where no clinical-stage therapy targeted the nominated protein. The '
+  'ranking criteria below require a clinical-stage therapy, so those two '
+  'are '
   'reported but not prioritized.')
 P('Against that background, aggressive and variant urologic histologies are '
   'in high need of novel therapies. Renal medullary carcinoma [9], penile '
@@ -316,7 +318,8 @@ H('Data Sources', 11.5, 10, level=2)
 P('This is a reassessment of a curated candidate set. The deposited scripts '
   'reproduce the differential-expression estimates, the enrichment tests, '
   'the score and the prioritization, but not the original manual mapping '
-  'from genes to agents, whose per-row queries were not retained. Procedure '
+  'from genes to therapies, whose per-row queries were not retained. '
+  'Procedure '
   'is in Supplementary Methods.')
 P('The order of decisions matters to how the score should be read. The '
   'candidate set, the scoring dimensions, their ranges and the four ranking '
@@ -353,7 +356,7 @@ P(f"A candidate here is one pairing of an existing drug with one cancer, "
   f"manually, and carried forward three to seven per cancer and three to "
   f"five in each rare cancer, by clinical relevance rather than a threshold. Each was then "
   f"searched against the Therapeutic Target Database and Open Targets and "
-  f"became an association only where it had an agent that could be evaluated "
+  f"became an association only where it had a therapy that could be evaluated "
   f"clinically. The two groups reach the table by different routes: "
   f"{F['tcga_rows_freq_ge_15pct']} of the {F['n_tcga_anchored']} "
   f"positive-control associations nominate a gene the original curation "
@@ -369,9 +372,9 @@ P(f"The eighteen gene sets were used to score candidates, not "
   f"entered that way, four of them cell-surface antigens that pathway "
   f"definitions do not group by, and two of the three prioritized candidates "
   f"are among the seven. This was a curated search, not an exhaustive "
-  f"screen, and the search for an agent was manual and unlogged: "
+  f"screen, and the search for a therapy was manual and unlogged: "
   f"{F['funnel_entry']:,} gene-cancer pairs met the expression threshold and "
-  f"most have no clinically evaluable agent (Supplementary Methods "
+  f"most have no clinically evaluable therapy (Supplementary Methods "
   f"Section 7b).")
 
 H('Prioritization Score', 11.5, 10, level=2)
@@ -397,10 +400,12 @@ H('Prior-Proposal Classification', 11.5, 10, level=2)
 P('After scoring, each association was classified on PubMed as having no '
   'prior urologic-oncology proposal identified, a partial precedent, or a '
   'prior proposal. A prior proposal is a primary report, review, position '
-  'paper or trial registration proposing the agent or its class against the '
+  'paper or trial registration proposing the therapy or its class against '
+  'the '
   'nominated target in this urologic disease. A partial precedent requires a '
   'report in the urologic literature that falls short of that: the target '
-  'named in this disease with no agent proposed against it, or the agent '
+  'named in this disease with no therapy proposed against it, or the '
+  'therapy '
   'proposed in the conventional form of the disease rather than the variant. '
   'A report in a non-urologic organ never creates a partial precedent; it is '
   'external mechanistic support: it can earn the literature point while the '
@@ -426,7 +431,7 @@ for _c in ('no prior urologic-oncology proposal identified;',
            'meeting the standard for its route, q < 0.05 on a disease '
            'contrast or the top 15% of transcripts where only abundance is '
            'available; and',
-           'a clinical-stage agent, meaning one already FDA-approved for '
+           'a clinical-stage therapy, meaning one already FDA-approved for '
            'another disease or currently in trials, with a documented '
            'development pathway.'):
     _p = doc.add_paragraph(_c, style='List Bullet')
@@ -438,7 +443,7 @@ P('Where a disease held more than one prioritized candidate, the first rank '
   'required that the target belong to an enriched pathway. A candidate that '
   'missed a criterion is reported with that criterion named. Two further '
   'checks fixed at the same time, that no external source contradict a '
-  'candidate and that the target be reachable by the kind of agent proposed, '
+  'candidate and that the target be reachable by the kind of therapy proposed, '
   'changed no candidate and are reported in the Supplementary Materials.')
 
 H('Statistical Analysis', 11.5, 10, level=2)
@@ -584,7 +589,7 @@ P(f"Figure 5 sets every candidate without a prior proposal against each "
   f"failed one or more criteria, named below.")
 
 P(f"The SSTR2-directed hypothesis, the only one of the six naming an "
-  f"FDA-approved agent, failed both the score and the transcriptomic "
+  f"FDA-approved therapy, failed both the score and the transcriptomic "
   f"criterion "
   f"({_s2v(29,'full')}/6; q = {de['SSTR2_neurod1']['q']:.3f} once the "
   f"small-cell subtypes are contrasted with batch in the model). ATR failed "
@@ -671,7 +676,7 @@ P(f"Recovery of the "
   f"{F['n_previously_proposed']} previously proposed priorities is a positive "
   f"control rather than independent validation, because prior knowledge "
   f"entered the pathway panel, the drug curation and the choice of "
-  f"representative agent; it shows the pipeline returns established priorities "
+  f"representative therapy; it shows the pipeline returns established priorities "
   f"in well-characterized disease, but it does not measure sensitivity or "
   f"precision. Three features of the deposited data also limited what could "
   f"be analyzed: histology confounded with array chip in the sarcomatoid "
@@ -826,7 +831,7 @@ FIGURES = [
      'recruited myeloid cells, which is why a tumor-cell monoculture does '
      'not evaluate it. Neither receptor was measured in this series. '
      'CXCL8 binds both receptors; CXCL1, '
-     'CXCL2 and CXCL3 are CXCR2-selective. The agents are CXCR1/CXCR2-axis '
+     'CXCL2 and CXCL3 are CXCR2-selective. These are CXCR1/CXCR2-axis '
      'antagonists with differing receptor selectivity: AZD5069, navarixin, '
      'reparixin and danirixin. Panel C created with '
      'BioRender.com.'),
@@ -864,7 +869,7 @@ FIGURES = [
      'because a route is not a verdict; the second marks whether the total meets '
      'the criterion of 4, and the third whether the evidence meets the standard '
      'for its arm. Protein access records whether the target is '
-     'reachable by the kind of agent proposed. The pathway column marks '
+     'reachable by the kind of therapy proposed. The pathway column marks '
      'whether the target is itself a member of the enriched set, and reads '
      'not in the selected sets where the target belongs to none of the '
      'eighteen, which differs from the sarcomatoid rows, where it reads not '
@@ -879,7 +884,7 @@ FIGURES = [
      'of 4 or better out of the points available for that row; E3, '
      'transcriptomic evidence strong enough for the kind it rests on, '
      'q < 0.05 on a disease contrast or the top 15% of transcripts on '
-     'abundance; and E4, an agent in clinical development. Every candidate '
+     'abundance; and E4, a therapy in clinical development. Every candidate '
      'placed below the line was placed there by E2 or E3.'),
 ]
 for name, width, legend in FIGURES:
@@ -1032,7 +1037,7 @@ def stage_tag(stage):
     return v.split('(')[0].strip().lower() or 'stage not curated'
 
 
-# the recovered agents behind each positive-control block; these are the
+# the recovered therapies behind each positive-control block; these are the
 # paper's only calibration evidence and no display item named them
 CONTROL_AGENTS = {
     '1\u20136': 'recovers venetoclax, alisertib, tazemetostat, decitabine, '
@@ -1215,7 +1220,7 @@ missing = sorted(set(merged['N']) - accounted)
 assert not missing, f'Table 1 omits associations {missing}'
 print(f'  Table 1: all {len(accounted)} associations accounted for')
 
-P('The line under each agent gives its furthest clinical stage: FDA approved '
+P('The line under each therapy gives its furthest clinical stage: FDA approved '
   'means approved somewhere, not necessarily in the cancer named here, and '
   'the approved indication and supporting trial are given in full in '
   'Supplementary Table S1. '
