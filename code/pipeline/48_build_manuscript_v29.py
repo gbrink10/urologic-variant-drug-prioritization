@@ -302,9 +302,9 @@ P('We therefore asked whether public molecular data could be interrogated '
   'included deliberately as positive controls: neuroendocrine prostate cancer, '
   'muscle-invasive bladder cancer and clear cell renal cell carcinoma. These '
   'were chosen by the authors on clinical grounds, as aggressive urologic '
-  'malignancies whose therapeutic priorities are already documented; neuroendocrine '
-  'prostate cancer in particular is aggressive, treated off protocol, and '
-  'has a published set of proposed targets to check against. If the '
+  'malignancies whose therapeutic priorities are already documented; '
+  'neuroendocrine prostate cancer was included because its published '
+  'therapeutic hypotheses give a reference to compare against. If the '
   'pipeline recovers those priorities, its output in the four rare cancers can '
   'be given more weight.')
 P(f"Of the {F['n_associations']} associations the pipeline produced, "
@@ -337,7 +337,7 @@ P('Somatic alteration frequencies for the three positive controls came from '
   'cancers are absent entirely, so their genes were ranked on differential '
   'expression [9\u201313]. Genomic evidence therefore enters through '
   'candidate selection, not the score (Supplementary Methods Section 2). '
-  'Section 2. Transcriptomic data came from ten Gene Expression Omnibus series '
+  'Transcriptomic data came from ten Gene Expression Omnibus series '
   '[4], listed with their accessions under Data Availability; pathway '
   'definitions from the Kyoto Encyclopedia of Genes and Genomes [7]; and '
   'drug-target relationships and clinical stage from the Therapeutic Target '
@@ -348,8 +348,11 @@ P('Somatic alteration frequencies for the three positive controls came from '
   'recurrently altered genes.')
 
 H('Candidate Selection', 11.5, 10, level=2)
-P(f"A candidate here is one pairing of an existing drug with one cancer, "
-  f"proposed on the molecular evidence below. Candidates were generated one "
+P(f"A candidate is one proposed therapy, drug class or combination matched "
+  f"to one cancer or molecular subtype, supported by the evidence below; a "
+  f"row naming several antagonists of the same axis is one candidate, not "
+  f"several. "
+  f"Candidates were generated one "
   f"cancer at a time. Genes were ranked by "
   f"somatic alteration frequency where TCGA provides a cohort and otherwise "
   f"by the moderated t-statistic from the corresponding fit, reviewed "
@@ -477,9 +480,11 @@ P(f"Enrichment asks whether a gene set holds more of a cancer's raised "
   f"genome, which would inflate the overlap for a targeted panel "
   f"(Supplementary Methods Section 5). Benjamini-Hochberg correction was "
   f"applied across the eighteen sets within each context, and not across "
-  f"contexts, drugs or downstream comparisons; q is that corrected p-value, "
-  f"the false-discovery rate, quoted throughout in place of p because "
-  f"thousands of genes are tested at once. Two thresholds were "
+  f"contexts, drugs or downstream comparisons. Throughout, q is a "
+  f"Benjamini-Hochberg-adjusted p-value, used to control the false-discovery "
+  f"rate. For differential expression it is adjusted across the genes tested "
+  f"in that series; for enrichment it is adjusted across the eighteen gene "
+  f"sets within each context. Two thresholds were "
   f"pre-specified: q < 0.05 for differential expression and an exploratory "
   f"q < 0.10 for enrichment, values between the two being described as "
   f"suggestive. Analyses ran under R 4.6.1 (limma 3.68.4, edgeR 4.10.1) and "
@@ -512,10 +517,10 @@ P(f"All {F['arm_control']['proposed']} positive-control associations recover a "
   f"in muscle-invasive bladder cancer [24\u201332] and three in clear cell "
   f"renal cell carcinoma [33\u201337]. Erlotinib in renal medullary "
   f"carcinoma [38,39] and pembrolizumab in penile squamous cell carcinoma "
-  f"[40–42] are not controls but recoveries inside two of the rare "
-  f"cancers, adding two to the same tally, {F['n_previously_proposed']} in total, a positive "
-  f"control rather than independent validation for the reason the "
-  f"Discussion gives.")
+  f"[40–42] were recovered within the rare cancers rather than the "
+  f"designated control contexts, giving {F['n_previously_proposed']} "
+  f"instances of agreement with a prior proposal, which is not independent "
+  f"validation, for the reason the Discussion gives.")
 
 H('Rare and Variant Cancers', 11.5, 10, level=2)
 P(f"In renal medullary carcinoma the deposited experiment is a SMARCB1 rescue "
