@@ -364,7 +364,7 @@ P(f"A candidate is one proposed therapy, drug class or combination matched "
   f"{F['tcga_rows_freq_ge_15pct']} of the {F['n_tcga_anchored']} "
   f"positive-control associations nominate a gene the original curation "
   f"recorded as altered in 15% or more of the cohort, a figure from that "
-  f"curation rather than from the recomputation in Supplementary Table S4, "
+  f"curation and not from the recomputation in Supplementary Table S4, "
   f"while {F['geo_rows_no_recurrent_alteration']} of the "
   f"{F['n_geo_anchored']} from the rare cancers nominate a target that is not "
   f"itself recurrently altered and were reached on expression alone "
@@ -464,21 +464,23 @@ P(f"Each series was fitted with the model its design supports, given per "
   f"the matched tumor-normal bladder kinome panel; batch as a covariate in "
   f"each small-cell subtype contrast against the mean of the rest; and, in "
   f"the sarcomatoid series, chip collinear with histology, so that "
-  f"coefficient is not estimable and no histology contrast is reported.")
+  f"coefficient is not estimable and no histology contrast is reported; its "
+  f"transcriptomic component is instead an abundance percentile over the 28 "
+  f"sarcomatoid tumors, recomputed within each chip batch to test whether "
+  f"each scoring gene stays on the same side of the threshold.")
 P(f"The renal medullary series is a two-cell-line SMARCB1 rescue experiment "
-  f"deposited only as an author-computed differential-expression table, with "
-  f"no sample-level matrix, so no model matched to its design can be fitted. "
-  f"The two lines were treated as two independent patient-derived models "
-  f"rather than an inferential cohort: a gene had to exceed |log2 fold "
-  f"change| of 0.5 in the disease-state orientation at q < 0.05 in each line "
-  f"separately, and the reported q-value is the larger of the two.")
+  f"deposited only as an author-computed differential-expression table, so no "
+  f"model matched to its design can be fitted. Its two lines were treated as "
+  f"two independent patient-derived models rather than an inferential "
+  f"cohort: a gene had to exceed |log2 fold change| of 0.5 in the disease-state "
+  f"orientation at q < 0.05 in each separately, and the reported q is the "
+  f"larger of the two.")
 P(f"Enrichment asks whether a gene set holds more of a cancer's raised "
   f"genes than chance would put there. It was a one-sided hypergeometric "
   f"test of the genes at q < 0.05 "
-  f"with log2 fold change above 0.5 against each of the eighteen sets, with "
-  f"the genes that dataset measured as the universe rather than the whole "
-  f"genome, which would inflate the overlap for a targeted panel "
-  f"(Supplementary Methods Section 5). Benjamini-Hochberg correction was "
+  f"with log2 fold change above 0.5 against each of the eighteen sets, "
+  f"against the genes that dataset measured rather than the whole genome, "
+  f"which would inflate the overlap for a targeted panel. Benjamini-Hochberg correction was "
   f"applied across the eighteen sets within each context, and not across "
   f"contexts, drugs or downstream comparisons. Throughout, q is a "
   f"Benjamini-Hochberg-adjusted p-value, used to control the false-discovery "
@@ -568,8 +570,9 @@ P(f"The sarcomatoid series is reported in full in the Supplementary Results. "
   f"sarcomatoid-versus-conventional comparison "
   f"and scored four of these five associations on transcript abundance "
   f"summarized within the sarcomatoid tumors, without estimating a "
-  f"difference between the histologies (Figure 4), and each of the four "
-  f"holds its percentile independently within all four chip batches: "
+  f"difference between the histologies (Figure 4). Recomputed inside each "
+  f"chip batch, UHRF1, NSD2 and G6PD stay above the 85th percentile in "
+  f"every batch and ATR stays below it: "
   f"UHRF1 [47], NSD2 "
   f"and G6PD [48] are highly abundant there and ATR is not. The pathway "
   f"component could not be computed for this context, so these rows total out of 4 "
@@ -862,9 +865,11 @@ FIGURES = [
      'abundance route scores against. ATR falls below it, which is why that '
      'candidate was not prioritized. (B) The same four percentiles '
      'recomputed independently inside each of the four chip batches the 28 '
-     'tumors were run on, with the pooled value filled. Each gene holds its '
-     'place in every batch, so the ranking is not an artifact of any one of '
-     'them. The confounded contrast itself, and the pathway values that '
+     'tumors were run on (n = 6, 11, 2 and 9), with the pooled value filled. '
+     'Each gene stays on the same side of the threshold in all four '
+     'batches, so the classification the score rests on is not an artifact '
+     'of any one of them. Percentiles shift by a few points between '
+     'batches; the per-batch values are deposited. The confounded contrast itself, and the pathway values that '
      'inherit it, are Supplementary Figure S2.'),
     ('Figure5_candidate_selection.png', 6.9,
      'Figure 5. Every candidate without a prior urologic-oncology proposal, '
@@ -930,8 +935,9 @@ P('Supplementary Results: the sarcomatoid urothelial carcinoma findings in '
   'full; a plain-language account of the four '
   'independent sources, what each can and cannot show, what was done with '
   'each and which deposited file holds its raw output; the penile squamous '
-  'cell carcinoma findings in full; and the per-gene nomination routes with '
-  'Supplementary Figure S1. '
+  'cell carcinoma findings in full; the per-gene nomination routes with '
+  'Supplementary Figure S1; and the sarcomatoid comparison that cannot be '
+  'interpreted, with Supplementary Figure S2. '
   'Supplementary Methods: full procedural detail for the pipeline steps and '
   'the four independent evidence sources, including data releases, model '
   'specifications, thresholds and statistical tests. '
@@ -953,7 +959,8 @@ P('Supplementary Results: the sarcomatoid urothelial carcinoma findings in '
   'fitted differential-expression tables for every context, enrichment tables '
   'with nominal and corrected values, the renal medullary two-line reanalysis, '
   'the Human Protein Atlas, DepMap, PRISM and LINCS result tables, and the '
-  'candidate-selection table.')
+  'candidate-selection table, and the sarcomatoid abundance percentiles '
+  'per chip batch.')
 
 H('AI USAGE DISCLOSURE', 12)
 P('Large language models were used for three things in this work: writing and '

@@ -150,6 +150,8 @@ axB.text(THRESH, len(GENES) - 0.42, ' 85th percentile', fontsize=6.9,
 axB.set_yticks(ypos)
 axB.set_yticklabels(GENES, fontsize=8.8)
 axB.set_xlim(62, 116)
+# no value exceeds 100; the space to its right carries the range labels only
+axB.set_xticks([70, 80, 90, 100])
 axB.set_ylim(-0.75, len(GENES) - 0.30)
 axB.set_xlabel('percentile, recomputed within each chip batch', fontsize=8.6)
 axB.set_title('B. The same ranking inside each of the four batches\n'
@@ -160,6 +162,19 @@ axB.set_title('B. The same ranking inside each of the four batches\n'
 axB.tick_params(labelsize=8.0)
 for s_ in ('top', 'right', 'left'):
     axB.spines[s_].set_visible(False)
+
+rows = []
+for g in GENES:
+    rows.append({'gene': g, 'batch': 'all 28 tumors pooled',
+                 'n_tumors': len(sarc), 'percentile': round(pooled[g], 1),
+                 'above_85th_percentile': pooled[g] >= THRESH})
+    for c in chips:
+        rows.append({'gene': g, 'batch': c, 'n_tumors': n_per_chip[c],
+                     'percentile': round(per_chip[g][c], 1),
+                     'above_85th_percentile': per_chip[g][c] >= THRESH})
+_out_csv = REPO / 'output' / 'v31_supplementary' / 'SARC_BATCH_PERCENTILES.csv'
+pd.DataFrame(rows).to_csv(_out_csv, index=False)
+print(f'wrote {_out_csv.name}')
 
 out = FIG / 'Figure4_SarcUC.png'
 plt.savefig(out, dpi=300, bbox_inches='tight')
