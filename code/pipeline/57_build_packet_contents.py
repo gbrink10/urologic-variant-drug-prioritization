@@ -45,14 +45,21 @@ n_tab = len(ms.tables)
 cl_words = sum(len(p.split()) for p in paras(CL))
 sup_words = sum(len(p.split()) for p in paras(SUP))
 
+# keyed on the filenames the figure scripts actually write; an earlier
+# numbering left three keys here that matched nothing, so two figures printed
+# with a blank description
 FIG_NOTE = {
     'Figure1_pipeline.png': 'the pipeline, context definition to ranked candidates',
     'Figure2_RMC.png': 'renal medullary carcinoma; panel C created with BioRender',
     'Figure3_SCBC.png': 'small-cell bladder cancer, by lineage subtype',
-    'Figure4_candidate_selection.png':
+    'Figure4_SarcUC.png':
+        'what the sarcomatoid rows are scored on, and the same ranking within '
+        'each chip batch',
+    'Figure5_candidate_selection.png':
         'every candidate without a prior proposal, against every criterion',
-    'FigureS1_SarcUC.png': 'sarcomatoid urothelial carcinoma',
-    'FigureS2_selection_routes.png': 'how each association was nominated',
+    'FigureS1_selection_routes.png': 'how each association was nominated',
+    'FigureS2_SarcUC_confounded.png':
+        'the sarcomatoid comparison that cannot be interpreted',
 }
 NUMBERED = ('Supplementary_Table_S1', 'Supplementary_Table_S2',
             'Supplementary_Table_S3')
