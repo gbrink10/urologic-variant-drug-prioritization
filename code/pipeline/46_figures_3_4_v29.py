@@ -17,7 +17,7 @@ wrong twice over: PTGS1/COX-1 is an intracellular enzyme, and the POU2F3-COX
 association is partially novel rather than framework-novel. The heading is now
 descriptive.
 
-Writes: figures/Figure4_SarcUC.png, figures/Figure3_SCBC.png
+Writes: figures/FigureS2_SarcUC_confounded.png, figures/Figure3_SCBC.png
 """
 import re
 import sys
@@ -72,8 +72,8 @@ def panel_c(ax, name, title):
 # Figure 3
 # =====================================================================
 d = de('SarcUC', SARC)
-fig = plt.figure(figsize=(15.0, 5.2))
-gs = gridspec.GridSpec(1, 3, width_ratios=[1.0, 1.0, 0.72], wspace=0.34,
+fig = plt.figure(figsize=(11.2, 5.2))
+gs = gridspec.GridSpec(1, 2, width_ratios=[1.0, 1.0], wspace=0.30,
                        left=0.05, right=0.99, top=0.84, bottom=0.13)
 
 axA = fig.add_subplot(gs[0, 0])
@@ -132,52 +132,10 @@ for s_ in ('top', 'right'):
     axB.spines[s_].set_visible(False)
 
 
-def _ord(v):
-    """91 -> '91st'. The panel had a hardcoded 'th' suffix."""
-    i = int(round(v))
-    suf = ('th' if 10 <= i % 100 <= 20
-           else {1: 'st', 2: 'nd', 3: 'rd'}.get(i % 10, 'th'))
-    return f'{i}{suf}'
-
-
-# ---- C: what the rows are actually scored on ---------------------------
-# the contrast cannot be interpreted, so the transcriptomic component for this
-# context comes from within-group abundance; this panel is that quantity
-axC = fig.add_subplot(gs[0, 2])
-_pct = {}
-for _n, _g in ((25, 'UHRF1'), (23, 'NSD2'), (26, 'G6PD'), (24, 'ATR')):
-    _row = prov[prov['N'] == _n]
-    if len(_row):
-        _m = re.search(r'at ([0-9.]+)th percentile of ([0-9,]+)',
-                       str(_row['E_basis'].iloc[0]))
-        if _m:
-            _pct[_g] = float(_m.group(1))
-            _universe = _m.group(2)
-_g_order = [g for g in ('UHRF1', 'NSD2', 'G6PD', 'ATR') if g in _pct]
-_y = np.arange(len(_g_order))[::-1]
-for _yy, _g in zip(_y, _g_order):
-    _v = _pct[_g]
-    # the 85th percentile is the threshold the abundance route scores against
-    _c = '#1a3a5c' if _v >= 85 else '#a93226'
-    axC.plot([0, _v], [_yy, _yy], color=_c, lw=1.6, alpha=0.55, zorder=1,
-             solid_capstyle='round')
-    axC.scatter([_v], [_yy], s=70, color=_c, edgecolor=_c, zorder=3)
-    axC.text(_v + 1.5, _yy, _ord(_v), va='center', fontsize=7.4,
-             color=_c, weight='bold')
-axC.axvline(85, ls='--', lw=0.9, c='#888')
-axC.set_ylim(-0.95, len(_g_order) - 0.55)
-axC.text(85, -0.72, '85th percentile', fontsize=6.8, color='#666',
-         style='italic', va='center', ha='center', clip_on=False)
-axC.set_yticks(_y); axC.set_yticklabels(_g_order, fontsize=8.6)
-axC.set_xlim(0, 108)
-axC.set_xlabel(f'percentile of {_universe} measured transcripts', fontsize=8.4)
-axC.set_title('C. What these rows are scored on\n'
-              'abundance within the sarcomatoid tumors',
-              fontsize=9.5, weight='bold', loc='left')
-for s_ in ('top', 'right'):
-    axC.spines[s_].set_visible(False)
-
-out3 = FIG / 'Figure4_SarcUC.png'
+# the confounded contrast is no longer a main-text figure; Figure 4 now
+# shows the abundance the rows are scored on, built by
+# 60_figure4_sarc_rebuild.py
+out3 = FIG / 'FigureS2_SarcUC_confounded.png'
 plt.savefig(out3, bbox_inches='tight')
 plt.close()
 print(f"Saved {out3.name} ({out3.stat().st_size:,} bytes)")

@@ -560,15 +560,16 @@ P(f"Lineage-stratified small-cell bladder cancer (Figure 3), classified by "
 
 print('results 3.1-3.3 written')
 
-P(f"The sarcomatoid series is reported in full in the Supplementary Results, "
-  f"and Figure 4 shows why no contrast is. Every sarcomatoid tumor was run "
-  f"on a different batch of chips from every conventional tumor, so a "
-  f"difference between the groups is also a difference between batches and "
-  f"no model can separate them. We therefore report no "
+P(f"The sarcomatoid series is reported in full in the Supplementary Results. "
+  f"Every sarcomatoid tumor was run on a different batch of chips from every "
+  f"conventional tumor, so a difference between the groups is also a "
+  f"difference between batches and no model can separate them "
+  f"(Supplementary Figure S2). We therefore report no "
   f"sarcomatoid-versus-conventional comparison "
   f"and scored four of these five associations on transcript abundance "
   f"summarized within the sarcomatoid tumors, without estimating a "
-  f"difference between the histologies: "
+  f"difference between the histologies (Figure 4), and each of the four "
+  f"holds its percentile independently within all four chip batches: "
   f"UHRF1 [47], NSD2 "
   f"and G6PD [48] are highly abundant there and ATR is not. The pathway "
   f"component could not be computed for this context, so these rows total out of 4 "
@@ -851,20 +852,20 @@ FIGURES = [
      'whether inhibition or activation is therapeutic requires functional '
      'testing.'),
     ('Figure4_SarcUC.png', 6.9,
-     'Figure 4. Sarcomatoid urothelial carcinoma, and why no contrast is '
-     'reported. (A) The separation between the two chip-aligned groups, shown '
-     'for completeness; it cannot be read as a difference between histologies, '
-     'because every sarcomatoid tumor was run on a different batch of chips '
-     'from every conventional tumor. (B) Pathway values from that same '
-     'comparison, which inherit the confounding, so no pathway component is '
-     'scored for this context. (C) The quantity these rows are scored on '
-     'instead: abundance summarized within the sarcomatoid tumors, which '
-     'estimates no difference between the histologies and so does not rest '
-     'on the confounded comparison. The dashed line is the 85th percentile, the threshold the '
-     'abundance route scores against; ATR falls below it, which is why that '
-     'candidate was not prioritized. The confounding in panels A and B is the '
-     'design flaw that the deposited summary statistics did not show and the '
-     'refit did.'),
+     'Figure 4. What the sarcomatoid rows are scored on. Histology is '
+     'confounded with array chip in this series, so no sarcomatoid-versus-'
+     'conventional contrast is reported and these rows are scored on '
+     'abundance within the sarcomatoid tumors alone. (A) Where the four '
+     'scoring genes sit in that transcriptome. The curve is the ranked mean '
+     'expression of all 20,363 genes measured across the 28 sarcomatoid '
+     'tumors; the dashed line is the 85th percentile, the threshold the '
+     'abundance route scores against. ATR falls below it, which is why that '
+     'candidate was not prioritized. (B) The same four percentiles '
+     'recomputed independently inside each of the four chip batches the 28 '
+     'tumors were run on, with the pooled value filled. Each gene holds its '
+     'place in every batch, so the ranking is not an artifact of any one of '
+     'them. The confounded contrast itself, and the pathway values that '
+     'inherit it, are Supplementary Figure S2.'),
     ('Figure5_candidate_selection.png', 6.9,
      'Figure 5. Every candidate without a prior urologic-oncology proposal, '
      'against every criterion. Each cell carries a symbol as well as a color: '

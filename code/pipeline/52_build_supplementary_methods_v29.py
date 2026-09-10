@@ -196,6 +196,26 @@ if _s2.exists():
     _r2.font.size = Pt(9)
     _r2.italic = True
 
+
+# the confounded sarcomatoid contrast, kept out of the main text but reported
+_s2b = paths.FIGURES / 'FigureS2_SarcUC_confounded.png'
+if _s2b.exists():
+    doc.add_picture(str(_s2b), width=Inches(6.5))
+    _c3 = doc.add_paragraph()
+    _r3 = _c3.add_run(
+        'Supplementary Figure S2. The sarcomatoid comparison that cannot be '
+        'interpreted. (A) The separation between the two chip-aligned groups. '
+        'It cannot be read as a difference between histologies, because every '
+        'sarcomatoid tumor was run on a different batch of chips from every '
+        'conventional tumor, so a difference between the groups is also a '
+        'difference between batches. (B) Pathway values from that same '
+        'comparison, which inherit the confounding, which is why no pathway '
+        'component is scored for this context and these rows total out of 4 '
+        'rather than 6. This is the design flaw the deposited summary '
+        'statistics did not show and the refit did. What the rows are scored '
+        'on instead is Figure 4.')
+    _r3.font.size = Pt(8.5)
+    _r3.italic = True
 H('Supplementary Methods', 13, 14)
 
 H('1. Contexts and their role')
