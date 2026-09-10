@@ -866,10 +866,10 @@ FIGURES = [
      'candidate was not prioritized. (B) The same four percentiles '
      'recomputed independently inside each of the four chip batches the 28 '
      'tumors were run on (n = 6, 11, 2 and 9), with the pooled value filled. '
-     'Each gene stays on the same side of the threshold in all four '
-     'batches, so the classification the score rests on is not an artifact '
-     'of any one of them. Percentiles shift by a few points between '
-     'batches; the per-batch values are deposited. The confounded contrast itself, and the pathway values that '
+     'Each gene stays on the same side of the 85th-percentile threshold in '
+     'all four batches, supporting the consistency of the pooled abundance '
+     'classification. Percentiles shift by a few points between batches; '
+     'the per-batch values are deposited. The confounded contrast itself, and the pathway values that '
      'inherit it, are Supplementary Figure S2.'),
     ('Figure5_candidate_selection.png', 6.9,
      'Figure 5. Every candidate without a prior urologic-oncology proposal, '

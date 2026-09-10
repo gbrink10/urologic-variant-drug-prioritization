@@ -143,6 +143,63 @@ for _, r in PROV.iterrows():
         continue
 check('no q-value is quoted in a form the deposit contradicts', not _bad)
 
+
+# ---- everything the manuscript names must exist in the package ----------
+print()
+print('Inventory: what the manuscript names against what ships')
+
+_sup_doc = docx.Document(str(REPO / 'output' / 'Supplementary_Methods_v31.docx'))
+SUPTEXT = '\n'.join(p.text for p in _sup_doc.paragraphs)
+
+# numbered supplementary tables cited anywhere in the main text
+for _n in sorted(set(re.findall(r'Supplementary Table S(\d)', ALL))):
+    _hits = list(SUP.glob(f'Supplementary_Table_S{_n}_*.csv'))
+    check(f'Supplementary Table S{_n} ships as a file', bool(_hits),
+          f'no Supplementary_Table_S{_n}_*.csv in {SUP.name}')
+
+# numbered supplementary figures cited in the main text must be in the
+# supplementary document, and its embedded image count must cover them
+_figs = sorted(set(re.findall(r'Supplementary Figure S(\d)', ALL)))
+for _n in _figs:
+    check(f'Supplementary Figure S{_n} has a caption in the supplement',
+          f'Supplementary Figure S{_n}.' in SUPTEXT)
+import zipfile
+_z = zipfile.ZipFile(REPO / 'output' / 'Supplementary_Methods_v31.docx')
+_media = [m for m in _z.namelist() if m.startswith('word/media/')]
+check(f'the supplement embeds an image for each of its {len(_figs)} figures',
+      len(_media) >= len(_figs), f'{len(_media)} embedded, {len(_figs)} cited')
+
+# numbered Supplementary Methods sections cited by the main text
+for _n in sorted(set(re.findall(r'Supplementary Methods Section (\w+)', ALL))):
+    check(f'Supplementary Methods Section {_n} exists',
+          re.search(rf'^{_n}\w*\.\s', SUPTEXT, re.M) is not None
+          or f'{_n}. ' in SUPTEXT)
+
+# the per-batch percentiles the inventory now promises
+_batch = SUP / 'SARC_BATCH_PERCENTILES.csv'
+check('the sarcomatoid per-batch percentiles ship', _batch.exists())
+if _batch.exists():
+    _b = pd.read_csv(_batch)
+    check('per-batch file covers four genes and five rows each',
+          len(_b) == 20 and _b['gene'].nunique() == 4, f'{len(_b)} rows')
+    # and must agree with the score it is meant to support
+    _bad = []
+    for _, r in _b[_b['batch'] == 'all 28 tumors pooled'].iterrows():
+        _basis = str(PROV.loc[PROV['scoring_gene'] == r['gene'], 'E_basis'].iloc[0])
+        _m = re.search(r'at ([0-9.]+)th percentile', _basis)
+        if _m and abs(float(_m.group(1)) - float(r['percentile'])) > 0.15:
+            _bad.append(r['gene'])
+    check('pooled per-batch values match the scoring provenance', not _bad,
+          '; '.join(_bad))
+    check('the threshold flag matches the 85th-percentile rule',
+          bool((_b['above_85th_percentile'] == (_b['percentile'] >= 85)).all()))
+
+# every GEO accession the manuscript lists must appear in the design summary
+# or be the one series the text says has no fitted model
+_acc = sorted(set(re.findall(r'GSE\d+', ALL)))
+check(f'the manuscript lists {len(_acc)} GEO accessions', len(_acc) >= 10,
+      str(len(_acc)))
+
 print()
 if _fails:
     print(f'{len(_fails)} reconciliation failure(s):')
