@@ -39,7 +39,9 @@ master = pd.read_csv(RF / 'MASTER_TABLE_V29.csv')
 n_assoc = len(master)
 
 SUPPORT, PARTIAL, AGAINST, UNTESTED = '#1e8449', '#f4d03f', '#c0392b', '#bdc3c7'
-SYM = {SUPPORT: '+', PARTIAL: '~', AGAINST: '\u2212', UNTESTED: 'n/a'}
+# a route is not a verdict, so the column that names one is uncoloured
+NEUTRAL = '#e8eaed'
+SYM = {SUPPORT: '+', PARTIAL: '~', AGAINST: '\u2212', UNTESTED: 'n/a', NEUTRAL: ''}
 
 NAMES = {
     17: 'CXCR1/CXCR2 antagonists\n(renal medullary carcinoma)',
@@ -49,7 +51,7 @@ NAMES = {
     24: 'ATR inhibition\n(sarcomatoid urothelial)',
     29: '$^{177}$Lu-DOTATATE\n(NEUROD1+ small-cell bladder)',
 }
-COLS = ['Transcriptomic\nevidence', 'Score', 'Meets its arm\'s\nstandard',
+COLS = ['Evidence\nroute', 'Score \u2265 4', 'Meets its arm\'s\nstandard',
         'Target in\nenriched pathway', 'Protein\naccess',
         'Clinical access /\ndevelopment path']
 
@@ -67,12 +69,13 @@ for _, r in sel.iterrows():
     path_ok = bool(r.get('pathway_estimable', True))
     denom = int(r.get('total_denominator', 9) or 9)
     arm_abundance = pd.isna(r['E_refit_q'])
-    cells.append(PARTIAL if arm_abundance else SUPPORT)
+    cells.append(NEUTRAL)
     txt.append('abundance\n(no contrast)' if arm_abundance else 'disease\ncontrast')
 
     if True:
         total = int(r['total'])
-        cells.append(SUPPORT if total >= 7 else PARTIAL if total >= 4 else AGAINST)
+        # E2 asks for 4 or better of the points available for the row
+        cells.append(SUPPORT if total >= 4 else AGAINST)
         txt.append(f'{total}/{denom}')
 
         q = float(r['E_refit_q']) if pd.notna(r['E_refit_q']) else np.nan
@@ -99,7 +102,7 @@ for _, r in sel.iterrows():
             # the target sits in a pre-specified set that is not enriched
             cells.append(AGAINST); txt.append('set not\nenriched')
         else:
-            cells.append(UNTESTED); txt.append('not in\npanel')
+            cells.append(UNTESTED); txt.append('not in the\nselected sets')
 
     pl = str(r['protein_layer'])
     if 'confirmed' in pl:
@@ -129,7 +132,7 @@ for i in range(n_r):
         c = grid[i][j]
         axB.add_patch(plt.Rectangle((j, n_r - 1 - i), 1, 1, fc=c, ec='white',
                                     lw=2.0))
-        dark = c in (SUPPORT, AGAINST)
+        dark = c in (SUPPORT, AGAINST)  # NEUTRAL and PARTIAL take dark text
         axB.text(j + 0.5, n_r - 1 - i + 0.68, SYM[c], ha='center', va='center',
                  fontsize=11, weight='bold',
                  color='white' if dark else '#2c3e50')
@@ -153,11 +156,13 @@ axB.set_title(f'All {n_novel} candidates without a prior urologic-oncology '
               f'proposal, against every criterion', fontsize=10.2,
               weight='bold', pad=30, loc='left')
 
-handles = [plt.Rectangle((0, 0), 1, 1, fc=c, ec='white')
-           for c in (SUPPORT, PARTIAL, AGAINST, UNTESTED)]
-labels = ['+  supports', '~  partial', '\u2212  contradicts', 'n/a  cannot test']
+handles = [plt.Rectangle((0, 0), 1, 1, fc=c, ec='#b0b6bd')
+           for c in (SUPPORT, PARTIAL, AGAINST, UNTESTED, NEUTRAL)]
+labels = ['+  meets the criterion', '~  partly meets it',
+          '\u2212  does not meet it', 'n/a  cannot be tested',
+          '   route, not a verdict']
 axB.legend(handles, labels, loc='upper center', bbox_to_anchor=(0.5, -0.03),
-           ncol=4, frameon=False, fontsize=7.4)
+           ncol=5, frameon=False, fontsize=7.0)
 
 out = FIG / 'Figure5_candidate_selection.png'
 plt.savefig(out, bbox_inches='tight')

@@ -121,8 +121,8 @@ TARGET_OVERRIDE = {
 DRUG_OVERRIDE = {
     # Seclidemstat (SP-2577) is an LSD1/KDM1A inhibitor, not an NSD2 inhibitor,
     # and does not belong in this row.
-    17: 'CXCR2-directed antagonists, including agents with additional CXCR1 '
-        'activity (AZD5069, navarixin, reparixin, danirixin)',
+    17: 'CXCR1/CXCR2-axis antagonists with differing receptor '
+        'selectivity (AZD5069, navarixin, reparixin, danirixin)',
     23: 'Gintemetostat (KTX-1001)',
     # The representative agent for the class is now the agent in development.
     28: 'Precemtabart tocentecan (M9140), anti-CEACAM5 ADC',

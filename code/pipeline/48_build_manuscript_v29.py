@@ -224,11 +224,11 @@ P(f"Methods. A curated set of drug-cancer associations was assembled from "
   f"{F['stage']['preclinical']} preclinical agents entered where nothing "
   f"clinical-stage targeted the protein. Differential expression across "
   f"{F['n_series_total']} datasets, enrichment across eighteen pre-specified "
-  f"gene sets and external mechanistic-literature concordance gave a 6-point "
-  f"score, refitted in limma and edgeR under models matched to each design "
-  f"except one series deposited only as a summary table. Associations were "
-  f"then classified by prior proposal and ranked by a rule written in "
-  f"advance.")
+  f"gene sets and mechanistic-literature concordance gave a 6-point "
+  f"score. Expression was reanalyzed in limma and edgeR under models matched "
+  f"to each design, except one series deposited only as summary results. "
+  f"Associations were "
+  f"then classified by prior proposal and ranked by a pre-specified rule.")
 P(f"Results. We evaluated {F['n_drug_hypotheses']} drug-cancer hypotheses "
   f"and one unscored "
   f"biomarker observation. {spell(F['n_complete_score']).capitalize()} carry a "
@@ -240,15 +240,15 @@ P(f"Results. We evaluated {F['n_drug_hypotheses']} drug-cancer hypotheses "
   f"proposed independently elsewhere. Among the {F['n_rare_hypotheses']} "
   f"rare-cancer hypotheses, {F['arm_discovery']['proposed']} were previously "
   f"proposed, {F['arm_discovery']['partial']} have a partial precedent and "
-  f"{F['arm_discovery']['novel']} none in the urologic literature. Criteria "
   f"{F['arm_discovery']['novel']} none in the urologic literature. The "
-  f"criteria prioritized {F['funnel']['survive']}: CXCR1/CXCR2 "
-  f"conjugates in ASCL1-positive small-cell bladder cancer. Restricting "
+  f"criteria prioritized {F['funnel']['survive']}: CXCR1/CXCR2 blockade and "
+  f"anti-CEACAM1 in renal medullary carcinoma, and anti-CEACAM5 conjugates "
+  f"in ASCL1-positive small-cell bladder cancer. Restricting "
   f"pathway points to targets in an enriched set retains CXCR1/CXCR2 and "
   f"anti-CEACAM5 but excludes anti-CEACAM1. Of the other "
   f"{F['arm_discovery']['novel'] - F['funnel']['survive']}, SSTR2 fails "
   f"the batch-adjusted transcriptomic criterion and the sarcomatoid rows "
-  f"cannot separate histology from array batch.")
+  f"cannot separate histology from batch.")
 P(f"Conclusion. Public data can prioritize drug hypotheses for cancers in "
   f"which prospective biomarker-directed trials are hard to conduct. Every "
   f"candidate is reported with its evidence and needs experimental "
@@ -820,9 +820,9 @@ FIGURES = [
      'recruited myeloid cells, which is why a tumor-cell monoculture does '
      'not evaluate it. Neither receptor was measured in this series. '
      'CXCL8 binds both receptors; CXCL1, '
-     'CXCL2 and CXCL3 are CXCR2-selective. The antagonists are '
-     'antagonists of the CXCR1/CXCR2 axis with differing receptor '
-     'selectivity: AZD5069, navarixin, reparixin and danirixin. Panel C created with '
+     'CXCL2 and CXCL3 are CXCR2-selective. The agents are CXCR1/CXCR2-axis '
+     'antagonists with differing receptor selectivity: AZD5069, navarixin, '
+     'reparixin and danirixin. Panel C created with '
      'BioRender.com.'),
     ('Figure3_SCBC.png', 6.9,
      'Figure 3. Lineage-stratified small-cell bladder cancer. (A) Subtype '
@@ -852,15 +852,18 @@ FIGURES = [
     ('Figure5_candidate_selection.png', 6.9,
      'Figure 5. Every candidate without a prior urologic-oncology proposal, '
      'against every criterion. Each cell carries a symbol as well as a color: '
-     '+ supports, '
-     '~ partial, \u2212 fails the criterion or contradicts, n/a cannot test. '
-     'The transcriptomic column records which arm the evidence comes from, '
-     'the second its total score, and the third whether it meets that '
-     'arm’s standard. Protein access records whether the target is '
+     '+ meets the criterion, ~ partly meets it, '
+     '− does not meet it, n/a cannot be tested. '
+     'The first column names which arm the evidence comes from and is left uncolored, '
+     'because a route is not a verdict; the second marks whether the total meets '
+     'the criterion of 4, and the third whether the evidence meets the standard '
+     'for its arm. Protein access records whether the target is '
      'reachable by the kind of agent proposed. The pathway column marks '
      'whether the target is itself a member of the enriched set, and reads '
-     'not computed for the sarcomatoid rows, whose only available '
-     'enrichment derives from the confounded comparison. '
+     'not in the selected sets where the target belongs to none of the '
+     'eighteen, which differs from the sarcomatoid rows, where it reads not '
+     'computed because their only enrichment derives from the confounded '
+     'comparison. '
      'The score is less strict than the column: it awards one point for '
      'enrichment or for membership and two for both, so a target can carry a '
      'pathway point without appearing in the set. Supplementary Table S2 gives '
@@ -983,6 +986,11 @@ P('Every association is accounted for in one class. The complete table, with '
 
 t = doc.add_table(rows=1, cols=6)
 t.style = 'Table Grid'
+# python-docx honours a width only when autofit is off, and the width has to
+# be set on every cell; the number column was taking as much room as the
+# drug column and forcing the long antagonist row to wrap
+t.autofit = False
+COL_IN = (0.32, 0.85, 2.05, 0.95, 1.45, 1.28)
 hdr = ['#', 'Context', 'Drug / target', 'Score \u00b7 evidence tier', 'Status',
        'Required next step']
 for c, h in zip(t.rows[0].cells, hdr):
@@ -1058,6 +1066,13 @@ def add_row(cells, bold=False, size=8.0):
             q.italic = True
     return row
 
+
+# the number column was taking as much width as the drug column, forcing the
+# long antagonist row to wrap; python-docx honours a width only with autofit
+# off and only when it is set on every cell
+for _row in t.rows:
+    for _c, _w in zip(_row.cells, COL_IN):
+        _c.width = Inches(_w)
 
 # narrow cell margins: the table is six columns of prose and the default
 # 0.08" left/right padding costs almost a page across thirty rows

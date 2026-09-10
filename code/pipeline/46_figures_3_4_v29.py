@@ -132,6 +132,14 @@ for s_ in ('top', 'right'):
     axB.spines[s_].set_visible(False)
 
 
+def _ord(v):
+    """91 -> '91st'. The panel had a hardcoded 'th' suffix."""
+    i = int(round(v))
+    suf = ('th' if 10 <= i % 100 <= 20
+           else {1: 'st', 2: 'nd', 3: 'rd'}.get(i % 10, 'th'))
+    return f'{i}{suf}'
+
+
 # ---- C: what the rows are actually scored on ---------------------------
 # the contrast cannot be interpreted, so the transcriptomic component for this
 # context comes from within-group abundance; this panel is that quantity
@@ -154,7 +162,7 @@ for _yy, _g in zip(_y, _g_order):
     axC.plot([0, _v], [_yy, _yy], color=_c, lw=1.6, alpha=0.55, zorder=1,
              solid_capstyle='round')
     axC.scatter([_v], [_yy], s=70, color=_c, edgecolor=_c, zorder=3)
-    axC.text(_v + 1.5, _yy, f'{_v:.0f}th', va='center', fontsize=7.4,
+    axC.text(_v + 1.5, _yy, _ord(_v), va='center', fontsize=7.4,
              color=_c, weight='bold')
 axC.axvline(85, ls='--', lw=0.9, c='#888')
 axC.set_ylim(-0.95, len(_g_order) - 0.55)

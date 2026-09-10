@@ -60,7 +60,7 @@ def generate_figure1():
     ax.annotate('', xy=(5.5, 7.35), xytext=(5.5, 7.70),
                 arrowprops=dict(arrowstyle='->', lw=1.5, color='#444'))
 
-    ax.text(5.5, 7.22, 'Step 1.  Genomic evidence input',
+    ax.text(5.5, 7.22, 'Step 1.  Candidate nomination',
             ha='center', fontsize=10, weight='bold', color='#1a1a1a')
 
     ax.add_patch(FancyBboxPatch((0.5, 5.65), 4.85, 1.45,
@@ -69,11 +69,13 @@ def generate_figure1():
     ax.text(2.925, 6.85, 'Step 1a — TCGA Pan-Cancer Atlas',
             ha='center', va='center', fontsize=9.2, weight='bold',
             color='#0b2e4f')
-    ax.text(2.925, 6.55, 'Positive-control cohorts',
+    ax.text(2.925, 6.55, 'Positive-control cohorts, ranked on alteration '
+            'frequency',
             ha='center', va='center', fontsize=8.2, style='italic',
             color='#1a1a1a')
     ax.text(2.925, 6.22,
-            'PRAD  n = 494   (NEPC)\nBLCA  n = 411   (MIBC)\n'
+            'PRAD  n = 494   (adjacent histology for NEPC)\n'
+            'BLCA  n = 411   (MIBC)\n'
             'KIRC  n = 512   (ccRCC)',
             ha='center', va='center', fontsize=8.0, color='#0b2e4f',
             family='monospace')
@@ -84,15 +86,16 @@ def generate_figure1():
     ax.add_patch(FancyBboxPatch((5.65, 5.65), 4.85, 1.45,
                                  boxstyle='round,pad=0.05',
                                  ec='#2c6e49', fc='#d9ead3', linewidth=1.3))
-    ax.text(8.075, 6.85, 'Step 1b — Published genomic series',
+    ax.text(8.075, 6.85, 'Step 1b — Expression-based nomination',
             ha='center', va='center', fontsize=9.2, weight='bold',
             color='#1d4d33')
-    ax.text(8.075, 6.55, 'Rare-disease discovery cohorts',
+    ax.text(8.075, 6.55, 'Rare-disease cohorts, ranked on differential '
+            'expression',
             ha='center', va='center', fontsize=8.2, style='italic',
             color='#1a1a1a')
     ax.text(8.075, 6.22,
-            'RMC: Msaouel 2020       PSCC: Chahoud 2021\n'
-            'Sarc-UC: Guo 2019         SCBC: Chang 2018',
+            'RMC   PSCC   Sarc-UC   SCBC\n'
+            'no TCGA cohort; disease context cited, not scored',
             ha='center', va='center', fontsize=7.7, color='#1d4d33',
             family='monospace')
     ax.text(8.075, 5.78, '→ associations 17–30',
@@ -107,7 +110,8 @@ def generate_figure1():
     unified_steps = [
         (4.62, 'Step 2',
          'GEO transcriptomic differential expression',
-         '10 datasets  ·  limma / edgeR, a model matched to how each dataset was collected  ·  BH-FDR',
+         '10 datasets  ·  limma / edgeR, a model matched to how each dataset was collected  ·  BH-FDR\n'
+         'RMC deposited as summary results only — scored by concordance across its two lines',
          '#fff2cc', '#806600'),
         (3.74, 'Step 3',
          '18 pre-specified druggable pathway / gene sets',
@@ -118,9 +122,9 @@ def generate_figure1():
          'Therapeutic Target Database  +  Open Targets (release 2026.03)',
          '#f4cccc', '#922b21'),
         (1.98, 'Step 5',
-         '9-point Molecular Prioritization Score',
-         'Genomic (0–3)  +  Transcriptomic (0–3)  +  '
-         'KEGG (0–2)  +  Literature (0–1)',
+         '6-point Prioritization Score',
+         'Transcriptomic (0–3)  +  Pathway (0–2)  +  '
+         'Literature (0–1)   ·   genomic evidence contributes no points',
          '#ead1dc', '#6c3483'),
         (1.10, 'Step 6',
          'PubMed search for prior proposals',
@@ -152,7 +156,7 @@ def generate_figure1():
                                  boxstyle='round,pad=0.05',
                                  ec='#7a4a00', fc='#fef5e7', linewidth=1.5))
     ax.text(5.50, 0.74,
-            '30 Drug–Cancer Associations',
+            '29 Drug–Cancer Hypotheses  +  1 Unscored Biomarker Observation',
             ha='center', va='center', fontsize=10.5, weight='bold',
             color='#7a4a00')
     ax.text(2.20, 0.40, '18  previously proposed',
@@ -167,17 +171,18 @@ def generate_figure1():
     ax.text(4.85, 0.20, '(in the urologic-oncology literature)',
             ha='center', va='center', fontsize=7.3, style='italic',
             color='#c00000')
-    ax.text(7.30, 0.40, '5  partial precedents',
+    ax.text(7.05, 0.40, '5  partial precedents',
             ha='center', va='center', fontsize=8.5, weight='bold',
             color='#6c3483')
-    ax.text(7.30, 0.20, '(variant-specific extensions)',
+    ax.text(7.05, 0.20, '(variant-specific extensions)',
             ha='center', va='center', fontsize=7.3, style='italic',
             color='#6c3483')
-    ax.text(9.50, 0.40, '1  biomarker observation',
+    ax.text(9.45, 0.44, '1  biomarker observation',
             ha='center', va='center', fontsize=8.5, weight='bold',
             color='#1d4d33')
-    ax.text(9.50, 0.20, '(TROP2-low, not a drug hypothesis)',
-            ha='center', va='center', fontsize=7.3, style='italic',
+    ax.text(9.45, 0.22, '(TROP2 expression,\nnot a drug hypothesis)',
+            ha='center', va='center', fontsize=6.9, style='italic',
+            linespacing=1.15,
             color='#1d4d33')
 
     # the independent checks moved to the Supplementary Materials; the
@@ -429,7 +434,7 @@ axB.grid(axis='x', alpha=0.3)
 
 panel_c_schematic(axC, SCHEMATICS / 'Figure3_PanelC_SarcUC.png',
                   'C. Proposed cellular mechanism — Sarcomatoid UC framework-'
-                  'novel targets + TROP2-low negative biomarker')
+                  'novel targets + TROP2 expression observation')
 
 plt.suptitle('Figure 3. Sarcomatoid Urothelial Carcinoma — Framework-Novel Findings',
              fontsize=12, weight='bold', y=0.99)

@@ -88,7 +88,7 @@
   {
    "N": 17,
    "target": "CXCR1 / CXCR2 (CXCL8/CXCL1/CXCL2/CXCL3 chemokine axis)",
-   "drug": "CXCR2-directed antagonists, including agents with additional CXCR1 activity (AZD5069, navarixin, reparixin, danirixin)",
+   "drug": "CXCR1/CXCR2-axis antagonists with differing receptor selectivity (AZD5069, navarixin, reparixin, danirixin)",
    "total": 5,
    "context": "RMC",
    "target_in_enriched": true,
