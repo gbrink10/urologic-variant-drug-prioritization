@@ -42,9 +42,11 @@ chem_q = float(enr[(enr['analysis'] == 'both lines')
 AXIS = ['CXCL8', 'CXCL1', 'CXCL2', 'CXCL3', 'CEACAM1']
 present = [g for g in AXIS if g in d.index]
 
-fig = plt.figure(figsize=(15.6, 5.2))
-gs = gridspec.GridSpec(1, 3, width_ratios=[1.0, 0.95, 1.45], wspace=0.30,
-                       left=0.05, right=0.99, top=0.82, bottom=0.12)
+fig = plt.figure(figsize=(11.6, 9.4))
+gs = gridspec.GridSpec(2, 2, width_ratios=[1.0, 0.95],
+                       height_ratios=[1.0, 0.92],
+                       wspace=0.26, hspace=0.12,
+                       left=0.07, right=0.985, top=0.94, bottom=0.06)
 
 # ---------------- A: agreement between the two cell lines ------------------
 axA = fig.add_subplot(gs[0, 0])
@@ -63,19 +65,20 @@ for g in present:
     axA.scatter([gx], [gy], s=52, facecolor='#1a3a5c', edgecolor='white',
                 linewidth=1.1, zorder=5)
     axA.annotate(g, (gx, gy), textcoords='offset points',
-                 xytext=LABEL_OFFSET.get(g, (9, 5)), fontsize=8, weight='bold',
+                 xytext=LABEL_OFFSET.get(g, (9, 5)), fontsize=9.4, weight='bold',
                  color='#1a3a5c', zorder=6)
 lim = np.nanpercentile(np.abs(np.r_[x[ok], y[ok]]), 99.5)
 axA.plot([-lim, lim], [-lim, lim], ls='--', lw=0.9, c='#888', zorder=1)
 axA.axhline(0, lw=0.7, c='#bbb'); axA.axvline(0, lw=0.7, c='#bbb')
 axA.set_xlim(-lim, lim); axA.set_ylim(-lim, lim)
 r_p = np.corrcoef(x[ok], y[ok])[0, 1]
-axA.set_xlabel('log$_2$ fold change, RMC-2C', fontsize=8.6)
-axA.set_ylabel('log$_2$ fold change, RMC219', fontsize=8.6)
+axA.tick_params(labelsize=9.0)
+axA.set_xlabel('log$_2$ fold change, RMC-2C', fontsize=10.2)
+axA.set_ylabel('log$_2$ fold change, RMC219', fontsize=10.2)
 axA.set_title('A. The two patient-derived lines compared\n'
               f'genome-wide r = {r_p:.2f}',
-              fontsize=9.3, weight='bold', loc='left')
-axA.legend(loc='lower right', fontsize=7.2, frameon=False)
+              fontsize=11.4, weight='bold', loc='left')
+axA.legend(loc='lower right', fontsize=8.8, frameon=False)
 for s in ('top', 'right'):
     axA.spines[s].set_visible(False)
 
@@ -95,12 +98,12 @@ axB.barh(ypos - w / 2, [d.loc[g, 'l2fc_disease_48h_219'] for g in present],
          height=w, color='#7fb3d5', label='RMC219')
 axB.set_yticks(ypos)
 axB.set_yticklabels([g if g != 'CEACAM1' else 'CEACAM1' for g in present],
-                    fontsize=8.6)
+                    fontsize=10.2)
 axB.axvline(0, lw=0.8, c='#333')
 axB.set_xlabel('log$_2$ fold change (higher in SMARCB1-null disease state)',
-               fontsize=8.2)
+               fontsize=9.6)
 axB.set_title('B. Nominated RMC signals, each line separately',
-              fontsize=9.3, weight='bold', loc='left')
+              fontsize=11.4, weight='bold', loc='left')
 # annotate the two groups inside the axes, so the q-value is attached only to
 # the ligands that actually drive the enrichment
 _lig = [g for g in present if g != 'CEACAM1']
@@ -109,15 +112,16 @@ if _lig:
     _y = [ypos[present.index(g)] for g in _lig]
     axB.text(_xr, float(max(_y)) + 0.60,
              f'chemokine ligands of the enriched pathway (q = {chem_q:.4f})',
-             ha='right', va='center', fontsize=6.8, style='italic',
+             ha='right', va='center', fontsize=8.4, style='italic',
              color='#1f4e79')
 if 'CEACAM1' in present:
     axB.text(_xr, float(ypos[present.index('CEACAM1')]) + 0.60,
              'CEACAM1: nominated separately, in no enriched set',
-             ha='right', va='center', fontsize=6.8, style='italic',
+             ha='right', va='center', fontsize=8.4, style='italic',
              color='#7d6608')
 axB.set_ylim(-0.8, float(max(ypos)) + 1.15)
-axB.legend(fontsize=7.4, frameon=False, loc='lower right')
+axB.tick_params(labelsize=9.0)
+axB.legend(fontsize=9.0, frameon=False, loc='lower right')
 for s in ('top', 'right'):
     axB.spines[s].set_visible(False)
 
@@ -125,8 +129,9 @@ for s in ('top', 'right'):
 # Checked arrow by arrow before use: CXCL8 reaches both receptors, CXCL1/2/3
 # reach CXCR2 only, and both receptors sit in the neutrophil membrane rather
 # than on the tumor cell.
-axC = fig.add_subplot(gs[0, 2])
+axC = fig.add_subplot(gs[1, :])
 axC.imshow(mpimg.imread(str(paths.PANEL_C / 'PanelC_RMC.png')))
+axC.set_anchor('N')
 axC.axis('off')
 axC.set_title('C. Proposed mechanism and point of blockade', fontsize=9.3,
               weight='bold', loc='left')
