@@ -120,7 +120,7 @@ check('the renal medullary series is absent from S3, as the text says',
 _q = S4[S4['source_type'].astype(str).str.startswith('recomputed')]
 _agree = int((_q['G_curated'] == _q['G_recomputed']).sum())
 check(f'S4 has {len(_q)} recomputed rows, {_agree} agreeing, as the paper says',
-      f'{_agree} of the {len(_q)} rows' in ALL, f'{_agree} of {len(_q)}')
+      f'{_agree} of {len(_q)}' in ALL, f'{_agree} of {len(_q)}')
 
 # ---- the genomic dimension is reported but never scored ----------------
 check('S1 carries no genomic score column',

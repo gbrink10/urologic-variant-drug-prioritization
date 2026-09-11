@@ -151,6 +151,23 @@ assert (F['arm_discovery']['proposed'] + F['arm_discovery']['partial']
         + F['arm_discovery']['novel'] == F['n_rare_hypotheses']),     'rare-cancer prior-proposal classes do not sum to the hypothesis count'
 # nine of the ten GEO series were refitted from sample-level data; the renal
 # medullary series is deposited only as an author-computed summary table
+# the genomic audit the Discussion quotes: how many recomputed rows
+# reproduced the curated band, and how many control rows the removal moved
+_SUPD = REPO / 'output' / 'v31_supplementary'
+_gp = _SUPD / 'GENOMIC_PROVENANCE.csv'
+_s2 = _SUPD / 'Supplementary_Table_S2_score_sensitivity.csv'
+if _gp.exists() and _s2.exists():
+    _g = pd.read_csv(_gp)
+    _r = _g[_g['source_type'].astype(str).str.startswith('recomputed')]
+    _t = pd.read_csv(_s2)
+    _moved = _t[_t['meets_E2_full'] != _t['meets_E2_with_former_genomic_dimension']]
+    F['genomic_audit'] = {
+        'recomputed': int(len(_r)),
+        'agree': int((_r['G_curated'] == _r['G_recomputed']).sum()),
+        'controls_moved': int((_moved['N'] <= 16).sum()),
+        'novel_moved': int(_moved['N'].isin([17, 19, 28, 23, 24, 29]).sum()),
+    }
+
 F['n_series_refitted'] = 9
 F['n_series_total'] = 10
 # associations carried forward per cancer, with the small-cell subtypes and

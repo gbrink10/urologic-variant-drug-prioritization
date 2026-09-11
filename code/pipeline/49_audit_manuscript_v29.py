@@ -70,13 +70,13 @@ check(f'{_nfig} figures + {_ntab} table within the 6 display-item cap',
       _nfig + _ntab <= 6, f'{_nfig + _ntab} items')
 check('one condensed table in the main text', len(doc.tables) == 1)
 # JCO CCI uses unnumbered title-case subsection headings
-RES_SUBS = ('The Association Table', 'Positive Controls',
+RES_SUBS = ('Candidate Overview', 'Positive Controls',
             'Rare and Variant Cancers',
-            'Candidates Without a Prior Proposal')
+            'Candidates Without an Identified Prior Proposal')
 check('five Results subsections', all(h in paras for h in RES_SUBS),
       str([h for h in RES_SUBS if h not in paras]))
 check('Discussion closes with a conclusion',
-      'In conclusion, we scored' in text)
+      'In conclusion, this public-data workflow' in text)
 
 print('\n2. TITLE AND FRAMING')
 title = paras[0]
@@ -93,20 +93,20 @@ _vf = re.findall(r'(?:not (?:a )?)?validated finding', text.lower())
 check('"validated finding" only used to disclaim',
       all(v.startswith('not') for v in _vf), str(_vf))
 check('TROP2 framed as an observation, not a biomarker claim',
-      'not as a predictive biomarker' in text
+      'unscored expression observation' in text
       and 'negative predictive biomarker' not in text)
 check('no claim of established predictive value',
-      ('not as a predictive biomarker' in text
+      ('not a predictive biomarker' in text
        or 'predictive validity is unestablished' in text)
       and 'predicts non-response' not in body
       and body.count('predictive biomarker')
-      == body.count('not as a predictive biomarker'))
+      == body.count('not a predictive biomarker'))
 check('framework-novel language replaced with a search statement',
       'no prior urologic-oncology proposal' in text)
 
 # Methods must carry named subsections including a statistics section, and must
 # not restate the selection criteria the pipeline no longer applies
-METH_SUBS = ('Data Sources', 'Candidate Selection',
+METH_SUBS = ('Data Sources and Study Sequence', 'Candidate Selection',
              'Prioritization Score', 'Prior-Proposal Classification',
              'Ranking Criteria', 'Statistical Analysis')
 check('Methods has named subsections', all(h in paras for h in METH_SUBS),
@@ -122,14 +122,13 @@ check('the retired E0 criterion is gone', 'E0' not in text)
 # be stated and must add up
 # the counts are over drug-cancer hypotheses, not distinct drugs, so the
 # check tests the numbers rather than one phrasing of them
-check('clinical stage of the agents stated over the hypotheses',
-      f"{F['stage']['approved']} name an FDA-approved therapy" in text
-      and f"{F['stage']['in_trials']} a therapy in trials" in text
-      and f"{F['stage']['preclinical']} a preclinical therapy" in text)
-check('the selection rule for the 30 is stated',
-      'alteration frequency where TCGA provides a cohort' in text
-      and 'searched against the Therapeutic Target Database and Open Targets'
-      in text)
+check('clinical stage stated over the hypotheses',
+      f"{F['stage']['approved']} named FDA-approved therapies" in text
+      and f"{F['stage']['in_trials']} investigational therapies" in text
+      and f"{F['stage']['preclinical']} preclinical therapies" in text)
+check('the selection rule is stated',
+      'ranked by alteration frequency where a TCGA cohort was available' in text
+      and 'Therapeutic Target Database and Open Targets' in text)
 check('per-cancer counts match the deposit',
       (F['rows_per_cancer_min'], F['rows_per_cancer_max'],
        F['rows_per_rare_min'], F['rows_per_rare_max']) == (3, 7, 3, 5)
@@ -139,17 +138,17 @@ check('the entry-rule denominator matches the deposit',
 # the eighteen sets score candidates, they do not gate them, and the paper must
 # not imply otherwise
 check('panel membership not presented as a condition of entry',
-      'used to score candidates, not' in text and 'to choose them' in text)
+      'gene sets were used for scoring, not selection' in text)
 
 # a reader must be able to tell which three cancers are the positive controls
 _PC = ('neuroendocrine prostate cancer', 'muscle-invasive bladder cancer',
        'clear cell renal cell carcinoma')
 _intro = text.split('MATERIALS AND METHODS', 1)[0]
 check('positive controls named in the Introduction',
-      'included deliberately as positive controls' in _intro
+      'positive-control cancers' in _intro
       and all(c in _intro.lower() for c in _PC))
-check('positive controls named again in Methods and Results',
-      all(text.lower().count(c) >= 3 for c in _PC))
+check('positive controls named again in the Results',
+      all(text.lower().count(c) >= 2 for c in _PC))
 
 _abs_i = paras.index('ABSTRACT')
 _int_i = paras.index('INTRODUCTION')
@@ -193,8 +192,9 @@ _frags = [m.group(0)[:90] for _p in doc.paragraphs
           if not _VERBISH.search(m.group(0))]
 check(f'no sentence ends on a coordinated phrase with no verb '
       f'({len(_frags)})', not _frags, '; '.join(_frags[:3]))
-check(f'not-tiered rows disclosed as out of {_dpart} rather than {_dfull}',
-      f'out of {_dpart} rather than {_dfull}' in text and 'not computed' in text)
+check(f'partial scores disclosed as out of {_dpart}',
+      f'partial scores out of {_dpart}' in text
+      and 'Pathway scores were not computed' in text)
 # every association must land in exactly one novelty class, and the prose that
 # adds them up must say so, or a reader subtracting them finds rows missing
 _classes = (F['n_previously_proposed'], F['n_partially_novel'],
@@ -217,21 +217,21 @@ check('no claim that the independent sources filtered candidates',
           'argued against the rest', 'survive the audit',
           'supported by the independent sources')))
 check('the checks are stated to have changed no outcome',
-      'changed which candidates were prioritized' in text
-      or 'the independent checks' in text.lower())
+      'changed no rankings' in text
+      or 'None changed the prioritized candidates' in text)
 # the coined word "reservation" was replaced by plain wording; the check is
 # that each non-prioritized candidate still has its failing criterion named
 # the promise is that every failed criterion is named, so test the naming
 # rather than one phrasing of the promise
 check('each candidate not prioritized has every failed criterion named',
-      'failed both the score and the transcriptomic criterion' in text
-      and 'failed both the score and the abundance criterion' in text
-      and 'failed the score criterion' in text
-      and 'open questions' in text)
+      'failed the score and expression criteria' in text
+      and 'failed the score and abundance criteria' in text
+      and 'fell below the score threshold' in text
+      and 'do not rule out therapeutic activity' in text)
 check('no coined shorthand for the ranking',
       not any(w in text.lower() for w in
               ('priority tier', 'lower-confidence tier',
-               'entry rule', 'pathway membership', 'both-lines'))
+               'entry rule', 'both-lines'))
       and 'reported as not estimable' not in text.lower())
 check(f"chemokine q = {F['q']['rmc_chemokine']:.4f}",
       f"{F['q']['rmc_chemokine']:.4f}" in text)
@@ -257,11 +257,13 @@ check('both-lines gene count reported', str(F['rmc']['up_both']) in text)
 print('\n4. NEW LIMITATIONS ARE STATED')
 check('sarcomatoid batch confounding disclosed',
       'share no chip' in text or 'confounded' in text)
-check('ccRCC has no normal tissue disclosed', 'no normal tissue' in text)
+check('ccRCC has no normal tissue disclosed',
+      'lacked normal tissue' in text)
 check('TCGA coverage limitation stated, by histology',
-      'the four rare cancers have no cohort there at all' in text
+      'four rare cancers had no TCGA cohorts' in text
       and 'prostate adenocarcinoma' in text)
-check('HLRCC demoted to adjacent disease', 'adjacent-disease' in text)
+check('HLRCC demoted to related disease',
+      'used only as related-disease context' in text)
 check('penile technical replicates disclosed',
       f"{F['design']['pscc_normal_donors']} donors" in text)
 check('LINCS no longer called a null comparator',
@@ -275,7 +277,8 @@ check('score sensitivity result stated', 'sensitivity analysis' in text.lower())
 check('scoring dimensions called partially overlapping',
       'partially overlapping' in text)
 check('correction scope stated',
-      'within each context' in text and 'not across contexts' in text)
+      'within each disease or subtype for enrichment' in text
+      and 'not applied across diseases, drugs, or later comparisons' in text)
 check('both pre-specified thresholds named',
       'q < 0.05' in text and 'q < 0.10' in text
       and 'pre-specified' in text)
@@ -381,15 +384,15 @@ check('anti-CEACAM5 successor agent named',
 check('seclidemstat no longer attached to the NSD2 row',
       'SP-2577' not in text and 'seclidemstat' not in text.lower())
 check('the confounding and its consequence are both stated',
-      'no model can separate them' in text and 'not computed' in text)
+      'Histology and batch therefore could not be separated' in text
+      and 'Pathway scores were not computed' in text)
 check('sarcomatoid rows scored on the arm their data supports',
       'abundance within the sarcomatoid tumors' in both
       or 'abundant a transcript is within the sarcomatoid' in both)
 check('PRISM no longer claims absence of off-target cytotoxicity',
       'absence of off-target cytotoxicity' not in text)
 check('normal-tissue RNA not used as a therapeutic-window claim',
-      'not a therapeutic-window' in text
-      or 'rather than demonstrating a systemic therapeutic window' in text)
+      'does not establish a systemic therapeutic window' in text)
 # the DLL3 section that carried tarlatamab's approval dates was removed; the
 # limitation it supported is now one sentence in the Discussion
 # the panel scores candidates and never gated one; nothing may imply otherwise
@@ -405,8 +408,8 @@ _body_only = chr(10).join(
 check('American spelling in the manuscript prose',
       not any(w in _body_only for w in
               ('tumour', 'signalling', 'normalised', 'hybridised', 'modelled')))
-check('RMC described as independent models, not replicates',
-      'two independent patient-derived models' in text
+check('RMC described as separate models, not replicates',
+      'treated as separate experimental models, not a patient cohort' in text
       and 'two biological replicates' not in text)
 def _cell_rows(txt):
     out = set()
@@ -441,13 +444,14 @@ check('within-disease priority named, not a global lead',
 # the point is made in Results and in the Abstract; the Conclusions
 # restatement was removed as duplicative
 check('no cross-disease ranking claimed',
-      'within a disease, not between diseases' in text
-      and 'could separate them across diseases' in text)
-check('three survivors across two diseases stated',
-      'two diseases' in text
-      or f"{F['n_survivor_contexts']} diseases" in text)
+      'ranked within diseases, not across diseases' in text)
+check('three prioritized, and their two diseases named',
+      text.count('renal medullary carcinoma') >= 3
+      and 'ASCL1-positive small-cell bladder cancer' in text
+      and f"{F['n_survivor_contexts']}" == '2')
 check('candidates hedged as hypotheses, not findings',
-      'not validated findings' in text or 'not a validated finding' in text)
+      'not evidence that these treatments work' in text
+      and 'require experimental validation' in text.lower())
 
 check('Zenodo concept DOI cited', '10.5281/zenodo.20217918' in text)
 check('no stale v1.0.0 version DOI cited', '10.5281/zenodo.20217919' not in text)

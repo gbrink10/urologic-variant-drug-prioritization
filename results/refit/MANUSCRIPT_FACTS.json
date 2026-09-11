@@ -50,6 +50,12 @@
  "n_complete_score": 25,
  "n_partial_score": 4,
  "n_rare_hypotheses": 13,
+ "genomic_audit": {
+  "recomputed": 15,
+  "agree": 4,
+  "controls_moved": 5,
+  "novel_moved": 0
+ },
  "n_series_refitted": 9,
  "n_series_total": 10,
  "rows_per_cancer_min": 3,
