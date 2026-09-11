@@ -126,8 +126,10 @@ check('clinical stage stated over the hypotheses',
       f"{F['stage']['approved']} named FDA-approved therapies" in text
       and f"{F['stage']['in_trials']} investigational therapies" in text
       and f"{F['stage']['preclinical']} preclinical therapies" in text)
-check('the selection rule is stated',
-      'ranked by alteration frequency where a TCGA cohort was available' in text
+check('the selection rule is stated as a ranking, not a hand-picked list',
+      'alteration frequency where a TCGA cohort was available' in text
+      and 'Only the highest-ranked genes were reviewed' in text
+      and 'not assembled as a free list of drugs' in text
       and 'Therapeutic Target Database and Open Targets' in text)
 check('per-cancer counts match the deposit',
       (F['rows_per_cancer_min'], F['rows_per_cancer_max'],

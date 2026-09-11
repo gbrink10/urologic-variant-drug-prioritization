@@ -195,9 +195,11 @@ P(f"Knowledge Generated: We developed a step-by-step workflow to evaluate "
 H('ABSTRACT', 12)
 P(f"Purpose: To develop a step-by-step workflow that uses public molecular "
   f"data to prioritize existing drugs for rare and variant urologic cancers.")
-P(f"Methods: We reassessed a manually curated candidate set using public "
-  f"genomic data, {F['n_series_total']} gene-expression datasets, and "
-  f"drug-target databases. A 6-point score combined gene expression, pathway "
+P(f"Methods: Within each cancer, genes were ranked by their molecular "
+  f"signal, and the highest-ranked were reviewed to carry a small number "
+  f"forward. We reassessed that candidate set using public genomic data, "
+  f"{F['n_series_total']} gene-expression datasets, and drug-target "
+  f"databases. A 6-point score combined gene expression, pathway "
   f"enrichment, and support from published mechanistic studies. Candidates "
   f"mainly involved approved or investigational drugs, with "
   f"{spell(F['stage']['preclinical'])} preclinical exceptions. We reanalyzed "
@@ -252,15 +254,17 @@ P('We developed a step-by-step workflow to use public cancer data to '
   'neuroendocrine prostate cancer, muscle-invasive bladder cancer, and clear '
   'cell renal cell carcinoma. The controls were selected because published '
   'treatment proposals provided a reference for comparison. The workflow '
-  'combines manual candidate selection with reproducible scoring and ranking '
-  '(Figure 1).')
+  'ranks genes within each cancer by their molecular signal, reviews the '
+  'highest-ranked for clinical relevance, and then scores and ranks the '
+  'resulting candidates reproducibly (Figure 1).')
 
 # =====================================================================
 # Methods
 # =====================================================================
 H('MATERIALS AND METHODS')
 H('Data Sources and Study Sequence', 11.5, 10, level=2)
-P(f"We reassessed a manually curated set of drug-cancer candidates. The "
+P(f"We reassessed a set of drug-cancer candidates drawn from the highest-ranked "
+  f"molecular signals in each cancer, as described below. The "
   f"candidate list, scoring components, point ranges, and ranking criteria "
   f"were fixed before reanalysis. We then reanalyzed each dataset using "
   f"methods appropriate to its study design. A later audit found that the "
@@ -286,13 +290,18 @@ P('The deposited scripts reproduce differential expression, pathway '
 H('Candidate Selection', 11.5, 10, level=2)
 P('Each candidate paired a therapy, drug class, or combination with one '
   'cancer or molecular subtype. Several drugs targeting the same biological '
-  'axis counted as one candidate. Genes were initially ranked by alteration '
-  'frequency where a TCGA cohort was available and by the moderated '
-  't-statistic elsewhere. Manual review selected three to seven candidates per '
-  'cancer, including three to five per rare cancer, based on clinical '
-  'relevance. Targets were matched to therapies through the Therapeutic Target '
-  'Database and Open Targets. Two preclinical therapies were retained because '
-  'no clinical-stage drug targeted the protein; neither was eligible for '
+  'axis counted as one candidate. Candidates were not assembled as a free '
+  'list of drugs. Within each cancer, every measured gene was ranked by its '
+  'molecular signal: alteration frequency where a TCGA cohort was available, '
+  'and the moderated t-statistic from that cancer\u2019s expression fit '
+  'otherwise. Only the highest-ranked genes were reviewed, and three to seven '
+  'per cancer were carried forward, including three to five per rare cancer. '
+  'The judgment applied at this step was which of the top-ranked signals to '
+  'pursue, weighing clinical relevance; the ranking itself came from the '
+  'data. Those genes were then matched to therapies through the Therapeutic '
+  'Target Database and Open Targets, and a gene became a candidate only where '
+  'a therapy existed. Two preclinical therapies were retained because no '
+  'clinical-stage drug targeted the protein; neither was eligible for '
   'prioritization.')
 P(f"In the rare cancers, initial expression-based selection required q < 0.05 "
   f"and log2 fold change >0.5. This threshold applied to the measured evidence "
@@ -307,10 +316,10 @@ P(f"In the rare cancers, initial expression-based selection required q < 0.05 "
   f"estimates in Supplementary Table S4.")
 P(f"The 18 prespecified gene sets were used for scoring, not selection. Seven "
   f"candidates, including four cell-surface antigens and two prioritized "
-  f"candidates, had targets outside these sets. This was a curated search, not "
-  f"an exhaustive drug screen: {F['funnel_entry']:,} gene-cancer pairs met the "
-  f"expression threshold, but only a small subset underwent manual drug "
-  f"matching (Supplementary Methods Section 7b).")
+  f"candidates, had targets outside these sets. This was a ranked shortlist, "
+  f"not an exhaustive drug screen: {F['funnel_entry']:,} gene-cancer pairs "
+  f"met the expression threshold, and only those at the top of each cancer\u2019s "
+  f"ranking were carried into drug matching (Supplementary Methods Section 7b).")
 
 H('Prioritization Score', 11.5, 10, level=2)
 P('Candidates received up to 6 points: gene-expression evidence, 0\u20133; '
@@ -546,7 +555,8 @@ P('Computational drug repurposing from public expression data is established '
   'and why.')
 P(f"The {F['n_previously_proposed']} matches to previous proposals should not "
   f"be interpreted as independent validation. Prior knowledge influenced the "
-  f"gene-set panel, manual drug selection, and representative therapies. The "
+  f"gene-set panel, the review of top-ranked genes, and the representative "
+  f"therapies chosen for each target. The "
   f"controls show that the workflow can return established proposals, but they "
   f"do not estimate its sensitivity or precision.")
 P(f"The score is a ranking tool, not a measure of treatment benefit. "
@@ -581,9 +591,9 @@ P('Data availability imposed further limits. TCGA provided direct genomic '
   'not a patient cohort. Some expression scores could not be recalculated and '
   'remain flagged as curated inputs. Prior-proposal classification was limited '
   'to urologic literature and was not independently repeated.')
-P('Manual selection also narrowed the search. Requiring statistical '
-  'significance can exclude useful targets when rare-disease datasets are '
-  'small. Proteasome inhibition in renal medullary carcinoma was one such '
+P('Taking only the top of each ranking also narrowed the search. Requiring '
+  'statistical significance can exclude useful targets when rare-disease '
+  'datasets are small. Proteasome inhibition in renal medullary carcinoma was one such '
   'omitted candidate [60]. Future analyses could examine genes below the '
   'initial significance threshold and broaden drug matching. We also lacked '
   'adequately sized, histology-labeled datasets for primary bladder '
