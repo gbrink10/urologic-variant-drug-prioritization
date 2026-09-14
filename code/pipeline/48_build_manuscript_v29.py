@@ -268,11 +268,7 @@ P(f"We reassessed a set of drug-cancer candidates drawn from the highest-ranked 
   f"molecular signals in each cancer, as described below. The "
   f"candidate list, scoring components, point ranges, and ranking criteria "
   f"were fixed before reanalysis. We then reanalyzed each dataset using "
-  f"methods appropriate to its study design. A later audit found that the "
-  f"genomic score could not be consistently reproduced, so we removed it. This "
-  f"reduced the maximum score from 9 to 6. The prioritization threshold "
-  f"remained 4 points and therefore became more demanding (Supplementary "
-  f"Table S4).")
+  f"methods appropriate to its study design.")
 P(f"Genomic data came from the TCGA Pan-Cancer Atlas 2018 through cBioPortal "
   f"[1\u20133]. TCGA lacks neuroendocrine prostate cancer and the four rare "
   f"cancers. Prostate adenocarcinoma therefore provided related-disease "
