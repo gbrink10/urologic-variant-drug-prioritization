@@ -93,14 +93,16 @@ _vf = re.findall(r'(?:not (?:a )?)?validated finding', text.lower())
 check('"validated finding" only used to disclaim',
       all(v.startswith('not') for v in _vf), str(_vf))
 check('TROP2 framed as an observation, not a biomarker claim',
-      'unscored expression observation' in text
-      and 'negative predictive biomarker' not in text)
+      'unscored biomarker observation' in text
+      and 'reported in the Supplementary Results' in text
+      and 'not as a predictive biomarker' in supp
+      and 'negative predictive biomarker' not in both)
 check('no claim of established predictive value',
-      ('not a predictive biomarker' in text
-       or 'predictive validity is unestablished' in text)
-      and 'predicts non-response' not in body
-      and body.count('predictive biomarker')
-      == body.count('not a predictive biomarker'))
+      ('not as a predictive biomarker' in supp
+       or 'predictive validity is unestablished' in both)
+      and 'predicts non-response' not in both
+      # the main text names it once, as an unscored observation
+      and body.count('predictive biomarker') == 0)
 check('framework-novel language replaced with a search statement',
       'no prior urologic-oncology proposal' in text)
 
@@ -429,8 +431,18 @@ def _cell_rows(txt):
 _listed = set()
 for _r in doc.tables[0].rows:
     _listed |= _cell_rows(_r.cells[0].text)
-check('all 30 associations accounted for in Table 1', len(_listed) == 30,
-      f'{len(_listed)} listed; missing {sorted(set(range(1, 31)) - _listed)}')
+# the biomarker observation is reported in the Supplementary Results, so
+# Table 1 lists the drug hypotheses and Supplementary Table S1 lists all 30
+_obs = set(int(x) for x in _prov.loc[
+    _prov['Tier'].astype(str).str.contains('transcriptomic'), 'N'])
+check(f'all {F["n_drug_hypotheses"]} drug hypotheses accounted for in Table 1',
+      _listed == set(range(1, 31)) - _obs,
+      f'{len(_listed)} listed; missing '
+      f'{sorted(set(range(1, 31)) - _obs - _listed)}')
+check('the biomarker observation is pointed to the supplement, not dropped',
+      len(_obs) == F['n_biomarker_obs']
+      and 'reported in the Supplementary Results' in text
+      and 'TROP2' in supp)
 
 print('\n6. SHORTLIST CONSISTENCY')
 for _, r in sel.iterrows():

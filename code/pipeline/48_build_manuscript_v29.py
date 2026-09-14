@@ -184,8 +184,8 @@ P(f"Key Objective: Can public molecular data help prioritize existing drugs "
   f"for rare and variant urologic cancers that are difficult to study in "
   f"randomized trials?")
 P(f"Knowledge Generated: We developed a step-by-step workflow to evaluate "
-  f"{F['n_drug_hypotheses']} drug-cancer hypotheses and one biomarker "
-  f"observation. {spell(F['funnel']['survive']).capitalize()} candidates "
+  f"{F['n_drug_hypotheses']} drug-cancer hypotheses. "
+  f"{spell(F['funnel']['survive']).capitalize()} candidates "
   f"without an identified prior urologic proposal met the ranking criteria. "
   f"Reanalysis also identified a candidate that lost statistical support after "
   f"batch adjustment and a dataset in which tumor type could not be separated "
@@ -207,7 +207,7 @@ P(f"Methods: Within each cancer, genes were ranked by their molecular "
   f"available, classified prior urologic proposals, and applied prespecified "
   f"ranking criteria.")
 P(f"Results: The workflow evaluated {F['n_drug_hypotheses']} drug-cancer "
-  f"hypotheses and one unscored biomarker observation. "
+  f"hypotheses. "
   f"{spell(F['n_complete_score']).capitalize()} candidates had complete "
   f"scores: {F['tiers'].get('Strong', 0)} Strong, "
   f"{F['tiers'].get('Moderate', 0)} Moderate, and "
@@ -420,9 +420,8 @@ print('front matter and methods written')
 H('RESULTS')
 H('Candidate Overview', 11.5, 10, level=2)
 P(f"The workflow evaluated {F['n_drug_hypotheses']} drug-cancer hypotheses "
-  f"and one unscored biomarker observation (Table 1). "
-  f"{spell(F['arm_control']['n']).capitalize()} entries involved "
-  f"positive-control cancers and {F['arm_discovery']['n']} involved rare "
+  f"(Table 1). {spell(F['arm_control']['n']).capitalize()} involved "
+  f"positive-control cancers and {F['n_rare_hypotheses']} involved rare "
   f"cancers. Among {F['n_complete_score']} candidates with complete scores, "
   f"{F['tiers'].get('Strong', 0)} were Strong, {F['tiers'].get('Moderate', 0)} "
   f"Moderate, and {F['tiers'].get('Exploratory', 0)} Exploratory. "
@@ -431,7 +430,10 @@ P(f"The workflow evaluated {F['n_drug_hypotheses']} drug-cancer hypotheses "
   f"{F['n_drug_hypotheses']} drug hypotheses, {F['stage']['approved']} named "
   f"FDA-approved therapies, {F['stage']['in_trials']} investigational "
   f"therapies, and {F['stage']['preclinical']} preclinical therapies. Approval "
-  f"refers to any indication, not necessarily the cancer studied here.")
+  f"refers to any indication, not necessarily the cancer studied here. One "
+  f"further, unscored biomarker observation, lower TROP2 expression in "
+  f"sarcomatoid tumors, is reported in the Supplementary Results "
+  f"[49–51].")
 
 H('Positive Controls', 11.5, 10, level=2)
 P(f"All {F['arm_control']['n']} control candidates matched previously "
@@ -477,9 +479,7 @@ P(f"Sarcomatoid results were limited to within-tumor transcript abundance "
   f"Supplementary Figure S2). UHRF1 [47], NSD2, and G6PD [48] remained above "
   f"the 85th percentile in every batch; ATR remained below it. Pathway scores "
   f"were not computed, leaving {F['n_partial_score']} candidates with partial "
-  f"scores. TROP2 was reported only as an unscored expression observation, not "
-  f"a predictive biomarker [49\u201351]. Full results appear in the "
-  f"Supplementary Results.")
+  f"scores. Full results appear in the Supplementary Results.")
 P(f"Penile cancer showed an immune-active expression pattern supporting the "
   f"established pembrolizumab proposal [40\u201342]. Two other candidates had "
   f"partial precedents [52\u201354]; none lacked a prior urologic proposal.")
@@ -600,8 +600,8 @@ P('Taking only the top of each ranking also narrowed the search. Requiring '
   'adenocarcinoma, urachal carcinoma, plasmacytoid urothelial carcinoma, and '
   'translocation renal cell carcinoma.')
 P(f"In conclusion, this public-data workflow evaluated "
-  f"{F['n_drug_hypotheses']} drug-cancer hypotheses and one biomarker "
-  f"observation across seven urologic cancers. "
+  f"{F['n_drug_hypotheses']} drug-cancer hypotheses across seven urologic "
+  f"cancers. "
   f"{spell(F['funnel']['survive']).capitalize()} candidates without an "
   f"identified prior urologic proposal met the primary ranking criteria. Each "
   f"requires disease-specific experimental validation. Larger, "
@@ -839,7 +839,8 @@ partial_rows = merged[merged['Prior status'].astype(str).str.startswith('PARTIAL
 bench = defs[defs['Context'].isin(['NEPC', 'MIBC / MPBC', 'ccRCC / sRCC', 'ccRCC'])]
 
 H('Table 1. Framework output by evidence class', 12)
-P('Every association is accounted for in one class. The complete table, with '
+P('Every drug hypothesis is accounted for in one class. The biomarker '
+  'observation is reported in the Supplementary Results. The complete table, with '
   'the three scored components, the curated genomic value retained as unscored '
   'disease context, and the provenance of each, is Supplementary Table S1.',
   italic=True, size=9.5)
@@ -1047,27 +1048,18 @@ add_row([', '.join(str(int(x)) for x in sorted(partial_rows['N'])), 'various',
                     partial_rows['Tier'].value_counts().to_dict().items()}.items()),
          'not evaluated as discovery', 'see Supplementary Table S1'])
 
-add_row(['', 'REPORTED, NOT SCORED AS A DRUG HYPOTHESIS', '', '', '', ''],
-        bold=True)
-# the one row whose transcriptomic component is also inestimable: a loss
-# marker can only be demonstrated by the comparison this cohort cannot support
-unscored = merged[merged['Tier'].str.contains('transcriptomic')
-                  & (~merged['N'].isin(accounted))]
-for _, r in unscored.sort_values('N').iterrows():
-    accounted.add(int(r['N']))
-    add_row([r['N'], r['Context'],
-             ('TROP2 (TACSTD2) expression \u2014 unscored observation, not a scored '
-              'association',
-              'sacituzumab govitecan: FDA approved, urothelial indication '
-              'withdrawn 2024'),
-             'not computed',
-             'the apparent between-group difference cannot be separated '
-             'from chip batch',
-             'independent, non-confounded cohort'])
-
-missing = sorted(set(merged['N']) - accounted)
-assert not missing, f'Table 1 omits associations {missing}'
-print(f'  Table 1: all {len(accounted)} associations accounted for')
+# the biomarker observation is not a drug hypothesis and is not scored, so
+# it is reported in the Supplementary Results rather than in this table;
+# Supplementary Table S1 still carries it with every other entry
+_unscored = merged[merged['Tier'].str.contains('transcriptomic')
+                   & (~merged['N'].isin(accounted))]
+missing = sorted(set(merged['N']) - accounted - set(_unscored['N']))
+assert not missing, f'Table 1 omits drug hypotheses {missing}'
+assert len(_unscored) == F['n_biomarker_obs'], (
+    f'expected {F["n_biomarker_obs"]} unscored observation, '
+    f'found {len(_unscored)}')
+print(f'  Table 1: all {len(accounted)} drug hypotheses accounted for; '
+      f'{len(_unscored)} biomarker observation in the supplement')
 
 P('The line under each therapy gives its furthest clinical stage: FDA approved '
   'means approved somewhere, not necessarily in the cancer named here, and '
