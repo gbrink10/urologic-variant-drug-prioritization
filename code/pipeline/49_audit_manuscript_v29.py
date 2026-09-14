@@ -259,8 +259,9 @@ check('both-lines gene count reported', str(F['rmc']['up_both']) in text)
 # supplement with the rest of the independent checks
 
 print('\n4. NEW LIMITATIONS ARE STATED')
-check('sarcomatoid batch confounding disclosed',
-      'share no chip' in text or 'confounded' in text)
+check('the sarcomatoid batch problem is disclosed in the main text',
+      'processed in separate batches' in text
+      or 'different batch of arrays' in text)
 check('ccRCC has no normal tissue disclosed',
       'lacked normal tissue' in text)
 check('TCGA coverage limitation stated, by histology',
@@ -387,9 +388,13 @@ check('anti-CEACAM5 successor agent named',
       'precemtabart' in text.lower() or 'M9140' in text)
 check('seclidemstat no longer attached to the NSD2 row',
       'SP-2577' not in text and 'seclidemstat' not in text.lower())
-check('the confounding and its consequence are both stated',
-      'Histology and batch therefore could not be separated' in text
-      and 'Pathway scores were not computed' in text)
+check('the batch problem and its consequence are both stated, plainly',
+      'processed on a different batch of arrays from every conventional tumor'
+      in text
+      and 'no model can tell those apart' in text
+      and 'Pathway scores were not computed' in text
+      # the statistical term stays in the supplement, not the main text
+      and 'confound' not in text.lower())
 check('sarcomatoid rows scored on the arm their data supports',
       'abundance within the sarcomatoid tumors' in both
       or 'abundant a transcript is within the sarcomatoid' in both)

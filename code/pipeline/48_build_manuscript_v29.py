@@ -187,9 +187,9 @@ P(f"Knowledge Generated: We developed a step-by-step workflow to evaluate "
   f"{F['n_drug_hypotheses']} drug-cancer hypotheses. "
   f"{spell(F['funnel']['survive']).capitalize()} candidates "
   f"without an identified prior urologic proposal met the ranking criteria. "
-  f"Reanalysis also identified a candidate that lost statistical support after "
-  f"batch adjustment and a dataset in which tumor type could not be separated "
-  f"from batch. The results provide priorities for experimental testing, not "
+  f"Reanalysis also identified a candidate that lost statistical support once "
+  f"processing batch was accounted for, and a dataset in which the two tumor "
+  f"types were processed in separate batches, so they could not be compared. The results provide priorities for experimental testing, not "
   f"evidence of treatment benefit.")
 
 H('ABSTRACT', 12)
@@ -220,9 +220,10 @@ P(f"Results: The workflow evaluated {F['n_drug_hypotheses']} drug-cancer "
   f"ranking criteria: CXCR1/CXCR2 blockade and anti-CEACAM1 in renal medullary "
   f"carcinoma, and CEACAM5-directed antibody-drug conjugates in ASCL1-positive "
   f"small-cell bladder cancer. Requiring target membership in an enriched "
-  f"pathway excluded anti-CEACAM1 but retained the other two. SSTR2 lacked "
-  f"significant expression support after batch adjustment, and the sarcomatoid "
-  f"dataset could not separate histology from batch.")
+  f"pathway excluded anti-CEACAM1 but retained the other two. SSTR2 lost its "
+  f"expression support once processing batch was accounted for, and in the "
+  f"sarcomatoid dataset the two tumor types were processed in separate "
+  f"batches, so they could not be compared.")
 P(f"Conclusion: Public data can help prioritize drug hypotheses for rare "
   f"cancers. Rankings depend on data quality and scoring assumptions, and all "
   f"prioritized candidates require experimental validation.")
@@ -386,9 +387,11 @@ P(f"Models accounted for repeated samples and batch effects where possible. "
   f"bladder kinome dataset used patient as a fixed blocking factor. Small-cell "
   f"bladder subtypes were compared with the mean of the remaining subtypes, "
   f"adjusting for batch.")
-P('In the sarcomatoid dataset, all sarcomatoid and conventional tumors were '
-  'processed on separate chip batches. Histology and batch therefore could not '
-  'be separated. We did not estimate differences between the two histologies. '
+P('In the sarcomatoid dataset, every sarcomatoid tumor was processed on a '
+  'different batch of arrays from every conventional tumor. A difference between '
+  'the two groups is therefore also a difference between two sets of arrays, '
+  'and no model can tell those apart. We did not estimate differences between '
+  'the two tumor types. '
   'Instead, we ranked mean transcript abundance within the 28 sarcomatoid '
   'tumors and repeated these rankings within each batch.')
 P(f"The renal medullary dataset contained a SMARCB1 rescue experiment in two "
@@ -469,13 +472,14 @@ P(f"Small-cell bladder tumors were grouped by lineage transcription factor "
   f"whether COX-1 should be inhibited or activated. Prostaglandin signaling "
   f"has restrained tumor formation in another tuft-cell model [45].")
 P(f"In NEUROD1-positive tumors, SSTR2 retained a positive fold change "
-  f"({de['SSTR2_neurod1']['log2FC']:+.2f}) but was not significant after batch "
-  f"adjustment (q = {de['SSTR2_neurod1']['q']:.3f}). The neuroactive "
+  f"({de['SSTR2_neurod1']['log2FC']:+.2f}) but was not significant once "
+  f"processing batch was accounted for (q = {de['SSTR2_neurod1']['q']:.3f}). The neuroactive "
   f"ligand-receptor gene set was also not enriched. These results did not "
   f"support extending the small-cell lung cancer SSTR2 approach [46] to this "
   f"bladder subtype.")
-P(f"Sarcomatoid results were limited to within-tumor transcript abundance "
-  f"because histology was inseparable from chip batch (Figure 4; "
+P(f"Sarcomatoid results were limited to transcript abundance within those "
+  f"tumors, because the sarcomatoid and conventional tumors were processed "
+  f"in separate batches and could not be compared (Figure 4; "
   f"Supplementary Figure S2). UHRF1 [47], NSD2, and G6PD [48] remained above "
   f"the 85th percentile in every batch; ATR remained below it. Pathway scores "
   f"were not computed, leaving {F['n_partial_score']} candidates with partial "
@@ -539,10 +543,11 @@ P(f"This study used public molecular data to prioritize existing drugs for "
   f"medullary carcinoma, and CEACAM5-directed antibody-drug conjugates in "
   f"ASCL1-positive small-cell bladder cancer. The value of this approach is a "
   f"transparent, testable shortlist, not evidence that these treatments work.")
-P('Reanalysis changed which candidates qualified. SSTR2 retained a positive '
-  'fold change but lost statistical support after batch adjustment. The '
-  'sarcomatoid comparison could not separate tumor biology from chip batch, so '
-  'we used within-tumor abundance rather than a histology comparison. These '
+P('Reanalysis changed which candidates qualified. SSTR2 kept a positive fold '
+  'change but lost statistical support once processing batch was accounted '
+  'for. The sarcomatoid tumors had been processed in separate batches from '
+  'the conventional ones, so we used abundance within the sarcomatoid tumors '
+  'rather than a comparison between the two. These '
   'examples show why published summary results cannot always substitute for '
   'analysis that accounts for study design.')
 P('Computational drug repurposing from public expression data is established '
@@ -691,9 +696,9 @@ FIGURES = [
      'whether inhibition or activation is therapeutic requires functional '
      'testing.'),
     ('Figure4_SarcUC.png', 6.9,
-     'Figure 4. What the sarcomatoid rows are scored on. Histology is '
-     'confounded with array chip in this series, so no sarcomatoid-versus-'
-     'conventional contrast is reported and these rows are scored on '
+     'Figure 4. What the sarcomatoid rows are scored on. In this series the '
+     'sarcomatoid and conventional tumors were processed in separate batches '
+     'of arrays, so the two cannot be compared, and these rows are scored on '
      'abundance within the sarcomatoid tumors alone. (A) Where the four '
      'scoring genes sit in that transcriptome. The curve is the ranked mean '
      'expression of all 20,363 genes measured across the 28 sarcomatoid '
@@ -705,8 +710,8 @@ FIGURES = [
      'Each gene stays on the same side of the 85th-percentile threshold in '
      'all four batches, supporting the consistency of the pooled abundance '
      'classification. Percentiles shift by a few points between batches; '
-     'the per-batch values are deposited. The confounded contrast itself, and the pathway values that '
-     'inherit it, are Supplementary Figure S2.'),
+     'the per-batch values are deposited. The comparison that cannot be made, '
+     'and the pathway values that depend on it, are Supplementary Figure S2.'),
     ('Figure5_candidate_selection.png', 6.9,
      'Figure 5. Every candidate without a prior urologic-oncology proposal, '
      'against every criterion. Each cell carries a symbol as well as a color: '
@@ -720,8 +725,8 @@ FIGURES = [
      'whether the target is itself a member of the enriched set, and reads '
      'not in the selected sets where the target belongs to none of the '
      'eighteen, which differs from the sarcomatoid rows, where it reads not '
-     'computed because their only enrichment derives from the confounded '
-     'comparison. '
+     'computed because their only enrichment comes from the comparison that '
+     'cannot be made. '
      'The score is less strict than the column: it awards one point for '
      'enrichment or for membership and two for both, so a target can carry a '
      'pathway point without appearing in the set. Supplementary Table S2 gives '
@@ -788,7 +793,7 @@ P('Supplementary Results: the sarcomatoid urothelial carcinoma findings in '
   'each row still meets the score criterion under each, including the score with '
   'the former genomic dimension restored. Supplementary Table S3: per-dataset '
   'design summary, giving the contrast, the model fitted, the blocking or batch '
-  'structure, sample counts and any confounding identified. Supplementary '
+  'structure, sample counts and any batch problem identified. Supplementary '
   'Table S4: the genomic value curated for each row, recomputed from the '
   'cohort it names where one exists, with the genes queried, the cohort '
   'size and the altered fraction. Supplementary Data: '
@@ -1027,9 +1032,10 @@ for _, r in novel_rows.sort_values('N').iterrows():
            28: 'SCBC-specific expression, internalization and payload testing',
            23: 'dependency testing in sarcomatoid rather than conventional '
                'urothelial models',
-           24: 'a sarcomatoid cohort whose histology is not confounded with '
-               'array chip',
-           29: 'a larger NEUROD1-positive cohort with batch separable from '
+           24: 'a sarcomatoid cohort in which the two tumor types share '
+               'processing batches',
+           29: 'a larger NEUROD1-positive cohort in which batch can be told '
+               'apart from '
                'subtype'}.get(int(r['N']), 'not carried forward')
     add_row([r['N'], r['Context'],
              (f"{r['Drug']} \u2014 {r['Target']}", stage_tag(r['Stage'])),
