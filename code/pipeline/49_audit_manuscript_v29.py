@@ -470,7 +470,7 @@ check('three prioritized, and their two diseases named',
       and f"{F['n_survivor_contexts']}" == '2')
 check('candidates hedged as hypotheses, not findings',
       'not evidence that these treatments work' in text
-      and 'require experimental validation' in text.lower())
+      and 'not evidence of therapeutic activity' in text)
 
 check('Zenodo concept DOI cited', '10.5281/zenodo.20217918' in text)
 check('no stale v1.0.0 version DOI cited', '10.5281/zenodo.20217919' not in text)

@@ -195,38 +195,40 @@ P(f"Knowledge Generated: We developed a step-by-step workflow to evaluate "
 H('ABSTRACT', 12)
 P(f"Purpose: To develop a step-by-step workflow that uses public molecular "
   f"data to prioritize existing drugs for rare and variant urologic cancers.")
-P(f"Methods: Within each cancer, genes were ranked by their molecular "
-  f"signal, and the highest-ranked were reviewed to carry a small number "
-  f"forward. We reassessed that candidate set using public genomic data, "
-  f"{F['n_series_total']} gene-expression datasets, and drug-target "
-  f"databases. A 6-point score combined gene expression, pathway "
-  f"enrichment, and support from published mechanistic studies. Candidates "
-  f"mainly involved approved or investigational drugs, with "
+P(f"Methods: Genes were ranked within each cancer by their molecular "
+  f"signal; investigators selected a small number of top-ranked genes on "
+  f"clinical relevance and matched them to available therapies. We reassessed the resulting candidate set using public "
+  f"genomic data, {F['n_series_total']} gene-expression datasets, and "
+  f"drug-target databases. A 6-point score combined gene-expression "
+  f"evidence, pathway enrichment, and published mechanistic support. "
+  f"Candidates mainly involved approved or investigational drugs, with "
   f"{spell(F['stage']['preclinical'])} preclinical exceptions. We reanalyzed "
   f"expression data according to study design where sample-level data were "
-  f"available, classified prior urologic proposals, and applied prespecified "
-  f"ranking criteria.")
+  f"available, classified prior urologic proposals, and applied criteria "
+  f"fixed before that reanalysis.")
 P(f"Results: The workflow evaluated {F['n_drug_hypotheses']} drug-cancer "
-  f"hypotheses. "
-  f"{spell(F['n_complete_score']).capitalize()} candidates had complete "
-  f"scores: {F['tiers'].get('Strong', 0)} Strong, "
-  f"{F['tiers'].get('Moderate', 0)} Moderate, and "
-  f"{F['tiers'].get('Exploratory', 0)} Exploratory. "
-  f"{spell(F['n_partial_score']).capitalize()} had partial scores without an "
-  f"evidence tier. All {F['arm_control']['n']} positive-control candidates "
-  f"matched previously proposed approaches. {F['arm_discovery']['novel']} of "
+  f"hypotheses: {F['n_complete_score']} with complete scores "
+  f"({F['tiers'].get('Strong', 0)} Strong, {F['tiers'].get('Moderate', 0)} "
+  f"Moderate, {F['tiers'].get('Exploratory', 0)} Exploratory) and "
+  f"{F['n_partial_score']} with partial scores and no tier. All "
+  f"{F['arm_control']['n']} positive-control candidates "
+  f"corresponded to previously proposed approaches, showing concordance "
+  f"with existing hypotheses rather than independent validation. {F['arm_discovery']['novel']} of "
   f"{F['n_rare_hypotheses']} rare-cancer hypotheses had no identified prior "
   f"urologic proposal. {spell(F['funnel']['survive']).capitalize()} met the "
   f"ranking criteria: CXCR1/CXCR2 blockade and anti-CEACAM1 in renal medullary "
   f"carcinoma, and CEACAM5-directed antibody-drug conjugates in ASCL1-positive "
-  f"small-cell bladder cancer. Requiring target membership in an enriched "
-  f"pathway excluded anti-CEACAM1 but retained the other two. SSTR2 lost its "
-  f"expression support once processing batch was accounted for, and in the "
-  f"sarcomatoid dataset the two tumor types were processed in separate "
-  f"batches, so they could not be compared.")
+  f"small-cell bladder cancer. Requiring the target itself to belong to an "
+  f"enriched pathway dropped anti-CEACAM1 below the threshold; the other "
+  f"two were retained. SSTR2 lost its "
+  f"support once processing batch was accounted for, and the sarcomatoid "
+  f"tumor types were processed in separate batches, so they could not be "
+  f"compared.")
 P(f"Conclusion: Public data can help prioritize drug hypotheses for rare "
-  f"cancers. Rankings depend on data quality and scoring assumptions, and all "
-  f"prioritized candidates require experimental validation.")
+  f"and variant urologic cancers, but rankings are sensitive to data quality, "
+  f"candidate-selection decisions, and scoring assumptions. The prioritized "
+  f"candidates are hypotheses for disease-specific experimental validation, "
+  f"not evidence of therapeutic activity.")
 
 # =====================================================================
 # Introduction
@@ -238,9 +240,10 @@ P('Public cancer datasets can help researchers identify treatment options '
   'The Gene Expression Omnibus (GEO) provides gene-expression data [4]. The '
   'Therapeutic Target Database [5] and Open Targets [6] link proteins to drugs '
   'and their development stage. The Kyoto Encyclopedia of Genes and Genomes '
-  '(KEGG) groups genes into biological pathways [7]. Together, these resources '
-  'support drug repurposing: studying an existing drug for a different '
-  'disease.')
+  '(KEGG) groups genes into biological pathways [7]. Together, these '
+  'resources can support therapeutic target and drug prioritization, '
+  'including repurposing: studying a therapy already approved or in trials '
+  'for a different disease.')
 P('Drugs already approved or tested in people may have safety and '
   'pharmacokinetic data that can reduce development time and cost [8]. The '
   'challenge is finding drugs with a clear biological rationale in the new '
@@ -257,7 +260,7 @@ P('We developed a step-by-step workflow to use public cancer data to '
   'treatment proposals provided a reference for comparison. The workflow '
   'ranks genes within each cancer by their molecular signal, reviews the '
   'highest-ranked for clinical relevance, and then scores and ranks the '
-  'resulting candidates reproducibly (Figure 1).')
+  'resulting candidates against stated criteria (Figure 1).')
 
 # =====================================================================
 # Methods
@@ -293,9 +296,10 @@ P('Each candidate paired a therapy, drug class, or combination with one '
   'and the moderated t-statistic from that cancer\u2019s expression fit '
   'otherwise. Only the highest-ranked genes were reviewed, and three to seven '
   'per cancer were carried forward, including three to five per rare cancer. '
-  'The judgment applied at this step was which of the top-ranked signals to '
-  'pursue, weighing clinical relevance; the ranking itself came from the '
-  'data. Those genes were then matched to therapies through the Therapeutic '
+  'Candidate nomination therefore included an investigator-curated step: the '
+  'gene ranking was data-derived, but which of the highest-ranked signals to '
+  'pursue was an investigator judgment on clinical relevance. Entry into the '
+  'candidate set was not an unbiased screen of every eligible gene. Those genes were then matched to therapies through the Therapeutic '
   'Target Database and Open Targets, and a gene became a candidate only where '
   'a therapy existed. Two preclinical therapies were retained because no '
   'clinical-stage drug targeted the protein; neither was eligible for '
@@ -325,9 +329,10 @@ P('Candidates received up to 6 points: gene-expression evidence, 0\u20133; '
   'enrichment and two when the target belonged to an enriched set. Full '
   'scoring rules appear in Supplementary Methods Section 6. These evidence '
   'sources overlap and are not independent.')
-P('Complete scores were classified as Strong (5\u20136), Moderate '
-  '(3\u20134), or Exploratory (1\u20132). These tiers describe evidence within '
-  'this workflow, not demonstrated drug activity. Candidates with an '
+P('Complete scores were classified within the framework as Strong (5\u20136), '
+  'Moderate (3\u20134), or Exploratory (1\u20132). These labels reflect relative '
+  'prioritization within this scoring system and should not be read as '
+  'validated levels of therapeutic evidence. Candidates with an '
   'unavailable component were scored out of the remaining points and received '
   'no tier. When expression support could not be recalculated from the '
   'deposited data, the original curated value was retained and clearly flagged '
@@ -350,8 +355,11 @@ P('Reports from non-urologic cancers could provide the mechanistic-literature '
   'strategy, counting rules, and classifications are deposited with the code.')
 
 H('Ranking Criteria', 11.5, 10, level=2)
-P('Candidates were prioritized only when they met all four prespecified '
-  'criteria:')
+P('Prioritization here combines evidence strength with discovery priority: '
+  'one of the four criteria asks whether a proposal already exists, so a '
+  'candidate with stronger biological support can fail it while a weaker but '
+  'unproposed one qualifies. Candidates were prioritized only when they met '
+  'all four criteria, which were fixed before they were applied:')
 for _c in ('No prior urologic-oncology proposal was identified.',
            'The total score was at least 4 points.',
            'Expression support could be recalculated from deposited data and '
@@ -406,9 +414,10 @@ P('Benjamini\u2013Hochberg correction was applied across tested genes for '
   'differential expression and across the 18 gene sets within each disease or '
   'subtype for enrichment. It was not applied across diseases, drugs, or later '
   'comparisons. Throughout, q denotes the adjusted P value. Thresholds were '
-  'q < 0.05 for differential expression and an exploratory q < 0.10 for '
-  'enrichment; enrichment values from 0.05 to <0.10 were considered '
-  'suggestive. Analyses used R 4.6.1, limma 3.68.4, edgeR 4.10.1, and '
+  'q < 0.05 for differential expression. Enrichment was additionally read at '
+  'an exploratory q < 0.10, with values from 0.05 to <0.10 considered '
+  'suggestive; that second threshold is reported as exploratory and was not '
+  'registered in advance. Analyses used R 4.6.1, limma 3.68.4, edgeR 4.10.1, and '
   'Python 3.10.')
 
 print('front matter and methods written')
